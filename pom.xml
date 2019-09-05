@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.smart4y</groupId>
+    <artifactId>cloud</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>cloud</name>
+    <description>Cloud project for Spring Boot</description>
+
+    <modules>
+        <module>cloud-dependencies</module>
+        <module>cloud-core</module>
+
+        <module>cloud-zone</module>
+        <module>cloud-uaa</module>
+        <module>cloud-gateway</module>
+    </modules>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <spring-cloud.version>Greenwich.SR2</spring-cloud.version>
+        <spring-cloud-alibaba.version>0.9.0.RELEASE</spring-cloud-alibaba.version>
+    </properties>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.7.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- 内部依赖管理 -->
+            <dependency>
+                <groupId>com.smart4y</groupId>
+                <artifactId>cloud-dependencies</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <resources>
+            <resource>
+                <!-- 先指定 src/main/resources下所有文件及文件夹为资源文件 -->
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <profile.name>dev</profile.name>
+                <!-- Nacos配置中心命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空 -->
+                <config.namespace/>
+                <config.server-addr>127.0.0.1:8848</config.server-addr>
+                <discovery.server-addr>127.0.0.1:8848</discovery.server-addr>
+            </properties>
+        </profile>
+        <profile>
+            <id>online</id>
+            <properties>
+                <profile.name>online</profile.name>
+                <!-- Nacos配置中心命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空 -->
+                <config.namespace/>
+                <config.server-addr>127.0.0.1:8848</config.server-addr>
+                <discovery.server-addr>127.0.0.1:8848</discovery.server-addr>
+            </properties>
+        </profile>
+    </profiles>
+</project>
