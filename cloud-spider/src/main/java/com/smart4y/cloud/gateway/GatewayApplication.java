@@ -1,9 +1,13 @@
 package com.smart4y.cloud.gateway;
 
 import com.smart4y.cloud.core.AbstractApplication;
+import com.smart4y.cloud.gateway.infrastructure.locator.JdbcRouteDefinitionLocator;
+import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.bus.jackson.RemoteApplicationEventScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
@@ -18,7 +22,17 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication
+@RemoteApplicationEventScan(basePackages = "com.smart4y.cloud")
 public class GatewayApplication extends AbstractApplication implements CommandLineRunner {
+
+    private final ResourceLocator resourceLocator;
+    private final JdbcRouteDefinitionLocator jdbcRouteDefinitionLocator;
+
+    @Autowired
+    public GatewayApplication(ResourceLocator resourceLocator, JdbcRouteDefinitionLocator jdbcRouteDefinitionLocator) {
+        this.resourceLocator = resourceLocator;
+        this.jdbcRouteDefinitionLocator = jdbcRouteDefinitionLocator;
+    }
 
     public static void main(String[] args) {
         initial(SpringApplication.run(GatewayApplication.class, args));
@@ -26,5 +40,7 @@ public class GatewayApplication extends AbstractApplication implements CommandLi
 
     @Override
     public void run(String... args) {
+        jdbcRouteDefinitionLocator.refresh();
+        resourceLocator.refresh();
     }
 }
