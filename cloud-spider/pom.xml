@@ -3,11 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cloud-gateway</artifactId>
+    <artifactId>cloud-spider</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>cloud-gateway</name>
-    <description>服务网关</description>
+    <name>cloud-spider</name>
+    <description>服务网关（蜘蛛，网罗万物。）</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -138,7 +138,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

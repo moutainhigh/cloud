@@ -14,9 +14,9 @@
         <module>cloud-dependencies</module>
         <module>cloud-core</module>
 
-        <module>cloud-zone</module>
-        <module>cloud-uaa</module>
-        <module>cloud-gateway</module>
+        <module>cloud-hippo</module>
+        <module>cloud-owl</module>
+        <module>cloud-spider</module>
     </modules>
 
     <properties>

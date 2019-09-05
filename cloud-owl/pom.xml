@@ -3,11 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cloud-zone</artifactId>
+    <artifactId>cloud-owl</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>cloud-zone</name>
-    <description>基础服务</description>
+    <name>cloud-owl</name>
+    <description>认证服务（猫头鹰，智慧的象征。）</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -54,6 +54,12 @@
         </dependency>
 
         <!-- ########################### 公共配置 ############################ -->
+        <!-- 属性配置 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
         <!-- 服务注册 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -108,7 +114,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
