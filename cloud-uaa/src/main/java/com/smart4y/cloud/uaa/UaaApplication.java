@@ -18,10 +18,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 @SpringBootApplication
 @EnableDiscoveryClient
-public class UaaAdminApplication extends AbstractApplication implements CommandLineRunner {
+public class UaaApplication extends AbstractApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
-        initial(SpringApplication.run(UaaAdminApplication.class, args));
+        initial(SpringApplication.run(UaaApplication.class, args));
     }
 
     @Override
