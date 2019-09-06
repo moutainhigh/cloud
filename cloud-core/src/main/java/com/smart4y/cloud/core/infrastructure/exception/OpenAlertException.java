@@ -6,7 +6,6 @@ package com.smart4y.cloud.core.infrastructure.exception;
  * @author admin
  */
 public class OpenAlertException extends OpenException {
-    private static final long serialVersionUID = 4908906410210213271L;
 
     public OpenAlertException() {
     }

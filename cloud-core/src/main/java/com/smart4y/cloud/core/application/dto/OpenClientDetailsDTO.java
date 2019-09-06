@@ -1,5 +1,6 @@
-package com.smart4y.cloud.core.domain;
+package com.smart4y.cloud.core.application.dto;
 
+import com.smart4y.cloud.core.domain.OpenAuthority;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.provider.ClientDetails;
@@ -12,6 +13,7 @@ import java.util.*;
 
 /**
  * 自定义客户端信息
+ *
  * @author: liuyadu
  * @date: 2019/5/30 18:07
  * @description:
@@ -20,9 +22,7 @@ import java.util.*;
 @org.codehaus.jackson.annotate.JsonIgnoreProperties(ignoreUnknown = true)
 @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_DEFAULT)
 @com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true)
-public class OpenClientDetails implements ClientDetails , Serializable {
-
-    private static final long serialVersionUID = -4888527753331687039L;
+public class OpenClientDetailsDTO implements ClientDetails, Serializable {
 
 
     @org.codehaus.jackson.annotate.JsonProperty("client_id")
@@ -75,10 +75,10 @@ public class OpenClientDetails implements ClientDetails , Serializable {
     @com.fasterxml.jackson.annotation.JsonProperty("additional_information")
     private Map<String, Object> additionalInformation = new LinkedHashMap<String, Object>();
 
-    public OpenClientDetails() {
+    public OpenClientDetailsDTO() {
     }
 
-    public OpenClientDetails(ClientDetails prototype) {
+    public OpenClientDetailsDTO(ClientDetails prototype) {
         this();
         setAccessTokenValiditySeconds(prototype.getAccessTokenValiditySeconds());
         setRefreshTokenValiditySeconds(prototype
@@ -92,14 +92,14 @@ public class OpenClientDetails implements ClientDetails , Serializable {
         setResourceIds(prototype.getResourceIds());
     }
 
-    public OpenClientDetails(String clientId, String resourceIds,
-                             String scopes, String grantTypes, String authorities) {
+    public OpenClientDetailsDTO(String clientId, String resourceIds,
+                                String scopes, String grantTypes, String authorities) {
         this(clientId, resourceIds, scopes, grantTypes, authorities, null);
     }
 
-    public OpenClientDetails(String clientId, String resourceIds,
-                             String scopes, String grantTypes, String authorities,
-                             String redirectUris) {
+    public OpenClientDetailsDTO(String clientId, String resourceIds,
+                                String scopes, String grantTypes, String authorities,
+                                String redirectUris) {
 
         this.clientId = clientId;
 
@@ -256,7 +256,7 @@ public class OpenClientDetails implements ClientDetails , Serializable {
     @com.fasterxml.jackson.annotation.JsonIgnore
     public void setAuthorities(
             Collection<? extends GrantedAuthority> authorities) {
-      this.authorities = new ArrayList<>(authorities);
+        this.authorities = new ArrayList<>(authorities);
     }
 
     @org.codehaus.jackson.annotate.JsonProperty("authorities")
@@ -351,7 +351,7 @@ public class OpenClientDetails implements ClientDetails , Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        OpenClientDetails other = (OpenClientDetails) obj;
+        OpenClientDetailsDTO other = (OpenClientDetailsDTO) obj;
         if (accessTokenValiditySeconds == null) {
             if (other.accessTokenValiditySeconds != null) {
                 return false;
@@ -416,9 +416,7 @@ public class OpenClientDetails implements ClientDetails , Serializable {
             return false;
         }
         if (additionalInformation == null) {
-            if (other.additionalInformation != null) {
-                return false;
-            }
+            return other.additionalInformation == null;
         } else if (!additionalInformation.equals(other.additionalInformation)) {
             return false;
         }

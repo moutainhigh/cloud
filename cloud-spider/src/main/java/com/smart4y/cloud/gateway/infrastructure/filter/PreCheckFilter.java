@@ -1,6 +1,6 @@
 package com.smart4y.cloud.gateway.infrastructure.filter;
 
-import com.smart4y.cloud.core.domain.model.AuthorityResource;
+import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonAccessDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.toolkit.ReactiveWebUtils;
@@ -37,7 +37,7 @@ public class PreCheckFilter implements WebFilter {
         String requestPath = request.getURI().getPath();
         String remoteIpAddress = ReactiveWebUtils.getRemoteAddress(exchange);
         String origin = request.getHeaders().getOrigin();
-        AuthorityResource resource = accessManager.getResource(requestPath);
+        AuthorityResourceDTO resource = accessManager.getResource(requestPath);
         if (resource != null) {
             if ("0".equals(resource.getIsOpen().toString())) {
                 // 未公开

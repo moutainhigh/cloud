@@ -1,6 +1,5 @@
 package com.smart4y.cloud.core.infrastructure.exception;
 
-
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 
 /**
@@ -36,6 +35,4 @@ public class OpenException extends RuntimeException {
     public void setCode(int code) {
         this.code = code;
     }
-
-
 }

@@ -10,7 +10,7 @@
     <description>客户端模块</description>
 
     <modules>
-        <module>cloud-spider-client</module>
+        <module>cloud-hippo-client</module>
     </modules>
 
     <properties>

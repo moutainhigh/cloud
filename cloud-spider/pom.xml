@@ -24,10 +24,6 @@
         <!-- 公共模块 -->
         <dependency>
             <groupId>com.smart4y</groupId>
-            <artifactId>cloud-spider-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.smart4y</groupId>
             <artifactId>cloud-core</artifactId>
         </dependency>
         <!-- Lombok -->

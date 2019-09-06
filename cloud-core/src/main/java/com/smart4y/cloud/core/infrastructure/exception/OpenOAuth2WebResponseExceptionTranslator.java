@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 自定义oauth2异常提示
+ *
  * @author liuyadu
  */
 @Slf4j
@@ -19,7 +20,7 @@ public class OpenOAuth2WebResponseExceptionTranslator implements WebResponseExce
     @Override
     public ResponseEntity translate(Exception e) throws Exception {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        ResultBody responseData = OpenGlobalExceptionHandler.resolveOauthException(e,request.getRequestURI());
+        ResultBody responseData = OpenGlobalExceptionHandler.resolveOauthException(e, request.getRequestURI());
         return ResponseEntity.status(responseData.getHttpStatus()).body(responseData);
     }
 }

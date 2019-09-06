@@ -1,8 +1,8 @@
 package com.smart4y.cloud.gateway.infrastructure.filter;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
-import com.smart4y.cloud.core.domain.model.AuthorityResource;
-import com.smart4y.cloud.core.domain.model.IpLimitApi;
+import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
+import com.smart4y.cloud.core.application.dto.IpLimitApiDTO;
 import com.smart4y.cloud.core.domain.OpenAuthority;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
@@ -107,7 +107,7 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
             }
         }
         // 动态权限列表
-        Flux<AuthorityResource> resources = resourceLocator.getAuthorityResources();
+        Flux<AuthorityResourceDTO> resources = resourceLocator.getAuthorityResources();
         resources.filter(res -> StringUtils.isNotBlank(res.getPath()))
                 .subscribe(res -> {
                     Boolean isAuth = res.getIsAuth() != null && res.getIsAuth().intValue() == 1 ? true : false;
@@ -123,10 +123,10 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
     /**
      * 获取资源状态
      */
-    public AuthorityResource getResource(String requestPath) {
-        final AuthorityResource[] result = {null};
+    public AuthorityResourceDTO getResource(String requestPath) {
+        final AuthorityResourceDTO[] result = {null};
         // 动态权限列表
-        Flux<AuthorityResource> resources = resourceLocator.getAuthorityResources();
+        Flux<AuthorityResourceDTO> resources = resourceLocator.getAuthorityResources();
         resources.filter(r -> !"/**".equals(r.getPath()) && !permitAll(requestPath) && StringUtils.isNotBlank(r.getPath()) && pathMatch.match(r.getPath(), requestPath))
                 .subscribe(r -> result[0] = r);
         return result[0];
@@ -236,7 +236,7 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
      */
     public boolean matchIpOrOriginBlacklist(String requestPath, String ipAddress, String origin) {
         final Boolean[] result = {false};
-        Flux<IpLimitApi> blackList = resourceLocator.getIpBlacks();
+        Flux<IpLimitApiDTO> blackList = resourceLocator.getIpBlacks();
         blackList.filter(api -> pathMatch.match(api.getPath(), requestPath) && api.getIpAddressSet() != null && !api.getIpAddressSet().isEmpty())
                 .filter(api -> matchIpOrOrigin(api.getIpAddressSet(), ipAddress, origin))
                 .subscribe(r -> result[0] = true);
@@ -256,7 +256,7 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
         final Boolean[] result = {false, false};
         boolean hasWhiteList = false;
         boolean allow = false;
-        Flux<IpLimitApi> whiteList = resourceLocator.getIpWhites();
+        Flux<IpLimitApiDTO> whiteList = resourceLocator.getIpWhites();
         whiteList.filter(api -> pathMatch.match(api.getPath(), requestPath) && api.getIpAddressSet() != null && !api.getIpAddressSet().isEmpty())
                 .subscribe(api -> {
                     result[0] = true;

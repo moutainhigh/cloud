@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.domain.model;
+package com.smart4y.cloud.core.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * @author liuyadu
  */
-public class IpLimitApi extends BaseApi implements Serializable {
+public class IpLimitApiDTO extends BaseApiDTO implements Serializable {
 
     private Long itemId;
     private Long policyId;

@@ -1,7 +1,7 @@
 package com.smart4y.cloud.core.infrastructure.exception;
 
-import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import com.smart4y.cloud.core.ResultBody;
+import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -19,24 +19,15 @@ import java.util.Optional;
 
 /**
  * 统一异常处理器
- *
- * @author LYD
- * @date 2017/7/3
  */
-@ControllerAdvice
-@ResponseBody
 @Slf4j
+@ResponseBody
+@ControllerAdvice
 public class OpenGlobalExceptionHandler {
-
 
     /**
      * 统一异常处理
      * AuthenticationException
-     *
-     * @param ex
-     * @param request
-     * @param response
-     * @return
      */
     @ExceptionHandler({AuthenticationException.class})
     public static ResultBody authenticationException(Exception ex, HttpServletRequest request, HttpServletResponse response) {
@@ -47,11 +38,6 @@ public class OpenGlobalExceptionHandler {
 
     /**
      * OAuth2Exception
-     *
-     * @param ex
-     * @param request
-     * @param response
-     * @return
      */
     @ExceptionHandler({OAuth2Exception.class, InvalidTokenException.class})
     public static ResultBody oauth2Exception(Exception ex, HttpServletRequest request, HttpServletResponse response) {
@@ -62,11 +48,6 @@ public class OpenGlobalExceptionHandler {
 
     /**
      * 自定义异常
-     *
-     * @param ex
-     * @param request
-     * @param response
-     * @return
      */
     @ExceptionHandler({OpenException.class})
     public static ResultBody openException(Exception ex, HttpServletRequest request, HttpServletResponse response) {
@@ -77,11 +58,6 @@ public class OpenGlobalExceptionHandler {
 
     /**
      * 其他异常
-     *
-     * @param ex
-     * @param request
-     * @param response
-     * @return
      */
     @ExceptionHandler({Exception.class})
     public static ResultBody exception(Exception ex, HttpServletRequest request, HttpServletResponse response) {
@@ -92,9 +68,6 @@ public class OpenGlobalExceptionHandler {
 
     /**
      * 静态解析认证异常
-     *
-     * @param ex
-     * @return
      */
     public static ResultBody resolveOauthException(Exception ex, String path) {
         ErrorCode code = ErrorCode.BAD_CREDENTIALS;
@@ -108,9 +81,6 @@ public class OpenGlobalExceptionHandler {
 
     /**
      * 静态解析异常。可以直接调用
-     *
-     * @param ex
-     * @return
      */
     public static ResultBody resolveException(Exception ex, String path) {
         ErrorCode code = ErrorCode.ERROR;

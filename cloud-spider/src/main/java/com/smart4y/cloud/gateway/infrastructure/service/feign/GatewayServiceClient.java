@@ -1,8 +1,8 @@
 package com.smart4y.cloud.gateway.infrastructure.service.feign;
 
-import com.smart4y.cloud.core.domain.model.GatewayRoute;
-import com.smart4y.cloud.core.domain.model.IpLimitApi;
-import com.smart4y.cloud.core.domain.model.RateLimitApi;
+import com.smart4y.cloud.core.application.dto.GatewayRouteDTO;
+import com.smart4y.cloud.core.application.dto.IpLimitApiDTO;
+import com.smart4y.cloud.core.application.dto.RateLimitApiDTO;
 import com.smart4y.cloud.core.ResultBody;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,9 +22,9 @@ public class GatewayServiceClient {
      * 获取接口黑名单列表
      */
     @GetMapping("/gateway/api/blackList")
-    public ResultBody<List<IpLimitApi>> getApiBlackList() {
+    public ResultBody<List<IpLimitApiDTO>> getApiBlackList() {
         // TODO
-        List<IpLimitApi> resources = Collections.emptyList();
+        List<IpLimitApiDTO> resources = Collections.emptyList();
         return new ResultBody<>().data(resources);
     }
 
@@ -32,9 +32,9 @@ public class GatewayServiceClient {
      * 获取接口白名单列表
      */
     @GetMapping("/gateway/api/whiteList")
-    public ResultBody<List<IpLimitApi>> getApiWhiteList() {
+    public ResultBody<List<IpLimitApiDTO>> getApiWhiteList() {
         // TODO
-        List<IpLimitApi> resources = Collections.emptyList();
+        List<IpLimitApiDTO> resources = Collections.emptyList();
         return new ResultBody<>().data(resources);
     }
 
@@ -42,9 +42,9 @@ public class GatewayServiceClient {
      * 获取限流列表
      */
     @GetMapping("/gateway/api/rateLimit")
-    public ResultBody<List<RateLimitApi>> getApiRateLimitList() {
+    public ResultBody<List<RateLimitApiDTO>> getApiRateLimitList() {
         // TODO
-        List<RateLimitApi> resources = Collections.emptyList();
+        List<RateLimitApiDTO> resources = Collections.emptyList();
         return new ResultBody<>().data(resources);
     }
 
@@ -52,9 +52,9 @@ public class GatewayServiceClient {
      * 获取路由列表
      */
     @GetMapping("/gateway/api/route")
-    public ResultBody<List<GatewayRoute>> getApiRouteList() {
+    public ResultBody<List<GatewayRouteDTO>> getApiRouteList() {
         // TODO
-        List<GatewayRoute> resources = Collections.emptyList();
+        List<GatewayRouteDTO> resources = Collections.emptyList();
         return new ResultBody<>().data(resources);
     }
 }

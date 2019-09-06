@@ -23,6 +23,10 @@
         <!-- 公共模块 -->
         <dependency>
             <groupId>com.smart4y</groupId>
+            <artifactId>cloud-hippo-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.smart4y</groupId>
             <artifactId>cloud-core</artifactId>
         </dependency>
         <!-- Lombok -->

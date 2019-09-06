@@ -1,8 +1,8 @@
 package com.smart4y.cloud.gateway.infrastructure.service.feign;
 
 import com.smart4y.cloud.core.ResultBody;
-import com.smart4y.cloud.core.domain.OpenClientDetails;
-import com.smart4y.cloud.core.domain.model.BaseApp;
+import com.smart4y.cloud.core.application.dto.OpenClientDetailsDTO;
+import com.smart4y.cloud.core.application.dto.AppDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +20,7 @@ public class BaseAppServiceClient {
      * @param appId 应用Id
      */
     @GetMapping("/app/{appId}/info")
-    public ResultBody<BaseApp> getApp(@PathVariable("appId") String appId) {
+    public ResultBody<AppDTO> getApp(@PathVariable("appId") String appId) {
         // TODO
         return ResultBody.ok();
     }
@@ -31,7 +31,7 @@ public class BaseAppServiceClient {
      * @param clientId
      */
     @GetMapping("/app/client/{clientId}/info")
-    public ResultBody<OpenClientDetails> getAppClientInfo(@PathVariable("clientId") String clientId) {
+    public ResultBody<OpenClientDetailsDTO> getAppClientInfo(@PathVariable("clientId") String clientId) {
         // TODO
         return ResultBody.ok();
     }

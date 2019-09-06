@@ -30,7 +30,7 @@
             </dependency>
             <dependency>
                 <groupId>com.smart4y</groupId>
-                <artifactId>cloud-spider-client</artifactId>
+                <artifactId>cloud-hippo-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- JDK9+ Jaxb模块引用 -->

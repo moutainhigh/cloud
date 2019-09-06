@@ -1,6 +1,8 @@
-package com.smart4y.cloud.core.domain.model;
+package com.smart4y.cloud.core.application.dto;
 
+import com.smart4y.cloud.core.application.dto.BaseApiDTO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -8,7 +10,8 @@ import java.io.Serializable;
  * @author liuyadu
  */
 @Data
-public class RateLimitApi extends BaseApi implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class RateLimitApiDTO extends BaseApiDTO implements Serializable {
 
     private Long itemId;
     private Long policyId;

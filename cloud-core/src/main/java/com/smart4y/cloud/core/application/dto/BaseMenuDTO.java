@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.domain.model;
+package com.smart4y.cloud.core.application.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 @Data
 @NoArgsConstructor
-public class BaseMenu implements Serializable {
+public class BaseMenuDTO implements Serializable {
 
     /**
      * 菜单Id

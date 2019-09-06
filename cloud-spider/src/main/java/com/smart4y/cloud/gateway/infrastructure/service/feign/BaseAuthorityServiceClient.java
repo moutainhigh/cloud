@@ -1,7 +1,7 @@
 package com.smart4y.cloud.gateway.infrastructure.service.feign;
 
-import com.smart4y.cloud.core.domain.model.AuthorityMenu;
-import com.smart4y.cloud.core.domain.model.AuthorityResource;
+import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
+import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
 import com.smart4y.cloud.core.ResultBody;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +23,9 @@ public class BaseAuthorityServiceClient {
      * 获取所有访问权限列表
      */
     @GetMapping("/authority/access")
-    public ResultBody<List<AuthorityResource>> findAuthorityResource() {
+    public ResultBody<List<AuthorityResourceDTO>> findAuthorityResource() {
         // TODO
-        List<AuthorityResource> resources = Collections.emptyList();
+        List<AuthorityResourceDTO> resources = Collections.emptyList();
         return new ResultBody<>().data(resources);
     }
 
@@ -33,9 +33,9 @@ public class BaseAuthorityServiceClient {
      * 获取菜单权限列表
      */
     @GetMapping("/authority/menu")
-    public ResultBody<List<AuthorityMenu>> findAuthorityMenu() {
+    public ResultBody<List<AuthorityMenuDTO>> findAuthorityMenu() {
         // TODO
-        List<AuthorityMenu> resources = Collections.emptyList();
+        List<AuthorityMenuDTO> resources = Collections.emptyList();
         return new ResultBody<>().data(resources);
     }
 }

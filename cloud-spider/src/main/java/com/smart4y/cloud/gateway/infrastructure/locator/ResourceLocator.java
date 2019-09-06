@@ -1,8 +1,8 @@
 package com.smart4y.cloud.gateway.infrastructure.locator;
 
 import com.google.common.collect.Lists;
-import com.smart4y.cloud.core.domain.model.AuthorityResource;
-import com.smart4y.cloud.core.domain.model.IpLimitApi;
+import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
+import com.smart4y.cloud.core.application.dto.IpLimitApiDTO;
 import com.smart4y.cloud.core.domain.RemoteRefreshRouteEvent;
 import com.smart4y.cloud.gateway.infrastructure.service.feign.BaseAuthorityServiceClient;
 import com.smart4y.cloud.gateway.infrastructure.service.feign.GatewayServiceClient;
@@ -57,17 +57,17 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
     /**
      * 权限资源
      */
-    private Flux<AuthorityResource> authorityResources;
+    private Flux<AuthorityResourceDTO> authorityResources;
 
     /**
      * ip黑名单
      */
-    private Flux<IpLimitApi> ipBlacks;
+    private Flux<IpLimitApiDTO> ipBlacks;
 
     /**
      * ip白名单
      */
-    private Flux<IpLimitApi> ipWhites;
+    private Flux<IpLimitApiDTO> ipWhites;
 
     /**
      * 权限列表
@@ -85,9 +85,9 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
     private RouteDefinitionLocator routeDefinitionLocator;
 
     public ResourceLocator() {
-        authorityResources = CacheFlux.lookup(cache, "authorityResources", AuthorityResource.class).onCacheMissResume(Flux.fromIterable(new ArrayList<>()));
-        ipBlacks = CacheFlux.lookup(cache, "ipBlacks", IpLimitApi.class).onCacheMissResume(Flux.fromIterable(new ArrayList<>()));
-        ipWhites = CacheFlux.lookup(cache, "ipWhites", IpLimitApi.class).onCacheMissResume(Flux.fromIterable(new ArrayList<>()));
+        authorityResources = CacheFlux.lookup(cache, "authorityResources", AuthorityResourceDTO.class).onCacheMissResume(Flux.fromIterable(new ArrayList<>()));
+        ipBlacks = CacheFlux.lookup(cache, "ipBlacks", IpLimitApiDTO.class).onCacheMissResume(Flux.fromIterable(new ArrayList<>()));
+        ipWhites = CacheFlux.lookup(cache, "ipWhites", IpLimitApiDTO.class).onCacheMissResume(Flux.fromIterable(new ArrayList<>()));
     }
 
 
@@ -138,15 +138,15 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
     /**
      * 加载授权列表
      */
-    public Flux<AuthorityResource> loadAuthorityResources() {
-        List<AuthorityResource> resources = Lists.newArrayList();
+    public Flux<AuthorityResourceDTO> loadAuthorityResources() {
+        List<AuthorityResourceDTO> resources = Lists.newArrayList();
         Collection<ConfigAttribute> array;
         ConfigAttribute cfg;
         try {
             // 查询所有接口
             resources = baseAuthorityServiceClient.findAuthorityResource().getData();
             if (resources != null) {
-                for (AuthorityResource item : resources) {
+                for (AuthorityResourceDTO item : resources) {
                     String path = item.getPath();
                     if (path == null) {
                         continue;
@@ -174,12 +174,12 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
     /**
      * 加载IP黑名单
      */
-    public Flux<IpLimitApi> loadIpBlackList() {
-        List<IpLimitApi> list = Lists.newArrayList();
+    public Flux<IpLimitApiDTO> loadIpBlackList() {
+        List<IpLimitApiDTO> list = Lists.newArrayList();
         try {
             list = gatewayServiceClient.getApiBlackList().getData();
             if (list != null) {
-                for (IpLimitApi item : list) {
+                for (IpLimitApiDTO item : list) {
                     item.setPath(getFullPath(item.getServiceId(), item.getPath()));
                 }
                 log.info("=============加载IP黑名单:{}==============", list.size());
@@ -193,12 +193,12 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
     /**
      * 加载IP白名单
      */
-    public Flux<IpLimitApi> loadIpWhiteList() {
-        List<IpLimitApi> list = Lists.newArrayList();
+    public Flux<IpLimitApiDTO> loadIpWhiteList() {
+        List<IpLimitApiDTO> list = Lists.newArrayList();
         try {
             list = gatewayServiceClient.getApiWhiteList().getData();
             if (list != null) {
-                for (IpLimitApi item : list) {
+                for (IpLimitApiDTO item : list) {
                     item.setPath(getFullPath(item.getServiceId(), item.getPath()));
                 }
                 log.info("=============加载IP白名单:{}==============", list.size());
@@ -229,27 +229,27 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
         }
     }
 
-    public Flux<AuthorityResource> getAuthorityResources() {
+    public Flux<AuthorityResourceDTO> getAuthorityResources() {
         return authorityResources;
     }
 
-    public void setAuthorityResources(Flux<AuthorityResource> authorityResources) {
+    public void setAuthorityResources(Flux<AuthorityResourceDTO> authorityResources) {
         this.authorityResources = authorityResources;
     }
 
-    public Flux<IpLimitApi> getIpBlacks() {
+    public Flux<IpLimitApiDTO> getIpBlacks() {
         return ipBlacks;
     }
 
-    public void setIpBlacks(Flux<IpLimitApi> ipBlacks) {
+    public void setIpBlacks(Flux<IpLimitApiDTO> ipBlacks) {
         this.ipBlacks = ipBlacks;
     }
 
-    public Flux<IpLimitApi> getIpWhites() {
+    public Flux<IpLimitApiDTO> getIpWhites() {
         return ipWhites;
     }
 
-    public void setIpWhites(Flux<IpLimitApi> ipWhites) {
+    public void setIpWhites(Flux<IpLimitApiDTO> ipWhites) {
         this.ipWhites = ipWhites;
     }
 

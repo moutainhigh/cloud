@@ -1,6 +1,7 @@
-package com.smart4y.cloud.core.domain.model;
+package com.smart4y.cloud.core.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.smart4y.cloud.core.domain.model.AuthorityAction;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.Objects;
  * @author liuyadu
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AuthorityMenu extends BaseMenu implements Serializable {
+public class AuthorityMenuDTO extends BaseMenuDTO implements Serializable {
 
     /**
      * 权限ID
@@ -57,10 +58,10 @@ public class AuthorityMenu extends BaseMenu implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof AuthorityMenu)) {
+        if (!(obj instanceof AuthorityMenuDTO)) {
             return false;
         }
-        AuthorityMenu a = (AuthorityMenu) obj;
+        AuthorityMenuDTO a = (AuthorityMenuDTO) obj;
         return this.authorityId.equals(a.getAuthorityId());
     }
 

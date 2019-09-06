@@ -11,6 +11,7 @@ import java.util.Map;
 
 /**
  * 自定义oauth2异常提示
+ *
  * @author liuyadu
  */
 @Slf4j

@@ -1,8 +1,8 @@
 package com.smart4y.cloud.gateway.infrastructure.locator;
 
 import com.google.common.collect.Lists;
-import com.smart4y.cloud.core.domain.model.GatewayRoute;
-import com.smart4y.cloud.core.domain.model.RateLimitApi;
+import com.smart4y.cloud.core.application.dto.GatewayRouteDTO;
+import com.smart4y.cloud.core.application.dto.RateLimitApiDTO;
 import com.smart4y.cloud.core.domain.RemoteRefreshRouteEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -82,7 +82,7 @@ public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, Appli
         refresh();
     }
 
-    protected String getFullPath(List<GatewayRoute> routeList, String serviceId, String path) {
+    protected String getFullPath(List<GatewayRouteDTO> routeList, String serviceId, String path) {
         final String[] fullPath = {path.startsWith("/") ? path : "/" + path};
         if (routeList != null) {
             routeList.forEach(route -> {
@@ -110,8 +110,8 @@ public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, Appli
         //从数据库拿到路由配置
         List<RouteDefinition> routes = Lists.newArrayList();
         try {
-            List<GatewayRoute> routeList = jdbcTemplate.query(SELECT_ROUTES, (rs, i) -> {
-                GatewayRoute result = new GatewayRoute();
+            List<GatewayRouteDTO> routeList = jdbcTemplate.query(SELECT_ROUTES, (rs, i) -> {
+                GatewayRouteDTO result = new GatewayRouteDTO();
                 result.setRouteId(rs.getLong("route_id"));
                 result.setPath(rs.getString("path"));
                 result.setServiceId(rs.getString("service_id"));
@@ -123,8 +123,8 @@ public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, Appli
                 result.setRouteName(rs.getString("route_name"));
                 return result;
             });
-            List<RateLimitApi> limitApiList = jdbcTemplate.query(SELECT_LIMIT_PATH, (rs, i) -> {
-                RateLimitApi result = new RateLimitApi();
+            List<RateLimitApiDTO> limitApiList = jdbcTemplate.query(SELECT_LIMIT_PATH, (rs, i) -> {
+                RateLimitApiDTO result = new RateLimitApiDTO();
                 result.setPolicyId(rs.getLong("policy_id"));
                 result.setPolicyName(rs.getString("policy_name"));
                 result.setServiceId(rs.getString("service_id"));

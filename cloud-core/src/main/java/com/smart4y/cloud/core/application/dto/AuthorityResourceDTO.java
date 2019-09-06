@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.domain.model;
+package com.smart4y.cloud.core.application.dto;
 
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @author liuyadu
  */
 @Data
-public class AuthorityResource implements Serializable {
+public class AuthorityResourceDTO implements Serializable {
 
     /**
      * 访问路径
