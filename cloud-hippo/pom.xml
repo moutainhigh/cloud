@@ -27,7 +27,7 @@
         </dependency>
         <dependency>
             <groupId>com.smart4y</groupId>
-            <artifactId>cloud-core</artifactId>
+            <artifactId>cloud-core-starter</artifactId>
         </dependency>
         <!-- Lombok -->
         <dependency>
