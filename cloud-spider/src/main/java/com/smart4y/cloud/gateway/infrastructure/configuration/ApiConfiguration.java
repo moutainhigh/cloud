@@ -9,14 +9,14 @@ import com.smart4y.cloud.core.infrastructure.properties.OpenCommonProperties;
 import com.smart4y.cloud.core.infrastructure.spring.SpringContextHolder;
 import com.smart4y.cloud.gateway.infrastructure.actuator.ApiEndpoint;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonExceptionHandler;
-import com.smart4y.cloud.gateway.infrastructure.service.feign.BaseAuthorityServiceClient;
-import com.smart4y.cloud.gateway.infrastructure.service.feign.GatewayServiceClient;
 import com.smart4y.cloud.gateway.infrastructure.filter.GatewayContextFilter;
 import com.smart4y.cloud.gateway.infrastructure.filter.RemoveGatewayContextFilter;
 import com.smart4y.cloud.gateway.infrastructure.locator.JdbcRouteDefinitionLocator;
 import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
-import com.smart4y.cloud.gateway.infrastructure.service.AccessLogService;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
+import com.smart4y.cloud.gateway.infrastructure.service.AccessLogService;
+import com.smart4y.cloud.gateway.infrastructure.service.feign.BaseAuthorityServiceClient;
+import com.smart4y.cloud.gateway.infrastructure.service.feign.GatewayServiceClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
@@ -76,7 +76,6 @@ public class ApiConfiguration {
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public ErrorWebExceptionHandler errorWebExceptionHandler(ObjectProvider<List<ViewResolver>> viewResolversProvider,
                                                              ServerCodecConfigurer serverCodecConfigurer, AccessLogService accessLogService) {
-
         JsonExceptionHandler jsonExceptionHandler = new JsonExceptionHandler(accessLogService);
         jsonExceptionHandler.setViewResolvers(viewResolversProvider.getIfAvailable(Collections::emptyList));
         jsonExceptionHandler.setMessageWriters(serverCodecConfigurer.getWriters());

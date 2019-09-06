@@ -5,9 +5,6 @@ spring:
     name: @artifactId@
   profiles:
     active: @profile.name@
-  mvc:
-    favicon:
-      enabled: false
   cloud:
     #手动配置Bus id,
     bus:
@@ -37,7 +34,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
-      pool-name: dbc
+      pool-name: dbg
       max-lifetime: 1765000
       minimum-idle: 1
       maximum-pool-size: 15
@@ -67,6 +64,9 @@ spring:
     suffix: .html
   main:
     allow-bean-definition-overriding: true
+  mvc:
+    favicon:
+      enabled: false
 ##熔断降级配置
 filters:
   - name: Hystrix

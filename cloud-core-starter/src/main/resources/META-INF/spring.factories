@@ -1,0 +1,8 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.smart4y.cloud.core.autoconfigure.AutoConfiguration,\
+  com.smart4y.cloud.core.autoconfigure.FeignAutoConfiguration,\
+  com.smart4y.cloud.core.autoconfigure.JacksonAutoConfiguration,\
+  com.smart4y.cloud.core.autoconfigure.MqAutoConfiguration,\
+  com.smart4y.cloud.core.autoconfigure.RedisCacheAutoConfiguration,\
+  com.smart4y.cloud.core.autoconfigure.SwaggerAutoConfiguration,\
+  com.smart4y.cloud.core.autoconfigure.WebMvcConfiguration

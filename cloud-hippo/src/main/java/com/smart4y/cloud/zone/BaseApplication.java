@@ -4,6 +4,7 @@ import com.smart4y.cloud.core.AbstractApplication;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
@@ -14,13 +15,14 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
+@EnableCaching
 @EnableFeignClients
 @SpringBootApplication
 @EnableDiscoveryClient
-public class ZoneApplication extends AbstractApplication implements CommandLineRunner {
+public class BaseApplication extends AbstractApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
-        initial(SpringApplication.run(ZoneApplication.class, args));
+        initial(SpringApplication.run(BaseApplication.class, args));
     }
 
     @Override

@@ -2296,3 +2296,399 @@ Caused by: org.springframework.security.access.AccessDeniedException: Access Den
 	at org.springframework.security.authorization.ReactiveAuthorizationManager.lambda$verify$1(ReactiveAuthorizationManager.java:53)
 	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:44)
 	... 249 common frames omitted
+[33m09-06 13:39:20.368[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:330[0;39m |[36mBean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$be87bf17] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[0;39m[33m09-06 13:39:20.708[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.b.c.PropertySourceBootstrapConfiguration:101[0;39m |[36mLocated property source: CompositePropertySource {name='NACOS', propertySources=[NacosPropertySource {name='cloud-spider-dev.properties'}, NacosPropertySource {name='cloud-spider.properties'}]}
+[0;39m[33m09-06 13:39:20.714[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mcom.smart4y.cloud.gateway.GatewayApplication:650[0;39m |[36mThe following profiles are active: dev
+[0;39m[33m09-06 13:39:22.231[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.d.r.config.RepositoryConfigurationDelegate:244[0;39m |[36mMultiple Spring Data modules found, entering strict repository configuration mode!
+[0;39m[33m09-06 13:39:22.236[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.d.r.config.RepositoryConfigurationDelegate:126[0;39m |[36mBootstrapping Spring Data repositories in DEFAULT mode.
+[0;39m[33m09-06 13:39:22.295[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.d.r.config.RepositoryConfigurationDelegate:182[0;39m |[36mFinished Spring Data repository scanning in 36ms. Found 0 repository interfaces.
+[0;39m[33m09-06 13:39:23.065[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.springframework.cloud.context.scope.GenericScope:295[0;39m |[36mBeanFactory id=444f7851-178d-3c01-bd24-03ce28d114c9
+[0;39m[33m09-06 13:39:23.083[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.i.c.DefaultConfiguringBeanFactoryPostProcessor:193[0;39m |[36mNo bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+[0;39m[33m09-06 13:39:23.211[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.i.c.DefaultConfiguringBeanFactoryPostProcessor:280[0;39m |[36mNo bean named 'taskScheduler' has been explicitly defined. Therefore, a default ThreadPoolTaskScheduler will be created.
+[0;39m[33m09-06 13:39:23.234[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.i.c.DefaultConfiguringBeanFactoryPostProcessor:431[0;39m |[36mNo bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+[0;39m[33m09-06 13:39:23.493[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:330[0;39m |[36mBean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$a26dbc1a] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[0;39m[33m09-06 13:39:23.543[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:330[0;39m |[36mBean 'integrationDisposableAutoCreatedBeans' of type [org.springframework.integration.config.annotation.Disposables] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[0;39m[33m09-06 13:39:23.575[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:330[0;39m |[36mBean 'org.springframework.integration.config.IntegrationManagementConfiguration' of type [org.springframework.integration.config.IntegrationManagementConfiguration$$EnhancerBySpringCGLIB$$d5f7749] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[0;39m[33m09-06 13:39:23.586[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:330[0;39m |[36mBean 'org.springframework.boot.autoconfigure.integration.IntegrationAutoConfiguration$IntegrationJmxConfiguration' of type [org.springframework.boot.autoconfigure.integration.IntegrationAutoConfiguration$IntegrationJmxConfiguration$$EnhancerBySpringCGLIB$$e8f18269] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[0;39m[33m09-06 13:39:23.601[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:330[0;39m |[36mBean 'org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration' of type [org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration$$EnhancerBySpringCGLIB$$21d92b36] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[0;39m[33m09-06 13:39:23.611[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:330[0;39m |[36mBean 'mbeanServer' of type [com.sun.jmx.mbeanserver.JmxMBeanServer] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[0;39m[33m09-06 13:39:23.640[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:330[0;39m |[36mBean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$be87bf17] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[0;39m[33m09-06 13:39:23.656[0;39m |[31mWARN [0;39m |[34mmain[0;39m |[34mo.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext:557[0;39m |[36mException encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server; nested exception is org.springframework.context.ApplicationContextException: Unable to start ServletWebServerApplicationContext due to missing ServletWebServerFactory bean.
+[0;39m[33m09-06 13:39:23.683[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.b.a.l.ConditionEvaluationReportLoggingListener:135[0;39m |[36m
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+[0;39m[33m09-06 13:39:23.715[0;39m |[1;31mERROR[0;39m |[34mmain[0;39m |[34morg.springframework.boot.SpringApplication:821[0;39m |[36mApplication run failed
+[0;39morg.springframework.context.ApplicationContextException: Unable to start web server; nested exception is org.springframework.context.ApplicationContextException: Unable to start ServletWebServerApplicationContext due to missing ServletWebServerFactory bean.
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:155)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:543)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:140)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:742)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:389)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:311)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1213)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1202)
+	at com.smart4y.cloud.gateway.GatewayApplication.main(GatewayApplication.java:38)
+Caused by: org.springframework.context.ApplicationContextException: Unable to start ServletWebServerApplicationContext due to missing ServletWebServerFactory bean.
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.getWebServerFactory(ServletWebServerApplicationContext.java:202)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:178)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:152)
+	... 8 common frames omitted
+[33m09-06 13:40:28.569[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:330[0;39m |[36mBean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$937d6a5c] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[0;39m[33m09-06 13:40:30.344[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.b.c.PropertySourceBootstrapConfiguration:101[0;39m |[36mLocated property source: CompositePropertySource {name='NACOS', propertySources=[NacosPropertySource {name='cloud-spider-dev.properties'}, NacosPropertySource {name='cloud-spider.properties'}]}
+[0;39m[33m09-06 13:40:30.407[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mcom.smart4y.cloud.gateway.GatewayApplication:650[0;39m |[36mThe following profiles are active: dev
+[0;39m[33m09-06 13:40:35.677[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.d.r.config.RepositoryConfigurationDelegate:244[0;39m |[36mMultiple Spring Data modules found, entering strict repository configuration mode!
+[0;39m[33m09-06 13:40:35.682[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.d.r.config.RepositoryConfigurationDelegate:126[0;39m |[36mBootstrapping Spring Data repositories in DEFAULT mode.
+[0;39m[33m09-06 13:40:35.784[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.d.r.config.RepositoryConfigurationDelegate:182[0;39m |[36mFinished Spring Data repository scanning in 55ms. Found 0 repository interfaces.
+[0;39m[33m09-06 13:40:36.654[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.springframework.cloud.context.scope.GenericScope:295[0;39m |[36mBeanFactory id=69adc08c-1d89-3174-a0c0-7ff004dfb548
+[0;39m[33m09-06 13:40:36.665[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.i.c.DefaultConfiguringBeanFactoryPostProcessor:193[0;39m |[36mNo bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+[0;39m[33m09-06 13:40:36.674[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.i.c.DefaultConfiguringBeanFactoryPostProcessor:280[0;39m |[36mNo bean named 'taskScheduler' has been explicitly defined. Therefore, a default ThreadPoolTaskScheduler will be created.
+[0;39m[33m09-06 13:40:36.689[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.i.c.DefaultConfiguringBeanFactoryPostProcessor:431[0;39m |[36mNo bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+[0;39m[33m09-06 13:40:36.876[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:330[0;39m |[36mBean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$7763675f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[0;39m[33m09-06 13:40:37.165[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:330[0;39m |[36mBean 'integrationDisposableAutoCreatedBeans' of type [org.springframework.integration.config.annotation.Disposables] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[0;39m[33m09-06 13:40:37.269[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:330[0;39m |[36mBean 'org.springframework.integration.config.IntegrationManagementConfiguration' of type [org.springframework.integration.config.IntegrationManagementConfiguration$$EnhancerBySpringCGLIB$$e255228e] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[0;39m[33m09-06 13:40:37.393[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:330[0;39m |[36mBean 'org.springframework.boot.autoconfigure.integration.IntegrationAutoConfiguration$IntegrationJmxConfiguration' of type [org.springframework.boot.autoconfigure.integration.IntegrationAutoConfiguration$IntegrationJmxConfiguration$$EnhancerBySpringCGLIB$$bde72dae] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[0;39m[33m09-06 13:40:37.487[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:330[0;39m |[36mBean 'org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration' of type [org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration$$EnhancerBySpringCGLIB$$f6ced67b] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[0;39m[33m09-06 13:40:37.516[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:330[0;39m |[36mBean 'mbeanServer' of type [com.sun.jmx.mbeanserver.JmxMBeanServer] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[0;39m[33m09-06 13:40:37.603[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:330[0;39m |[36mBean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$937d6a5c] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[0;39m[33m09-06 13:40:38.474[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mc.s.c.g.i.configuration.ApiConfiguration:139[0;39m |[36mJdbcRouteDefinitionLocator [com.smart4y.cloud.gateway.infrastructure.locator.JdbcRouteDefinitionLocator@5885e231]
+[0;39m[33m09-06 13:40:38.842[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mc.s.c.g.i.configuration.ApiConfiguration:150[0;39m |[36mResourceLocator [com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator@34beadce]
+[0;39m[33m09-06 13:40:39.208[0;39m |[31mWARN [0;39m |[34mmain[0;39m |[34mcom.netflix.config.sources.URLConfigurationSource:121[0;39m |[36mNo URLs will be polled as dynamic configuration sources.
+[0;39m[33m09-06 13:40:39.209[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mcom.netflix.config.sources.URLConfigurationSource:122[0;39m |[36mTo enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+[0;39m[33m09-06 13:40:39.220[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mcom.netflix.config.DynamicPropertyFactory:281[0;39m |[36mDynamicPropertyFactory is initialized with configuration sources: com.netflix.config.ConcurrentCompositeConfiguration@350567f1
+[0;39m[33m09-06 13:40:40.266[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mc.s.c.g.i.configuration.ApiConfiguration:67[0;39m |[36mSpringContextHolder [com.smart4y.cloud.core.infrastructure.spring.SpringContextHolder@6f65aa58]
+[0;39m[33m09-06 13:40:40.382[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.b.a.s.r.ReactiveUserDetailsServiceAutoConfiguration:76[0;39m |[36m
+
+Using generated security password: a329bd0f-cb8e-491e-8cf4-7286a0097c55
+
+[0;39m[33m09-06 13:40:40.453[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mc.s.c.g.i.configuration.ApiConfiguration:98[0;39m |[36mJacksonProperties [org.springframework.boot.autoconfigure.jackson.JacksonProperties@6124dda2]
+[0;39m[33m09-06 13:40:41.292[0;39m |[31mWARN [0;39m |[34mmain[0;39m |[34mo.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration:105[0;39m |[36mCannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+[0;39m[33m09-06 13:40:41.797[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mc.s.c.g.i.configuration.ApiConfiguration:84[0;39m |[36mErrorWebExceptionHandler [com.smart4y.cloud.gateway.infrastructure.exception.JsonExceptionHandler@68f2363]
+[0;39m[33m09-06 13:40:41.977[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mc.s.c.g.i.configuration.ApiConfiguration:123[0;39m |[36mMappingJackson2HttpMessageConverter [org.springframework.http.converter.json.MappingJackson2HttpMessageConverter@21d8da75]
+[0;39m[33m09-06 13:40:42.072[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mc.s.c.g.i.configuration.ApiConfiguration:162[0;39m |[36mApiEndpoint [com.smart4y.cloud.gateway.infrastructure.actuator.ApiEndpoint@fa11fda]
+[0;39m[33m09-06 13:40:42.090[0;39m |[39mDEBUG[0;39m |[34mmain[0;39m |[34mc.s.c.g.i.configuration.ApiConfiguration:169[0;39m |[36mLoad GatewayContextFilter Config Bean
+[0;39m[33m09-06 13:40:42.138[0;39m |[39mDEBUG[0;39m |[34mmain[0;39m |[34mc.s.c.g.i.configuration.ApiConfiguration:177[0;39m |[36mLoad RemoveGatewayContextFilter Config Bean
+[0;39m[33m09-06 13:40:43.923[0;39m |[31mWARN [0;39m |[34mmain[0;39m |[34mcom.netflix.config.sources.URLConfigurationSource:121[0;39m |[36mNo URLs will be polled as dynamic configuration sources.
+[0;39m[33m09-06 13:40:43.924[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mcom.netflix.config.sources.URLConfigurationSource:122[0;39m |[36mTo enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+[0;39m[33m09-06 13:40:46.692[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.gateway.route.RouteDefinitionRouteLocator:119[0;39m |[36mLoaded RoutePredicateFactory [After]
+[0;39m[33m09-06 13:40:46.693[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.gateway.route.RouteDefinitionRouteLocator:119[0;39m |[36mLoaded RoutePredicateFactory [Before]
+[0;39m[33m09-06 13:40:46.697[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.gateway.route.RouteDefinitionRouteLocator:119[0;39m |[36mLoaded RoutePredicateFactory [Between]
+[0;39m[33m09-06 13:40:46.698[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.gateway.route.RouteDefinitionRouteLocator:119[0;39m |[36mLoaded RoutePredicateFactory [Cookie]
+[0;39m[33m09-06 13:40:46.698[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.gateway.route.RouteDefinitionRouteLocator:119[0;39m |[36mLoaded RoutePredicateFactory [Header]
+[0;39m[33m09-06 13:40:46.699[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.gateway.route.RouteDefinitionRouteLocator:119[0;39m |[36mLoaded RoutePredicateFactory [Host]
+[0;39m[33m09-06 13:40:46.699[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.gateway.route.RouteDefinitionRouteLocator:119[0;39m |[36mLoaded RoutePredicateFactory [Method]
+[0;39m[33m09-06 13:40:46.700[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.gateway.route.RouteDefinitionRouteLocator:119[0;39m |[36mLoaded RoutePredicateFactory [Path]
+[0;39m[33m09-06 13:40:46.701[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.gateway.route.RouteDefinitionRouteLocator:119[0;39m |[36mLoaded RoutePredicateFactory [Query]
+[0;39m[33m09-06 13:40:46.702[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.gateway.route.RouteDefinitionRouteLocator:119[0;39m |[36mLoaded RoutePredicateFactory [ReadBodyPredicateFactory]
+[0;39m[33m09-06 13:40:46.704[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.gateway.route.RouteDefinitionRouteLocator:119[0;39m |[36mLoaded RoutePredicateFactory [RemoteAddr]
+[0;39m[33m09-06 13:40:46.705[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.gateway.route.RouteDefinitionRouteLocator:119[0;39m |[36mLoaded RoutePredicateFactory [Weight]
+[0;39m[33m09-06 13:40:46.706[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.gateway.route.RouteDefinitionRouteLocator:119[0;39m |[36mLoaded RoutePredicateFactory [CloudFoundryRouteService]
+[0;39m[33m09-06 13:40:50.391[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.scheduling.concurrent.ThreadPoolTaskScheduler:171[0;39m |[36mInitializing ExecutorService 'taskScheduler'
+[0;39m[33m09-06 13:40:51.620[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.b.actuate.endpoint.web.EndpointLinksResolver:58[0;39m |[36mExposing 3 endpoint(s) beneath base path '/actuator'
+[0;39m[33m09-06 13:40:54.758[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.scheduling.concurrent.ThreadPoolTaskScheduler:171[0;39m |[36mInitializing ExecutorService
+[0;39m[33m09-06 13:40:56.105[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.stream.messaging.DirectWithAttributesChannel:64[0;39m |[36mChannel 'cloud-spider-1.springCloudBusInput' has 1 subscriber(s).
+[0;39m[33m09-06 13:40:56.530[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.integration.monitor.IntegrationMBeanExporter:767[0;39m |[36mRegistering MessageChannel springCloudBusOutput
+[0;39m[33m09-06 13:40:56.764[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.integration.monitor.IntegrationMBeanExporter:767[0;39m |[36mRegistering MessageChannel springCloudBusInput
+[0;39m[33m09-06 13:40:56.779[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.integration.monitor.IntegrationMBeanExporter:767[0;39m |[36mRegistering MessageChannel nullChannel
+[0;39m[33m09-06 13:40:56.811[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.integration.monitor.IntegrationMBeanExporter:767[0;39m |[36mRegistering MessageChannel errorChannel
+[0;39m[33m09-06 13:40:57.004[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.integration.monitor.IntegrationMBeanExporter:785[0;39m |[36mRegistering MessageHandler errorLogger
+[0;39m[33m09-06 13:40:57.138[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.integration.monitor.IntegrationMBeanExporter:785[0;39m |[36mRegistering MessageHandler org.springframework.cloud.stream.binding.StreamListenerMessageHandler@69f24965
+[0;39m[33m09-06 13:40:57.532[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.integration.endpoint.EventDrivenConsumer:107[0;39m |[36mAdding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+[0;39m[33m09-06 13:40:57.534[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.integration.channel.PublishSubscribeChannel:64[0;39m |[36mChannel 'cloud-spider-1.errorChannel' has 1 subscriber(s).
+[0;39m[33m09-06 13:40:57.537[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.integration.endpoint.EventDrivenConsumer:159[0;39m |[36mstarted _org.springframework.integration.errorLogger
+[0;39m[33m09-06 13:40:57.683[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.b.c.PropertySourceBootstrapConfiguration:101[0;39m |[36mLocated property source: CompositePropertySource {name='NACOS', propertySources=[NacosPropertySource {name='cloud-spider-dev.properties'}, NacosPropertySource {name='cloud-spider.properties'}]}
+[0;39m[33m09-06 13:40:58.138[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mcom.alibaba.nacos.client.config.impl.ClientWorker:184[0;39m |[36m[fixed-127.0.0.1_8848] [subscribe] cloud-spider-dev.properties+DEFAULT_GROUP
+[0;39m[33m09-06 13:40:58.141[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mcom.alibaba.nacos.client.config.impl.CacheData:78[0;39m |[36m[fixed-127.0.0.1_8848] [add-listener] ok, tenant=, dataId=cloud-spider-dev.properties, group=DEFAULT_GROUP, cnt=1
+[0;39m[33m09-06 13:40:58.141[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mcom.alibaba.nacos.client.config.impl.ClientWorker:184[0;39m |[36m[fixed-127.0.0.1_8848] [subscribe] cloud-spider.properties+DEFAULT_GROUP
+[0;39m[33m09-06 13:40:58.141[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mcom.alibaba.nacos.client.config.impl.CacheData:78[0;39m |[36m[fixed-127.0.0.1_8848] [add-listener] ok, tenant=, dataId=cloud-spider.properties, group=DEFAULT_GROUP, cnt=1
+[0;39m[33m09-06 13:40:58.713[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.stream.messaging.DirectWithAttributesChannel:64[0;39m |[36mChannel 'cloud-spider-1.springCloudBusOutput' has 1 subscriber(s).
+[0;39m[33m09-06 13:40:58.837[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.s.b.r.p.RabbitExchangeQueueProvisioner:168[0;39m |[36mdeclaring queue for inbound: springCloudBus.anonymous.CgaXkGO5QRuo-0tna9iMYQ, bound to: springCloudBus
+[0;39m[33m09-06 13:40:59.014[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.integration.monitor.IntegrationMBeanExporter:767[0;39m |[36mRegistering MessageChannel springCloudBus.anonymous.CgaXkGO5QRuo-0tna9iMYQ.errors
+[0;39m[33m09-06 13:40:59.662[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.cloud.stream.binder.BinderErrorChannel:64[0;39m |[36mChannel 'cloud-spider-1.springCloudBus.anonymous.CgaXkGO5QRuo-0tna9iMYQ.errors' has 1 subscriber(s).
+[0;39m[33m09-06 13:40:59.663[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.cloud.stream.binder.BinderErrorChannel:64[0;39m |[36mChannel 'cloud-spider-1.springCloudBus.anonymous.CgaXkGO5QRuo-0tna9iMYQ.errors' has 2 subscriber(s).
+[0;39m[33m09-06 13:40:59.720[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.i.amqp.inbound.AmqpInboundChannelAdapter:159[0;39m |[36mstarted inbound.springCloudBus.anonymous.CgaXkGO5QRuo-0tna9iMYQ
+[0;39m[33m09-06 13:41:00.075[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.boot.web.embedded.netty.NettyWebServer:76[0;39m |[36mNetty started on port(s): 8888
+[0;39m[33m09-06 13:41:00.130[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mo.s.c.alibaba.nacos.registry.NacosServiceRegistry:64[0;39m |[36mnacos registry, cloud-spider 10.0.4.72:8888 register finished
+[0;39m[33m09-06 13:41:00.146[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mcom.smart4y.cloud.gateway.GatewayApplication:59[0;39m |[36mStarted GatewayApplication in 39.269 seconds (JVM running for 43.5)
+[0;39m[33m09-06 13:41:00.186[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mcom.zaxxer.hikari.HikariDataSource:110[0;39m |[36mdbg - Starting...
+[0;39m[33m09-06 13:41:00.927[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mcom.zaxxer.hikari.HikariDataSource:123[0;39m |[36mdbg - Start completed.
+[0;39m[33m09-06 13:41:00.993[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mc.s.c.g.i.locator.JdbcRouteDefinitionLocator:227[0;39m |[36m=============加载动态路由:6==============
+[0;39m[33m09-06 13:41:00.994[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mc.s.c.g.i.locator.JdbcRouteDefinitionLocator:228[0;39m |[36m=============加载动态限流:3==============
+[0;39m[33m09-06 13:41:01.003[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mc.s.c.g.infrastructure.locator.ResourceLocator:166[0;39m |[36m=============加载动态权限:0==============
+[0;39m[33m09-06 13:41:01.005[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mc.s.c.g.infrastructure.locator.ResourceLocator:185[0;39m |[36m=============加载IP黑名单:0==============
+[0;39m[33m09-06 13:41:01.005[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mc.s.c.g.infrastructure.locator.ResourceLocator:204[0;39m |[36m=============加载IP白名单:0==============
+[0;39m[33m09-06 13:41:01.007[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mcom.smart4y.cloud.core.AbstractApplication:36[0;39m |[36m
+----------------------------------------------------------
+	Application 'cloud-spider' is running! Access URLs:
+	Local: 		http://127.0.0.1:8888
+	External: 	http://10.0.4.72:8888
+	Profile(s): 	[dev]
+----------------------------------------------------------
+[0;39m[33m09-06 13:41:01.007[0;39m |[34mINFO [0;39m |[34mmain[0;39m |[34mcom.smart4y.cloud.core.AbstractApplication:48[0;39m |[36mRunning with Spring profile(s) : [dev]
+[0;39m[33m09-06 13:41:01.842[0;39m |[34mINFO [0;39m |[34mparallel-1[0;39m |[34mio.lettuce.core.EpollProvider:68[0;39m |[36mStarting without optional epoll library
+[0;39m[33m09-06 13:41:01.896[0;39m |[34mINFO [0;39m |[34mparallel-1[0;39m |[34mio.lettuce.core.KqueueProvider:70[0;39m |[36mStarting without optional kqueue library
+[0;39m[33m09-06 13:42:15.292[0;39m |[39mDEBUG[0;39m |[34mreactor-http-nio-2[0;39m |[34mc.s.c.g.infrastructure.filter.GatewayContextFilter:73[0;39m |[36m[GatewayContext]ContentType:null,Gateway context is set with GatewayContext(requestBody=null, responseBody=null, requestHeaders=[Accept:"*/*", Cache-Control:"no-cache", Host:"localhost:8888", Connection:"Keep-Alive", User-Agent:"Apache-HttpClient/4.5.6 (Java/1.8.0_202-release)", Accept-Encoding:"gzip,deflate"], formData=null, allRequestData={})
+[0;39m[33m09-06 13:42:15.453[0;39m |[1;31mERROR[0;39m |[34mreactor-http-nio-2[0;39m |[34mc.s.c.c.i.exception.OpenGlobalExceptionHandler:231[0;39m |[36m==> error:ResultBody{code=2012, message='认证失败,请重新登录!', path='/api/xxx', data=null, httpStatus=401, extra=null, timestamp=1567748535448} exception: {}
+[0;39morg.springframework.security.authentication.AuthenticationCredentialsNotFoundException: Not Authenticated
+	at org.springframework.security.web.server.authorization.ExceptionTranslationWebFilter.commenceAuthentication(ExceptionTranslationWebFilter.java:72)
+	at org.springframework.security.web.server.authorization.ExceptionTranslationWebFilter.lambda$filter$1(ExceptionTranslationWebFilter.java:44)
+	at reactor.core.publisher.Mono.lambda$onErrorResume$25(Mono.java:3142)
+	at reactor.core.publisher.FluxOnErrorResume$ResumeSubscriber.onError(FluxOnErrorResume.java:88)
+	at reactor.core.publisher.Operators$MultiSubscriptionSubscriber.onError(Operators.java:1748)
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onError(MonoFlatMap.java:165)
+	at reactor.core.publisher.Operators$MultiSubscriptionSubscriber.onError(Operators.java:1748)
+	at reactor.core.publisher.Operators.error(Operators.java:181)
+	at reactor.core.publisher.MonoError.subscribe(MonoError.java:52)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:3848)
+	at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onComplete(FluxSwitchIfEmpty.java:75)
+	at reactor.core.publisher.FluxFilter$FilterSubscriber.onComplete(FluxFilter.java:160)
+	at reactor.core.publisher.FluxDefaultIfEmpty$DefaultIfEmptySubscriber.onComplete(FluxDefaultIfEmpty.java:98)
+	at reactor.core.publisher.MonoNext$NextSubscriber.onComplete(MonoNext.java:96)
+	at reactor.core.publisher.MonoNext$NextSubscriber.onNext(MonoNext.java:77)
+	at reactor.core.publisher.FluxConcatMap$ConcatMapImmediate.innerNext(FluxConcatMap.java:275)
+	at reactor.core.publisher.FluxConcatMap$ConcatMapInner.onNext(FluxConcatMap.java:849)
+	at reactor.core.publisher.Operators$MonoSubscriber.complete(Operators.java:1515)
+	at reactor.core.publisher.MonoFlatMap$FlatMapInner.onNext(MonoFlatMap.java:241)
+	at reactor.core.publisher.Operators$MonoSubscriber.complete(Operators.java:1515)
+	at reactor.core.publisher.FluxDefaultIfEmpty$DefaultIfEmptySubscriber.onComplete(FluxDefaultIfEmpty.java:100)
+	at reactor.core.publisher.FluxMapFuseable$MapFuseableSubscriber.onComplete(FluxMapFuseable.java:144)
+	at reactor.core.publisher.FluxMapFuseable$MapFuseableSubscriber.onComplete(FluxMapFuseable.java:144)
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.onComplete(FluxFilterFuseable.java:166)
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.secondComplete(MonoFlatMap.java:189)
+	at reactor.core.publisher.MonoFlatMap$FlatMapInner.onComplete(MonoFlatMap.java:260)
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onNext(MonoFlatMap.java:141)
+	at reactor.core.publisher.FluxMap$MapSubscriber.onNext(FluxMap.java:114)
+	at reactor.core.publisher.Operators$MonoSubscriber.complete(Operators.java:1515)
+	at reactor.core.publisher.MonoProcessor.subscribe(MonoProcessor.java:457)
+	at reactor.core.publisher.MonoMap.subscribe(MonoMap.java:55)
+	at reactor.core.publisher.MonoFlatMap.subscribe(MonoFlatMap.java:60)
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onNext(MonoFlatMap.java:150)
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.onNext(FluxFilterFuseable.java:113)
+	at reactor.core.publisher.Operators$ScalarSubscription.request(Operators.java:2071)
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.request(FluxFilterFuseable.java:185)
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onSubscribe(MonoFlatMap.java:103)
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.onSubscribe(FluxFilterFuseable.java:82)
+	at reactor.core.publisher.MonoCurrentContext.subscribe(MonoCurrentContext.java:35)
+	at reactor.core.publisher.MonoFilterFuseable.subscribe(MonoFilterFuseable.java:47)
+	at reactor.core.publisher.MonoFlatMap.subscribe(MonoFlatMap.java:60)
+	at reactor.core.publisher.MonoFilterFuseable.subscribe(MonoFilterFuseable.java:47)
+	at reactor.core.publisher.MonoMapFuseable.subscribe(MonoMapFuseable.java:59)
+	at reactor.core.publisher.MonoMapFuseable.subscribe(MonoMapFuseable.java:59)
+	at reactor.core.publisher.MonoDefaultIfEmpty.subscribe(MonoDefaultIfEmpty.java:37)
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onNext(MonoFlatMap.java:150)
+	at reactor.core.publisher.FluxMapFuseable$MapFuseableSubscriber.onNext(FluxMapFuseable.java:121)
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.onNext(FluxFilterFuseable.java:113)
+	at reactor.core.publisher.Operators$ScalarSubscription.request(Operators.java:2071)
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.request(FluxFilterFuseable.java:185)
+	at reactor.core.publisher.FluxMapFuseable$MapFuseableSubscriber.request(FluxMapFuseable.java:162)
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onSubscribe(MonoFlatMap.java:103)
+	at reactor.core.publisher.FluxMapFuseable$MapFuseableSubscriber.onSubscribe(FluxMapFuseable.java:90)
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.onSubscribe(FluxFilterFuseable.java:82)
+	at reactor.core.publisher.MonoJust.subscribe(MonoJust.java:54)
+	at reactor.core.publisher.MonoFilterFuseable.subscribe(MonoFilterFuseable.java:47)
+	at reactor.core.publisher.MonoMapFuseable.subscribe(MonoMapFuseable.java:59)
+	at reactor.core.publisher.MonoFlatMap.subscribe(MonoFlatMap.java:60)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:3848)
+	at reactor.core.publisher.FluxConcatMap$ConcatMapImmediate.drain(FluxConcatMap.java:442)
+	at reactor.core.publisher.FluxConcatMap$ConcatMapImmediate.onSubscribe(FluxConcatMap.java:212)
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:139)
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:63)
+	at reactor.core.publisher.FluxConcatMap.subscribe(FluxConcatMap.java:121)
+	at reactor.core.publisher.MonoNext.subscribe(MonoNext.java:40)
+	at reactor.core.publisher.MonoDefaultIfEmpty.subscribe(MonoDefaultIfEmpty.java:37)
+	at reactor.core.publisher.MonoFilter.subscribe(MonoFilter.java:46)
+	at reactor.core.publisher.MonoSwitchIfEmpty.subscribe(MonoSwitchIfEmpty.java:44)
+	at reactor.core.publisher.MonoFlatMap.subscribe(MonoFlatMap.java:60)
+	at reactor.core.publisher.MonoSwitchIfEmpty.subscribe(MonoSwitchIfEmpty.java:44)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.MonoOnErrorResume.subscribe(MonoOnErrorResume.java:44)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:3848)
+	at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.drain(MonoIgnoreThen.java:172)
+	at reactor.core.publisher.MonoIgnoreThen.subscribe(MonoIgnoreThen.java:56)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:3848)
+	at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onComplete(FluxSwitchIfEmpty.java:75)
+	at reactor.core.publisher.FluxFilter$FilterSubscriber.onComplete(FluxFilter.java:160)
+	at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onComplete(FluxSwitchIfEmpty.java:78)
+	at reactor.core.publisher.Operators$ScalarSubscription.request(Operators.java:2073)
+	at reactor.core.publisher.Operators$MultiSubscriptionSubscriber.set(Operators.java:1879)
+	at reactor.core.publisher.Operators$MultiSubscriptionSubscriber.onSubscribe(Operators.java:1753)
+	at reactor.core.publisher.MonoJust.subscribe(MonoJust.java:54)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:3848)
+	at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onComplete(FluxSwitchIfEmpty.java:75)
+	at reactor.core.publisher.MonoNext$NextSubscriber.onComplete(MonoNext.java:96)
+	at reactor.core.publisher.FluxFilter$FilterSubscriber.onComplete(FluxFilter.java:160)
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.checkTerminated(FluxFlatMap.java:794)
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.drainLoop(FluxFlatMap.java:560)
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.drain(FluxFlatMap.java:540)
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.onComplete(FluxFlatMap.java:426)
+	at reactor.core.publisher.FluxIterable$IterableSubscription.slowPath(FluxIterable.java:265)
+	at reactor.core.publisher.FluxIterable$IterableSubscription.request(FluxIterable.java:201)
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.onSubscribe(FluxFlatMap.java:335)
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:139)
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:63)
+	at reactor.core.publisher.FluxFlatMap.subscribe(FluxFlatMap.java:97)
+	at reactor.core.publisher.FluxFilter.subscribe(FluxFilter.java:53)
+	at reactor.core.publisher.MonoNext.subscribe(MonoNext.java:40)
+	at reactor.core.publisher.MonoSwitchIfEmpty.subscribe(MonoSwitchIfEmpty.java:44)
+	at reactor.core.publisher.MonoFilter.subscribe(MonoFilter.java:46)
+	at reactor.core.publisher.MonoSwitchIfEmpty.subscribe(MonoSwitchIfEmpty.java:44)
+	at reactor.core.publisher.MonoMap.subscribe(MonoMap.java:55)
+	at reactor.core.publisher.MonoFlatMap.subscribe(MonoFlatMap.java:60)
+	at reactor.core.publisher.MonoFlatMap.subscribe(MonoFlatMap.java:60)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onNext(MonoFlatMap.java:150)
+	at reactor.core.publisher.Operators$MonoSubscriber.complete(Operators.java:1515)
+	at reactor.core.publisher.FluxDefaultIfEmpty$DefaultIfEmptySubscriber.onComplete(FluxDefaultIfEmpty.java:100)
+	at reactor.core.publisher.FluxMap$MapSubscriber.onComplete(FluxMap.java:136)
+	at reactor.core.publisher.FluxMap$MapSubscriber.onComplete(FluxMap.java:136)
+	at reactor.core.publisher.FluxFilter$FilterSubscriber.onComplete(FluxFilter.java:160)
+	at reactor.core.publisher.FluxMap$MapConditionalSubscriber.onComplete(FluxMap.java:262)
+	at reactor.core.publisher.Operators$MonoSubscriber.complete(Operators.java:1516)
+	at reactor.core.publisher.MonoProcessor.onNext(MonoProcessor.java:389)
+	at reactor.core.publisher.FluxPeek$PeekSubscriber.onNext(FluxPeek.java:192)
+	at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onNext(FluxSwitchIfEmpty.java:67)
+	at reactor.core.publisher.Operators$MonoSubscriber.complete(Operators.java:1515)
+	at reactor.core.publisher.MonoSupplier.subscribe(MonoSupplier.java:61)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:3848)
+	at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onComplete(FluxSwitchIfEmpty.java:75)
+	at reactor.core.publisher.MonoNext$NextSubscriber.onComplete(MonoNext.java:96)
+	at reactor.core.publisher.FluxConcatMap$ConcatMapImmediate.drain(FluxConcatMap.java:360)
+	at reactor.core.publisher.FluxConcatMap$ConcatMapImmediate.onComplete(FluxConcatMap.java:269)
+	at reactor.core.publisher.Operators.complete(Operators.java:131)
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:122)
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:63)
+	at reactor.core.publisher.FluxConcatMap.subscribe(FluxConcatMap.java:121)
+	at reactor.core.publisher.MonoNext.subscribe(MonoNext.java:40)
+	at reactor.core.publisher.MonoSwitchIfEmpty.subscribe(MonoSwitchIfEmpty.java:44)
+	at reactor.core.publisher.MonoPeek.subscribe(MonoPeek.java:71)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:3848)
+	at reactor.core.publisher.MonoProcessor.add(MonoProcessor.java:531)
+	at reactor.core.publisher.MonoProcessor.subscribe(MonoProcessor.java:444)
+	at reactor.core.publisher.MonoMap.subscribe(MonoMap.java:52)
+	at reactor.core.publisher.MonoFilter.subscribe(MonoFilter.java:46)
+	at reactor.core.publisher.MonoMap.subscribe(MonoMap.java:55)
+	at reactor.core.publisher.MonoMap.subscribe(MonoMap.java:55)
+	at reactor.core.publisher.MonoDefaultIfEmpty.subscribe(MonoDefaultIfEmpty.java:37)
+	at reactor.core.publisher.MonoFlatMap.subscribe(MonoFlatMap.java:60)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:3848)
+	at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.drain(MonoIgnoreThen.java:172)
+	at reactor.core.publisher.MonoIgnoreThen.subscribe(MonoIgnoreThen.java:56)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:3848)
+	at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.drain(MonoIgnoreThen.java:172)
+	at reactor.core.publisher.MonoIgnoreThen.subscribe(MonoIgnoreThen.java:56)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:3848)
+	at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onComplete(FluxSwitchIfEmpty.java:75)
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.secondComplete(MonoFlatMap.java:189)
+	at reactor.core.publisher.MonoFlatMap$FlatMapInner.onComplete(MonoFlatMap.java:260)
+	at reactor.core.publisher.FluxMap$MapSubscriber.onComplete(FluxMap.java:136)
+	at reactor.core.publisher.Operators.complete(Operators.java:131)
+	at reactor.core.publisher.MonoEmpty.subscribe(MonoEmpty.java:45)
+	at reactor.core.publisher.MonoMap.subscribe(MonoMap.java:55)
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onNext(MonoFlatMap.java:150)
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.onNext(FluxFilterFuseable.java:113)
+	at reactor.core.publisher.Operators$ScalarSubscription.request(Operators.java:2071)
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.request(FluxFilterFuseable.java:185)
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onSubscribe(MonoFlatMap.java:103)
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.onSubscribe(FluxFilterFuseable.java:82)
+	at reactor.core.publisher.MonoJust.subscribe(MonoJust.java:54)
+	at reactor.core.publisher.MonoFilterFuseable.subscribe(MonoFilterFuseable.java:47)
+	at reactor.core.publisher.MonoFlatMap.subscribe(MonoFlatMap.java:60)
+	at reactor.core.publisher.MonoSwitchIfEmpty.subscribe(MonoSwitchIfEmpty.java:44)
+	at reactor.core.publisher.MonoFlatMap.subscribe(MonoFlatMap.java:60)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.MonoSubscriberContext.subscribe(MonoSubscriberContext.java:47)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.MonoSubscriberContext.subscribe(MonoSubscriberContext.java:47)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onNext(MonoFlatMap.java:150)
+	at reactor.core.publisher.FluxMapFuseable$MapFuseableSubscriber.onNext(FluxMapFuseable.java:121)
+	at reactor.core.publisher.FluxMapFuseable$MapFuseableSubscriber.onNext(FluxMapFuseable.java:121)
+	at reactor.core.publisher.Operators$MonoSubscriber.complete(Operators.java:1515)
+	at reactor.core.publisher.MonoFlatMap$FlatMapInner.onNext(MonoFlatMap.java:241)
+	at reactor.core.publisher.Operators$MonoSubscriber.complete(Operators.java:1515)
+	at reactor.core.publisher.MonoCollectList$MonoCollectListSubscriber.onComplete(MonoCollectList.java:121)
+	at reactor.core.publisher.FluxIterable$IterableSubscription.fastPath(FluxIterable.java:333)
+	at reactor.core.publisher.FluxIterable$IterableSubscription.request(FluxIterable.java:198)
+	at reactor.core.publisher.MonoCollectList$MonoCollectListSubscriber.onSubscribe(MonoCollectList.java:72)
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:139)
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:63)
+	at reactor.core.publisher.MonoCollectList.subscribe(MonoCollectList.java:40)
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onNext(MonoFlatMap.java:150)
+	at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onNext(FluxSwitchIfEmpty.java:67)
+	at reactor.core.publisher.MonoNext$NextSubscriber.onNext(MonoNext.java:76)
+	at reactor.core.publisher.FluxFilterWhen$FluxFilterWhenSubscriber.drain(FluxFilterWhen.java:295)
+	at reactor.core.publisher.FluxFilterWhen$FluxFilterWhenSubscriber.onNext(FluxFilterWhen.java:134)
+	at reactor.core.publisher.FluxIterable$IterableSubscription.slowPath(FluxIterable.java:243)
+	at reactor.core.publisher.FluxIterable$IterableSubscription.request(FluxIterable.java:201)
+	at reactor.core.publisher.FluxFilterWhen$FluxFilterWhenSubscriber.onSubscribe(FluxFilterWhen.java:194)
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:139)
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:63)
+	at reactor.core.publisher.FluxFilterWhen.subscribe(FluxFilterWhen.java:69)
+	at reactor.core.publisher.MonoNext.subscribe(MonoNext.java:40)
+	at reactor.core.publisher.MonoSwitchIfEmpty.subscribe(MonoSwitchIfEmpty.java:44)
+	at reactor.core.publisher.MonoFlatMap.subscribe(MonoFlatMap.java:60)
+	at reactor.core.publisher.MonoMapFuseable.subscribe(MonoMapFuseable.java:59)
+	at reactor.core.publisher.MonoMapFuseable.subscribe(MonoMapFuseable.java:59)
+	at reactor.core.publisher.MonoFlatMap.subscribe(MonoFlatMap.java:60)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.MonoPeekTerminal.subscribe(MonoPeekTerminal.java:61)
+	at reactor.core.publisher.MonoPeekFuseable.subscribe(MonoPeekFuseable.java:74)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.MonoDoFinally.subscribe(MonoDoFinally.java:47)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:52)
+	at reactor.core.publisher.MonoOnErrorResume.subscribe(MonoOnErrorResume.java:44)
+	at reactor.core.publisher.MonoOnErrorResume.subscribe(MonoOnErrorResume.java:44)
+	at reactor.core.publisher.MonoPeekTerminal.subscribe(MonoPeekTerminal.java:61)
+	at reactor.core.publisher.MonoOnErrorResume.subscribe(MonoOnErrorResume.java:44)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:3848)
+	at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.drain(MonoIgnoreThen.java:172)
+	at reactor.core.publisher.MonoIgnoreThen.subscribe(MonoIgnoreThen.java:56)
+	at reactor.core.publisher.MonoPeekFuseable.subscribe(MonoPeekFuseable.java:70)
+	at reactor.core.publisher.MonoPeekTerminal.subscribe(MonoPeekTerminal.java:61)
+	at reactor.netty.http.server.HttpServerHandle.onStateChange(HttpServerHandle.java:64)
+	at reactor.netty.tcp.TcpServerBind$ChildObserver.onStateChange(TcpServerBind.java:226)
+	at reactor.netty.http.server.HttpServerOperations.onInboundNext(HttpServerOperations.java:442)
+	at reactor.netty.channel.ChannelOperationsHandler.channelRead(ChannelOperationsHandler.java:91)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:374)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:360)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:352)
+	at reactor.netty.http.server.HttpTrafficHandler.channelRead(HttpTrafficHandler.java:161)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:374)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:360)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:352)
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:438)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:323)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:297)
+	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:253)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:374)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:360)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:352)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1408)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:374)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:360)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:930)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:163)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:682)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:617)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:534)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:496)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:906)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: org.springframework.security.access.AccessDeniedException: Access Denied
+	at org.springframework.security.authorization.ReactiveAuthorizationManager.lambda$verify$1(ReactiveAuthorizationManager.java:53)
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:44)
+	... 249 common frames omitted

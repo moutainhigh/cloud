@@ -13,6 +13,7 @@
     <modules>
         <module>cloud-dependencies</module>
         <module>cloud-core</module>
+        <module>cloud-core-starter</module>
 
         <module>cloud-hippo</module>
         <module>cloud-owl</module>

@@ -1,0 +1,67 @@
+server:
+  port: 8223
+spring:
+  application:
+    name: @artifactId@
+  profiles:
+    active: @profile.name@
+  cloud:
+    #手动配置Bus id,
+    bus:
+      id: ${spring.application.name}:${server.port}
+    nacos:
+      discovery:
+        server-addr: @discovery.server-addr@
+        namespace: @config.namespace@
+      config:
+        server-addr: @config.server-addr@
+        namespace: @config.namespace@
+        #refreshable-dataids: common.properties
+        #shared-dataids: common.properties,db.properties,redis.properties,rabbitmq.properties
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/cloud?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: dbb
+      max-lifetime: 1765000
+      minimum-idle: 1
+      maximum-pool-size: 15
+      connection-test-query: SELECT 1
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: 3000ms
+        max-idle: 8
+        min-idle: 2
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    publisher-confirms: true
+  main:
+    allow-bean-definition-overriding: true
+  mvc:
+    ##解决 Restful 404错误 spring.mvc.throw-exception-if-no-handler-found=true spring.resources.add-mappings=false
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: true
+management:
+  endpoints:
+    web:
+      exposure:
+        # 开放部分端点和自定义端点
+        include: '*'
+opencloud:
+  swagger2:
+    enabled: true
+    description: 平台基础服务器
+    title: 平台基础服务器
