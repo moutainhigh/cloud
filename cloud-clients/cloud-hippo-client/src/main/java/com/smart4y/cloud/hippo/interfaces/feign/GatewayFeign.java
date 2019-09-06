@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 
 /**
- * 网关信息服务
+ * 网关对外信息服务
  *
  * @author Youtao
  *         Created by youtao on 2019-09-06.

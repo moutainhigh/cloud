@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 /**
- * 应用基础信息 服务
+ * 系统应用信息服务
  *
  * @author Youtao
  *         Created by youtao on 2019-09-06.

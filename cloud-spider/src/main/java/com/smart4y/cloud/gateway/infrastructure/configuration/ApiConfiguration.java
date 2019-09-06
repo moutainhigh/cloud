@@ -71,9 +71,10 @@ public class ApiConfiguration {
     /**
      * 自定义异常处理[@@]注册Bean时依赖的Bean，会从容器中直接获取，所以直接注入即可
      */
-    @Primary
     @Bean
+    @Primary
     @Order(Ordered.HIGHEST_PRECEDENCE)
+    @SuppressWarnings("all")
     public ErrorWebExceptionHandler errorWebExceptionHandler(ObjectProvider<List<ViewResolver>> viewResolversProvider,
                                                              ServerCodecConfigurer serverCodecConfigurer, AccessLogService accessLogService) {
         JsonExceptionHandler jsonExceptionHandler = new JsonExceptionHandler(accessLogService);

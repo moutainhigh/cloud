@@ -176,7 +176,7 @@ public class GatewayContextFilter implements WebFilter, Ordered {
                 .flatMap(dataBuffer -> {
                     /*
                      * read the body Flux<DataBuffer>, and release the buffer
-                     * //TODO when SpringCloudGateway Version Release To G.SR2,this can be update with the new version's feature
+                     *  when SpringCloudGateway Version Release To G.SR2,this can be update with the new version's feature
                      * see PR https://github.com/spring-cloud/spring-cloud-gateway/pull/1095
                      */
                     byte[] bytes = new byte[dataBuffer.readableByteCount()];
