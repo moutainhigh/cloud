@@ -1,6 +1,6 @@
 package com.smart4y.cloud.gateway.interfaces.web;
 
-import com.smart4y.cloud.core.properties.OpenCommonProperties;
+import com.smart4y.cloud.core.infrastructure.properties.OpenCommonProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;

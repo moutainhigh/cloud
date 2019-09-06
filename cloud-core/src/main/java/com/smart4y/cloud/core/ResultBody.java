@@ -1,8 +1,8 @@
 package com.smart4y.cloud.core;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Maps;
+import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -15,7 +15,6 @@ import java.util.ResourceBundle;
  */
 @ApiModel(value = "响应结果")
 public class ResultBody<T> implements Serializable {
-    private static final long serialVersionUID = -6190689122701100762L;
 
     /**
      * 响应编码

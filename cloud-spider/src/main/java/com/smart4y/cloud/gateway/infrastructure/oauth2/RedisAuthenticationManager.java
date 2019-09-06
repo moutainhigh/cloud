@@ -1,6 +1,6 @@
 package com.smart4y.cloud.gateway.infrastructure.oauth2;
 
-import com.smart4y.cloud.core.ErrorCode;
+import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.core.Authentication;

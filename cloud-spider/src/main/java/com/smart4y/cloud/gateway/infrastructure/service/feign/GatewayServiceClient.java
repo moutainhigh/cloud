@@ -1,8 +1,8 @@
 package com.smart4y.cloud.gateway.infrastructure.service.feign;
 
-import com.smart4y.cloud.core.GatewayRoute;
-import com.smart4y.cloud.core.IpLimitApi;
-import com.smart4y.cloud.core.RateLimitApi;
+import com.smart4y.cloud.core.domain.model.GatewayRoute;
+import com.smart4y.cloud.core.domain.model.IpLimitApi;
+import com.smart4y.cloud.core.domain.model.RateLimitApi;
 import com.smart4y.cloud.core.ResultBody;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;

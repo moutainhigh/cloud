@@ -1,6 +1,6 @@
 package com.smart4y.cloud.gateway.infrastructure.fallback;
 
-import com.smart4y.cloud.core.ErrorCode;
+import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import com.smart4y.cloud.core.ResultBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

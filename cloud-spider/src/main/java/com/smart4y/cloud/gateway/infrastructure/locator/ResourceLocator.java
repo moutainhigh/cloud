@@ -1,9 +1,9 @@
 package com.smart4y.cloud.gateway.infrastructure.locator;
 
 import com.google.common.collect.Lists;
-import com.smart4y.cloud.core.AuthorityResource;
-import com.smart4y.cloud.core.IpLimitApi;
-import com.smart4y.cloud.core.RemoteRefreshRouteEvent;
+import com.smart4y.cloud.core.domain.model.AuthorityResource;
+import com.smart4y.cloud.core.domain.model.IpLimitApi;
+import com.smart4y.cloud.core.domain.RemoteRefreshRouteEvent;
 import com.smart4y.cloud.gateway.infrastructure.service.feign.BaseAuthorityServiceClient;
 import com.smart4y.cloud.gateway.infrastructure.service.feign.GatewayServiceClient;
 import lombok.extern.slf4j.Slf4j;

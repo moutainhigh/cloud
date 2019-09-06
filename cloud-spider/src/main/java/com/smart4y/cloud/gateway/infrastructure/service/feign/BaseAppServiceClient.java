@@ -1,8 +1,8 @@
 package com.smart4y.cloud.gateway.infrastructure.service.feign;
 
-import com.smart4y.cloud.core.BaseApp;
-import com.smart4y.cloud.core.OpenClientDetails;
 import com.smart4y.cloud.core.ResultBody;
+import com.smart4y.cloud.core.domain.OpenClientDetails;
+import com.smart4y.cloud.core.domain.model.BaseApp;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

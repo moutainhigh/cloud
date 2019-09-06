@@ -1,9 +1,9 @@
 package com.smart4y.cloud.gateway.infrastructure.locator;
 
 import com.google.common.collect.Lists;
-import com.smart4y.cloud.core.GatewayRoute;
-import com.smart4y.cloud.core.RateLimitApi;
-import com.smart4y.cloud.core.RemoteRefreshRouteEvent;
+import com.smart4y.cloud.core.domain.model.GatewayRoute;
+import com.smart4y.cloud.core.domain.model.RateLimitApi;
+import com.smart4y.cloud.core.domain.RemoteRefreshRouteEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.filter.FilterDefinition;

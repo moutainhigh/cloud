@@ -1,7 +1,7 @@
 package com.smart4y.cloud.gateway.infrastructure.service.feign;
 
-import com.smart4y.cloud.core.AuthorityMenu;
-import com.smart4y.cloud.core.AuthorityResource;
+import com.smart4y.cloud.core.domain.model.AuthorityMenu;
+import com.smart4y.cloud.core.domain.model.AuthorityResource;
 import com.smart4y.cloud.core.ResultBody;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;

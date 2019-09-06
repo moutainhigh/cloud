@@ -2,8 +2,8 @@ package com.smart4y.cloud.gateway.infrastructure.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
-import com.smart4y.cloud.core.OpenUserDetails;
-import com.smart4y.cloud.core.QueueConstants;
+import com.smart4y.cloud.core.domain.OpenUserDetails;
+import com.smart4y.cloud.core.infrastructure.constants.QueueConstants;
 import com.smart4y.cloud.gateway.infrastructure.filter.context.GatewayContext;
 import com.smart4y.cloud.gateway.infrastructure.toolkit.ReactiveWebUtils;
 import lombok.extern.slf4j.Slf4j;
