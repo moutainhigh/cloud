@@ -15,6 +15,7 @@
         <module>cloud-core</module>
         <module>cloud-core-starter</module>
 
+        <module>cloud-clients</module>
         <module>cloud-hippo</module>
         <module>cloud-owl</module>
         <module>cloud-spider</module>
