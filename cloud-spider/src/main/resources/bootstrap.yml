@@ -37,7 +37,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
-      pool-name: db-op
+      pool-name: dbc
       max-lifetime: 1765000
       minimum-idle: 1
       maximum-pool-size: 15
@@ -52,6 +52,13 @@ spring:
         max-wait: 3000ms
         max-idle: 8
         min-idle: 2
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    publisher-confirms: true
   thymeleaf:
     cache: false
     encoding: UTF-8
@@ -60,14 +67,13 @@ spring:
     suffix: .html
   main:
     allow-bean-definition-overriding: true
-
+##熔断降级配置
 filters:
-  # 熔断降级配置
   - name: Hystrix
     args:
       name: default
       fallbackUri: 'forward:/fallback'
-# hystrix 信号量隔离，3秒后自动超时
+##Hystrix 信号量隔离，3秒后自动超时
 hystrix:
   command:
     default:

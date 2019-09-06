@@ -3,9 +3,12 @@ package com.smart4y.cloud.gateway.infrastructure.service;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.smart4y.cloud.core.OpenUserDetails;
+import com.smart4y.cloud.core.QueueConstants;
 import com.smart4y.cloud.gateway.infrastructure.filter.context.GatewayContext;
 import com.smart4y.cloud.gateway.infrastructure.toolkit.ReactiveWebUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.http.HttpHeaders;
@@ -32,7 +35,13 @@ public class JdbcAccessLogService implements AccessLogService {
     @Value("${spring.application.name}")
     private String defaultServiceId;
 
+    private final AmqpTemplate amqpTemplate;
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
+
+    @Autowired
+    public JdbcAccessLogService(AmqpTemplate amqpTemplate) {
+        this.amqpTemplate = amqpTemplate;
+    }
 
     /**
      * 不记录日志的请求列表
@@ -84,7 +93,7 @@ public class JdbcAccessLogService implements AccessLogService {
         map.put("error", error);
         map.put("authentication", authentication);
         try {
-            log.info("Send Log: {}", map);
+            amqpTemplate.convertAndSend(QueueConstants.QUEUE_ACCESS_LOGS, map);
         } catch (Exception e) {
             log.error("Access log save error {}", e.getMessage(), e);
         }
