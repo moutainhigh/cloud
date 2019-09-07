@@ -7,6 +7,7 @@ import com.smart4y.cloud.core.domain.RemoteRefreshRouteEvent;
 import com.smart4y.cloud.gateway.infrastructure.service.feign.BaseAuthorityServiceClient;
 import com.smart4y.cloud.gateway.infrastructure.service.feign.GatewayServiceClient;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.access.ConfigAttribute;
@@ -204,6 +205,9 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
             }
         } catch (Exception e) {
             log.error("加载IP白名单错误：{}", e.getLocalizedMessage(), e);
+        }
+        if (CollectionUtils.isEmpty(list)) {
+            return Flux.empty();
         }
         return Flux.fromIterable(list);
     }
