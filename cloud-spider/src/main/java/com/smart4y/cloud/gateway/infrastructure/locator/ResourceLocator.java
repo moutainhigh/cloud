@@ -90,7 +90,6 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
         ipWhites = CacheFlux.lookup(cache, "ipWhites", IpLimitApiDTO.class).onCacheMissResume(Flux.fromIterable(new ArrayList<>()));
     }
 
-
     public ResourceLocator(RouteDefinitionLocator routeDefinitionLocator, BaseAuthorityServiceClient baseAuthorityServiceClient, GatewayServiceClient gatewayServiceClient) {
         this();
         this.baseAuthorityServiceClient = baseAuthorityServiceClient;
@@ -166,7 +165,7 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
                 log.info("=============加载动态权限:{}==============", resources.size());
             }
         } catch (Exception e) {
-            log.error("加载动态权限错误:{}", e);
+            log.error("加载动态权限错误：{}", e.getLocalizedMessage(), e);
         }
         return Flux.fromIterable(resources);
     }
@@ -185,7 +184,7 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
                 log.info("=============加载IP黑名单:{}==============", list.size());
             }
         } catch (Exception e) {
-            log.error("加载IP黑名单错误:{}", e);
+            log.error("加载IP黑名单错误：{}", e.getLocalizedMessage(), e);
         }
         return Flux.fromIterable(list);
     }
@@ -204,16 +203,13 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
                 log.info("=============加载IP白名单:{}==============", list.size());
             }
         } catch (Exception e) {
-            log.error("加载IP白名单错误:{}", e);
+            log.error("加载IP白名单错误：{}", e.getLocalizedMessage(), e);
         }
         return Flux.fromIterable(list);
     }
 
     /**
      * 获取单位时间内刷新时长和请求总时长
-     *
-     * @param timeUnit
-     * @return
      */
     public static long[] getIntervalAndQuota(String timeUnit) {
         if (timeUnit.equalsIgnoreCase(TimeUnit.SECONDS.name())) {
