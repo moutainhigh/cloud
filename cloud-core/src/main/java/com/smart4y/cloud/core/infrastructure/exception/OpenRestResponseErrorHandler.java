@@ -8,7 +8,8 @@ import java.io.IOException;
 /**
  * 自定RestTemplate异常处理
  *
- * @author liuyadu
+ *  * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 public class OpenRestResponseErrorHandler implements ResponseErrorHandler {
 

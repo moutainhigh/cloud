@@ -16,7 +16,6 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class JsonAccessDeniedHandler extends DeniedHandler implements ServerAccessDeniedHandler {
 
-
     public JsonAccessDeniedHandler(AccessLogService accessLogAdapter) {
         super(accessLogAdapter);
     }

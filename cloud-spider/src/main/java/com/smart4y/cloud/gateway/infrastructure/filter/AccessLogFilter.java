@@ -15,7 +15,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * 日志过滤器
+ * 日志 过滤器
  *
  * @author Youtao
  *         Created by youtao on 2019-09-05.
@@ -42,7 +42,7 @@ public class AccessLogFilter implements WebFilter {
                         // probably should reuse buffers
                         byte[] content = new byte[dataBuffer.readableByteCount()];
                         dataBuffer.read(content);
-                        //释放掉内存
+                        // 释放掉内存
                         DataBufferUtils.release(dataBuffer);
                         return bufferFactory.wrap(content);
                     }));

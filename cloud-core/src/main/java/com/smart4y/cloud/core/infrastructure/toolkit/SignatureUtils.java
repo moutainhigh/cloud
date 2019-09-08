@@ -12,7 +12,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author liuyadu
+ *  * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class SignatureUtils {

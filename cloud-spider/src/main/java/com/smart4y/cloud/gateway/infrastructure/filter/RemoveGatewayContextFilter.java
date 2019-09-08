@@ -9,7 +9,7 @@ import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 /**
- * 移除GatewayContext过滤器
+ * 移除GatewayContext 过滤器
  *
  * @author Youtao
  *         Created by youtao on 2019-09-05.

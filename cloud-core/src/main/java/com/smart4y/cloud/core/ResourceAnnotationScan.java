@@ -41,7 +41,8 @@ import java.util.concurrent.Executors;
 /**
  * 自定义注解扫描
  *
- * @author liuyadu
+ *  * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class ResourceAnnotationScan implements ApplicationListener<ApplicationReadyEvent> {

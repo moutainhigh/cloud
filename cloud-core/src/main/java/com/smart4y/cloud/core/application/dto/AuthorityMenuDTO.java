@@ -10,7 +10,8 @@ import java.util.Objects;
 /**
  * 菜单权限
  *
- * @author liuyadu
+ *  * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AuthorityMenuDTO extends BaseMenuDTO implements Serializable {

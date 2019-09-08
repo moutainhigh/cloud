@@ -5,7 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 /**
  * 自定义oauth2异常提示
  *
- * @author liuyadu
+ *  * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @JsonSerialize(using = OpenOAuth2ExceptionSerializer.class)
 public class OpenOAuth2Exception extends org.springframework.security.oauth2.common.exceptions.OAuth2Exception {

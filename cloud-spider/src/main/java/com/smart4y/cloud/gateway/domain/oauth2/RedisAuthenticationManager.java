@@ -11,6 +11,8 @@ import org.springframework.security.oauth2.server.resource.BearerTokenAuthentica
 import reactor.core.publisher.Mono;
 
 /**
+ * Redis缓存认证 管理类
+ *
  * @author Youtao
  *         Created by youtao on 2019-09-05.
  */

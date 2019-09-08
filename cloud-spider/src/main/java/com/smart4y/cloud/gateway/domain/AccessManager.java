@@ -7,7 +7,6 @@ import com.smart4y.cloud.core.domain.OpenAuthority;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
-import com.smart4y.cloud.gateway.domain.ReactiveIpAddressMatcher;
 import com.smart4y.cloud.gateway.domain.locator.ResourceLocator;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -27,24 +26,21 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
  * 访问权限控制管理类
  *
- * @author liuyadu
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 @Component
 public class AccessManager implements ReactiveAuthorizationManager<AuthorizationContext> {
 
-    private ResourceLocator resourceLocator;
-
-    private ApiProperties apiProperties;
-
     private static final AntPathMatcher pathMatch = new AntPathMatcher();
-
+    private ResourceLocator resourceLocator;
+    private ApiProperties apiProperties;
     private Set<String> permitAll = new ConcurrentHashSet<>();
 
     private Set<String> authorityIgnores = new ConcurrentHashSet<>();
@@ -85,22 +81,17 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
         if (permitAll(requestPath)) {
             return Mono.just(new AuthorizationDecision(true));
         }
-        return authentication.map(a -> {
-            return new AuthorizationDecision(checkAuthorities(exchange, a, requestPath));
-        }).defaultIfEmpty(new AuthorizationDecision(false));
+        return authentication
+                .map(a -> new AuthorizationDecision(checkAuthorities(exchange, a, requestPath)))
+                .defaultIfEmpty(new AuthorizationDecision(false));
     }
 
     /**
      * 始终放行
-     *
-     * @param requestPath
-     * @return
      */
     public boolean permitAll(String requestPath) {
         final Boolean[] result = {false};
-        Iterator<String> it = permitAll.iterator();
-        while (it.hasNext()) {
-            String path = it.next();
+        for (String path : permitAll) {
             if (pathMatch.match(path, requestPath)) {
                 return true;
             }
@@ -109,11 +100,10 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
         Flux<AuthorityResourceDTO> resources = resourceLocator.getAuthorityResources();
         resources.filter(res -> StringUtils.isNotBlank(res.getPath()))
                 .subscribe(res -> {
-                    Boolean isAuth = res.getIsAuth() != null && res.getIsAuth().intValue() == 1 ? true : false;
+                    boolean isAuth = res.getIsAuth() != null && res.getIsAuth().intValue() == 1;
                     // 无需认证,返回true
                     if (pathMatch.match(res.getPath(), requestPath) && !isAuth) {
                         result[0] = true;
-                        return;
                     }
                 });
         return result[0];
@@ -133,14 +123,9 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
 
     /**
      * 忽略鉴权
-     *
-     * @param requestPath
-     * @return
      */
     private boolean authorityIgnores(String requestPath) {
-        Iterator<String> it = authorityIgnores.iterator();
-        while (it.hasNext()) {
-            String path = it.next();
+        for (String path : authorityIgnores) {
             if (pathMatch.match(path, requestPath)) {
                 return true;
             }
@@ -150,11 +135,6 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
 
     /**
      * 检查权限
-     *
-     * @param exchange
-     * @param authentication
-     * @param requestPath
-     * @return
      */
     private boolean checkAuthorities(ServerWebExchange exchange, Authentication authentication, String requestPath) {
         Object principal = authentication.getPrincipal();
@@ -185,17 +165,13 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
                 return true;
             }
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-            Iterator var6 = attributes.iterator();
-            while (var6.hasNext()) {
-                ConfigAttribute attribute = (ConfigAttribute) var6.next();
-                Iterator var8 = authorities.iterator();
-                while (var8.hasNext()) {
-                    GrantedAuthority authority = (GrantedAuthority) var8.next();
+            for (ConfigAttribute attribute : attributes) {
+                for (GrantedAuthority authority : authorities) {
                     if (attribute.getAttribute().equals(authority.getAuthority())) {
                         result++;
                         if (authority instanceof OpenAuthority) {
                             OpenAuthority customer = (OpenAuthority) authority;
-                            if (customer.getIsExpired() != null && customer.getIsExpired()) {
+                            if (customer.getIsExpired()) {
                                 // 授权过期数
                                 expires++;
                             }
@@ -214,8 +190,7 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
 
     private Collection<ConfigAttribute> getAttributes(String requestPath) {
         // 匹配动态权限
-        for (Iterator<String> iter = resourceLocator.getConfigAttributes().keySet().iterator(); iter.hasNext(); ) {
-            String url = iter.next();
+        for (String url : resourceLocator.getConfigAttributes().keySet()) {
             // 防止匹配错误 忽略/**
             if (!"/**".equals(url) && pathMatch.match(url, requestPath)) {
                 // 返回匹配到权限
@@ -227,11 +202,6 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
 
     /**
      * IP黑名单验证
-     *
-     * @param requestPath
-     * @param ipAddress
-     * @param origin
-     * @return
      */
     public boolean matchIpOrOriginBlacklist(String requestPath, String ipAddress, String origin) {
         final Boolean[] result = {false};
@@ -246,9 +216,6 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
     /**
      * 白名单验证
      *
-     * @param requestPath
-     * @param ipAddress
-     * @param origin
      * @return [hasWhiteList, allow]
      */
     public Boolean[] matchIpOrOriginWhiteList(String requestPath, String ipAddress, String origin) {
@@ -266,14 +233,9 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
 
     /**
      * 匹配IP或域名
-     *
-     * @param values
-     * @param ipAddress
-     * @param origin
-     * @return
      */
     public boolean matchIpOrOrigin(Set<String> values, String ipAddress, String origin) {
-        ReactiveIpAddressMatcher ipAddressMatcher = null;
+        ReactiveIpAddressMatcher ipAddressMatcher;
         for (String value : values) {
             if (StringUtils.matchIp(value)) {
                 ipAddressMatcher = new ReactiveIpAddressMatcher(value);

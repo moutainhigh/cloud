@@ -11,7 +11,7 @@ import org.springframework.web.server.ServerWebExchange;
 public interface AccessLogService {
 
     /**
-     * 发送日志
+     * 发送网关日志
      */
     void sendLog(ServerWebExchange exchange, Exception e);
 }

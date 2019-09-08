@@ -33,7 +33,8 @@ import java.util.Locale;
 /**
  * Swagger文档生成配置
  *
- * @author liuyadu
+ *  * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 @EnableConfigurationProperties({OpenSwaggerProperties.class})

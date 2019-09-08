@@ -1,7 +1,7 @@
 package com.smart4y.cloud.gateway.infrastructure.exception;
 
-import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import com.smart4y.cloud.core.ResultBody;
+import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import com.smart4y.cloud.core.infrastructure.exception.OpenGlobalExceptionHandler;
 import com.smart4y.cloud.gateway.application.AccessLogService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,42 +26,38 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author liuyadu
- * @classDesc: 统一异常处理
+ * 统一异常处理
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class JsonExceptionHandler implements ErrorWebExceptionHandler {
 
     private AccessLogService accessLogService;
+    /**
+     * MessageReader
+     */
+    private List<HttpMessageReader<?>> messageReaders = Collections.emptyList();
+    /**
+     * MessageWriter
+     */
+    private List<HttpMessageWriter<?>> messageWriters = Collections.emptyList();
+    /**
+     * ViewResolvers
+     */
+    private List<ViewResolver> viewResolvers = Collections.emptyList();
+    /**
+     * 存储处理异常后的信息
+     */
+    private ThreadLocal<ResultBody> exceptionHandlerResult = new ThreadLocal<>();
 
     public JsonExceptionHandler(AccessLogService accessLogService) {
         this.accessLogService = accessLogService;
     }
 
     /**
-     * MessageReader
-     */
-    private List<HttpMessageReader<?>> messageReaders = Collections.emptyList();
-
-    /**
-     * MessageWriter
-     */
-    private List<HttpMessageWriter<?>> messageWriters = Collections.emptyList();
-
-    /**
-     * ViewResolvers
-     */
-    private List<ViewResolver> viewResolvers = Collections.emptyList();
-
-    /**
-     * 存储处理异常后的信息
-     */
-    private ThreadLocal<ResultBody> exceptionHandlerResult = new ThreadLocal<>();
-
-    /**
      * 参考AbstractErrorWebExceptionHandler
-     *
-     * @param messageReaders
      */
     public void setMessageReaders(List<HttpMessageReader<?>> messageReaders) {
         Assert.notNull(messageReaders, "'messageReaders' must not be null");
@@ -70,8 +66,6 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
 
     /**
      * 参考AbstractErrorWebExceptionHandler
-     *
-     * @param viewResolvers
      */
     public void setViewResolvers(List<ViewResolver> viewResolvers) {
         this.viewResolvers = viewResolvers;
@@ -79,8 +73,6 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
 
     /**
      * 参考AbstractErrorWebExceptionHandler
-     *
-     * @param messageWriters
      */
     public void setMessageWriters(List<HttpMessageWriter<?>> messageWriters) {
         Assert.notNull(messageWriters, "'messageWriters' must not be null");
@@ -89,7 +81,7 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
 
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
-        /**
+        /*
          * 按照异常类型进行处理
          */
         ResultBody resultBody;
@@ -103,7 +95,7 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
         } else {
             resultBody = OpenGlobalExceptionHandler.resolveException((Exception) ex, exchange.getRequest().getURI().getPath());
         }
-        /**
+        /*
          * 参考AbstractErrorWebExceptionHandler
          */
         if (exchange.getResponse().isCommitted()) {
@@ -114,18 +106,13 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
         return RouterFunctions.route(RequestPredicates.all(), this::renderErrorResponse).route(newRequest)
                 .switchIfEmpty(Mono.error(ex))
                 .flatMap((handler) -> handler.handle(newRequest))
-                .flatMap((response) -> {
-                    return write(exchange, response, ex);
-                });
+                .flatMap((response) -> write(exchange, response, ex));
     }
 
     /**
      * 参考DefaultErrorWebExceptionHandler
-     *
-     * @param request
-     * @return
      */
-    protected Mono<ServerResponse> renderErrorResponse(ServerRequest request) {
+    private Mono<ServerResponse> renderErrorResponse(ServerRequest request) {
         ResultBody result = exceptionHandlerResult.get();
         return ServerResponse.status(result.getHttpStatus())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -134,10 +121,6 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
 
     /**
      * 参考AbstractErrorWebExceptionHandler
-     *
-     * @param exchange
-     * @param response
-     * @return
      */
     private Mono<? extends Void> write(ServerWebExchange exchange,
                                        ServerResponse response, Throwable ex) {

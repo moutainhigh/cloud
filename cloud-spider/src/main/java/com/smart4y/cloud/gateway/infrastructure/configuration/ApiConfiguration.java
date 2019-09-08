@@ -7,16 +7,16 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.smart4y.cloud.core.infrastructure.properties.OpenCommonProperties;
 import com.smart4y.cloud.core.infrastructure.spring.SpringContextHolder;
-import com.smart4y.cloud.gateway.domain.actuator.ApiEndpoint;
-import com.smart4y.cloud.gateway.infrastructure.exception.JsonExceptionHandler;
-import com.smart4y.cloud.gateway.infrastructure.filter.GatewayContextFilter;
-import com.smart4y.cloud.gateway.infrastructure.filter.RemoveGatewayContextFilter;
-import com.smart4y.cloud.gateway.domain.locator.JdbcRouteDefinitionLocator;
-import com.smart4y.cloud.gateway.domain.locator.ResourceLocator;
-import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
 import com.smart4y.cloud.gateway.application.AccessLogService;
 import com.smart4y.cloud.gateway.application.feign.BaseAuthorityServiceClient;
 import com.smart4y.cloud.gateway.application.feign.GatewayServiceClient;
+import com.smart4y.cloud.gateway.interfaces.actuator.ApiEndpoint;
+import com.smart4y.cloud.gateway.domain.locator.JdbcRouteDefinitionLocator;
+import com.smart4y.cloud.gateway.domain.locator.ResourceLocator;
+import com.smart4y.cloud.gateway.infrastructure.exception.JsonExceptionHandler;
+import com.smart4y.cloud.gateway.infrastructure.filter.GatewayContextFilter;
+import com.smart4y.cloud.gateway.infrastructure.filter.RemoveGatewayContextFilter;
+import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
@@ -177,11 +177,6 @@ public class ApiConfiguration {
         log.debug("Load RemoveGatewayContextFilter Config Bean");
         return gatewayContextFilter;
     }
-
-     /*@Bean
-    public KeyResolver ipKeyResolver() {
-        return exchange -> Mono.just(exchange.getRequest().getRemoteAddress().getHostName());
-    }*/
 
     @Bean
     public KeyResolver pathKeyResolver() {

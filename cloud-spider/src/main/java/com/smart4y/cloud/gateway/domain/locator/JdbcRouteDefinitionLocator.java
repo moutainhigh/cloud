@@ -26,18 +26,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 自定义动态路由加载器
- *
- * @author liuyadu
+ * <p>
+ * @author Youtao
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, ApplicationListener<RemoteRefreshRouteEvent> {
 
-    private JdbcTemplate jdbcTemplate;
-    private Flux<RouteDefinition> routeDefinitions;
-    private Map<String, List> cache = new ConcurrentHashMap<>();
-
     private final static String SELECT_ROUTES = "SELECT * FROM gateway_route WHERE status = 1";
-
     private final static String SELECT_LIMIT_PATH = "SELECT\n" +
             "        i.policy_id,\n" +
             "        p.limit_quota,\n" +
@@ -57,6 +53,9 @@ public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, Appli
             "    INNER JOIN gateway_route AS r ON a.service_id = r.route_name\n" +
             "    WHERE\n" +
             "        p.policy_type = 'url'";
+    private JdbcTemplate jdbcTemplate;
+    private Flux<RouteDefinition> routeDefinitions;
+    private Map<String, List> cache = new ConcurrentHashMap<>();
 
 
     public JdbcRouteDefinitionLocator(JdbcTemplate jdbcTemplate) {

@@ -9,7 +9,7 @@ import java.util.Set;
  * 网关属性配置类
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ *         Created by youtao on 2019-09-08.
  */
 @Data
 @ConfigurationProperties(prefix = "opencloud.api")

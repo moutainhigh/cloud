@@ -1,7 +1,7 @@
-package com.smart4y.cloud.gateway.domain.actuator;
+package com.smart4y.cloud.gateway.interfaces.actuator;
 
-import com.smart4y.cloud.core.domain.RemoteRefreshRouteEvent;
 import com.smart4y.cloud.core.ResultBody;
+import com.smart4y.cloud.core.domain.RemoteRefreshRouteEvent;
 import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint;
 import org.springframework.cloud.bus.endpoint.AbstractBusEndpoint;
 import org.springframework.context.ApplicationEventPublisher;
@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * 自定义网关监控端点
  *
- * @author liuyadu
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @RestControllerEndpoint(
         id = "open"

@@ -7,7 +7,8 @@ import java.util.Objects;
 /**
  * 功能权限
  *
- * @author liuyadu
+ *  * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AuthorityAction extends BaseAction {

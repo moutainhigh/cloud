@@ -8,20 +8,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
- * @author: liuyadu
- * @date: 2018/11/5 16:33
- * @description:
+ * @author Youtao
+ *         Created by youtao on 2019-09-08.
  */
 @Controller
 public class IndexController {
 
-    @Autowired
-    private ApiProperties apiProperties;
-    @Autowired
-    private RouteDefinitionLocator routeDefinitionLocator;
-
     @Value("${spring.application.name}")
     private String serviceId;
+
+    private final ApiProperties apiProperties;
+    private final RouteDefinitionLocator routeDefinitionLocator;
+
+    @Autowired
+    public IndexController(ApiProperties apiProperties, RouteDefinitionLocator routeDefinitionLocator) {
+        this.apiProperties = apiProperties;
+        this.routeDefinitionLocator = routeDefinitionLocator;
+    }
 
     @GetMapping("/")
     public String index() {

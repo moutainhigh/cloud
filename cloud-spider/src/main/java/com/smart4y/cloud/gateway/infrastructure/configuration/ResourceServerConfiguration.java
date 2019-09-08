@@ -103,12 +103,14 @@ public class ResourceServerConfiguration {
         JsonAuthenticationDeniedHandler entryPoint = new JsonAuthenticationDeniedHandler(messageQueueAccessLogService);
         JsonAccessDeniedHandler accessDeniedHandler = new JsonAccessDeniedHandler(messageQueueAccessLogService);
         AccessManager accessManager = new AccessManager(resourceLocator, apiProperties);
+
         AuthenticationWebFilter oauth2 = new AuthenticationWebFilter(new RedisAuthenticationManager(new RedisTokenStore(redisConnectionFactory)));
         oauth2.setServerAuthenticationConverter(new ServerBearerTokenAuthenticationConverter());
         oauth2.setAuthenticationFailureHandler(new ServerAuthenticationEntryPointFailureHandler(entryPoint));
         oauth2.setAuthenticationSuccessHandler((webFilterExchange, authentication) -> {
             ServerWebExchange exchange = webFilterExchange.getExchange();
-            Mono<SecurityContext> subscriberContext = ReactiveSecurityContextHolder.getContext().subscriberContext(ReactiveSecurityContextHolder.withAuthentication(authentication));
+            Mono<SecurityContext> subscriberContext = ReactiveSecurityContextHolder.getContext()
+                    .subscriberContext(ReactiveSecurityContextHolder.withAuthentication(authentication));
             SecurityContextServerWebExchange securityContextServerWebExchange = new SecurityContextServerWebExchange(exchange, subscriberContext);
             return webFilterExchange.getChain().filter(securityContextServerWebExchange);
         });

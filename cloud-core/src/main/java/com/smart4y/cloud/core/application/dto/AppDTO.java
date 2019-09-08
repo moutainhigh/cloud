@@ -8,7 +8,8 @@ import java.io.Serializable;
 /**
  * 系统应用-基础信息
  *
- * @author liuyadu
+ *  * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Data
 @NoArgsConstructor

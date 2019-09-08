@@ -25,7 +25,8 @@ import java.util.zip.CRC32;
  * 1、AES、DES可逆算法
  * 2、md5,Hex,Sha不可逆算法加密
  *
- * @author liuyadu
+ *  * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 public class EncryptUtils extends DigestUtils {
 

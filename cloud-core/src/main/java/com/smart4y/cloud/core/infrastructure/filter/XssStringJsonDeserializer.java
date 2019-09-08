@@ -9,7 +9,8 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import java.io.IOException;
 
 /**
- * @author liuyadu
+ *  * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 public class XssStringJsonDeserializer extends JsonDeserializer<String> {
 

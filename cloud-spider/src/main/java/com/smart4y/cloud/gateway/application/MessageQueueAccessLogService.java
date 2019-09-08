@@ -34,17 +34,10 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.G
 @Component
 public class MessageQueueAccessLogService implements AccessLogService {
 
-    @Value("${spring.application.name}")
-    private String defaultServiceId;
-
     private final AmqpTemplate amqpTemplate;
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
-
-    @Autowired
-    public MessageQueueAccessLogService(AmqpTemplate amqpTemplate) {
-        this.amqpTemplate = amqpTemplate;
-    }
-
+    @Value("${spring.application.name}")
+    private String defaultServiceId;
     /**
      * 不记录日志的请求列表
      */
@@ -52,6 +45,11 @@ public class MessageQueueAccessLogService implements AccessLogService {
             "/**/oauth/check_token/**",
             "/**/gateway/access/logs/**",
             "/webjars/**");
+
+    @Autowired
+    public MessageQueueAccessLogService(AmqpTemplate amqpTemplate) {
+        this.amqpTemplate = amqpTemplate;
+    }
 
     /**
      * 是否忽略记录日志

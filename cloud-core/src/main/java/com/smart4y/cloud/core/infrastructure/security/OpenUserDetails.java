@@ -12,7 +12,8 @@ import java.util.Map;
 /**
  * 自定义认证用户信息
  *
- * @author liuyadu
+ *  * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 public class OpenUserDetails implements UserDetails {
 

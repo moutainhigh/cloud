@@ -11,7 +11,8 @@ import java.util.UUID;
 /**
  * 随机生成工具类
  *
- * @author liuyadu
+ *  * @author Youtao
+ *         Created by youtao on 2019-09-05.
  * @date 2017/5/9
  */
 @Service

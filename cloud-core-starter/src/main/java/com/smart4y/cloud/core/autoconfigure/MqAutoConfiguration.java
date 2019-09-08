@@ -7,7 +7,8 @@ import org.springframework.context.annotation.Bean;
 
 
 /**
- * @author liuyadu
+ *  * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class MqAutoConfiguration {

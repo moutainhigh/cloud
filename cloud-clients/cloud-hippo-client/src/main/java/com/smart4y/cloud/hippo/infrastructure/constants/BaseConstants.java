@@ -3,7 +3,8 @@ package com.smart4y.cloud.hippo.infrastructure.constants;
 /**
  * 通用权限常量
  *
- * @author liuyadu
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 public class BaseConstants {
 
@@ -23,7 +24,6 @@ public class BaseConstants {
     public final static int ENABLED = 1;
     public final static int DISABLED = 0;
 
-
     /**
      * 系统用户类型:超级管理员-super 普通管理员-admin
      */
@@ -39,8 +39,10 @@ public class BaseConstants {
     public final static int ACCOUNT_STATUS_LOCKED = 2;
 
     /**
-     * 账号类型:
-     * username:系统用户名、email：邮箱、mobile：手机号、qq：QQ号、weixin：微信号、weibo：微博
+     * 账号类型
+     * <p>
+     * username系统用户名、email邮箱、mobile手机号、qqQQ号、weixin微信号、weibo微博
+     * </p>
      */
     public final static String ACCOUNT_TYPE_USERNAME = "username";
     public final static String ACCOUNT_TYPE_EMAIL = "email";

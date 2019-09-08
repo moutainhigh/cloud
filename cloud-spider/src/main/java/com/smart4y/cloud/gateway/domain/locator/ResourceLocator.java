@@ -24,14 +24,16 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 资源加载器
+ * <p>
  *
- * @author liuyadu
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEvent> {
 
 
-    /**
+    /*
      * 单位时间
      */
     /**
@@ -96,6 +98,23 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
         this.baseAuthorityServiceClient = baseAuthorityServiceClient;
         this.gatewayServiceClient = gatewayServiceClient;
         this.routeDefinitionLocator = routeDefinitionLocator;
+    }
+
+    /**
+     * 获取单位时间内刷新时长和请求总时长
+     */
+    public static long[] getIntervalAndQuota(String timeUnit) {
+        if (timeUnit.equalsIgnoreCase(TimeUnit.SECONDS.name())) {
+            return new long[]{SECONDS_IN_MINUTE, PERIOD_SECOND_TTL};
+        } else if (timeUnit.equalsIgnoreCase(TimeUnit.MINUTES.name())) {
+            return new long[]{SECONDS_IN_MINUTE, PERIOD_MINUTE_TTL};
+        } else if (timeUnit.equalsIgnoreCase(TimeUnit.HOURS.name())) {
+            return new long[]{SECONDS_IN_HOUR, PERIOD_HOUR_TTL};
+        } else if (timeUnit.equalsIgnoreCase(TimeUnit.DAYS.name())) {
+            return new long[]{SECONDS_IN_DAY, PERIOD_DAY_TTL};
+        } else {
+            throw new IllegalArgumentException("Don't support this TimeUnit: " + timeUnit);
+        }
     }
 
     /**
@@ -168,13 +187,16 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
         } catch (Exception e) {
             log.error("加载动态权限错误：{}", e.getLocalizedMessage(), e);
         }
+        if (CollectionUtils.isEmpty(resources)) {
+            return Flux.empty();
+        }
         return Flux.fromIterable(resources);
     }
 
     /**
      * 加载IP黑名单
      */
-    public Flux<IpLimitApiDTO> loadIpBlackList() {
+    private Flux<IpLimitApiDTO> loadIpBlackList() {
         List<IpLimitApiDTO> list = Lists.newArrayList();
         try {
             list = gatewayServiceClient.getApiBlackList().getData();
@@ -187,13 +209,16 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
         } catch (Exception e) {
             log.error("加载IP黑名单错误：{}", e.getLocalizedMessage(), e);
         }
+        if (CollectionUtils.isEmpty(list)) {
+            return Flux.empty();
+        }
         return Flux.fromIterable(list);
     }
 
     /**
      * 加载IP白名单
      */
-    public Flux<IpLimitApiDTO> loadIpWhiteList() {
+    private Flux<IpLimitApiDTO> loadIpWhiteList() {
         List<IpLimitApiDTO> list = Lists.newArrayList();
         try {
             list = gatewayServiceClient.getApiWhiteList().getData();
@@ -210,23 +235,6 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
             return Flux.empty();
         }
         return Flux.fromIterable(list);
-    }
-
-    /**
-     * 获取单位时间内刷新时长和请求总时长
-     */
-    public static long[] getIntervalAndQuota(String timeUnit) {
-        if (timeUnit.equalsIgnoreCase(TimeUnit.SECONDS.name())) {
-            return new long[]{SECONDS_IN_MINUTE, PERIOD_SECOND_TTL};
-        } else if (timeUnit.equalsIgnoreCase(TimeUnit.MINUTES.name())) {
-            return new long[]{SECONDS_IN_MINUTE, PERIOD_MINUTE_TTL};
-        } else if (timeUnit.equalsIgnoreCase(TimeUnit.HOURS.name())) {
-            return new long[]{SECONDS_IN_HOUR, PERIOD_HOUR_TTL};
-        } else if (timeUnit.equalsIgnoreCase(TimeUnit.DAYS.name())) {
-            return new long[]{SECONDS_IN_DAY, PERIOD_DAY_TTL};
-        } else {
-            throw new IllegalArgumentException("Don't support this TimeUnit: " + timeUnit);
-        }
     }
 
     public Flux<AuthorityResourceDTO> getAuthorityResources() {
