@@ -1,4 +1,4 @@
-package com.smart4y.cloud.gateway.infrastructure.filter;
+package com.smart4y.cloud.gateway.domain;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
 import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
@@ -7,9 +7,9 @@ import com.smart4y.cloud.core.domain.OpenAuthority;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
+import com.smart4y.cloud.gateway.domain.ReactiveIpAddressMatcher;
 import com.smart4y.cloud.gateway.domain.locator.ResourceLocator;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
-import com.smart4y.cloud.gateway.infrastructure.toolkit.ReactiveIpAddressMatcher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
@@ -48,7 +48,6 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
     private Set<String> permitAll = new ConcurrentHashSet<>();
 
     private Set<String> authorityIgnores = new ConcurrentHashSet<>();
-
 
     public AccessManager(ResourceLocator resourceLocator, ApiProperties apiProperties) {
         this.resourceLocator = resourceLocator;

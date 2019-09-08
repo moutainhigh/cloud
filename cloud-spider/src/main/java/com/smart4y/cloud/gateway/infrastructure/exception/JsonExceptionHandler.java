@@ -3,7 +3,7 @@ package com.smart4y.cloud.gateway.infrastructure.exception;
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import com.smart4y.cloud.core.ResultBody;
 import com.smart4y.cloud.core.infrastructure.exception.OpenGlobalExceptionHandler;
-import com.smart4y.cloud.gateway.infrastructure.service.AccessLogService;
+import com.smart4y.cloud.gateway.application.AccessLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.cloud.gateway.support.NotFoundException;

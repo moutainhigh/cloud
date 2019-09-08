@@ -3,7 +3,7 @@ package com.smart4y.cloud.gateway.infrastructure.exception;
 import com.alibaba.fastjson.JSONObject;
 import com.smart4y.cloud.core.ResultBody;
 import com.smart4y.cloud.core.infrastructure.exception.OpenGlobalExceptionHandler;
-import com.smart4y.cloud.gateway.infrastructure.service.AccessLogService;
+import com.smart4y.cloud.gateway.application.AccessLogService;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.core.io.buffer.DataBufferUtils;

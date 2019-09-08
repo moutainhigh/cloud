@@ -2,6 +2,7 @@ package com.smart4y.cloud.gateway.infrastructure.filter;
 
 import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
+import com.smart4y.cloud.gateway.domain.AccessManager;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonAccessDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.toolkit.ReactiveWebUtils;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
 package com.smart4y.cloud.gateway.infrastructure.filter;
 
-import com.smart4y.cloud.gateway.infrastructure.service.AccessLogService;
+import com.smart4y.cloud.gateway.application.AccessLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
 import org.springframework.core.io.buffer.DataBuffer;

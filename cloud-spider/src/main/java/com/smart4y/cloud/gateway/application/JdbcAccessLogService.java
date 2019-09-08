@@ -1,4 +1,4 @@
-package com.smart4y.cloud.gateway.infrastructure.service;
+package com.smart4y.cloud.gateway.application;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;

@@ -1,4 +1,4 @@
-package com.smart4y.cloud.gateway.infrastructure.service.feign;
+package com.smart4y.cloud.gateway.application.feign;
 
 import com.smart4y.cloud.hippo.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.hippo.interfaces.feign.GatewayFeign;

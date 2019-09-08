@@ -1,6 +1,6 @@
 package com.smart4y.cloud.gateway.infrastructure.exception;
 
-import com.smart4y.cloud.gateway.infrastructure.service.AccessLogService;
+import com.smart4y.cloud.gateway.application.AccessLogService;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.server.ServerAuthenticationEntryPoint;
 import org.springframework.web.server.ServerWebExchange;

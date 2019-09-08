@@ -1,16 +1,16 @@
 package com.smart4y.cloud.gateway.infrastructure.configuration;
 
-import com.smart4y.cloud.gateway.infrastructure.filter.AccessManager;
+import com.smart4y.cloud.gateway.domain.AccessManager;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonAccessDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonAuthenticationDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonSignatureDeniedHandler;
-import com.smart4y.cloud.gateway.infrastructure.service.feign.BaseAppServiceClient;
+import com.smart4y.cloud.gateway.application.feign.BaseAppServiceClient;
 import com.smart4y.cloud.gateway.infrastructure.filter.AccessLogFilter;
 import com.smart4y.cloud.gateway.infrastructure.filter.PreCheckFilter;
 import com.smart4y.cloud.gateway.infrastructure.filter.PreRequestFilter;
 import com.smart4y.cloud.gateway.infrastructure.filter.PreSignatureFilter;
 import com.smart4y.cloud.gateway.domain.locator.ResourceLocator;
-import com.smart4y.cloud.gateway.infrastructure.service.JdbcAccessLogService;
+import com.smart4y.cloud.gateway.application.JdbcAccessLogService;
 import com.smart4y.cloud.gateway.domain.oauth2.RedisAuthenticationManager;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
 import org.springframework.beans.factory.annotation.Autowired;

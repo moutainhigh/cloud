@@ -10,7 +10,7 @@ import com.smart4y.cloud.core.infrastructure.toolkit.SignatureUtils;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonSignatureDeniedHandler;
 import com.smart4y.cloud.gateway.domain.GatewayContext;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
-import com.smart4y.cloud.gateway.infrastructure.service.feign.BaseAppServiceClient;
+import com.smart4y.cloud.gateway.application.feign.BaseAppServiceClient;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.server.ServerWebExchange;

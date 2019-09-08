@@ -1,7 +1,7 @@
 package com.smart4y.cloud.gateway.infrastructure.exception;
 
 import com.smart4y.cloud.core.infrastructure.exception.OpenSignatureException;
-import com.smart4y.cloud.gateway.infrastructure.service.AccessLogService;
+import com.smart4y.cloud.gateway.application.AccessLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;

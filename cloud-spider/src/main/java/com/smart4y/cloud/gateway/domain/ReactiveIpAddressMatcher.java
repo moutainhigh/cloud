@@ -1,4 +1,4 @@
-package com.smart4y.cloud.gateway.infrastructure.toolkit;
+package com.smart4y.cloud.gateway.domain;
 
 import org.springframework.util.StringUtils;
 
