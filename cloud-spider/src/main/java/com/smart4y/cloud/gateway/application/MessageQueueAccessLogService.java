@@ -2,8 +2,8 @@ package com.smart4y.cloud.gateway.application;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
-import com.smart4y.cloud.core.infrastructure.security.OpenUserDetails;
 import com.smart4y.cloud.core.infrastructure.constants.QueueConstants;
+import com.smart4y.cloud.core.infrastructure.security.OpenUserDetails;
 import com.smart4y.cloud.gateway.domain.GatewayContext;
 import com.smart4y.cloud.gateway.infrastructure.toolkit.ReactiveWebUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -25,12 +25,14 @@ import java.util.*;
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR;
 
 /**
+ * 网关日志记录 实现类
+ *
  * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 @Component
-public class JdbcAccessLogService implements AccessLogService {
+public class MessageQueueAccessLogService implements AccessLogService {
 
     @Value("${spring.application.name}")
     private String defaultServiceId;
@@ -39,7 +41,7 @@ public class JdbcAccessLogService implements AccessLogService {
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Autowired
-    public JdbcAccessLogService(AmqpTemplate amqpTemplate) {
+    public MessageQueueAccessLogService(AmqpTemplate amqpTemplate) {
         this.amqpTemplate = amqpTemplate;
     }
 

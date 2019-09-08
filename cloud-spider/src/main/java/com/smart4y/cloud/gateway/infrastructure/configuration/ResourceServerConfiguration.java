@@ -1,17 +1,17 @@
 package com.smart4y.cloud.gateway.infrastructure.configuration;
 
+import com.smart4y.cloud.gateway.application.MessageQueueAccessLogService;
+import com.smart4y.cloud.gateway.application.feign.BaseAppServiceClient;
 import com.smart4y.cloud.gateway.domain.AccessManager;
+import com.smart4y.cloud.gateway.domain.locator.ResourceLocator;
+import com.smart4y.cloud.gateway.domain.oauth2.RedisAuthenticationManager;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonAccessDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonAuthenticationDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonSignatureDeniedHandler;
-import com.smart4y.cloud.gateway.application.feign.BaseAppServiceClient;
 import com.smart4y.cloud.gateway.infrastructure.filter.AccessLogFilter;
 import com.smart4y.cloud.gateway.infrastructure.filter.PreCheckFilter;
 import com.smart4y.cloud.gateway.infrastructure.filter.PreRequestFilter;
 import com.smart4y.cloud.gateway.infrastructure.filter.PreSignatureFilter;
-import com.smart4y.cloud.gateway.domain.locator.ResourceLocator;
-import com.smart4y.cloud.gateway.application.JdbcAccessLogService;
-import com.smart4y.cloud.gateway.domain.oauth2.RedisAuthenticationManager;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -52,13 +52,13 @@ public class ResourceServerConfiguration {
     private final BaseAppServiceClient baseAppServiceClient;
     private final ApiProperties apiProperties;
     private final ResourceLocator resourceLocator;
-    private final JdbcAccessLogService accessLogService;
+    private final MessageQueueAccessLogService messageQueueAccessLogService;
     private final RedisConnectionFactory redisConnectionFactory;
 
     @Autowired
     @SuppressWarnings("all")
-    public ResourceServerConfiguration(JdbcAccessLogService accessLogService, ApiProperties apiProperties, ResourceLocator resourceLocator, RedisConnectionFactory redisConnectionFactory, BaseAppServiceClient baseAppServiceClient) {
-        this.accessLogService = accessLogService;
+    public ResourceServerConfiguration(MessageQueueAccessLogService messageQueueAccessLogService, ApiProperties apiProperties, ResourceLocator resourceLocator, RedisConnectionFactory redisConnectionFactory, BaseAppServiceClient baseAppServiceClient) {
+        this.messageQueueAccessLogService = messageQueueAccessLogService;
         this.apiProperties = apiProperties;
         this.resourceLocator = resourceLocator;
         this.redisConnectionFactory = redisConnectionFactory;
@@ -100,8 +100,8 @@ public class ResourceServerConfiguration {
     @SuppressWarnings("all")
     public SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
         // 自定义Oauth2认证, 使用Redis读取token，而非Jwt方式。
-        JsonAuthenticationDeniedHandler entryPoint = new JsonAuthenticationDeniedHandler(accessLogService);
-        JsonAccessDeniedHandler accessDeniedHandler = new JsonAccessDeniedHandler(accessLogService);
+        JsonAuthenticationDeniedHandler entryPoint = new JsonAuthenticationDeniedHandler(messageQueueAccessLogService);
+        JsonAccessDeniedHandler accessDeniedHandler = new JsonAccessDeniedHandler(messageQueueAccessLogService);
         AccessManager accessManager = new AccessManager(resourceLocator, apiProperties);
         AuthenticationWebFilter oauth2 = new AuthenticationWebFilter(new RedisAuthenticationManager(new RedisTokenStore(redisConnectionFactory)));
         oauth2.setServerAuthenticationConverter(new ServerBearerTokenAuthenticationConverter());
@@ -128,13 +128,13 @@ public class ResourceServerConfiguration {
                 // 跨域过滤器
                 .addFilterAt(corsFilter(), SecurityWebFiltersOrder.CORS)
                 // 签名验证过滤器
-                .addFilterAt(new PreSignatureFilter(baseAppServiceClient, apiProperties, new JsonSignatureDeniedHandler(accessLogService)), SecurityWebFiltersOrder.CSRF)
+                .addFilterAt(new PreSignatureFilter(baseAppServiceClient, apiProperties, new JsonSignatureDeniedHandler(messageQueueAccessLogService)), SecurityWebFiltersOrder.CSRF)
                 // 访问验证前置过滤器
                 .addFilterAt(new PreCheckFilter(accessManager, accessDeniedHandler), SecurityWebFiltersOrder.CSRF)
                 // Oauth2认证过滤器
                 .addFilterAt(oauth2, SecurityWebFiltersOrder.AUTHENTICATION)
                 // 日志过滤器
-                .addFilterAt(new AccessLogFilter(accessLogService), SecurityWebFiltersOrder.SECURITY_CONTEXT_SERVER_WEB_EXCHANGE);
+                .addFilterAt(new AccessLogFilter(messageQueueAccessLogService), SecurityWebFiltersOrder.SECURITY_CONTEXT_SERVER_WEB_EXCHANGE);
         return http.build();
     }
 }
