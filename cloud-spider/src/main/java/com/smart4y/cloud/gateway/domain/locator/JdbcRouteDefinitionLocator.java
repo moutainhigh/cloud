@@ -5,6 +5,7 @@ import com.smart4y.cloud.core.application.dto.GatewayRouteDTO;
 import com.smart4y.cloud.core.application.dto.RateLimitApiDTO;
 import com.smart4y.cloud.core.domain.RemoteRefreshRouteEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.filter.FilterDefinition;
 import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
@@ -27,32 +28,33 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 自定义动态路由加载器
  * <p>
+ *
  * @author Youtao
- * Created by youtao on 2019-09-05.
+ *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, ApplicationListener<RemoteRefreshRouteEvent> {
 
     private final static String SELECT_ROUTES = "SELECT * FROM gateway_route WHERE status = 1";
-    private final static String SELECT_LIMIT_PATH = "SELECT\n" +
-            "        i.policy_id,\n" +
-            "        p.limit_quota,\n" +
-            "        p.interval_unit,\n" +
-            "        p.policy_name,\n" +
-            "        a.api_id,\n" +
-            "        a.api_code,\n" +
-            "        a.api_name,\n" +
-            "        a.api_category,\n" +
-            "        a.service_id,\n" +
-            "        a.path,\n" +
-            "        r.url\n" +
-            "    FROM\n" +
-            "        gateway_rate_limit_api AS i\n" +
-            "    INNER JOIN gateway_rate_limit AS p ON i.policy_id = p.policy_id\n" +
-            "    INNER JOIN base_api AS a ON i.api_id = a.api_id\n" +
-            "    INNER JOIN gateway_route AS r ON a.service_id = r.route_name\n" +
-            "    WHERE\n" +
-            "        p.policy_type = 'url'";
+    private final static String SELECT_LIMIT_PATH = "" +
+            "SELECT " +
+            "        i.policy_id, " +
+            "        p.limit_quota, " +
+            "        p.interval_unit, " +
+            "        p.policy_name, " +
+            "        a.api_id, " +
+            "        a.api_code, " +
+            "        a.api_name, " +
+            "        a.api_category, " +
+            "        a.service_id, " +
+            "        a.path, " +
+            "        r.url " +
+            "FROM " +
+            "        gateway_rate_limit_api AS i " +
+            "INNER JOIN gateway_rate_limit AS p ON i.policy_id = p.policy_id " +
+            "INNER JOIN base_api AS a ON i.api_id = a.api_id " +
+            "INNER JOIN gateway_route AS r ON a.service_id = r.route_name " +
+            "WHERE p.policy_type = 'url'";
     private JdbcTemplate jdbcTemplate;
     private Flux<RouteDefinition> routeDefinitions;
     private Map<String, List> cache = new ConcurrentHashMap<>();
@@ -137,7 +139,7 @@ public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, Appli
                 result.setUrl(rs.getString("url"));
                 return result;
             });
-            if (limitApiList != null) {
+            if (CollectionUtils.isNotEmpty(limitApiList)) {
                 // 加载限流
                 limitApiList.forEach(item -> {
                     long[] arry = ResourceLocator.getIntervalAndQuota(item.getIntervalUnit());
@@ -191,7 +193,7 @@ public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, Appli
                     routes.add(definition);
                 });
             }
-            if (routeList != null) {
+            if (CollectionUtils.isNotEmpty(routeList)) {
                 // 最后加载路由
                 routeList.forEach(gatewayRoute -> {
                     RouteDefinition definition = new RouteDefinition();
