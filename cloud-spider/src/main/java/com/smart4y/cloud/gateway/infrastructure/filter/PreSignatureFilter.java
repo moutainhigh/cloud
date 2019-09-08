@@ -8,7 +8,7 @@ import com.smart4y.cloud.core.ResultBody;
 import com.smart4y.cloud.core.infrastructure.exception.OpenSignatureException;
 import com.smart4y.cloud.core.infrastructure.toolkit.SignatureUtils;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonSignatureDeniedHandler;
-import com.smart4y.cloud.gateway.infrastructure.filter.context.GatewayContext;
+import com.smart4y.cloud.gateway.domain.GatewayContext;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
 import com.smart4y.cloud.gateway.infrastructure.service.feign.BaseAppServiceClient;
 import org.springframework.http.server.reactive.ServerHttpRequest;

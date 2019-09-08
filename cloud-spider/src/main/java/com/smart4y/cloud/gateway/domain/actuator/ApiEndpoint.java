@@ -1,4 +1,4 @@
-package com.smart4y.cloud.gateway.infrastructure.actuator;
+package com.smart4y.cloud.gateway.domain.actuator;
 
 import com.smart4y.cloud.core.domain.RemoteRefreshRouteEvent;
 import com.smart4y.cloud.core.ResultBody;

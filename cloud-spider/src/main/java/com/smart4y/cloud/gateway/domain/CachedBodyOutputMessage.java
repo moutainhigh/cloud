@@ -1,4 +1,4 @@
-package com.smart4y.cloud.gateway.infrastructure.filter.support;
+package com.smart4y.cloud.gateway.domain;
 
 import org.reactivestreams.Publisher;
 import org.springframework.core.io.buffer.DataBuffer;

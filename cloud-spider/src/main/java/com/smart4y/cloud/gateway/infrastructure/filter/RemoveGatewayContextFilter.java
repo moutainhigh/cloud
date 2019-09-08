@@ -1,6 +1,6 @@
 package com.smart4y.cloud.gateway.infrastructure.filter;
 
-import com.smart4y.cloud.gateway.infrastructure.filter.context.GatewayContext;
+import com.smart4y.cloud.gateway.domain.GatewayContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.web.server.ServerWebExchange;

@@ -1,4 +1,4 @@
-package com.smart4y.cloud.gateway.infrastructure.filter.context;
+package com.smart4y.cloud.gateway.domain;
 
 import lombok.Getter;
 import lombok.Setter;

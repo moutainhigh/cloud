@@ -7,7 +7,7 @@ import com.smart4y.cloud.core.domain.OpenAuthority;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
-import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
+import com.smart4y.cloud.gateway.domain.locator.ResourceLocator;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
 import com.smart4y.cloud.gateway.infrastructure.toolkit.ReactiveIpAddressMatcher;
 import lombok.extern.slf4j.Slf4j;

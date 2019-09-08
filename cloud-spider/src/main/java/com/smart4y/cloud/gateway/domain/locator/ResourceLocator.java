@@ -1,4 +1,4 @@
-package com.smart4y.cloud.gateway.infrastructure.locator;
+package com.smart4y.cloud.gateway.domain.locator;
 
 import com.google.common.collect.Lists;
 import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;

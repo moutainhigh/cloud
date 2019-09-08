@@ -1,8 +1,8 @@
 package com.smart4y.cloud.gateway.infrastructure.filter;
 
 import com.alibaba.fastjson.JSONObject;
-import com.smart4y.cloud.gateway.infrastructure.filter.context.GatewayContext;
-import com.smart4y.cloud.gateway.infrastructure.filter.support.CachedBodyOutputMessage;
+import com.smart4y.cloud.gateway.domain.GatewayContext;
+import com.smart4y.cloud.gateway.domain.CachedBodyOutputMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.support.BodyInserterContext;

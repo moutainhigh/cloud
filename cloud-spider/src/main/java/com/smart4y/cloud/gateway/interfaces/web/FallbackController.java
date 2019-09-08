@@ -1,4 +1,4 @@
-package com.smart4y.cloud.gateway.infrastructure.fallback;
+package com.smart4y.cloud.gateway.interfaces.web;
 
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import com.smart4y.cloud.core.ResultBody;
