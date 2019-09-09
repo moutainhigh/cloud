@@ -10,13 +10,13 @@ import com.smart4y.cloud.core.infrastructure.spring.SpringContextHolder;
 import com.smart4y.cloud.gateway.application.AccessLogService;
 import com.smart4y.cloud.gateway.application.feign.BaseAuthorityServiceClient;
 import com.smart4y.cloud.gateway.application.feign.GatewayServiceClient;
-import com.smart4y.cloud.gateway.interfaces.actuator.ApiEndpoint;
 import com.smart4y.cloud.gateway.domain.locator.JdbcRouteDefinitionLocator;
 import com.smart4y.cloud.gateway.domain.locator.ResourceLocator;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonExceptionHandler;
 import com.smart4y.cloud.gateway.infrastructure.filter.GatewayContextFilter;
 import com.smart4y.cloud.gateway.infrastructure.filter.RemoveGatewayContextFilter;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
+import com.smart4y.cloud.gateway.interfaces.actuator.ApiEndpoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
@@ -40,7 +40,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.reactive.result.view.ViewResolver;
 import reactor.core.publisher.Mono;
 
@@ -134,8 +133,8 @@ public class ApiConfiguration {
      * 动态路由加载
      */
     @Bean
-    public JdbcRouteDefinitionLocator jdbcRouteDefinitionLocator(JdbcTemplate jdbcTemplate) {
-        JdbcRouteDefinitionLocator jdbcRouteDefinitionLocator = new JdbcRouteDefinitionLocator(jdbcTemplate);
+    public JdbcRouteDefinitionLocator jdbcRouteDefinitionLocator() {
+        JdbcRouteDefinitionLocator jdbcRouteDefinitionLocator = new JdbcRouteDefinitionLocator();
         log.info("JdbcRouteDefinitionLocator [{}]", jdbcRouteDefinitionLocator);
         return jdbcRouteDefinitionLocator;
     }

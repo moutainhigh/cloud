@@ -1,19 +1,20 @@
 package com.smart4y.cloud.gateway.domain.locator;
 
 import com.google.common.collect.Lists;
-import com.smart4y.cloud.core.application.dto.GatewayRouteDTO;
-import com.smart4y.cloud.core.application.dto.RateLimitApiDTO;
 import com.smart4y.cloud.core.domain.RemoteRefreshRouteEvent;
+import com.smart4y.cloud.gateway.domain.model.GatewayRouteJpa;
+import com.smart4y.cloud.gateway.domain.model.RateLimitApiObj;
+import com.smart4y.cloud.gateway.domain.repository.GatewayRouteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.FilterDefinition;
 import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import org.springframework.cloud.gateway.support.NameUtils;
 import org.springframework.context.ApplicationListener;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.cache.CacheFlux;
 import reactor.core.publisher.Flux;
@@ -35,34 +36,16 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, ApplicationListener<RemoteRefreshRouteEvent> {
 
-    private final static String SELECT_ROUTES = "SELECT * FROM gateway_route WHERE status = 1";
-    private final static String SELECT_LIMIT_PATH = "" +
-            "SELECT " +
-            "        i.policy_id, " +
-            "        p.limit_quota, " +
-            "        p.interval_unit, " +
-            "        p.policy_name, " +
-            "        a.api_id, " +
-            "        a.api_code, " +
-            "        a.api_name, " +
-            "        a.api_category, " +
-            "        a.service_id, " +
-            "        a.path, " +
-            "        r.url " +
-            "FROM " +
-            "        gateway_rate_limit_api AS i " +
-            "INNER JOIN gateway_rate_limit AS p ON i.policy_id = p.policy_id " +
-            "INNER JOIN base_api AS a ON i.api_id = a.api_id " +
-            "INNER JOIN gateway_route AS r ON a.service_id = r.route_name " +
-            "WHERE p.policy_type = 'url'";
-    private JdbcTemplate jdbcTemplate;
     private Flux<RouteDefinition> routeDefinitions;
     private Map<String, List> cache = new ConcurrentHashMap<>();
 
+    @Autowired
+    private GatewayRouteRepository gatewayRouteRepository;
 
-    public JdbcRouteDefinitionLocator(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-        routeDefinitions = CacheFlux.lookup(cache, "routeDefs", RouteDefinition.class).onCacheMissResume(Flux.fromIterable(new ArrayList<>()));
+    public JdbcRouteDefinitionLocator() {
+        routeDefinitions = CacheFlux
+                .lookup(cache, "routeDefs", RouteDefinition.class)
+                .onCacheMissResume(Flux.fromIterable(new ArrayList<>()));
     }
 
     /**
@@ -83,7 +66,7 @@ public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, Appli
         refresh();
     }
 
-    protected String getFullPath(List<GatewayRouteDTO> routeList, String serviceId, String path) {
+    private String getFullPath(List<GatewayRouteJpa> routeList, String serviceId, String path) {
         final String[] fullPath = {path.startsWith("/") ? path : "/" + path};
         if (routeList != null) {
             routeList.forEach(route -> {
@@ -111,34 +94,8 @@ public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, Appli
         //从数据库拿到路由配置
         List<RouteDefinition> routes = Lists.newArrayList();
         try {
-            List<GatewayRouteDTO> routeList = jdbcTemplate.query(SELECT_ROUTES, (rs, i) -> {
-                GatewayRouteDTO result = new GatewayRouteDTO();
-                result.setRouteId(rs.getLong("route_id"));
-                result.setPath(rs.getString("path"));
-                result.setServiceId(rs.getString("service_id"));
-                result.setUrl(rs.getString("url"));
-                result.setStatus(rs.getInt("status"));
-                result.setRetryable(rs.getInt("retryable"));
-                result.setStripPrefix(rs.getInt("strip_prefix"));
-                result.setIsPersist(rs.getInt("is_persist"));
-                result.setRouteName(rs.getString("route_name"));
-                return result;
-            });
-            List<RateLimitApiDTO> limitApiList = jdbcTemplate.query(SELECT_LIMIT_PATH, (rs, i) -> {
-                RateLimitApiDTO result = new RateLimitApiDTO();
-                result.setPolicyId(rs.getLong("policy_id"));
-                result.setPolicyName(rs.getString("policy_name"));
-                result.setServiceId(rs.getString("service_id"));
-                result.setPath(rs.getString("path"));
-                result.setApiId(rs.getLong("api_id"));
-                result.setApiCode(rs.getString("api_code"));
-                result.setApiName(rs.getString("api_name"));
-                result.setApiCategory(rs.getString("api_category"));
-                result.setLimitQuota(rs.getLong("limit_quota"));
-                result.setIntervalUnit(rs.getString("interval_unit"));
-                result.setUrl(rs.getString("url"));
-                return result;
-            });
+            List<GatewayRouteJpa> routeList = gatewayRouteRepository.findAllByStatus();
+            List<RateLimitApiObj> limitApiList = gatewayRouteRepository.findRateLimitApis();
             if (CollectionUtils.isNotEmpty(limitApiList)) {
                 // 加载限流
                 limitApiList.forEach(item -> {

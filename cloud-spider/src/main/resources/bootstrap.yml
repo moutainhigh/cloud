@@ -39,6 +39,11 @@ spring:
       minimum-idle: 1
       maximum-pool-size: 15
       connection-test-query: SELECT 1
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
   redis:
     host: 127.0.0.1
     port: 6379

@@ -1,14 +1,13 @@
 package com.smart4y.cloud.core.application.dto;
 
-import com.smart4y.cloud.core.application.dto.BaseApiDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
 /**
- *  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * * @author Youtao
+ * Created by youtao on 2019-09-05.
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
