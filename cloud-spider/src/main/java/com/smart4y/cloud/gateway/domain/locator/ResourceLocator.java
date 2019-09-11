@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
 import com.smart4y.cloud.core.application.dto.IpLimitApiDTO;
 import com.smart4y.cloud.core.domain.RemoteRefreshRouteEvent;
-import com.smart4y.cloud.gateway.application.feign.BaseAuthorityServiceClient;
-import com.smart4y.cloud.gateway.application.feign.GatewayServiceClient;
+import com.smart4y.cloud.gateway.infrastructure.feign.BaseAuthorityFeign;
+import com.smart4y.cloud.gateway.infrastructure.feign.GatewayFeign;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
@@ -82,10 +82,9 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
     private Map<String, Object> cache = new ConcurrentHashMap<>();
 
 
-    private BaseAuthorityServiceClient baseAuthorityServiceClient;
-    private GatewayServiceClient gatewayServiceClient;
-
     private RouteDefinitionLocator routeDefinitionLocator;
+    private BaseAuthorityFeign baseAuthorityFeign;
+    private GatewayFeign gatewayFeign;
 
     public ResourceLocator() {
         authorityResources = CacheFlux.lookup(cache, "authorityResources", AuthorityResourceDTO.class).onCacheMissResume(Flux.fromIterable(new ArrayList<>()));
@@ -93,10 +92,10 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
         ipWhites = CacheFlux.lookup(cache, "ipWhites", IpLimitApiDTO.class).onCacheMissResume(Flux.fromIterable(new ArrayList<>()));
     }
 
-    public ResourceLocator(RouteDefinitionLocator routeDefinitionLocator, BaseAuthorityServiceClient baseAuthorityServiceClient, GatewayServiceClient gatewayServiceClient) {
+    public ResourceLocator(RouteDefinitionLocator routeDefinitionLocator, BaseAuthorityFeign baseAuthorityFeign, GatewayFeign gatewayFeign) {
         this();
-        this.baseAuthorityServiceClient = baseAuthorityServiceClient;
-        this.gatewayServiceClient = gatewayServiceClient;
+        this.baseAuthorityFeign = baseAuthorityFeign;
+        this.gatewayFeign = gatewayFeign;
         this.routeDefinitionLocator = routeDefinitionLocator;
     }
 
@@ -163,7 +162,7 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
         ConfigAttribute cfg;
         try {
             // 查询所有接口
-            resources = baseAuthorityServiceClient.findAuthorityResource().getData();
+            resources = baseAuthorityFeign.findAuthorityResource().getData();
             if (resources != null) {
                 for (AuthorityResourceDTO item : resources) {
                     String path = item.getPath();
@@ -199,7 +198,7 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
     private Flux<IpLimitApiDTO> loadIpBlackList() {
         List<IpLimitApiDTO> list = Lists.newArrayList();
         try {
-            list = gatewayServiceClient.getApiBlackList().getData();
+            list = gatewayFeign.getApiBlackList().getData();
             if (list != null) {
                 for (IpLimitApiDTO item : list) {
                     item.setPath(getFullPath(item.getServiceId(), item.getPath()));
@@ -221,7 +220,7 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
     private Flux<IpLimitApiDTO> loadIpWhiteList() {
         List<IpLimitApiDTO> list = Lists.newArrayList();
         try {
-            list = gatewayServiceClient.getApiWhiteList().getData();
+            list = gatewayFeign.getApiWhiteList().getData();
             if (list != null) {
                 for (IpLimitApiDTO item : list) {
                     item.setPath(getFullPath(item.getServiceId(), item.getPath()));
@@ -275,29 +274,5 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
 
     public void setCache(Map<String, Object> cache) {
         this.cache = cache;
-    }
-
-    public BaseAuthorityServiceClient getBaseAuthorityServiceClient() {
-        return baseAuthorityServiceClient;
-    }
-
-    public void setBaseAuthorityServiceClient(BaseAuthorityServiceClient baseAuthorityServiceClient) {
-        this.baseAuthorityServiceClient = baseAuthorityServiceClient;
-    }
-
-    public GatewayServiceClient getGatewayServiceClient() {
-        return gatewayServiceClient;
-    }
-
-    public void setGatewayServiceClient(GatewayServiceClient gatewayServiceClient) {
-        this.gatewayServiceClient = gatewayServiceClient;
-    }
-
-    public RouteDefinitionLocator getRouteDefinitionLocator() {
-        return routeDefinitionLocator;
-    }
-
-    public void setRouteDefinitionLocator(RouteDefinitionLocator routeDefinitionLocator) {
-        this.routeDefinitionLocator = routeDefinitionLocator;
     }
 }

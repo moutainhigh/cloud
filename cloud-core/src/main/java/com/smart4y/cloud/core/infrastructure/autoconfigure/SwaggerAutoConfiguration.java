@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.autoconfigure;
+package com.smart4y.cloud.core.infrastructure.autoconfigure;
 
 import com.google.common.collect.Lists;
 import com.smart4y.cloud.core.infrastructure.properties.OpenSwaggerProperties;
@@ -33,7 +33,7 @@ import java.util.Locale;
 /**
  * Swagger文档生成配置
  *
- *  * @author Youtao
+ * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
 @Slf4j

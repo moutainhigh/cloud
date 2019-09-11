@@ -1,9 +1,12 @@
-package com.smart4y.cloud.hippo.interfaces.feign;
+package com.smart4y.cloud.gateway.infrastructure.feign;
 
 import com.smart4y.cloud.core.ResultBody;
 import com.smart4y.cloud.core.application.dto.GatewayRouteDTO;
 import com.smart4y.cloud.core.application.dto.IpLimitApiDTO;
 import com.smart4y.cloud.core.application.dto.RateLimitApiDTO;
+import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
@@ -14,6 +17,8 @@ import java.util.List;
  * @author Youtao
  *         Created by youtao on 2019-09-06.
  */
+@Component
+@FeignClient(value = BaseConstants.BASE_SERVER)
 public interface GatewayFeign {
 
     /**

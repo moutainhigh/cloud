@@ -1,13 +1,13 @@
 package com.smart4y.cloud.gateway.infrastructure.configuration;
 
 import com.smart4y.cloud.gateway.application.MessageQueueAccessLogService;
-import com.smart4y.cloud.gateway.application.feign.BaseAppServiceClient;
 import com.smart4y.cloud.gateway.domain.AccessManager;
 import com.smart4y.cloud.gateway.domain.locator.ResourceLocator;
 import com.smart4y.cloud.gateway.domain.oauth2.RedisAuthenticationManager;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonAccessDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonAuthenticationDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonSignatureDeniedHandler;
+import com.smart4y.cloud.gateway.infrastructure.feign.BaseAppFeign;
 import com.smart4y.cloud.gateway.infrastructure.filter.AccessLogFilter;
 import com.smart4y.cloud.gateway.infrastructure.filter.PreCheckFilter;
 import com.smart4y.cloud.gateway.infrastructure.filter.PreRequestFilter;
@@ -49,7 +49,7 @@ public class ResourceServerConfiguration {
 
     private static final String CORS_MAX_AGE = "18000L";
 
-    private final BaseAppServiceClient baseAppServiceClient;
+    private final BaseAppFeign baseAppFeign;
     private final ApiProperties apiProperties;
     private final ResourceLocator resourceLocator;
     private final MessageQueueAccessLogService messageQueueAccessLogService;
@@ -57,12 +57,12 @@ public class ResourceServerConfiguration {
 
     @Autowired
     @SuppressWarnings("all")
-    public ResourceServerConfiguration(MessageQueueAccessLogService messageQueueAccessLogService, ApiProperties apiProperties, ResourceLocator resourceLocator, RedisConnectionFactory redisConnectionFactory, BaseAppServiceClient baseAppServiceClient) {
+    public ResourceServerConfiguration(MessageQueueAccessLogService messageQueueAccessLogService, ApiProperties apiProperties, ResourceLocator resourceLocator, RedisConnectionFactory redisConnectionFactory, BaseAppFeign baseAppFeign) {
         this.messageQueueAccessLogService = messageQueueAccessLogService;
         this.apiProperties = apiProperties;
         this.resourceLocator = resourceLocator;
         this.redisConnectionFactory = redisConnectionFactory;
-        this.baseAppServiceClient = baseAppServiceClient;
+        this.baseAppFeign = baseAppFeign;
     }
 
     /**
@@ -130,7 +130,7 @@ public class ResourceServerConfiguration {
                 // 跨域过滤器
                 .addFilterAt(corsFilter(), SecurityWebFiltersOrder.CORS)
                 // 签名验证过滤器
-                .addFilterAt(new PreSignatureFilter(baseAppServiceClient, apiProperties, new JsonSignatureDeniedHandler(messageQueueAccessLogService)), SecurityWebFiltersOrder.CSRF)
+                .addFilterAt(new PreSignatureFilter(baseAppFeign, apiProperties, new JsonSignatureDeniedHandler(messageQueueAccessLogService)), SecurityWebFiltersOrder.CSRF)
                 // 访问验证前置过滤器
                 .addFilterAt(new PreCheckFilter(accessManager, accessDeniedHandler), SecurityWebFiltersOrder.CSRF)
                 // Oauth2认证过滤器

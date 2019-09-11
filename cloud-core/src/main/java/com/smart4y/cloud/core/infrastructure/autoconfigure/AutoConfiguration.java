@@ -1,10 +1,10 @@
-package com.smart4y.cloud.core.autoconfigure;
+package com.smart4y.cloud.core.infrastructure.autoconfigure;
 
-import com.smart4y.cloud.core.DbHealthIndicator;
-import com.smart4y.cloud.core.ResourceAnnotationScan;
+import com.smart4y.cloud.core.infrastructure.ResourceAnnotationScan;
 import com.smart4y.cloud.core.infrastructure.exception.OpenGlobalExceptionHandler;
 import com.smart4y.cloud.core.infrastructure.exception.OpenRestResponseErrorHandler;
 import com.smart4y.cloud.core.infrastructure.filter.XssFilter;
+import com.smart4y.cloud.core.infrastructure.health.DbHealthIndicator;
 import com.smart4y.cloud.core.infrastructure.properties.OpenCommonProperties;
 import com.smart4y.cloud.core.infrastructure.properties.OpenIdGenProperties;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
@@ -19,7 +19,6 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.bus.BusProperties;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,7 +29,6 @@ import org.springframework.web.client.RestTemplate;
  *         Created by youtao on 2019-09-06.
  */
 @Slf4j
-@Configuration
 @EnableConfigurationProperties({OpenCommonProperties.class, OpenIdGenProperties.class, OpenOAuth2ClientProperties.class})
 public class AutoConfiguration {
 

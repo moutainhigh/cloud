@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core;
+package com.smart4y.cloud.core.infrastructure;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

@@ -3,7 +3,6 @@ package com.smart4y.cloud.zone.interfaces.web;
 import com.smart4y.cloud.core.ResultBody;
 import com.smart4y.cloud.core.application.dto.AppDTO;
 import com.smart4y.cloud.core.application.dto.OpenClientDetailsDTO;
-import com.smart4y.cloud.hippo.interfaces.feign.BaseAppFeign;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -22,9 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping
 @Api(tags = "系统应用管理")
-public class BaseAppController implements BaseAppFeign {
+public class BaseAppController {
 
-    @Override
     @GetMapping("/app/{appId}/info")
     @ApiOperation(value = "获取应用详情", notes = "获取应用详情")
     @ApiImplicitParams({
@@ -35,7 +33,6 @@ public class BaseAppController implements BaseAppFeign {
         return ResultBody.ok().data(new AppDTO());
     }
 
-    @Override
     @GetMapping("/app/client/{clientId}/info")
     @ApiOperation(value = "获取应用开发配置信息", notes = "获取应用开发配置信息")
     @ApiImplicitParams({

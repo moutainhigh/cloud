@@ -1,4 +1,4 @@
-package com.smart4y.cloud.hippo.infrastructure.constants;
+package com.smart4y.cloud.core.infrastructure.constants;
 
 /**
  * 通用权限常量

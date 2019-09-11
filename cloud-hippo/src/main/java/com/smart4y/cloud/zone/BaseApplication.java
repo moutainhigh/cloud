@@ -1,6 +1,6 @@
 package com.smart4y.cloud.zone;
 
-import com.smart4y.cloud.core.AbstractApplication;
+import com.smart4y.cloud.core.infrastructure.AbstractApplication;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

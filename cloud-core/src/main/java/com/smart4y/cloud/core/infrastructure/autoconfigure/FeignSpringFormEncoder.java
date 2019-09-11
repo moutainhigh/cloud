@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.autoconfigure;
+package com.smart4y.cloud.core.infrastructure.autoconfigure;
 
 import feign.RequestTemplate;
 import feign.codec.EncodeException;
@@ -16,6 +16,9 @@ import java.util.Map;
 
 /**
  * 处理多个文件上传
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 public class FeignSpringFormEncoder extends SpringFormEncoder {
 

@@ -23,11 +23,7 @@
         <!-- 公共模块 -->
         <dependency>
             <groupId>com.smart4y</groupId>
-            <artifactId>cloud-hippo-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.smart4y</groupId>
-            <artifactId>cloud-core-starter</artifactId>
+            <artifactId>cloud-core</artifactId>
         </dependency>
         <!-- Lombok -->
         <dependency>
@@ -50,6 +46,11 @@
         <dependency>
             <groupId>javax.activation</groupId>
             <artifactId>activation</artifactId>
+        </dependency>
+        <!-- Servlet API -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
         </dependency>
         <!-- Web -->
         <dependency>

@@ -7,9 +7,9 @@ import com.smart4y.cloud.core.application.dto.AppDTO;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenSignatureException;
 import com.smart4y.cloud.core.infrastructure.toolkit.SignatureUtils;
-import com.smart4y.cloud.gateway.application.feign.BaseAppServiceClient;
 import com.smart4y.cloud.gateway.domain.GatewayContext;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonSignatureDeniedHandler;
+import com.smart4y.cloud.gateway.infrastructure.feign.BaseAppFeign;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.AntPathMatcher;
@@ -34,13 +34,13 @@ public class PreSignatureFilter implements WebFilter {
 
     private static final AntPathMatcher pathMatch = new AntPathMatcher();
     private JsonSignatureDeniedHandler signatureDeniedHandler;
-    private BaseAppServiceClient baseAppServiceClient;
+    private BaseAppFeign baseAppFeign;
     private ApiProperties apiProperties;
     private Set<String> signIgnores = new ConcurrentHashSet<>();
 
-    public PreSignatureFilter(BaseAppServiceClient baseAppServiceClient, ApiProperties apiProperties, JsonSignatureDeniedHandler signatureDeniedHandler) {
+    public PreSignatureFilter(BaseAppFeign baseAppFeign, ApiProperties apiProperties, JsonSignatureDeniedHandler signatureDeniedHandler) {
         this.apiProperties = apiProperties;
-        this.baseAppServiceClient = baseAppServiceClient;
+        this.baseAppFeign = baseAppFeign;
         this.signatureDeniedHandler = signatureDeniedHandler;
         // 默认忽略签名
         signIgnores.add("/");
@@ -81,10 +81,10 @@ public class PreSignatureFilter implements WebFilter {
                 // 验证请求参数
                 SignatureUtils.validateParams(params);
                 //开始验证签名
-                if (baseAppServiceClient != null) {
+                if (baseAppFeign != null) {
                     String appId = params.get(CommonConstants.SIGN_APP_ID_KEY).toString();
                     // 获取客户端信息
-                    ResultBody<AppDTO> result = baseAppServiceClient.getApp(appId);
+                    ResultBody<AppDTO> result = baseAppFeign.getApp(appId);
                     AppDTO app = result.getData();
                     if (app == null || app.getAppId() == null) {
                         return signatureDeniedHandler.handle(exchange, new OpenSignatureException("appId无效"));

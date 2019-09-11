@@ -8,11 +8,11 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.smart4y.cloud.core.infrastructure.properties.OpenCommonProperties;
 import com.smart4y.cloud.core.infrastructure.spring.SpringContextHolder;
 import com.smart4y.cloud.gateway.application.AccessLogService;
-import com.smart4y.cloud.gateway.application.feign.BaseAuthorityServiceClient;
-import com.smart4y.cloud.gateway.application.feign.GatewayServiceClient;
 import com.smart4y.cloud.gateway.domain.locator.JdbcRouteDefinitionLocator;
 import com.smart4y.cloud.gateway.domain.locator.ResourceLocator;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonExceptionHandler;
+import com.smart4y.cloud.gateway.infrastructure.feign.BaseAuthorityFeign;
+import com.smart4y.cloud.gateway.infrastructure.feign.GatewayFeign;
 import com.smart4y.cloud.gateway.infrastructure.filter.GatewayContextFilter;
 import com.smart4y.cloud.gateway.infrastructure.filter.RemoveGatewayContextFilter;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
@@ -144,8 +144,8 @@ public class ApiConfiguration {
      */
     @Bean
     @Lazy
-    public ResourceLocator resourceLocator(RouteDefinitionLocator routeDefinitionLocator, BaseAuthorityServiceClient baseAuthorityServiceClient, GatewayServiceClient gatewayServiceClient) {
-        ResourceLocator resourceLocator = new ResourceLocator(routeDefinitionLocator, baseAuthorityServiceClient, gatewayServiceClient);
+    public ResourceLocator resourceLocator(RouteDefinitionLocator routeDefinitionLocator, BaseAuthorityFeign baseAuthorityFeign, GatewayFeign gatewayFeign) {
+        ResourceLocator resourceLocator = new ResourceLocator(routeDefinitionLocator, baseAuthorityFeign, gatewayFeign);
         log.info("ResourceLocator [{}]", resourceLocator);
         return resourceLocator;
     }

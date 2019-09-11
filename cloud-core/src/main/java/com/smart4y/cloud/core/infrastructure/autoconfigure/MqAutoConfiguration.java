@@ -1,13 +1,12 @@
-package com.smart4y.cloud.core.autoconfigure;
+package com.smart4y.cloud.core.infrastructure.autoconfigure;
 
 import com.smart4y.cloud.core.infrastructure.constants.QueueConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
 
-
 /**
- *  * @author Youtao
+ * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
 @Slf4j

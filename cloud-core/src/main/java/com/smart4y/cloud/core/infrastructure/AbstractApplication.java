@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core;
+package com.smart4y.cloud.core.infrastructure;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ConfigurableApplicationContext;

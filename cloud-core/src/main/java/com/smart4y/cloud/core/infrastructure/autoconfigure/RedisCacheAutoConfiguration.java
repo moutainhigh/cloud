@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.autoconfigure;
+package com.smart4y.cloud.core.infrastructure.autoconfigure;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -26,7 +26,7 @@ import java.time.Duration;
 /**
  * Redis缓存配置
  *
- *  * @author Youtao
+ * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
 @Slf4j

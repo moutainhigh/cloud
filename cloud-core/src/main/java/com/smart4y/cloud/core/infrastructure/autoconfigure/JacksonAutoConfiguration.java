@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.autoconfigure;
+package com.smart4y.cloud.core.infrastructure.autoconfigure;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.*;
@@ -20,12 +20,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import static com.smart4y.cloud.core.autoconfigure.JacksonAutoConfiguration.SerializerFeature.*;
+import static com.smart4y.cloud.core.infrastructure.autoconfigure.JacksonAutoConfiguration.SerializerFeature.*;
 
 /**
- * @author: liuyadu
- * @date: 2019/5/20 14:56
- * @description:
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class JacksonAutoConfiguration {

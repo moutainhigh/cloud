@@ -1,8 +1,8 @@
 package com.smart4y.cloud.gateway.domain.repository;
 
+import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.gateway.domain.model.GatewayRouteJpa;
 import com.smart4y.cloud.gateway.domain.model.RateLimitApiObj;
-import com.smart4y.cloud.hippo.infrastructure.constants.BaseConstants;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -43,8 +43,8 @@ public interface GatewayRouteRepository extends JpaRepository<GatewayRouteJpa, L
      * 根据状态查询路由列表
      *
      * @param status 0无效 1有效 （
-     *               {@link com.smart4y.cloud.hippo.infrastructure.constants.BaseConstants#DISABLED}
-     *               or {@link com.smart4y.cloud.hippo.infrastructure.constants.BaseConstants#ENABLED}）
+     *               {@link BaseConstants#DISABLED}
+     *               or {@link BaseConstants#ENABLED}）
      * @return 路由列表
      */
     List<GatewayRouteJpa> findAllByStatusEquals(int status);

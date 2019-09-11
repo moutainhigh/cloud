@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.autoconfigure;
+package com.smart4y.cloud.core.infrastructure.autoconfigure;
 
 import com.smart4y.cloud.core.infrastructure.interceptor.FeignRequestInterceptor;
 import feign.Request;
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Bean;
 /**
  * Feign OAuth2 request interceptor.
  *
- *  * @author Youtao
+ * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
 @Slf4j

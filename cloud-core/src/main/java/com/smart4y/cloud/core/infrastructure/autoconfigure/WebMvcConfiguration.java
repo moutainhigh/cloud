@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.autoconfigure;
+package com.smart4y.cloud.core.infrastructure.autoconfigure;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -8,10 +8,9 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- *  * @author Youtao
+ * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
-@Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     /**
