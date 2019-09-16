@@ -10,7 +10,7 @@ import com.smart4y.cloud.core.infrastructure.properties.OpenIdGenProperties;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import com.smart4y.cloud.core.infrastructure.security.oauth2.client.OpenOAuth2ClientProperties;
 import com.smart4y.cloud.core.infrastructure.spring.SpringContextHolder;
-import com.smart4y.cloud.core.infrastructure.toolkit.SnowflakeIdGenerator;
+import com.smart4y.cloud.core.infrastructure.toolkit.gen.SnowflakeIdWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -77,14 +77,14 @@ public class AutoConfiguration {
     }
 
     /**
-     * ID生成器 配置
+     * ID生成器配置
      */
     @Bean
     @ConditionalOnMissingBean(OpenIdGenProperties.class)
-    public SnowflakeIdGenerator snowflakeIdWorker(OpenIdGenProperties properties) {
-        SnowflakeIdGenerator snowflakeIdGenerator = new SnowflakeIdGenerator(properties.getWorkId(), properties.getCenterId());
-        log.info("SnowflakeIdGenerator [{}]", snowflakeIdGenerator);
-        return snowflakeIdGenerator;
+    public SnowflakeIdWorker snowflakeIdWorker(OpenIdGenProperties properties) {
+        SnowflakeIdWorker worker = new SnowflakeIdWorker(properties.getWorkId(), properties.getCenterId());
+        log.info("Bean [{}] properties [{}]", worker, properties);
+        return worker;
     }
 
     /**

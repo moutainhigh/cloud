@@ -1,7 +1,7 @@
 package com.smart4y.cloud.gateway.interfaces.actuator;
 
-import com.smart4y.cloud.core.ResultBody;
-import com.smart4y.cloud.core.domain.RemoteRefreshRouteEvent;
+import com.smart4y.cloud.core.domain.ResultBody;
+import com.smart4y.cloud.core.domain.event.RemoteRefreshRouteEvent;
 import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint;
 import org.springframework.cloud.bus.endpoint.AbstractBusEndpoint;
 import org.springframework.context.ApplicationEventPublisher;

@@ -1,9 +1,9 @@
 package com.smart4y.cloud.gateway.infrastructure.configuration;
 
 import com.smart4y.cloud.gateway.application.MessageQueueAccessLogService;
-import com.smart4y.cloud.gateway.domain.AccessManager;
-import com.smart4y.cloud.gateway.domain.locator.ResourceLocator;
-import com.smart4y.cloud.gateway.domain.oauth2.RedisAuthenticationManager;
+import com.smart4y.cloud.gateway.infrastructure.security.AccessManager;
+import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
+import com.smart4y.cloud.gateway.infrastructure.security.RedisAuthenticationManager;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonAccessDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonAuthenticationDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonSignatureDeniedHandler;

@@ -23,6 +23,11 @@
                 <artifactId>cloud-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.smart4y</groupId>
+                <artifactId>cloud-generator</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!-- JDK9+ Jaxb模块引用 -->
             <dependency>
                 <groupId>javax.xml.bind</groupId>

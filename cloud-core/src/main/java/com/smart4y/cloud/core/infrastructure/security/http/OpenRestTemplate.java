@@ -1,6 +1,6 @@
 package com.smart4y.cloud.core.infrastructure.security.http;
 
-import com.smart4y.cloud.core.domain.RemoteRefreshRouteEvent;
+import com.smart4y.cloud.core.domain.event.RemoteRefreshRouteEvent;
 import com.smart4y.cloud.core.infrastructure.properties.OpenCommonProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.bus.BusProperties;

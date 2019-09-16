@@ -1,6 +1,6 @@
 package com.smart4y.cloud.gateway.interfaces.web;
 
-import com.smart4y.cloud.core.ResultBody;
+import com.smart4y.cloud.core.domain.ResultBody;
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

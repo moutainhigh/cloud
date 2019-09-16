@@ -1,6 +1,6 @@
 package com.smart4y.cloud.gateway.infrastructure.feign;
 
-import com.smart4y.cloud.core.ResultBody;
+import com.smart4y.cloud.core.domain.ResultBody;
 import com.smart4y.cloud.core.application.dto.AppDTO;
 import com.smart4y.cloud.core.application.dto.OpenClientDetailsDTO;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;

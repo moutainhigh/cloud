@@ -1,6 +1,6 @@
 package com.smart4y.cloud.zone.interfaces.web;
 
-import com.smart4y.cloud.core.ResultBody;
+import com.smart4y.cloud.core.domain.ResultBody;
 import com.smart4y.cloud.core.application.dto.GatewayRouteDTO;
 import com.smart4y.cloud.core.application.dto.IpLimitApiDTO;
 import com.smart4y.cloud.core.application.dto.RateLimitApiDTO;

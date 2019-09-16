@@ -1,8 +1,8 @@
 package com.smart4y.cloud.gateway;
 
 import com.smart4y.cloud.core.infrastructure.AbstractApplication;
-import com.smart4y.cloud.gateway.domain.locator.JdbcRouteDefinitionLocator;
-import com.smart4y.cloud.gateway.domain.locator.ResourceLocator;
+import com.smart4y.cloud.gateway.infrastructure.locator.JdbcRouteDefinitionLocator;
+import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

@@ -1,6 +1,6 @@
 package com.smart4y.cloud.core.infrastructure.exception;
 
-import com.smart4y.cloud.core.ResultBody;
+import com.smart4y.cloud.core.domain.ResultBody;
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

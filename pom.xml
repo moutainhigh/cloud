@@ -13,6 +13,7 @@
     <modules>
         <module>cloud-dependencies</module>
         <module>cloud-core</module>
+        <module>cloud-generator</module>
         <module>cloud-hippo</module>
         <module>cloud-owl</module>
         <module>cloud-spider</module>
@@ -69,6 +70,31 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+        <pluginManagement>
+            <plugins>
+                <!-- MyBatis 生成插件 -->
+                <plugin>
+                    <groupId>org.mybatis.generator</groupId>
+                    <artifactId>mybatis-generator-maven-plugin</artifactId>
+                    <version>1.3.7</version>
+                    <configuration>
+                        <configurationFile>${basedir}/src/main/resources/mybatis/generatorConfig.xml
+                        </configurationFile>
+                        <overwrite>true</overwrite>
+                        <verbose>true</verbose>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.smart4y</groupId>
+                            <artifactId>cloud-generator</artifactId>
+                            <version>${project.version}</version>
+                            <type>jar</type>
+                        </dependency>
+                        <!-- 依赖业务模块 version:${project.version} type:jar -->
+                    </dependencies>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
     <profiles>

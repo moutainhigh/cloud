@@ -1,15 +1,15 @@
 package com.smart4y.cloud.core.infrastructure.constants;
 
 /**
- *  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * * @author Youtao
+ * Created by youtao on 2019-09-05.
  */
 public class CommonConstants {
+
     /**
      * 默认超级管理员账号
      */
     public final static String ROOT = "admin";
-
     /**
      * 默认最小页码
      */
@@ -47,11 +47,18 @@ public class CommonConstants {
      * 客户端ID KEY
      */
     public static final String SIGN_APP_ID_KEY = "APP_ID";
-
+    /**
+     * 客户端ID KEY
+     */
+    public static final String SIGN_CLIENT_ID_KEY = "clientId";
     /**
      * 客户端秘钥 KEY
      */
     public static final String SIGN_SECRET_KEY = "SECRET_KEY";
+    /**
+     * 客户端秘钥 KEY
+     */
+    public static final String SIGN_CLIENT_SECRET_KEY = "clientSecret";
 
     /**
      * 随机字符串 KEY

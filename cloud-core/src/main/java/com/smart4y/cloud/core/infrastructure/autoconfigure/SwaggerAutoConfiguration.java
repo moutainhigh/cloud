@@ -3,7 +3,7 @@ package com.smart4y.cloud.core.infrastructure.autoconfigure;
 import com.google.common.collect.Lists;
 import com.smart4y.cloud.core.infrastructure.properties.OpenSwaggerProperties;
 import com.smart4y.cloud.core.infrastructure.toolkit.DateUtils;
-import com.smart4y.cloud.core.infrastructure.toolkit.RandomValueUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.random.RandomValueUtils;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

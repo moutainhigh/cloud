@@ -1,6 +1,6 @@
 package com.smart4y.cloud.zone.interfaces.web;
 
-import com.smart4y.cloud.core.ResultBody;
+import com.smart4y.cloud.core.domain.ResultBody;
 import com.smart4y.cloud.core.application.dto.AppDTO;
 import com.smart4y.cloud.core.application.dto.OpenClientDetailsDTO;
 import io.swagger.annotations.Api;

@@ -78,10 +78,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
         <!-- Swagger -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
@@ -114,6 +110,24 @@
                 <configuration>
                     <skipTests>true</skipTests>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.smart4y</groupId>
+                        <artifactId>cloud-generator</artifactId>
+                        <version>${project.version}</version>
+                        <type>jar</type>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.smart4y</groupId>
+                        <artifactId>cloud-spider</artifactId>
+                        <version>${project.version}</version>
+                        <type>jar</type>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
