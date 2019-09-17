@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>cloud-owl</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <packaging>jar</packaging>
     <name>cloud-owl</name>
     <description>认证服务（猫头鹰，智慧的象征。）</description>
@@ -16,7 +16,7 @@
     <parent>
         <groupId>com.smart4y</groupId>
         <artifactId>cloud</artifactId>
-        <version>0.1.0</version>
+        <version>0.1.1</version>
     </parent>
 
     <dependencies>
@@ -60,7 +60,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}-${project.version}</finalName>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
