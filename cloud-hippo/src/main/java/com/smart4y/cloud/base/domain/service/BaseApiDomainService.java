@@ -6,6 +6,7 @@ import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.mapper.BaseDomainService;
 import org.apache.commons.collections4.CollectionUtils;
 import tk.mybatis.mapper.weekend.Weekend;
+import tk.mybatis.mapper.weekend.WeekendCriteria;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -61,6 +62,9 @@ public class BaseApiDomainService extends BaseDomainService<BaseApi> {
         }
     }
 
+    /**
+     * 更新API资源
+     */
     public void updateApis(List<BaseApi> apis) {
         if (CollectionUtils.isNotEmpty(apis)) {
             List<BaseApi> items = apis.stream()
@@ -75,5 +79,33 @@ public class BaseApiDomainService extends BaseDomainService<BaseApi> {
                     }).collect(Collectors.toList());
             this.updateSelectiveBatchById(items);
         }
+    }
+
+    /**
+     * 移除API资源
+     */
+    public void removeApis(List<Long> apiIds) {
+        if (CollectionUtils.isNotEmpty(apiIds)) {
+            Weekend<BaseApi> weekend = Weekend.of(BaseApi.class);
+            weekend
+                    .weekendCriteria()
+                    .andIn(BaseApi::getApiId, apiIds);
+            this.remove(weekend);
+        }
+    }
+
+    /**
+     * 查询 无效的API资源
+     */
+    public List<BaseApi> getNotInApis(String serviceId, List<String> apiCodes) {
+        Weekend<BaseApi> weekend = Weekend.of(BaseApi.class);
+        WeekendCriteria<BaseApi, Object> criteria = weekend.weekendCriteria();
+        criteria
+                .andEqualTo(BaseApi::getServiceId, serviceId);
+        if (CollectionUtils.isNotEmpty(apiCodes)) {
+            criteria
+                    .andNotIn(BaseApi::getApiCode, apiCodes);
+        }
+        return this.list(weekend);
     }
 }

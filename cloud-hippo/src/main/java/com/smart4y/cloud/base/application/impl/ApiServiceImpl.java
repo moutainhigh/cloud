@@ -52,8 +52,17 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public void clearInvalidApis(String serviceId, List<String> apiCodes) {
         if (CollectionUtils.isNotEmpty(apiCodes)) {
-            // TODO
-
+            List<Long> notInApiIds = baseApiDomainService.getNotInApis(serviceId, apiCodes).stream()
+                    .map(BaseApi::getApiId)
+                    .collect(Collectors.toList());
+            notInApiIds.remove(1L);
+            notInApiIds.remove(2L);
+            if (CollectionUtils.isNotEmpty(notInApiIds)) {
+                // 移除API资源对应的权限
+                baseAuthorityDomainService.removeApiAuthorities(notInApiIds);
+                // 移除接口资源
+                baseApiDomainService.removeApis(notInApiIds);
+            }
         }
     }
 }

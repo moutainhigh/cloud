@@ -61,7 +61,6 @@ public class ResourceAnnotationScan implements ApplicationListener<ApplicationRe
     public void onApplicationEvent(ApplicationReadyEvent event) {
         ConfigurableApplicationContext applicationContext = event.getApplicationContext();
         Map<String, Object> resourceServer = applicationContext.getBeansWithAnnotation(EnableResourceServer.class);
-        amqpTemplate = applicationContext.getBean(RabbitTemplate.class);
         if (resourceServer.isEmpty()) {
             // 只扫描资源服务器
             return;
@@ -93,6 +92,7 @@ public class ResourceAnnotationScan implements ApplicationListener<ApplicationRe
             log.error("error：{}", e.getLocalizedMessage(), e);
         }
 
+        List<String> apiCodes = new ArrayList<>();
         List<ResourceScannedEvent.Mapping> list = new ArrayList<>();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> m : map.entrySet()) {
             RequestMappingInfo info = m.getKey();
@@ -119,9 +119,15 @@ public class ResourceAnnotationScan implements ApplicationListener<ApplicationRe
             String className = method.getMethod().getDeclaringClass().getName();
             // 方法名
             String methodName = method.getMethod().getName();
-            String fullName = className + "." + methodName;
+            // String fullName = className + "." + methodName;
             // md5码
             String md5 = EncryptUtils.md5Hex(serviceId + urls);
+            if (apiCodes.contains(md5)) {
+                continue;
+            } else {
+                apiCodes.add(md5);
+            }
+
             String name = "";
             String desc = "";
             // 是否需要安全认证 默认:1-是 0-否
@@ -164,6 +170,8 @@ public class ResourceAnnotationScan implements ApplicationListener<ApplicationRe
                 .setApplication(serviceId)
                 .setMappings(list);
         log.info("ApplicationReadyEvent: [{}]", serviceId);
+
+        amqpTemplate = applicationContext.getBean(RabbitTemplate.class);
         CompletableFuture.runAsync(() -> {
             try {
                 amqpTemplate.convertAndSend(QueueConstants.QUEUE_SCAN_API_RESOURCE, scannedEvent);
@@ -205,6 +213,4 @@ public class ResourceAnnotationScan implements ApplicationListener<ApplicationRe
         }
         return sbf.toString();
     }
-
-
 }
