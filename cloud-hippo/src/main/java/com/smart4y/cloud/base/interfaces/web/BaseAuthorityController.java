@@ -1,14 +1,15 @@
 package com.smart4y.cloud.base.interfaces.web;
 
-import com.smart4y.cloud.core.domain.ResultBody;
+import com.smart4y.cloud.base.application.AuthorityService;
 import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
 import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
+import com.smart4y.cloud.core.domain.ResultBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,17 +22,24 @@ import java.util.List;
 @Api(tags = "系统权限管理")
 public class BaseAuthorityController {
 
+    private final AuthorityService authorityService;
+
+    @Autowired
+    public BaseAuthorityController(AuthorityService authorityService) {
+        this.authorityService = authorityService;
+    }
+
     @GetMapping("/authority/access")
     @ApiOperation(value = "获取所有访问权限列表", notes = "获取所有访问权限列表")
     public ResultBody<List<AuthorityResourceDTO>> findAuthorityResource() {
-        // TODO 待开发补充内容
-        return ResultBody.ok().data(Collections.emptyList());
+        List<AuthorityResourceDTO> result = authorityService.getAuthorityResources();
+        return ResultBody.ok().data(result);
     }
 
     @GetMapping("/authority/menu")
     @ApiOperation(value = "获取菜单权限列表", notes = "获取菜单权限列表")
     public ResultBody<List<AuthorityMenuDTO>> findAuthorityMenu() {
-        // TODO 待开发补充内容
-        return ResultBody.ok().data(Collections.emptyList());
+        List<AuthorityMenuDTO> result = authorityService.getAuthorityMenu(1);
+        return ResultBody.ok().data(result);
     }
 }

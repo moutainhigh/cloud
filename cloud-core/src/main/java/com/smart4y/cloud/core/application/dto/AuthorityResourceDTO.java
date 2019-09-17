@@ -1,16 +1,18 @@
 package com.smart4y.cloud.core.application.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 /**
  * 资源权限
- *
- *  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * <p>
+ * * @author Youtao
+ * Created by youtao on 2019-09-05.
  */
 @Data
+@NoArgsConstructor
 public class AuthorityResourceDTO implements Serializable {
 
     /**

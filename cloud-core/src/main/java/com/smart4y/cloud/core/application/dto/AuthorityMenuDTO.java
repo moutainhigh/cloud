@@ -9,9 +9,9 @@ import java.util.Objects;
 
 /**
  * 菜单权限
- *
- *  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * <p>
+ * * @author Youtao
+ * Created by youtao on 2019-09-05.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AuthorityMenuDTO extends BaseMenuDTO implements Serializable {
@@ -20,12 +20,10 @@ public class AuthorityMenuDTO extends BaseMenuDTO implements Serializable {
      * 权限ID
      */
     private Long authorityId;
-
     /**
      * 权限标识
      */
     private String authority;
-
 
     private List<AuthorityAction> actionList;
 

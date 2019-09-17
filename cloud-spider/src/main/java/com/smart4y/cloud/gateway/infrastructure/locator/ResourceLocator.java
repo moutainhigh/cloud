@@ -32,7 +32,6 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEvent> {
 
-
     /*
      * 单位时间
      */

@@ -57,9 +57,7 @@ public class GatewayContextFilter implements WebFilter, Ordered {
         HttpHeaders headers = request.getHeaders();
         gatewayContext.setRequestHeaders(headers);
         gatewayContext.getAllRequestData().addAll(request.getQueryParams());
-        /*
-         * save gateway context into exchange
-         */
+        // save gateway context into exchange
         exchange.getAttributes().put(GatewayContext.CACHE_GATEWAY_CONTEXT, gatewayContext);
         MediaType contentType = headers.getContentType();
         if (headers.getContentLength() > 0) {
@@ -72,9 +70,7 @@ public class GatewayContextFilter implements WebFilter, Ordered {
         }
         log.debug("[GatewayContext]ContentType:{},Gateway context is set with {}", contentType, gatewayContext);
         return chain.filter(exchange);
-
     }
-
 
     @Override
     public int getOrder() {

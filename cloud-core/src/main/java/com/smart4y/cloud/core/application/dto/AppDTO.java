@@ -2,17 +2,19 @@ package com.smart4y.cloud.core.application.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
 /**
  * 系统应用-基础信息
- *
- *  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * <p>
+ * * @author Youtao
+ * Created by youtao on 2019-09-05.
  */
 @Data
 @NoArgsConstructor
+@Accessors(chain = true)
 public class AppDTO implements Serializable {
 
     /**

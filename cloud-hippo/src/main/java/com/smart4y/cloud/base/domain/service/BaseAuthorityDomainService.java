@@ -1,11 +1,11 @@
 package com.smart4y.cloud.base.domain.service;
 
 import com.smart4y.cloud.base.domain.model.*;
-import com.smart4y.cloud.base.domain.repository.BaseAuthorityActionMapper;
-import com.smart4y.cloud.base.domain.repository.BaseAuthorityAppMapper;
-import com.smart4y.cloud.base.domain.repository.BaseAuthorityRoleMapper;
-import com.smart4y.cloud.base.domain.repository.BaseAuthorityUserMapper;
+import com.smart4y.cloud.base.domain.repository.*;
+import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
+import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
 import com.smart4y.cloud.core.domain.annotation.DomainService;
+import com.smart4y.cloud.core.domain.model.OpenAuthority;
 import com.smart4y.cloud.core.infrastructure.mapper.BaseDomainService;
 import com.smart4y.cloud.core.infrastructure.security.OpenSecurityConstants;
 import org.apache.commons.collections4.CollectionUtils;
@@ -32,13 +32,15 @@ public class BaseAuthorityDomainService extends BaseDomainService<BaseAuthority>
     private final BaseAuthorityAppMapper baseAuthorityAppMapper;
     private final BaseAuthorityRoleMapper baseAuthorityRoleMapper;
     private final BaseAuthorityUserMapper baseAuthorityUserMapper;
+    private final BaseCustomMapper baseCustomMapper;
 
     @Autowired
-    public BaseAuthorityDomainService(BaseAuthorityActionMapper baseAuthorityActionMapper, BaseAuthorityAppMapper baseAuthorityAppMapper, BaseAuthorityRoleMapper baseAuthorityRoleMapper, BaseAuthorityUserMapper baseAuthorityUserMapper) {
+    public BaseAuthorityDomainService(BaseAuthorityActionMapper baseAuthorityActionMapper, BaseAuthorityAppMapper baseAuthorityAppMapper, BaseAuthorityRoleMapper baseAuthorityRoleMapper, BaseAuthorityUserMapper baseAuthorityUserMapper, BaseCustomMapper baseCustomMapper) {
         this.baseAuthorityActionMapper = baseAuthorityActionMapper;
         this.baseAuthorityAppMapper = baseAuthorityAppMapper;
         this.baseAuthorityRoleMapper = baseAuthorityRoleMapper;
         this.baseAuthorityUserMapper = baseAuthorityUserMapper;
+        this.baseCustomMapper = baseCustomMapper;
     }
 
     /**
@@ -83,10 +85,10 @@ public class BaseAuthorityDomainService extends BaseDomainService<BaseAuthority>
         List<Long> authorityIds = this.getApiBaseAuthorities(apiIds).stream()
                 .map(BaseAuthority::getAuthorityId).collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(authorityIds)) {
-            this.removeAuthorityActions(authorityIds);
-            this.removeAuthorityApps(authorityIds);
-            this.removeAuthorityRoles(authorityIds);
-            this.removeAuthorityUsers(authorityIds);
+            this.removeActionAuthorities(authorityIds);
+            this.removeAppAuthorities(authorityIds);
+            this.removeRoleAuthorities(authorityIds);
+            this.removeUserAuthorities(authorityIds);
             this.removeAuthorities(authorityIds);
         }
     }
@@ -94,7 +96,7 @@ public class BaseAuthorityDomainService extends BaseDomainService<BaseAuthority>
     /**
      * 移除权限操作
      */
-    private void removeAuthorityActions(List<Long> authorityIds) {
+    private void removeActionAuthorities(List<Long> authorityIds) {
         Weekend<BaseAuthorityAction> weekend = Weekend.of(BaseAuthorityAction.class);
         weekend
                 .weekendCriteria()
@@ -103,9 +105,16 @@ public class BaseAuthorityDomainService extends BaseDomainService<BaseAuthority>
     }
 
     /**
-     * 移除权限应用
+     * 获取应用已授权权限
      */
-    private void removeAuthorityApps(List<Long> authorityIds) {
+    public List<OpenAuthority> getAppAuthorities(String appId) {
+        return baseCustomMapper.selectAppAuthorities(appId);
+    }
+
+    /**
+     * 移除应用权限
+     */
+    private void removeAppAuthorities(List<Long> authorityIds) {
         Weekend<BaseAuthorityApp> weekend = Weekend.of(BaseAuthorityApp.class);
         weekend
                 .weekendCriteria()
@@ -116,7 +125,7 @@ public class BaseAuthorityDomainService extends BaseDomainService<BaseAuthority>
     /**
      * 移除权限角色
      */
-    private void removeAuthorityRoles(List<Long> authorityIds) {
+    private void removeRoleAuthorities(List<Long> authorityIds) {
         Weekend<BaseAuthorityRole> weekend = Weekend.of(BaseAuthorityRole.class);
         weekend
                 .weekendCriteria()
@@ -127,7 +136,7 @@ public class BaseAuthorityDomainService extends BaseDomainService<BaseAuthority>
     /**
      * 移除权限用户
      */
-    private void removeAuthorityUsers(List<Long> authorityIds) {
+    private void removeUserAuthorities(List<Long> authorityIds) {
         Weekend<BaseAuthorityUser> weekend = Weekend.of(BaseAuthorityUser.class);
         weekend
                 .weekendCriteria()
@@ -160,5 +169,19 @@ public class BaseAuthorityDomainService extends BaseDomainService<BaseAuthority>
                 .weekendCriteria()
                 .andIn(BaseAuthority::getApiId, apiIds);
         return this.list(weekend);
+    }
+
+    /**
+     * 获取 所有资源授权列表
+     */
+    public List<AuthorityResourceDTO> getAuthorityResources() {
+        return baseCustomMapper.selectAllAuthorityResource();
+    }
+
+    /**
+     * 获取 菜单权限
+     */
+    public List<AuthorityMenuDTO> getAuthorityMenu(int status) {
+        return baseCustomMapper.selectAuthorityMenu(status);
     }
 }

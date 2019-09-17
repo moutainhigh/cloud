@@ -111,7 +111,7 @@ public class BaseDomainService<T extends BaseEntity> {
      * @param id 主键ID
      * @return 实体记录
      */
-    public T getById(long id) {
+    public T getById(Object id) {
         return mapper.selectByPrimaryKey(id);
     }
 

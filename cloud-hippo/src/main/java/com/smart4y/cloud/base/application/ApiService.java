@@ -5,7 +5,7 @@ import com.smart4y.cloud.base.domain.model.BaseApi;
 import java.util.List;
 
 /**
- * 资源应用服务
+ * API资源 应用服务
  *
  * @author Youtao
  *         Created by youtao on 2019/9/17.
