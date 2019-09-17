@@ -18,7 +18,6 @@ import java.util.Objects;
  *         Created By Youtao on 2017/02/20
  */
 @Slf4j
-@SuppressWarnings("unused")
 public class EnumHandler<E extends Enum<E> & IEnum<K>, K> extends BaseTypeHandler<E> {
 
     private Class<E> type;

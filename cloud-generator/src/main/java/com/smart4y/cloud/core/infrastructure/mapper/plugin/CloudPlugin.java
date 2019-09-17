@@ -22,7 +22,7 @@ import java.util.*;
  *         Created By Youtao on 2017/04/16.
  */
 @Slf4j
-public final class OpenCloudPlugin extends MethodPlugin {
+public final class CloudPlugin extends MethodPlugin {
 
     private final Collection<Annotations> annotations;
     private Set<String> mappers = new HashSet<>();
@@ -55,7 +55,7 @@ public final class OpenCloudPlugin extends MethodPlugin {
      */
     private boolean generateEntity = true;
 
-    public OpenCloudPlugin() {
+    public CloudPlugin() {
         annotations = new HashSet<>(Annotations.values().length);
     }
 

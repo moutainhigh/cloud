@@ -11,7 +11,7 @@ import tk.mybatis.mapper.common.Mapper;
  * @author Youtao
  *         Created by youtao on 2019-04-30.
  */
-public interface OpenCloudMapper<T> extends Mapper<T>, InsertListMapper<T> {
+public interface CloudMapper<T> extends Mapper<T>, InsertListMapper<T> {
 
     /**
      * 添加或更新（表必须设置唯一索引并且实体记录中存在索引值，主键Id不为空也可以）

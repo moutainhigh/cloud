@@ -1,8 +1,9 @@
-package com.smart4y.cloud.zone.infrastructure.configuration;
+package com.smart4y.cloud.base.infrastructure.configuration;
 
 import com.smart4y.cloud.core.infrastructure.autoconfigure.*;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * @author Youtao
@@ -16,7 +17,7 @@ import org.springframework.context.annotation.Import;
         MqAutoConfiguration.class,
         RedisCacheAutoConfiguration.class,
         SwaggerAutoConfiguration.class,
-        WebMvcConfiguration.class
-})
+        WebMvcConfiguration.class})
+@EnableTransactionManagement(proxyTargetClass = true)
 public class AutoConfig {
 }

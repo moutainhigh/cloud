@@ -83,7 +83,7 @@ public class AutoConfiguration {
     @ConditionalOnMissingBean(OpenIdGenProperties.class)
     public SnowflakeIdWorker snowflakeIdWorker(OpenIdGenProperties properties) {
         SnowflakeIdWorker worker = new SnowflakeIdWorker(properties.getWorkId(), properties.getCenterId());
-        log.info("Bean [{}] properties [{}]", worker, properties);
+        log.info("SnowflakeIdWorker [{}]", worker);
         return worker;
     }
 

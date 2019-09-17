@@ -39,17 +39,17 @@ public class BaseDomainService<T extends BaseEntity> {
      * 当前处理 Mapper
      */
     @Autowired
-    protected OpenCloudMapper<T> mapper;
+    protected CloudMapper<T> mapper;
 
     /**
      * 获取 当前批量 Mapper
      *
      * @return 当前批量 Mapper
      */
-    private OpenCloudMapper<T> batchMapper(SqlSession sqlSession) {
-        Class<? extends OpenCloudMapper> mapperClass = mapper.getClass();
+    private CloudMapper<T> batchMapper(SqlSession sqlSession) {
+        Class<? extends CloudMapper> mapperClass = mapper.getClass();
         Class<?>[] interfaces = mapperClass.getInterfaces();
-        return (OpenCloudMapper<T>) sqlSession.getMapper(interfaces[0]);
+        return (CloudMapper<T>) sqlSession.getMapper(interfaces[0]);
     }
 
     /**
@@ -161,7 +161,7 @@ public class BaseDomainService<T extends BaseEntity> {
      */
     public void saveBatch(Collection<T> entityList, int batchSize) {
         SqlSession sqlSession = batchSqlSession();
-        OpenCloudMapper<T> batchMapper = batchMapper(sqlSession);
+        CloudMapper<T> batchMapper = batchMapper(sqlSession);
         int i = 0;
         for (T entity : entityList) {
             setSaveInfo(entity);
@@ -223,7 +223,7 @@ public class BaseDomainService<T extends BaseEntity> {
      */
     public void updateSelectiveBatchById(Collection<T> entityList, int batchSize) {
         SqlSession sqlSession = batchSqlSession();
-        OpenCloudMapper<T> batchMapper = batchMapper(sqlSession);
+        CloudMapper<T> batchMapper = batchMapper(sqlSession);
         int i = 0;
         for (T entity : entityList) {
             setUpdateInfo(entity);
@@ -281,7 +281,7 @@ public class BaseDomainService<T extends BaseEntity> {
      */
     public void saveOrUpdateBatch(Collection<T> entityList, int batchSize) {
         SqlSession sqlSession = batchSqlSession();
-        OpenCloudMapper<T> batchMapper = batchMapper(sqlSession);
+        CloudMapper<T> batchMapper = batchMapper(sqlSession);
         int i = 0;
         for (T entity : entityList) {
             setSaveOrUpdateInfo(entity);

@@ -1,4 +1,4 @@
-package com.smart4y.cloud.zone.infrastructure.configuration;
+package com.smart4y.cloud.base.infrastructure.configuration;
 
 import com.smart4y.cloud.core.infrastructure.exception.OpenAccessDeniedHandler;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAuthenticationEntryPoint;

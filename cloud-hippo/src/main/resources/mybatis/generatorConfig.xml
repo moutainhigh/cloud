@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="Db2Tables" targetRuntime="tk.mybatis.mapper.generator.TkMyBatis3SimpleImpl" defaultModelType="flat">
+        <!--
+            Mapper 生成插件
+         -->
+        <plugin type="com.smart4y.cloud.core.infrastructure.mapper.plugin.CloudPlugin">
+            <property name="mappers" value="com.smart4y.cloud.core.infrastructure.mapper.CloudMapper"/>
+        </plugin>
+        <!--
+            领域模型 生成插件
+         -->
+        <plugin type="com.smart4y.cloud.core.infrastructure.mapper.plugin.ModelPlugin">
+            <property name="targetPackage" value="com.smart4y.cloud.base.domain.model"/>
+            <property name="author" value="youtao"/>
+        </plugin>
+
+        <!-- 数据库连接 -->
+        <jdbcConnection connectionURL="jdbc:mysql://127.0.0.1:3306/cloud?useSSL=false"
+                        userId="root"
+                        password="123456"
+                        driverClass="com.mysql.cj.jdbc.Driver"/>
+        <!-- Java 实体路径 -->
+        <javaModelGenerator targetPackage="com.smart4y.cloud.base.domain.model" targetProject="src/main/java"/>
+        <!-- SQL XML 路径 -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
+        <!-- Java 接口路径 -->
+        <javaClientGenerator targetPackage="com.smart4y.cloud.base.domain.repository" targetProject="src/main/java"
+                             type="XMLMAPPER"/>
+        <!-- 使用"%"匹配所有表或者单独定义表 -->
+        <!--<table tableName="%" mapperName="{0}Mapper">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>-->
+        <table catalog="cloud" tableName="base_account" domainObjectName="BaseAccount"/>
+        <table catalog="cloud" tableName="base_account_logs" domainObjectName="BaseAccountLogs"/>
+        <table catalog="cloud" tableName="base_action" domainObjectName="BaseAction"/>
+        <table catalog="cloud" tableName="base_api" domainObjectName="BaseApi"/>
+        <table catalog="cloud" tableName="base_app" domainObjectName="BaseApp"/>
+        <table catalog="cloud" tableName="base_authority" domainObjectName="BaseAuthority"/>
+        <table catalog="cloud" tableName="base_authority_action" domainObjectName="BaseAuthorityAction"/>
+        <table catalog="cloud" tableName="base_authority_app" domainObjectName="BaseAuthorityApp"/>
+        <table catalog="cloud" tableName="base_authority_role" domainObjectName="BaseAuthorityRole"/>
+        <table catalog="cloud" tableName="base_authority_user" domainObjectName="BaseAuthorityUser"/>
+        <table catalog="cloud" tableName="base_developer" domainObjectName="BaseDeveloper"/>
+        <table catalog="cloud" tableName="base_menu" domainObjectName="BaseMenu"/>
+        <table catalog="cloud" tableName="base_role" domainObjectName="BaseRole"/>
+        <table catalog="cloud" tableName="base_role_user" domainObjectName="BaseRoleUser"/>
+        <table catalog="cloud" tableName="base_user" domainObjectName="BaseUser"/>
+        <table catalog="cloud" tableName="gateway_access_logs" domainObjectName="GatewayAccessLogs"/>
+        <table catalog="cloud" tableName="gateway_ip_limit" domainObjectName="GatewayIpLimit"/>
+        <table catalog="cloud" tableName="gateway_ip_limit_api" domainObjectName="GatewayIpLimitApi"/>
+        <table catalog="cloud" tableName="gateway_rate_limit" domainObjectName="GatewayRateLimit"/>
+        <table catalog="cloud" tableName="gateway_rate_limit_api" domainObjectName="GatewayRateLimitApi"/>
+        <table catalog="cloud" tableName="gateway_route" domainObjectName="GatewayRoute"/>
+    </context>
+</generatorConfiguration>

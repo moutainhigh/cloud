@@ -98,7 +98,7 @@ management:
 mapper:
   mappers:
     - tk.mybatis.mapper.common.Mapper
-    - com.smart4y.cloud.core.infrastructure.mapper.OpenCloudMapper
+    - com.smart4y.cloud.core.infrastructure.mapper.CloudMapper
   not-empty: true
   identity: MYSQL
 ##分页配置
@@ -139,7 +139,7 @@ mybatis:
     local-cache-scope: session
     #设置当JDBC类型为空时，插入空值时的处理方式
     jdbc-type-for-null: null
-    default-enum-type-handler:
+    default-enum-type-handler: com.smart4y.cloud.core.infrastructure.mapper.enumhandler.EnumHandler
 opencloud:
   # 开放api
   api:

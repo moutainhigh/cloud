@@ -1,4 +1,4 @@
-package com.smart4y.cloud.zone;
+package com.smart4y.cloud.base;
 
 import com.smart4y.cloud.core.infrastructure.AbstractApplication;
 import org.springframework.boot.CommandLineRunner;

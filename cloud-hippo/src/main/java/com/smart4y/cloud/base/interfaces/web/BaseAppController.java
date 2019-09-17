@@ -1,4 +1,4 @@
-package com.smart4y.cloud.zone.interfaces.web;
+package com.smart4y.cloud.base.interfaces.web;
 
 import com.smart4y.cloud.core.domain.ResultBody;
 import com.smart4y.cloud.core.application.dto.AppDTO;

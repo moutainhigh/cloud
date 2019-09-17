@@ -6,8 +6,8 @@
         <!--
             Mapper 生成插件
          -->
-        <plugin type="com.smart4y.cloud.core.infrastructure.mapper.plugin.OpenCloudPlugin">
-            <property name="mappers" value="com.smart4y.cloud.core.infrastructure.mapper.OpenCloudMapper"/>
+        <plugin type="com.smart4y.cloud.core.infrastructure.mapper.plugin.CloudPlugin">
+            <property name="mappers" value="com.smart4y.cloud.core.infrastructure.mapper.CloudMapper"/>
         </plugin>
         <!--
             领域模型 生成插件

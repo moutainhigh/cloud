@@ -8,13 +8,13 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.smart4y.cloud.core.infrastructure.properties.OpenCommonProperties;
 import com.smart4y.cloud.core.infrastructure.spring.SpringContextHolder;
 import com.smart4y.cloud.gateway.application.AccessLogService;
-import com.smart4y.cloud.gateway.infrastructure.locator.JdbcRouteDefinitionLocator;
-import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonExceptionHandler;
 import com.smart4y.cloud.gateway.infrastructure.feign.BaseAuthorityFeign;
 import com.smart4y.cloud.gateway.infrastructure.feign.GatewayFeign;
 import com.smart4y.cloud.gateway.infrastructure.filter.GatewayContextFilter;
 import com.smart4y.cloud.gateway.infrastructure.filter.RemoveGatewayContextFilter;
+import com.smart4y.cloud.gateway.infrastructure.locator.JdbcRouteDefinitionLocator;
+import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
 import com.smart4y.cloud.gateway.interfaces.actuator.ApiEndpoint;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +40,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.reactive.result.view.ViewResolver;
 import reactor.core.publisher.Mono;
 
@@ -56,6 +57,7 @@ import java.util.TimeZone;
  */
 @Slf4j
 @Configuration
+@EnableTransactionManagement(proxyTargetClass = true)
 @EnableConfigurationProperties({ApiProperties.class, OpenCommonProperties.class})
 public class ApiConfiguration {
 
