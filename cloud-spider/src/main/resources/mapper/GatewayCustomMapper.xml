@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smart4y.cloud.gateway.domain.repository.GatewayCustomMapper">
+
+    <select id="findRateLimitApis" resultType="com.smart4y.cloud.gateway.domain.RateLimitApiObj">
+        SELECT
+            i.policy_id AS policyId,
+            p.limit_quota AS limitQuota,
+            p.interval_unit AS intervalUnit,
+            p.policy_name AS policyName,
+            a.api_id AS apiId,
+            a.api_code AS apiCode,
+            a.api_name AS apiName,
+            a.api_category AS apiCategory,
+            a.service_id AS serviceId,
+            a.path,
+            r.url
+        FROM gateway_rate_limit_api AS i
+        INNER JOIN gateway_rate_limit AS p ON i.policy_id = p.policy_id
+        INNER JOIN base_api AS a ON i.api_id = a.api_id
+        INNER JOIN gateway_route AS r ON a.service_id = r.route_name
+        WHERE p.policy_type = 'url'
+    </select>
+</mapper>

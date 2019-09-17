@@ -2,8 +2,9 @@ package com.smart4y.cloud.gateway.infrastructure.locator;
 
 import com.google.common.collect.Lists;
 import com.smart4y.cloud.core.domain.event.RemoteRefreshRouteEvent;
+import com.smart4y.cloud.gateway.domain.RateLimitApiObj;
 import com.smart4y.cloud.gateway.domain.model.GatewayRoute;
-import com.smart4y.cloud.gateway.domain.model.RateLimitApiObj;
+import com.smart4y.cloud.gateway.domain.service.GatewayRateLimitApiDomainService;
 import com.smart4y.cloud.gateway.domain.service.GatewayRouteDomainService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -41,6 +42,8 @@ public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, Appli
 
     @Autowired
     private GatewayRouteDomainService gatewayRouteDomainService;
+    @Autowired
+    private GatewayRateLimitApiDomainService gatewayRateLimitApiDomainService;
 
     public JdbcRouteDefinitionLocator() {
         routeDefinitions = CacheFlux
@@ -94,9 +97,8 @@ public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, Appli
         //从数据库拿到路由配置
         List<RouteDefinition> routes = Lists.newArrayList();
         try {
-            List<RateLimitApiObj> limitApiList = null;
             List<GatewayRoute> routeList = gatewayRouteDomainService.findAllByStatusEnable();
-            //List<RateLimitApiObj> limitApiList = gatewayRouteRepository.findRateLimitApis();
+            List<RateLimitApiObj> limitApiList = gatewayRateLimitApiDomainService.findRateLimitApis();
             if (CollectionUtils.isNotEmpty(limitApiList)) {
                 // 加载限流
                 limitApiList.forEach(item -> {
