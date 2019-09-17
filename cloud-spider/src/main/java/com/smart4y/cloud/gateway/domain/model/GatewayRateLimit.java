@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  * 网关（流量控制策略）
  *
  * @author Youtao
- *         Created by youtao on 2019/09/16.
+ *         Created by youtao on 2019/09/17.
  */
 @Data
 @Table(name = "gateway_rate_limit")
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 public class GatewayRateLimit extends BaseEntity {
 
     /**
-     * 
+     * 策略ID
      */
     @Id
     @KeySql(genId = SnowflakeId.class)
@@ -33,7 +33,7 @@ public class GatewayRateLimit extends BaseEntity {
     private Long policyId;
 
     /**
-     * 
+     * 策略名称
      */
     @Column(name = "policy_name")
     private String policyName;
@@ -57,16 +57,16 @@ public class GatewayRateLimit extends BaseEntity {
     private String intervalUnit;
 
     /**
-     * 
+     * 创建时间
      */
-    @Column(name = "create_time")
-    private LocalDateTime createTime;
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
 
     /**
-     * 
+     * 最后修改时间
      */
-    @Column(name = "update_time")
-    private LocalDateTime updateTime;
+    @Column(name = "last_modified_date")
+    private LocalDateTime lastModifiedDate;
 
     /**
      * 构造器

@@ -1,11 +1,12 @@
 package com.smart4y.cloud.core.infrastructure;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import com.smart4y.cloud.core.domain.event.ResourceScannedEvent;
+import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.QueueConstants;
-import com.smart4y.cloud.core.infrastructure.toolkit.secret.EncryptUtils;
-import com.smart4y.cloud.core.infrastructure.toolkit.reflection.ReflectionUtils;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.reflection.ReflectionUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.secret.EncryptUtils;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -35,14 +36,13 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * 自定义注解扫描
- *
- *  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * <p>
+ * * @author Youtao
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class ResourceAnnotationScan implements ApplicationListener<ApplicationReadyEvent> {
@@ -54,22 +54,15 @@ public class ResourceAnnotationScan implements ApplicationListener<ApplicationRe
         this.amqpTemplate = amqpTemplate;
     }
 
-    private ExecutorService executorService = Executors.newFixedThreadPool(2);
-
     /**
      * 初始化方法
-     *
-     * @param event
      */
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         ConfigurableApplicationContext applicationContext = event.getApplicationContext();
         Map<String, Object> resourceServer = applicationContext.getBeansWithAnnotation(EnableResourceServer.class);
         amqpTemplate = applicationContext.getBean(RabbitTemplate.class);
-        if (amqpTemplate == null) {
-            return;
-        }
-        if (resourceServer == null || resourceServer.isEmpty()) {
+        if (resourceServer.isEmpty()) {
             // 只扫描资源服务器
             return;
         }
@@ -84,32 +77,26 @@ public class ResourceAnnotationScan implements ApplicationListener<ApplicationRe
         try {
             // 获取所有安全配置适配器
             Map<String, WebSecurityConfigurerAdapter> securityConfigurerAdapterMap = applicationContext.getBeansOfType(WebSecurityConfigurerAdapter.class);
-            Iterator<Map.Entry<String, WebSecurityConfigurerAdapter>> iterable = securityConfigurerAdapterMap.entrySet().iterator();
-            while (iterable.hasNext()) {
-                WebSecurityConfigurerAdapter configurer = iterable.next().getValue();
+            for (Map.Entry<String, WebSecurityConfigurerAdapter> stringWebSecurityConfigurerAdapterEntry : securityConfigurerAdapterMap.entrySet()) {
+                WebSecurityConfigurerAdapter configurer = stringWebSecurityConfigurerAdapterEntry.getValue();
                 HttpSecurity httpSecurity = (HttpSecurity) ReflectionUtils.getFieldValue(configurer, "http");
                 FilterSecurityInterceptor filterSecurityInterceptor = httpSecurity.getSharedObject(FilterSecurityInterceptor.class);
                 FilterInvocationSecurityMetadataSource metadataSource = filterSecurityInterceptor.getSecurityMetadataSource();
                 Map<RequestMatcher, Collection<ConfigAttribute>> requestMap = (Map) ReflectionUtils.getFieldValue(metadataSource, "requestMap");
-                Iterator<Map.Entry<RequestMatcher, Collection<ConfigAttribute>>> requestIterable = requestMap.entrySet().iterator();
-                while (requestIterable.hasNext()) {
-                    Map.Entry<RequestMatcher, Collection<ConfigAttribute>> match = requestIterable.next();
+                for (Map.Entry<RequestMatcher, Collection<ConfigAttribute>> match : requestMap.entrySet()) {
                     if (match.getValue().toString().contains("permitAll")) {
                         permitAll.add(match.getKey());
                     }
                 }
             }
         } catch (Exception e) {
-            log.error("error:{}", e);
+            log.error("error：{}", e.getLocalizedMessage(), e);
         }
-        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+
+        List<ResourceScannedEvent.Mapping> list = new ArrayList<>();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> m : map.entrySet()) {
             RequestMappingInfo info = m.getKey();
             HandlerMethod method = m.getValue();
-//            if (method.getMethod().getDeclaringClass().getAnnotation(RestController.class) == null) {
-//                // 只扫描RestController
-//                continue;
-//            }
             if (method.getMethodAnnotation(ApiIgnore.class) != null) {
                 // 忽略的接口不扫描
                 continue;
@@ -128,7 +115,6 @@ public class ResourceAnnotationScan implements ApplicationListener<ApplicationRe
             // 请求路径
             PatternsRequestCondition p = info.getPatternsCondition();
             String urls = getUrls(p.getPatterns());
-            Map<String, String> api = Maps.newHashMap();
             // 类名
             String className = method.getMethod().getDeclaringClass().getName();
             // 方法名
@@ -139,7 +125,7 @@ public class ResourceAnnotationScan implements ApplicationListener<ApplicationRe
             String name = "";
             String desc = "";
             // 是否需要安全认证 默认:1-是 0-否
-            String isAuth = "1";
+            int isAuth = BaseConstants.ENABLED;
             // 匹配项目中.permitAll()配置
             for (String url : p.getPatterns()) {
                 for (RequestMatcher requestMatcher : permitAll) {
@@ -147,7 +133,7 @@ public class ResourceAnnotationScan implements ApplicationListener<ApplicationRe
                         AntPathRequestMatcher pathRequestMatcher = (AntPathRequestMatcher) requestMatcher;
                         if (pathMatch.match(pathRequestMatcher.getPattern(), url)) {
                             // 忽略验证
-                            isAuth = "0";
+                            isAuth = BaseConstants.DISABLED;
                         }
                     }
                 }
@@ -159,32 +145,30 @@ public class ResourceAnnotationScan implements ApplicationListener<ApplicationRe
                 desc = apiOperation.notes();
             }
             name = StringUtils.isBlank(name) ? methodName : name;
-            api.put("apiName", name);
-            api.put("apiCode", md5);
-            api.put("apiDesc", desc);
-            api.put("path", urls);
-            api.put("className", className);
-            api.put("methodName", methodName);
-            api.put("md5", md5);
-            api.put("requestMethod", methods);
-            api.put("serviceId", serviceId);
-            api.put("contentType", mediaTypes);
-            api.put("isAuth", isAuth);
-            list.add(api);
+
+            ResourceScannedEvent.Mapping mappings = new ResourceScannedEvent.Mapping()
+                    .setApiName(name)
+                    .setApiCode(md5)
+                    .setApiDesc(desc)
+                    .setPath(urls)
+                    .setClassName(className)
+                    .setMethodName(methodName)
+                    .setMd5(md5)
+                    .setRequestMethod(methods)
+                    .setServiceId(serviceId)
+                    .setContentType(mediaTypes)
+                    .setIsAuth(isAuth);
+            list.add(mappings);
         }
-        Map resource = Maps.newHashMap();
-        resource.put("application", serviceId);
-        resource.put("mapping", list);
-        log.info("ApplicationReadyEvent:[{}]", serviceId);
-        executorService.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // 发送mq扫描消息
-                    amqpTemplate.convertAndSend(QueueConstants.QUEUE_SCAN_API_RESOURCE, resource);
-                } catch (Exception e) {
-                    log.error("发送失败:{}", e);
-                }
+        ResourceScannedEvent scannedEvent = new ResourceScannedEvent()
+                .setApplication(serviceId)
+                .setMappings(list);
+        log.info("ApplicationReadyEvent: [{}]", serviceId);
+        CompletableFuture.runAsync(() -> {
+            try {
+                amqpTemplate.convertAndSend(QueueConstants.QUEUE_SCAN_API_RESOURCE, scannedEvent);
+            } catch (Exception e) {
+                log.error("发送失败：{}", e.getLocalizedMessage(), e);
             }
         });
     }

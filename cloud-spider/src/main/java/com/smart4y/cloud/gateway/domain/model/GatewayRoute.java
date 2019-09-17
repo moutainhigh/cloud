@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  * 网关（路由）
  *
  * @author Youtao
- *         Created by youtao on 2019/09/16.
+ *         Created by youtao on 2019/09/17.
  */
 @Data
 @Table(name = "gateway_route")
@@ -57,7 +57,7 @@ public class GatewayRoute extends BaseEntity {
     private String url;
 
     /**
-     * 忽略前缀
+     * 忽略前缀（0不忽略 1忽略）
      */
     @Column(name = "strip_prefix")
     private Integer stripPrefix;
@@ -89,14 +89,14 @@ public class GatewayRoute extends BaseEntity {
     /**
      * 创建时间
      */
-    @Column(name = "create_time")
-    private LocalDateTime createTime;
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
 
     /**
      * 修改时间
      */
-    @Column(name = "update_time")
-    private LocalDateTime updateTime;
+    @Column(name = "last_modified_date")
+    private LocalDateTime lastModifiedDate;
 
     /**
      * 构造器

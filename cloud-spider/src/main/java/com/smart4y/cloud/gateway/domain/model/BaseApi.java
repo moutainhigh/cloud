@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  * 系统资源-API接口
  *
  * @author Youtao
- *         Created by youtao on 2019/09/16.
+ *         Created by youtao on 2019/09/17.
  */
 @Data
 @Table(name = "base_api")
@@ -84,43 +84,31 @@ public class BaseApi extends BaseEntity {
      * 优先级
      */
     @Column(name = "priority")
-    private Long priority;
+    private Integer priority;
 
     /**
      * 状态:0-无效 1-有效
      */
     @Column(name = "status")
-    private Byte status;
-
-    /**
-     * 
-     */
-    @Column(name = "create_time")
-    private LocalDateTime createTime;
-
-    /**
-     * 
-     */
-    @Column(name = "update_time")
-    private LocalDateTime updateTime;
+    private Integer status;
 
     /**
      * 保留数据0-否 1-是 不允许删除
      */
     @Column(name = "is_persist")
-    private Byte isPersist;
+    private Integer isPersist;
 
     /**
      * 是否需要认证: 0-无认证 1-身份认证 默认:1
      */
     @Column(name = "is_auth")
-    private Byte isAuth;
+    private Integer isAuth;
 
     /**
      * 是否公开: 0-内部的 1-公开的
      */
     @Column(name = "is_open")
-    private Byte isOpen;
+    private Integer isOpen;
 
     /**
      * 类名
@@ -133,6 +121,18 @@ public class BaseApi extends BaseEntity {
      */
     @Column(name = "method_name")
     private String methodName;
+
+    /**
+     * 创建时间
+     */
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+
+    /**
+     * 最后修改时间
+     */
+    @Column(name = "last_modified_date")
+    private LocalDateTime lastModifiedDate;
 
     /**
      * 构造器

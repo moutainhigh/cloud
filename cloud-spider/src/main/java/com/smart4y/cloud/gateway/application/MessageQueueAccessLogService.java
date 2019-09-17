@@ -2,6 +2,7 @@ package com.smart4y.cloud.gateway.application;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
+import com.smart4y.cloud.core.domain.event.LogAccessedEvent;
 import com.smart4y.cloud.core.infrastructure.constants.QueueConstants;
 import com.smart4y.cloud.core.infrastructure.security.OpenUserDetails;
 import com.smart4y.cloud.gateway.domain.GatewayContext;
@@ -20,6 +21,8 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR;
@@ -72,28 +75,30 @@ public class MessageQueueAccessLogService implements AccessLogService {
         Map<String, String> headers = request.getHeaders().toSingleValueMap();
         String userAgent = headers.get(HttpHeaders.USER_AGENT);
         String ip = ReactiveWebUtils.getRemoteAddress(exchange);
-        Object requestTime = exchange.getAttribute("requestTime");
+        LocalDateTime requestTime = Objects
+                .requireNonNull((Date) exchange.getAttribute("requestTime"))
+                .toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         String serviceId = getServiceId(exchange);
         Map data = getParams(exchange);
         String error = getErrorMessage(ex);
         int httpStatus = Objects.requireNonNull(response.getStatusCode()).value();
         String authentication = getAuthentication(exchange);
 
-        Map<String, Object> map = Maps.newHashMap();
-        map.put("requestTime", requestTime);
-        map.put("serviceId", serviceId);
-        map.put("httpStatus", httpStatus);
-        map.put("headers", JSONObject.toJSON(headers));
-        map.put("path", requestPath);
-        map.put("params", JSONObject.toJSON(data));
-        map.put("ip", ip);
-        map.put("method", method);
-        map.put("userAgent", userAgent);
-        map.put("responseTime", new Date());
-        map.put("error", error);
-        map.put("authentication", authentication);
+        LogAccessedEvent event = new LogAccessedEvent()
+                .setRequestTime(requestTime)
+                .setServiceId(serviceId)
+                .setHttpStatus(String.valueOf(httpStatus))
+                .setHeaders(JSONObject.toJSONString(headers))
+                .setPath(requestPath)
+                .setParams(JSONObject.toJSONString(data))
+                .setIp(ip)
+                .setMethod(method)
+                .setUserAgent(userAgent)
+                .setResponseTime(LocalDateTime.now())
+                .setError(error)
+                .setAuthentication(authentication);
         try {
-            amqpTemplate.convertAndSend(QueueConstants.QUEUE_ACCESS_LOGS, map);
+            amqpTemplate.convertAndSend(QueueConstants.QUEUE_ACCESS_LOGS, event);
         } catch (Exception e) {
             log.error("Access log save error {}", e.getMessage(), e);
         }

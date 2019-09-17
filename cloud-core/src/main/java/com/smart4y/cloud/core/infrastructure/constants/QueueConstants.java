@@ -1,9 +1,8 @@
 package com.smart4y.cloud.core.infrastructure.constants;
 
 /**
- * @author: liuyadu
- * @date: 2019/2/21 17:46
- * @description:
+ * @author Youtao
+ *         Created by youtao on 2019/9/17.
  */
 public class QueueConstants {
 
