@@ -162,10 +162,6 @@ public class GatewayContextFilter implements WebFilter, Ordered {
 
     /**
      * ReadJsonBody
-     *
-     * @param exchange
-     * @param chain
-     * @return
      */
     private Mono<Void> readBody(ServerWebExchange exchange, WebFilterChain chain, GatewayContext gatewayContext) {
         return DataBufferUtils.join(exchange.getRequest().getBody())

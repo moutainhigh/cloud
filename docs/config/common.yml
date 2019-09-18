@@ -1,0 +1,28 @@
+opencloud:
+  ##资源服务器公共配置
+  common:
+    #API网关访问地址
+    api-server-addr: http://localhost:8888
+    #管理后台前端访问地址
+    admin-server-addr: http://localhost:8080
+    #平台认证服务地址
+    auth-server-addr: http://localhost:8211
+    #默认使用OpenHelper.buildRedisTokenServices(RedisConnectionFactory redisConnectionFactory)
+    #公共客户端配置（适用于OpenHelper.buildRemoteTokenServices(OpenCommonProperties properties)）
+    client-id: 7gBZcbsC7kLIWCdELIl8nxcs
+    client-secret: 0osTIhce7uPvDKHz6aa67bhCukaKoYl4
+    scope: userProfile
+    user-authorization-uri: ${opencloud.common.auth-server-addr}/oauth/authorize
+    access-token-uri: ${opencloud.common.api-server-addr}/admin/oauth/token
+    token-info-uri: ${opencloud.common.api-server-addr}/admin/oauth/check_token
+    user-info-uri: ${opencloud.common.api-server-addr}/admin/current/user
+    #资源服务器jwt签名秘钥（适用于OpenHelper.buildJwtTokenServices(OpenCommonProperties properties)）
+    jwt-signing-key: 2cde1eaa60fe4af1987f94caa13f29a2
+  ##Swagger2默认配置
+  swagger2:
+    enabled: true
+    client-id: ${opencloud.common.client-id}
+    client-secret: ${opencloud.common.client-secret}
+    scope: ${opencloud.common.scope}
+    access-token-uri: ${opencloud.common.access-token-uri}
+    user-authorization-uri: ${opencloud.common.user-authorization-uri}
