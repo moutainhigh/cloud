@@ -66,7 +66,8 @@ public class BaseAccountDomainService extends BaseDomainService<BaseAccount> {
                         .setLoginIp(remoteAddress)
                         .setLoginAgent(header)
                         .setLoginTime(LocalDateTime.now())
-                        .setLoginNums(count + 1);
+                        .setLoginNums(count + 1)
+                        .setCreatedDate(LocalDateTime.now());
                 baseAccountLogsMapper.insertSelective(log);
             }
         } catch (Exception e) {
