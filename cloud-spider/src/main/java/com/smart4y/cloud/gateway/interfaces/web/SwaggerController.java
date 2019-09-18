@@ -22,16 +22,12 @@ import java.util.Optional;
 @RequestMapping(value = "/swagger-resources")
 public class SwaggerController {
 
-    //@Autowired(required = false)
-    //private SecurityConfiguration securityConfiguration;
-    //@Autowired(required = false)
-    //private UiConfiguration uiConfiguration;
-    private final SwaggerResourcesProvider swaggerResources;
+    private final SwaggerResourcesProvider swaggerResourcesProvider;
     private final OpenCommonProperties commonProperties;
 
     @Autowired
-    public SwaggerController(SwaggerResourcesProvider swaggerResources, OpenCommonProperties commonProperties) {
-        this.swaggerResources = swaggerResources;
+    public SwaggerController(SwaggerResourcesProvider swaggerResourcesProvider, OpenCommonProperties commonProperties) {
+        this.swaggerResourcesProvider = swaggerResourcesProvider;
         this.commonProperties = commonProperties;
     }
 
@@ -68,7 +64,7 @@ public class SwaggerController {
 
     @GetMapping
     public Mono<ResponseEntity> swaggerResources() {
-        List<SwaggerResource> resources = swaggerResources.get();
+        List<SwaggerResource> resources = swaggerResourcesProvider.get();
         return Mono.just((new ResponseEntity<>(resources, HttpStatus.OK)));
     }
 
