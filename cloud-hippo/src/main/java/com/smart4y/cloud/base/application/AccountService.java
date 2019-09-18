@@ -1,6 +1,10 @@
 package com.smart4y.cloud.base.application;
 
-import com.smart4y.cloud.base.domain.model.BaseAccount;
+import com.smart4y.cloud.base.domain.model.BaseUser;
+import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
+import com.smart4y.cloud.core.application.dto.UserAccount;
+
+import java.util.List;
 
 /**
  * @author Youtao
@@ -9,17 +13,27 @@ import com.smart4y.cloud.base.domain.model.BaseAccount;
 public interface AccountService {
 
     /**
-     * 查询 账号信息
-     *
-     * @param account     登录账号
-     * @param accountType 账号类型
-     * @param domain      所属域
-     * @return 账号信息
+     * 登录
      */
-    BaseAccount getAccount(String account, String accountType, String domain);
+    UserAccount login(String username);
 
     /**
-     * 添加登录成功日志
+     * 更新密码
+     *
+     * @param userId   用户ID
+     * @param password 密码
      */
-    void loginLog(BaseAccount account);
+    void modifyPassword(long userId, String password);
+
+    /**
+     * 修改用户基本信息
+     */
+    void modifyUser(BaseUser user);
+
+    /**
+     * 获取 用户菜单权限
+     *
+     * @param isAdmin 是否超级管理员
+     */
+    List<AuthorityMenuDTO> findAuthorityMenuByUser(long userId, boolean isAdmin);
 }

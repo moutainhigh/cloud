@@ -40,7 +40,7 @@
 
     <!-- 开发环境 -->
     <springProfile name="dev">
-        <logger name="com.smart4y.cloud" level="debug"/>
+        <logger name="com.smart4y.cloud" level="info"/>
         <logger name="org.springframework.amqp" level="off"/>
         <logger name="com.alibaba.nacos.client.naming" level="off"/>
         <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="off"/>

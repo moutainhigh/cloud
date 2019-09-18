@@ -17,6 +17,7 @@
         <module>cloud-hippo</module>
         <module>cloud-owl</module>
         <module>cloud-spider</module>
+        <module>cloud-vue</module>
     </modules>
 
     <properties>

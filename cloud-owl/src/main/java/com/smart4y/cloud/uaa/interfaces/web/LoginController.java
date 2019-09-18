@@ -2,6 +2,7 @@ package com.smart4y.cloud.uaa.interfaces.web;
 
 import com.smart4y.cloud.core.domain.ResultBody;
 import com.smart4y.cloud.core.infrastructure.security.OpenHelper;
+import com.smart4y.cloud.core.infrastructure.security.OpenUserDetails;
 import com.smart4y.cloud.core.infrastructure.security.oauth2.client.OpenOAuth2ClientDetails;
 import com.smart4y.cloud.core.infrastructure.security.oauth2.client.OpenOAuth2ClientProperties;
 import io.swagger.annotations.Api;
@@ -38,7 +39,8 @@ public class LoginController {
     @ApiOperation(value = "获取用户基础信息")
     @GetMapping("/current/user")
     public ResultBody getUserProfile() {
-        return ResultBody.ok().data(OpenHelper.getUser());
+        OpenUserDetails user = OpenHelper.getUser();
+        return ResultBody.ok().data(user);
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.smart4y.cloud.base.interfaces.web;
 
-import com.smart4y.cloud.base.application.BaseDeveloperService;
+import com.smart4y.cloud.base.application.AccountService;
 import com.smart4y.cloud.core.application.dto.UserAccount;
 import com.smart4y.cloud.core.domain.ResultBody;
 import io.swagger.annotations.Api;
@@ -19,8 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "系统用户管理")
 public class BaseDeveloperController {
 
+    private final AccountService accountService;
+
     @Autowired
-    private BaseDeveloperService baseDeveloperService;
+    public BaseDeveloperController(AccountService accountService) {
+        this.accountService = accountService;
+    }
 
     /**
      * 获取登录账号信息
@@ -33,7 +37,7 @@ public class BaseDeveloperController {
     })
     @PostMapping("/developer/login")
     public ResultBody<UserAccount> developerLogin(@RequestParam(value = "username") String username) {
-        UserAccount account = baseDeveloperService.login(username);
+        UserAccount account = accountService.login(username);
         return ResultBody.ok().data(account);
     }
 }
