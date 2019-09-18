@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface BaseDeveloperFeign {
 
     /**
-     * TODO 开发者登录
+     * 开发者登录
      */
     @PostMapping("/developer/login")
     ResultBody<UserAccount> developerLogin(@RequestParam(value = "username") String username);

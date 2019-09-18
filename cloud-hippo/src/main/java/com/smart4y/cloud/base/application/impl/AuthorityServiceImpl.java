@@ -1,6 +1,7 @@
 package com.smart4y.cloud.base.application.impl;
 
 import com.smart4y.cloud.base.application.AuthorityService;
+import com.smart4y.cloud.base.domain.model.BaseMenu;
 import com.smart4y.cloud.base.domain.service.BaseAuthorityDomainService;
 import com.smart4y.cloud.core.application.annotation.ApplicationService;
 import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
@@ -33,5 +34,10 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Override
     public List<AuthorityMenuDTO> getMenuAuthoritiesAll() {
         return baseAuthorityDomainService.getMenuAuthoritiesAll();
+    }
+
+    @Override
+    public List<BaseMenu> getMenus() {
+        return baseAuthorityDomainService.getMenus();
     }
 }

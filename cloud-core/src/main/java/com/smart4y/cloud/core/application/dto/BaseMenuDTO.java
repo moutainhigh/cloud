@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * 系统资源-菜单信息
@@ -64,4 +65,12 @@ public class BaseMenuDTO implements Serializable {
      * 服务ID
      */
     private String serviceId;
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createdDate;
+    /**
+     * 最后修改时间
+     */
+    private LocalDateTime lastModifiedDate;
 }

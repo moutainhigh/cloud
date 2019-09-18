@@ -2,6 +2,7 @@ package com.smart4y.cloud.core.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.smart4y.cloud.core.domain.model.AuthorityAction;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,10 +10,11 @@ import java.util.Objects;
 
 /**
  * 菜单权限
- * <p>
- * * @author Youtao
- * Created by youtao on 2019-09-05.
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
+@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AuthorityMenuDTO extends BaseMenuDTO implements Serializable {
 
@@ -26,31 +28,6 @@ public class AuthorityMenuDTO extends BaseMenuDTO implements Serializable {
     private String authority;
 
     private List<AuthorityAction> actionList;
-
-    public Long getAuthorityId() {
-        return authorityId;
-    }
-
-    public void setAuthorityId(Long authorityId) {
-        this.authorityId = authorityId;
-    }
-
-    public String getAuthority() {
-        return authority;
-    }
-
-    public void setAuthority(String authority) {
-        this.authority = authority;
-    }
-
-
-    public List<AuthorityAction> getActionList() {
-        return actionList;
-    }
-
-    public void setActionList(List<AuthorityAction> actionList) {
-        this.actionList = actionList;
-    }
 
     @Override
     public boolean equals(Object obj) {

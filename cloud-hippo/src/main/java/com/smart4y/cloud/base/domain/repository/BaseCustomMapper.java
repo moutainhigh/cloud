@@ -34,6 +34,16 @@ public interface BaseCustomMapper {
     List<OpenAuthority> selectRoleAuthorities(@Param("roleId") long roleId);
 
     /**
+     * 获取 角色菜单权限
+     */
+    List<AuthorityMenuDTO> selectRoleMenuAuthorities(@Param("roleId") long roleId);
+
+    /**
+     * 获取 用户菜单权限
+     */
+    List<AuthorityMenuDTO> selectUserMenuAuthorities(@Param("userId") long userId);
+
+    /**
      * 获取 用户权限
      */
     List<OpenAuthority> selectUserAuthorities(@Param("userId") long userId);

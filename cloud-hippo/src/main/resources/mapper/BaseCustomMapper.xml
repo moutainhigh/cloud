@@ -134,4 +134,38 @@
          AND
             a.status = 1
     </select>
+    <select id="selectRoleMenuAuthorities" resultType="com.smart4y.cloud.core.application.dto.AuthorityMenuDTO">
+        SELECT
+            a.authority_id,
+            a.authority,
+            a.`status`,
+            m.*,
+            rp.role_id,
+            rp.expire_time
+        FROM
+            base_authority_role AS rp
+        INNER JOIN base_authority AS a ON rp.authority_id = a.authority_id
+        INNER JOIN base_menu AS m ON a.menu_id = m.menu_id
+        WHERE
+            rp.role_id = #{roleId}
+        AND
+            a.status = 1
+    </select>
+    <select id="selectUserMenuAuthorities" resultType="com.smart4y.cloud.core.application.dto.AuthorityMenuDTO">
+        SELECT
+            a.authority_id,
+            a.authority,
+            a.`status`,
+            m.*,
+            ua.user_id,
+            ua.expire_time
+        FROM
+            base_authority_user AS ua
+        INNER JOIN base_authority AS a ON ua.authority_id = a.authority_id
+        INNER JOIN base_menu AS m ON a.menu_id = m.menu_id
+        WHERE
+            ua.user_id = #{userId}
+        AND
+            a.status = 1
+    </select>
 </mapper>

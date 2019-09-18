@@ -7,6 +7,7 @@ import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
 import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
 import com.smart4y.cloud.core.domain.annotation.DomainService;
 import com.smart4y.cloud.core.domain.model.OpenAuthority;
+import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.mapper.BaseDomainService;
 import com.smart4y.cloud.core.infrastructure.security.OpenSecurityConstants;
 import org.apache.commons.collections4.CollectionUtils;
@@ -33,6 +34,8 @@ public class BaseAuthorityDomainService extends BaseDomainService<BaseAuthority>
     private final BaseAuthorityUserMapper baseAuthorityUserMapper;
     private final BaseCustomMapper baseCustomMapper;
     private final BaseRoleDomainService baseRoleDomainService;
+    @Autowired
+    private BaseMenuMapper baseMenuMapper;
 
     @Autowired
     public BaseAuthorityDomainService(BaseAuthorityActionMapper baseAuthorityActionMapper, BaseAuthorityAppMapper baseAuthorityAppMapper, BaseAuthorityRoleMapper baseAuthorityRoleMapper, BaseAuthorityUserMapper baseAuthorityUserMapper, BaseCustomMapper baseCustomMapper, BaseRoleDomainService baseRoleDomainService) {
@@ -188,6 +191,7 @@ public class BaseAuthorityDomainService extends BaseDomainService<BaseAuthority>
         Set<OpenAuthority> set = new HashSet<>(authorities);
         authorities.clear();
         authorities.addAll(set);
+
         return authorities;
     }
 
@@ -225,5 +229,32 @@ public class BaseAuthorityDomainService extends BaseDomainService<BaseAuthority>
      */
     public List<AuthorityMenuDTO> getMenuAuthoritiesAll() {
         return baseCustomMapper.selectMenuAuthoritiesAll();
+    }
+
+    /**
+     * 获取 角色菜单权限
+     */
+    public List<AuthorityMenuDTO> getRoleMenuAuthorities(long roleId) {
+        return baseCustomMapper.selectRoleMenuAuthorities(roleId);
+    }
+
+    /**
+     * 获取 用户菜单权限
+     */
+    public List<AuthorityMenuDTO> getUserMenuAuthorities(long userId) {
+        return baseCustomMapper.selectUserMenuAuthorities(userId);
+    }
+
+    /**
+     * 获取 所有菜单
+     */
+    public List<BaseMenu> getMenus() {
+        Weekend<BaseMenu> weekend = Weekend.of(BaseMenu.class);
+        weekend
+                .weekendCriteria()
+                .andEqualTo(BaseMenu::getStatus, BaseConstants.ENABLED);
+        weekend
+                .orderBy("priority").asc();
+        return baseMenuMapper.selectByExample(weekend);
     }
 }

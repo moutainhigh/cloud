@@ -12,6 +12,7 @@ import com.smart4y.cloud.base.domain.service.BaseRoleDomainService;
 import com.smart4y.cloud.base.domain.service.BaseUserDomainService;
 import com.smart4y.cloud.core.application.annotation.ApplicationService;
 import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
+import com.smart4y.cloud.core.application.dto.BaseMenuDTO;
 import com.smart4y.cloud.core.application.dto.UserAccount;
 import com.smart4y.cloud.core.domain.model.OpenAuthority;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
@@ -23,10 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static com.smart4y.cloud.core.infrastructure.constants.BaseConstants.*;
 
@@ -103,18 +101,48 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void modifyPassword(long userId, String password) {
-        // TODO 修改密码
+        baseAccountDomainService.updatePassword(userId, password);
     }
 
     @Override
     public void modifyUser(BaseUser user) {
-        // TODO 修改用户基本信息
+        if (user == null || user.getUserId() == null) {
+            return;
+        }
+        if (user.getStatus() != null) {
+            baseAccountDomainService.updateStatus(user.getUserId(), user.getStatus());
+        }
+        baseUserDomainService.updateSelectiveById(user);
     }
 
     @Override
     public List<AuthorityMenuDTO> findAuthorityMenuByUser(long userId, boolean isAdmin) {
+        if (isAdmin) {
+            return baseAuthorityDomainService.getMenuAuthoritiesAll();
+        }
         // TODO 获取 用户菜单权限
-        return Collections.emptyList();
+        // 用户角色列表
+        List<AuthorityMenuDTO> authorities = Lists.newArrayList();
+        List<BaseRole> userRoles = baseRoleDomainService.getUserRoles(userId);
+        for (BaseRole role : userRoles) {
+            List<AuthorityMenuDTO> roleMenuAuthorities = baseAuthorityDomainService.getRoleMenuAuthorities(role.getRoleId());
+            if (CollectionUtils.isNotEmpty(roleMenuAuthorities)) {
+                authorities.addAll(roleMenuAuthorities);
+            }
+        }
+        // 加入用户特殊授权
+        List<AuthorityMenuDTO> userMenuAuthorities = baseAuthorityDomainService.getUserMenuAuthorities(userId);
+        if (CollectionUtils.isNotEmpty(userMenuAuthorities)) {
+            authorities.addAll(userMenuAuthorities);
+        }
+
+        // 权限去重
+        Set<AuthorityMenuDTO> set = new HashSet<>(authorities);
+        authorities.clear();
+        authorities.addAll(set);
+        authorities.sort(Comparator.comparing(BaseMenuDTO::getPriority));
+
+        return authorities;
     }
 
     private UserAccount getUserAccount(long userId) {

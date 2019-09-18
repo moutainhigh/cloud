@@ -9,10 +9,15 @@ import com.smart4y.cloud.core.infrastructure.toolkit.WebUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import tk.mybatis.mapper.weekend.Weekend;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+
+import static com.smart4y.cloud.core.infrastructure.constants.BaseConstants.*;
 
 /**
  * @author Youtao
@@ -22,11 +27,13 @@ import java.time.LocalDateTime;
 @DomainService
 public class BaseAccountDomainService extends BaseDomainService<BaseAccount> {
 
+    private final PasswordEncoder passwordEncoder;
     private final BaseAccountLogsMapper baseAccountLogsMapper;
 
     @Autowired
-    public BaseAccountDomainService(BaseAccountLogsMapper baseAccountLogsMapper) {
+    public BaseAccountDomainService(BaseAccountLogsMapper baseAccountLogsMapper, PasswordEncoder passwordEncoder) {
         this.baseAccountLogsMapper = baseAccountLogsMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -85,5 +92,37 @@ public class BaseAccountDomainService extends BaseDomainService<BaseAccount> {
                 .andEqualTo(BaseAccountLogs::getAccountId, accountId)
                 .andEqualTo(BaseAccountLogs::getUserId, userId);
         return baseAccountLogsMapper.selectCountByExample(weekend);
+    }
+
+    /**
+     * 修改 账号密码
+     */
+    public void updatePassword(long userId, String password) {
+        BaseAccount record = new BaseAccount()
+                .setPassword(passwordEncoder.encode(password))
+                .setLastModifiedDate(LocalDateTime.now());
+        List<String> accountTypes = Arrays.asList(ACCOUNT_TYPE_USERNAME, ACCOUNT_TYPE_EMAIL, ACCOUNT_TYPE_MOBILE);
+        Weekend<BaseAccount> weekend = Weekend.of(BaseAccount.class);
+        weekend
+                .weekendCriteria()
+                .andIn(BaseAccount::getAccountType, accountTypes)
+                .andEqualTo(BaseAccount::getUserId, userId)
+                .andEqualTo(BaseAccount::getDomain, ACCOUNT_DOMAIN_ADMIN);
+        super.updateSelective(record, weekend);
+    }
+
+    /**
+     * 修改 账号状态
+     */
+    public void updateStatus(long userId, int status) {
+        BaseAccount record = new BaseAccount()
+                .setStatus(status)
+                .setLastModifiedDate(LocalDateTime.now());
+        Weekend<BaseAccount> weekend = Weekend.of(BaseAccount.class);
+        weekend
+                .weekendCriteria()
+                .andEqualTo(BaseAccount::getUserId, userId)
+                .andEqualTo(BaseAccount::getDomain, ACCOUNT_DOMAIN_ADMIN);
+        super.updateSelective(record, weekend);
     }
 }
