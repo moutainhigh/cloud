@@ -30,17 +30,14 @@ public class OpenOAuth2ClientDetails implements Serializable {
      * 认证地址
      */
     private String userAuthorizationUri;
-
     /**
      * 重定向地址
      */
     private String redirectUri;
-
     /**
      * 获取用户信息
      */
     private String userInfoUri;
-
     /**
      * 登录成功地址
      */

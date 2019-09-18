@@ -4,8 +4,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * 自定义ID生成器配置
- * @author LYD
- * @date 2018/7/29
  */
 @ConfigurationProperties(prefix = "opencloud.id")
 public class OpenIdGenProperties {

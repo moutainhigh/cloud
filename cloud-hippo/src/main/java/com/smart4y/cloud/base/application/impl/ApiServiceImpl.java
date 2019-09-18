@@ -46,7 +46,7 @@ public class ApiServiceImpl implements ApiService {
         // 同步权限
         List<String> apiCodes = apis.stream().map(BaseApi::getApiCode).collect(Collectors.toList());
         List<BaseApi> baseApis = baseApiDomainService.getApis(apiCodes);
-        baseAuthorityDomainService.modifyAuthorityApis(baseApis);
+        baseAuthorityDomainService.modifyAuthoritiesForApi(baseApis);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class ApiServiceImpl implements ApiService {
             notInApiIds.remove(2L);
             if (CollectionUtils.isNotEmpty(notInApiIds)) {
                 // 移除API资源对应的权限
-                baseAuthorityDomainService.removeApiAuthorities(notInApiIds);
+                baseAuthorityDomainService.removeAuthoritiesForApi(notInApiIds);
                 // 移除接口资源
                 baseApiDomainService.removeApis(notInApiIds);
             }

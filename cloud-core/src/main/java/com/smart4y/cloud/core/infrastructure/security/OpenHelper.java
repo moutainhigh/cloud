@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerEndpointsConfiguration;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
+import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
@@ -30,9 +31,9 @@ import java.util.Map;
 
 /**
  * 认证信息帮助类
- *
- *  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * <p>
+ * * @author Youtao
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class OpenHelper {
@@ -188,7 +189,8 @@ public class OpenHelper {
         Assert.notNull(postParameters.get("client_id"), "client_id not null");
         Assert.notNull(postParameters.get("client_secret"), "client_secret not null");
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(postParameters.get("client_id"), postParameters.get("client_secret"), Collections.emptyList());
-        ResponseEntity<OAuth2AccessToken> responseEntity = endpoints.tokenEndpoint().postAccessToken(auth, postParameters);
+        TokenEndpoint endpoint = endpoints.tokenEndpoint();
+        ResponseEntity<OAuth2AccessToken> responseEntity = endpoint.postAccessToken(auth, postParameters);
         log.info("createAccessToken[{}]", responseEntity.getBody());
         return responseEntity.getBody();
     }

@@ -8,9 +8,14 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
+ * <p>
  * 平台认证服务
  * 提供微服务间oauth2统一平台认证服务
  * 提供认证客户端、令牌、已授权管理`
+ * </p>
+ * <p>
+ * 移动应用认证中心
+ * </p>
  *
  * @author Youtao
  *         Created by youtao on 2019-09-05.

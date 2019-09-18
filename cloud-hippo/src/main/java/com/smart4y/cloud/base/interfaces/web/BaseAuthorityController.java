@@ -39,7 +39,7 @@ public class BaseAuthorityController {
     @GetMapping("/authority/menu")
     @ApiOperation(value = "获取菜单权限列表", notes = "获取菜单权限列表")
     public ResultBody<List<AuthorityMenuDTO>> findAuthorityMenu() {
-        List<AuthorityMenuDTO> result = authorityService.getAuthorityMenu(1);
+        List<AuthorityMenuDTO> result = authorityService.getMenuAuthoritiesAll();
         return ResultBody.ok().data(result);
     }
 }

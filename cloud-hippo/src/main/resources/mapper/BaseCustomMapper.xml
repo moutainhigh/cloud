@@ -66,7 +66,7 @@
             WHERE
                 action.`status` = 1
     </select>
-    <select id="selectAuthorityMenu" resultType="com.smart4y.cloud.core.application.dto.AuthorityMenuDTO">
+    <select id="selectMenuAuthoritiesAll" resultType="com.smart4y.cloud.core.application.dto.AuthorityMenuDTO">
         SELECT
             a.authority_id,
             a.authority,
@@ -75,6 +75,63 @@
             base_authority AS a
         INNER JOIN base_menu AS m ON a.menu_id = m.menu_id
         WHERE
-            m.status = #{status}
+            m.status = 1
+    </select>
+    <select id="selectUserRoles" resultType="com.smart4y.cloud.base.domain.model.BaseRole">
+        SELECT
+            base_role_user.user_id,
+            base_role.role_id,
+            base_role.role_code,
+            base_role.role_name,
+            base_role.role_desc,
+            base_role.status,
+            base_role.create_time,
+            base_role.update_time
+        FROM
+            base_role_user
+        INNER JOIN base_role ON base_role_user.role_id = base_role.role_id
+        WHERE
+            user_id = #{userId}
+        AND
+            status = 1
+    </select>
+    <select id="selectAdminAuthorities" resultType="com.smart4y.cloud.core.domain.model.OpenAuthority">
+        SELECT
+            authority_id,
+            authority,
+            'user' AS owner
+        FROM base_authority
+        WHERE
+            status = 1
+        AND
+            api_id IS NULL
+    </select>
+    <select id="selectRoleAuthorities" resultType="com.smart4y.cloud.core.domain.model.OpenAuthority">
+        SELECT
+            a.authority_id,
+            a.authority,
+            rp.expire_time,
+            'role' AS owner
+        FROM
+            base_authority_role AS rp
+        INNER JOIN base_authority AS a ON rp.authority_id = a.authority_id
+        WHERE
+            rp.role_id = #{roleId}
+        AND
+            a.status = 1
+    </select>
+    <select id="selectUserAuthorities" resultType="com.smart4y.cloud.core.domain.model.OpenAuthority">
+        SELECT
+            a.authority_id,
+            a.authority,
+            up.expire_time,
+            'user' AS owner
+        FROM
+            base_authority_user AS up
+                INNER JOIN base_authority AS a ON up.authority_id = a.authority_id
+        WHERE
+            up.user_id = #{userId}
+         AND
+            a.status = 1
     </select>
 </mapper>

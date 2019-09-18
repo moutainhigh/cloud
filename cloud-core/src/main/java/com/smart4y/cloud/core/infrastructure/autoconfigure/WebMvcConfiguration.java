@@ -21,13 +21,15 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public static class ApiWebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         @Override
         public void configure(WebSecurity web) {
-            web.ignoring().antMatchers(
-                    "/error",
-                    "/static/**",
-                    "/v2/api-docs/**",
-                    "/swagger-resources/**",
-                    "/webjars/**",
-                    "/favicon.ico");
+            web
+                    .ignoring()
+                    .antMatchers(
+                            "/error",
+                            "/static/**",
+                            "/v2/api-docs/**",
+                            "/swagger-resources/**",
+                            "/webjars/**",
+                            "/favicon.ico");
         }
     }
 
@@ -36,10 +38,14 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-        registry.addResourceHandler("swagger-ui.html", "doc.html")
+        registry
+                .addResourceHandler("/static/**")
+                .addResourceLocations("classpath:/static/");
+        registry
+                .addResourceHandler("swagger-ui.html", "doc.html")
                 .addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("/webjars/**")
+        registry
+                .addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 }

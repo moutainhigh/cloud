@@ -12,14 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 自定义oauth2异常提示
  *
- *  * @author Youtao
+ * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class OpenOAuth2WebResponseExceptionTranslator implements WebResponseExceptionTranslator {
 
     @Override
-    public ResponseEntity translate(Exception e) throws Exception {
+    public ResponseEntity translate(Exception e) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         ResultBody responseData = OpenGlobalExceptionHandler.resolveOauthException(e, request.getRequestURI());
         return ResponseEntity.status(responseData.getHttpStatus()).body(responseData);

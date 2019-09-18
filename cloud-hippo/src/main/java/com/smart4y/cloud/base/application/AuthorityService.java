@@ -21,5 +21,5 @@ public interface AuthorityService {
     /**
      * 获取 菜单权限列表
      */
-    List<AuthorityMenuDTO> getAuthorityMenu(int status);
+    List<AuthorityMenuDTO> getMenuAuthoritiesAll();
 }

@@ -31,7 +31,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     }
 
     @Override
-    public List<AuthorityMenuDTO> getAuthorityMenu(int status) {
-        return baseAuthorityDomainService.getAuthorityMenu(status);
+    public List<AuthorityMenuDTO> getMenuAuthoritiesAll() {
+        return baseAuthorityDomainService.getMenuAuthoritiesAll();
     }
 }

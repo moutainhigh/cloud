@@ -1,5 +1,6 @@
 package com.smart4y.cloud.base.domain.repository;
 
+import com.smart4y.cloud.base.domain.model.BaseRole;
 import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
 import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
 import com.smart4y.cloud.core.domain.model.OpenAuthority;
@@ -18,9 +19,29 @@ import java.util.List;
 public interface BaseCustomMapper {
 
     /**
-     * 获取 应用已授权权限
+     * 获取 超级管理员（admin）权限
+     */
+    List<OpenAuthority> selectAdminAuthorities();
+
+    /**
+     * 获取 应用权限
      */
     List<OpenAuthority> selectAppAuthorities(@Param("appId") String appId);
+
+    /**
+     * 获取 角色权限
+     */
+    List<OpenAuthority> selectRoleAuthorities(@Param("roleId") long roleId);
+
+    /**
+     * 获取 用户权限
+     */
+    List<OpenAuthority> selectUserAuthorities(@Param("userId") long userId);
+
+    /**
+     * 获取 菜单权限
+     */
+    List<AuthorityMenuDTO> selectMenuAuthoritiesAll();
 
     /**
      * 获取 所有资源授权列表
@@ -28,7 +49,7 @@ public interface BaseCustomMapper {
     List<AuthorityResourceDTO> selectAllAuthorityResource();
 
     /**
-     * 获取 菜单权限
+     * 获取 用户角色
      */
-    List<AuthorityMenuDTO> selectAuthorityMenu(@Param("status") Integer status);
+    List<BaseRole> selectUserRoles(@Param("userId") long userId);
 }
