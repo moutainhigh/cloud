@@ -52,6 +52,11 @@ public class SwaggerController {
                 UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS, false, true, 60000L);
     }
 
+    @GetMapping
+    public Mono<ResponseEntity> swaggerResources() {
+        return Mono.just((new ResponseEntity<>(swaggerResources.get(), HttpStatus.OK)));
+    }
+
     @GetMapping("/configuration/security")
     public Mono<ResponseEntity<SecurityConfiguration>> securityConfiguration() {
         return Mono.just(new ResponseEntity<>(
@@ -62,10 +67,5 @@ public class SwaggerController {
     public Mono<ResponseEntity<UiConfiguration>> uiConfiguration() {
         return Mono.just(new ResponseEntity<>(
                 Optional.ofNullable(uiConfiguration).orElse(new UiConfiguration("/")), HttpStatus.OK));
-    }
-
-    @GetMapping("")
-    public Mono<ResponseEntity> swaggerResources() {
-        return Mono.just((new ResponseEntity<>(swaggerResources.get(), HttpStatus.OK)));
     }
 }
