@@ -9,11 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import springfox.documentation.swagger.web.ApiKeyVehicle;
-import springfox.documentation.swagger.web.SecurityConfiguration;
-import springfox.documentation.swagger.web.SwaggerResourcesProvider;
-import springfox.documentation.swagger.web.UiConfiguration;
+import springfox.documentation.swagger.web.*;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -24,48 +22,68 @@ import java.util.Optional;
 @RequestMapping(value = "/swagger-resources")
 public class SwaggerController {
 
-    @Autowired(required = false)
-    private SecurityConfiguration securityConfiguration;
-    @Autowired(required = false)
-    private UiConfiguration uiConfiguration;
+    //@Autowired(required = false)
+    //private SecurityConfiguration securityConfiguration;
+    //@Autowired(required = false)
+    //private UiConfiguration uiConfiguration;
     private final SwaggerResourcesProvider swaggerResources;
+    private final OpenCommonProperties commonProperties;
 
     @Autowired
-    public SwaggerController(SwaggerResourcesProvider swaggerResources) {
+    public SwaggerController(SwaggerResourcesProvider swaggerResources, OpenCommonProperties commonProperties) {
         this.swaggerResources = swaggerResources;
+        this.commonProperties = commonProperties;
     }
 
     /**
      * swagger安全配置
      */
     @Bean
-    public SecurityConfiguration security(OpenCommonProperties commonProperties) {
-        return new SecurityConfiguration(commonProperties.getClientId(),
-                commonProperties.getClientSecret(),
-                "realm", commonProperties.getClientId(),
-                "", ApiKeyVehicle.HEADER, "", ",");
+    public SecurityConfiguration security() {
+        return SecurityConfigurationBuilder.builder()
+                .clientId(commonProperties.getClientId())
+                .clientSecret(commonProperties.getClientSecret())
+                .realm("realm")
+                .appName(commonProperties.getClientId())
+                .scopeSeparator(",")
+                .build();
+        //return new SecurityConfiguration(commonProperties.getClientId(),
+        //        commonProperties.getClientSecret(),
+        //        "realm", commonProperties.getClientId(),
+        //        "", ApiKeyVehicle.HEADER, "", ",");
     }
 
     @Bean
-    UiConfiguration uiConfig() {
-        return new UiConfiguration(null, "list", "alpha", "schema",
-                UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS, false, true, 60000L);
+    public UiConfiguration uiConfig() {
+        return UiConfigurationBuilder.builder()
+                .validatorUrl(null)
+                .docExpansion(DocExpansion.LIST)
+                .operationsSorter(OperationsSorter.ALPHA)
+                .defaultModelRendering(ModelRendering.EXAMPLE)
+                .supportedSubmitMethods(UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS)
+                .build();
+        //return new UiConfiguration(null, "list", "alpha", "schema",
+        //        UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS, false, true, 60000L);
     }
 
     @GetMapping
     public Mono<ResponseEntity> swaggerResources() {
-        return Mono.just((new ResponseEntity<>(swaggerResources.get(), HttpStatus.OK)));
+        List<SwaggerResource> resources = swaggerResources.get();
+        return Mono.just((new ResponseEntity<>(resources, HttpStatus.OK)));
     }
 
     @GetMapping("/configuration/security")
     public Mono<ResponseEntity<SecurityConfiguration>> securityConfiguration() {
+        SecurityConfiguration securityConfiguration = security();
         return Mono.just(new ResponseEntity<>(
                 Optional.ofNullable(securityConfiguration).orElse(null), HttpStatus.OK));
     }
 
     @GetMapping("/configuration/ui")
     public Mono<ResponseEntity<UiConfiguration>> uiConfiguration() {
+        UiConfiguration uiConfiguration = uiConfig();
+        UiConfiguration uiConfig = UiConfigurationBuilder.builder().validatorUrl("/").build();
         return Mono.just(new ResponseEntity<>(
-                Optional.ofNullable(uiConfiguration).orElse(new UiConfiguration("/")), HttpStatus.OK));
+                Optional.ofNullable(uiConfiguration).orElse(uiConfig), HttpStatus.OK));
     }
 }

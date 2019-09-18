@@ -64,6 +64,42 @@ public class SwaggerAutoConfiguration {
                 .securitySchemes(Collections.singletonList(securityScheme()));
     }
 
+    @Bean
+    public SecurityConfiguration security() {
+        return new SecurityConfiguration(openSwaggerProperties.getClientId(),
+                openSwaggerProperties.getClientSecret(),
+                "realm", openSwaggerProperties.getClientId(),
+                "", ApiKeyVehicle.HEADER, "", ",");
+    }
+
+    @Bean
+    public List<GrantType> grantTypes() {
+        List<GrantType> grantTypes = new ArrayList<>();
+        TokenRequestEndpoint tokenRequestEndpoint = new TokenRequestEndpoint(
+                openSwaggerProperties.getUserAuthorizationUri(),
+                openSwaggerProperties.getClientId(), openSwaggerProperties.getClientSecret());
+        TokenEndpoint tokenEndpoint = new TokenEndpoint(
+                openSwaggerProperties.getAccessTokenUri(), "access_token");
+        grantTypes.add(new AuthorizationCodeGrant(tokenRequestEndpoint, tokenEndpoint));
+        return grantTypes;
+    }
+
+    @Bean
+    public UiConfiguration uiConfig() {
+        return new UiConfiguration(null, "list", "alpha", "schema",
+                UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS, false, true, 60000L);
+    }
+
+    /***
+     * oauth2配置
+     * 需要增加swagger授权回调地址
+     * http://localhost:8888/webjars/springfox-swagger-ui/o2c.html
+     */
+    @Bean
+    public SecurityScheme securityScheme() {
+        return new ApiKey("BearerToken", "Authorization", "header");
+    }
+
     /**
      * 构建全局参数
      * 这里主要针对网关服务外部访问数字验签所需参数
@@ -113,51 +149,13 @@ public class SwaggerAutoConfiguration {
                 .build();
     }
 
-    @Bean
-    UiConfiguration uiConfig() {
-        return new UiConfiguration(null, "list", "alpha", "schema",
-                UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS, false, true, 60000L);
-    }
-
-    /***
-     * oauth2配置
-     * 需要增加swagger授权回调地址
-     * http://localhost:8888/webjars/springfox-swagger-ui/o2c.html
-     */
-    @Bean
-    SecurityScheme securityScheme() {
-        return new ApiKey("BearerToken", "Authorization", "header");
-    }
-
     private List<AuthorizationScope> scopes() {
         List<String> scopes = Lists.newArrayList();
         List list = Lists.newArrayList();
         if (openSwaggerProperties.getScope() != null) {
             scopes.addAll(Lists.newArrayList(openSwaggerProperties.getScope().split(",")));
         }
-        scopes.forEach(s -> {
-            list.add(new AuthorizationScope(s, messageSource.getMessage(SCOPE_PREFIX + s, null, s, locale)));
-        });
+        scopes.forEach(s -> list.add(new AuthorizationScope(s, messageSource.getMessage(SCOPE_PREFIX + s, null, s, locale))));
         return list;
-    }
-
-    @Bean
-    public SecurityConfiguration security() {
-        return new SecurityConfiguration(openSwaggerProperties.getClientId(),
-                openSwaggerProperties.getClientSecret(),
-                "realm", openSwaggerProperties.getClientId(),
-                "", ApiKeyVehicle.HEADER, "", ",");
-    }
-
-    @Bean
-    List<GrantType> grantTypes() {
-        List<GrantType> grantTypes = new ArrayList<>();
-        TokenRequestEndpoint tokenRequestEndpoint = new TokenRequestEndpoint(
-                openSwaggerProperties.getUserAuthorizationUri(),
-                openSwaggerProperties.getClientId(), openSwaggerProperties.getClientSecret());
-        TokenEndpoint tokenEndpoint = new TokenEndpoint(
-                openSwaggerProperties.getAccessTokenUri(), "access_token");
-        grantTypes.add(new AuthorizationCodeGrant(tokenRequestEndpoint, tokenEndpoint));
-        return grantTypes;
     }
 }
