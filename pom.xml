@@ -106,7 +106,7 @@
             </activation>
             <properties>
                 <profile.name>dev</profile.name>
-                <!-- Nacos配置中心命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空 -->
+                <!-- Nacos配置中心命名空间，用于支持多环境。这里必须使用ID，不能使用名称，默认为空 -->
                 <config.namespace/>
                 <config.server-addr>127.0.0.1:8848</config.server-addr>
                 <discovery.server-addr>127.0.0.1:8848</discovery.server-addr>
@@ -116,7 +116,7 @@
             <id>online</id>
             <properties>
                 <profile.name>online</profile.name>
-                <!-- Nacos配置中心命名空间,用于支持多环境.这里必须使用ID，不能使用名称,默认为空 -->
+                <!-- Nacos配置中心命名空间，用于支持多环境。这里必须使用ID，不能使用名称，默认为空 -->
                 <config.namespace/>
                 <config.server-addr>127.0.0.1:8848</config.server-addr>
                 <discovery.server-addr>127.0.0.1:8848</discovery.server-addr>
