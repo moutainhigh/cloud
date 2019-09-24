@@ -8,11 +8,15 @@ import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
 import com.smart4y.cloud.core.domain.annotation.DomainService;
 import com.smart4y.cloud.core.domain.model.OpenAuthority;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
+import com.smart4y.cloud.core.infrastructure.constants.ResourceType;
+import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
 import com.smart4y.cloud.core.infrastructure.mapper.BaseDomainService;
 import com.smart4y.cloud.core.infrastructure.security.OpenSecurityConstants;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import tk.mybatis.mapper.weekend.Weekend;
+import tk.mybatis.mapper.weekend.WeekendCriteria;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -28,23 +32,28 @@ import java.util.stream.Collectors;
 @DomainService
 public class BaseAuthorityDomainService extends BaseDomainService<BaseAuthority> {
 
+    @Value("${spring.application.name}")
+    private String DEFAULT_SERVICE_ID;
+
     private final BaseAuthorityActionMapper baseAuthorityActionMapper;
     private final BaseAuthorityAppMapper baseAuthorityAppMapper;
     private final BaseAuthorityRoleMapper baseAuthorityRoleMapper;
     private final BaseAuthorityUserMapper baseAuthorityUserMapper;
     private final BaseCustomMapper baseCustomMapper;
     private final BaseRoleDomainService baseRoleDomainService;
-    @Autowired
-    private BaseMenuMapper baseMenuMapper;
+    private final BaseMenuMapper baseMenuMapper;
+    private final BaseActionMapper baseActionMapper;
 
     @Autowired
-    public BaseAuthorityDomainService(BaseAuthorityActionMapper baseAuthorityActionMapper, BaseAuthorityAppMapper baseAuthorityAppMapper, BaseAuthorityRoleMapper baseAuthorityRoleMapper, BaseAuthorityUserMapper baseAuthorityUserMapper, BaseCustomMapper baseCustomMapper, BaseRoleDomainService baseRoleDomainService) {
+    public BaseAuthorityDomainService(BaseAuthorityActionMapper baseAuthorityActionMapper, BaseAuthorityAppMapper baseAuthorityAppMapper, BaseAuthorityRoleMapper baseAuthorityRoleMapper, BaseAuthorityUserMapper baseAuthorityUserMapper, BaseCustomMapper baseCustomMapper, BaseRoleDomainService baseRoleDomainService, BaseMenuMapper baseMenuMapper, BaseActionMapper baseActionMapper) {
         this.baseAuthorityActionMapper = baseAuthorityActionMapper;
         this.baseAuthorityAppMapper = baseAuthorityAppMapper;
         this.baseAuthorityRoleMapper = baseAuthorityRoleMapper;
         this.baseAuthorityUserMapper = baseAuthorityUserMapper;
         this.baseCustomMapper = baseCustomMapper;
         this.baseRoleDomainService = baseRoleDomainService;
+        this.baseMenuMapper = baseMenuMapper;
+        this.baseActionMapper = baseActionMapper;
     }
 
     /**
@@ -112,6 +121,23 @@ public class BaseAuthorityDomainService extends BaseDomainService<BaseAuthority>
                 .weekendCriteria()
                 .andIn(BaseAuthority::getApiId, apiIds);
         return this.list(weekend);
+    }
+
+    private BaseAuthority getAuthority(long resourceId, ResourceType resourceType) {
+        Weekend<BaseAuthority> weekend = Weekend.of(BaseAuthority.class);
+        WeekendCriteria<BaseAuthority, Object> criteria = weekend.weekendCriteria();
+        switch (resourceType) {
+            case api:
+                criteria.andEqualTo(BaseAuthority::getApiId, resourceId);
+                break;
+            case menu:
+                criteria.andEqualTo(BaseAuthority::getMenuId, resourceId);
+                break;
+            case action:
+                criteria.andEqualTo(BaseAuthority::getActionId, resourceId);
+                break;
+        }
+        return this.getOne(weekend);
     }
 
     /**
@@ -256,5 +282,134 @@ public class BaseAuthorityDomainService extends BaseDomainService<BaseAuthority>
         weekend
                 .orderBy("priority").asc();
         return baseMenuMapper.selectByExample(weekend);
+    }
+
+    /**
+     * 获取菜单下所有操作
+     */
+    public List<BaseAction> getMenuActionsByMenuId(long menuId) {
+        Weekend<BaseAction> weekend = Weekend.of(BaseAction.class);
+        weekend
+                .weekendCriteria()
+                .andEqualTo(BaseAction::getMenuId, menuId);
+        weekend
+                .orderBy("priority").asc();
+        return baseActionMapper.selectByExample(weekend);
+    }
+
+    /**
+     * 获取菜单资源详情
+     */
+    public BaseMenu getMenu(long menuId) {
+        return baseMenuMapper.selectByPrimaryKey(menuId);
+    }
+
+    /**
+     * 添加菜单
+     */
+    public long addMenu(BaseMenu menu) {
+        if (menuCodeExist(menu.getMenuCode())) {
+            throw new OpenAlertException(String.format("%s编码已存在!", menu.getMenuCode()));
+        }
+        if (menu.getParentId() == null) {
+            menu.setParentId(0L);
+        }
+        if (menu.getPriority() == null) {
+            menu.setPriority(0);
+        }
+        if (menu.getStatus() == null) {
+            menu.setStatus(1);
+        }
+        if (menu.getIsPersist() == null) {
+            menu.setIsPersist(0);
+        }
+        menu.setServiceId(DEFAULT_SERVICE_ID);
+        menu.setCreatedDate(LocalDateTime.now());
+        menu.setLastModifiedDate(LocalDateTime.now());
+        baseMenuMapper.insertSelective(menu);
+
+        this.modifyAuthorityForMenu(menu.getMenuId());
+
+        return menu.getMenuId();
+    }
+
+    /**
+     * 新增或更新权限（Menu 权限）
+     */
+    private void modifyAuthorityForMenu(long menuId) {
+        BaseMenu menu = getMenu(menuId);
+        BaseAuthority baseAuthority = this.getAuthority(menu.getMenuId(), ResourceType.menu);
+        if (null == baseAuthority) {
+            baseAuthority = new BaseAuthority()
+                    .setMenuId(menu.getMenuId())
+                    .setStatus(menu.getStatus())
+                    .setAuthority(OpenSecurityConstants.AUTHORITY_PREFIX_MENU + menu.getMenuCode());
+        }
+        if (null == baseAuthority.getAuthorityId()) {
+            baseAuthority
+                    .setCreatedDate(LocalDateTime.now())
+                    .setLastModifiedDate(LocalDateTime.now());
+            this.save(baseAuthority);
+        } else {
+            baseAuthority.setLastModifiedDate(LocalDateTime.now());
+            this.updateSelectiveById(baseAuthority);
+        }
+    }
+
+    /**
+     * 菜单代码是否存在
+     */
+    private boolean menuCodeExist(String menuCode) {
+        Weekend<BaseMenu> weekend = Weekend.of(BaseMenu.class);
+        weekend
+                .weekendCriteria()
+                .andEqualTo(BaseMenu::getMenuCode, menuCode);
+        return baseMenuMapper.selectCountByExample(weekend) > 0;
+    }
+
+    /**
+     * 修改菜单
+     */
+    public void updateMenu(BaseMenu menu) {
+        BaseMenu saved = getMenu(menu.getMenuId());
+        if (saved == null) {
+            throw new OpenAlertException(String.format("%s信息不存在!", menu.getMenuId()));
+        }
+        if (!saved.getMenuCode().equals(menu.getMenuCode())) {
+            // 和原来不一致重新检查唯一性
+            if (menuCodeExist(menu.getMenuCode())) {
+                throw new OpenAlertException(String.format("%s编码已存在!", menu.getMenuCode()));
+            }
+        }
+        if (menu.getParentId() == null) {
+            menu.setParentId(0L);
+        }
+        if (menu.getPriority() == null) {
+            menu.setPriority(0);
+        }
+        menu.setLastModifiedDate(LocalDateTime.now());
+        baseMenuMapper.updateByPrimaryKeySelective(menu);
+
+        this.modifyAuthorityForMenu(menu.getMenuId());
+    }
+
+    /**
+     * 移除菜单
+     */
+    public void removeMenu(long menuId) {
+        BaseMenu menu = getMenu(menuId);
+        if (menu != null && menu.getIsPersist().equals(BaseConstants.ENABLED)) {
+            throw new OpenAlertException("保留数据,不允许删除!");
+        }
+        BaseAuthority authority = getAuthority(menuId, ResourceType.menu);
+        if (null != authority) {
+            this.removeById(authority.getAuthorityId());
+        }
+        //        // 移除菜单权限
+        //        baseAuthorityService.removeAuthority(menuId, ResourceType.menu);
+        //        // 移除功能按钮和相关权限
+        //        baseActionService.removeByMenuId(menuId);
+        // 移除菜单信息
+        baseMenuMapper.deleteByPrimaryKey(menuId);
     }
 }

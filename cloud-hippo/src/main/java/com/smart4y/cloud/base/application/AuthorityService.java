@@ -1,5 +1,6 @@
 package com.smart4y.cloud.base.application;
 
+import com.smart4y.cloud.base.domain.model.BaseAction;
 import com.smart4y.cloud.base.domain.model.BaseMenu;
 import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
 import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
@@ -28,4 +29,29 @@ public interface AuthorityService {
      * 获取所有菜单
      */
     List<BaseMenu> getMenus();
+
+    /**
+     * 获取菜单下所有操作
+     */
+    List<BaseAction> getMenuActionsByMenuId(long menuId);
+
+    /**
+     * 获取菜单资源详情
+     */
+    BaseMenu getMenu(long menuId);
+
+    /**
+     * 添加菜单
+     */
+    long addMenu(BaseMenu menu);
+
+    /**
+     * 修改菜单
+     */
+    void updateMenu(BaseMenu menu);
+
+    /**
+     * 移除菜单
+     */
+    void removeMenu(long menuId);
 }
