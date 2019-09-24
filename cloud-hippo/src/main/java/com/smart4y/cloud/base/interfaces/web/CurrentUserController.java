@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * TODO 当前账户管理
+ */
 @RestController
 @Api(tags = "当前登陆用户")
 public class CurrentUserController {

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 系统应用信息服务
+ * TODO 系统应用信息服务
  *
  * @author Youtao
  *         Created by youtao on 2019-09-06.
