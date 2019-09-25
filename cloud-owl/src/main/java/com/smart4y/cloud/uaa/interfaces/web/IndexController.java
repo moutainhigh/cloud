@@ -42,6 +42,7 @@ public class IndexController {
      * 欢迎页
      */
     @GetMapping("/")
+    @ApiOperation(value = "欢迎页", notes = "欢迎页")
     public String welcome() {
         return "welcome";
     }
@@ -50,14 +51,26 @@ public class IndexController {
      * 登录页
      */
     @GetMapping("/login")
+    @ApiOperation(value = "登录页", notes = "登录页")
     public String login(HttpServletRequest request) {
         return "login";
+    }
+
+    /**
+     * 自定义Oauth2错误页
+     */
+    @ResponseBody
+    @RequestMapping("/oauth/error")
+    @ApiOperation(value = "自定义Oauth2错误处理", notes = "自定义Oauth2错误处理")
+    public Object handleError(HttpServletRequest request) {
+        return request.getAttribute("error");
     }
 
     /**
      * 确认授权页
      */
     @RequestMapping("/oauth/confirm_access")
+    @ApiOperation(value = "确认授权", notes = "确认授权")
     public String confirm_access(HttpServletRequest request, HttpSession session, Map model) {
         Map<String, String> scopes = (Map<String, String>) (model.containsKey("scopes") ? model.get("scopes") : request.getAttribute("scopes"));
         List<String> scopeList = new ArrayList<String>();
@@ -78,18 +91,10 @@ public class IndexController {
     }
 
     /**
-     * 自定义oauth2错误页
-     */
-    @RequestMapping("/oauth/error")
-    @ResponseBody
-    public Object handleError(HttpServletRequest request) {
-        return request.getAttribute("error");
-    }
-
-    /**
-     * QQ第三方登录回调
+     * QQ登录回调
      */
     @GetMapping("/oauth/qq/callback")
+    @ApiOperation(value = "登录回调（QQ）", notes = "登录回调（QQ）")
     public String qq(@RequestParam(value = "code") String code, @RequestHeader HttpHeaders headers) throws Exception {
         String accessToken = qqAuthService.getAccessToken(code);
         String token = "";
@@ -104,9 +109,10 @@ public class IndexController {
     }
 
     /**
-     * 微信第三方登录回调
+     * 微信登录回调
      */
     @GetMapping("/oauth/wechat/callback")
+    @ApiOperation(value = "登录回调（微信）", notes = "登录回调（微信）")
     public String wechat(@RequestParam(value = "code") String code) throws Exception {
         String accessToken = wechatAuthService.getAccessToken(code);
         String token = "";
@@ -120,11 +126,11 @@ public class IndexController {
         return "redirect:" + wechatAuthService.getLoginSuccessUrl() + "?token=" + token;
     }
 
-
     /**
-     * 码云第三方登录回调
+     * 码云登录回调
      */
     @GetMapping("/oauth/gitee/callback")
+    @ApiOperation(value = "登录回调（码云）", notes = "登录回调（码云）")
     public String gitee(@RequestParam(value = "code") String code) throws Exception {
         String accessToken = giteeAuthService.getAccessToken(code);
         String token = "";

@@ -52,5 +52,5 @@ public class BaseConstants {
      * 账号域
      */
     public static final String ACCOUNT_DOMAIN_ADMIN = "@admin.com";
-    //public static final String ACCOUNT_DOMAIN_PORTAL = "@portal.com";
+    public static final String ACCOUNT_DOMAIN_PORTAL = "@portal.com";
 }

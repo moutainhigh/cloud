@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.smart4y.cloud.base.domain.repository.GatewayIpLimitApiCustomMapper">
+    <select id="selectBlackList" resultType="com.smart4y.cloud.core.application.dto.IpLimitApiDTO">
+        SELECT
+            i.policy_id,
+            i.api_id,
+            p.policy_name,
+            p.policy_type,
+            a.api_code,
+            a.api_name,
+            a.api_category,
+            a.service_id,
+            a.path,
+            p.ip_address
+        FROM
+            gateway_ip_limit_api AS i
+        INNER JOIN gateway_ip_limit AS p ON i.policy_id = p.policy_id
+        INNER JOIN base_api AS a ON i.api_id = a.api_id
+        where
+            p.policy_type = 0
+    </select>
+    <select id="selectWhiteList" resultType="com.smart4y.cloud.core.application.dto.IpLimitApiDTO">
+        SELECT
+            i.policy_id,
+            i.api_id,
+            p.policy_name,
+            p.policy_type,
+            a.api_code,
+            a.api_name,
+            a.api_category,
+            a.service_id,
+            a.path,
+            p.ip_address
+        FROM
+            gateway_ip_limit_api AS i
+        INNER JOIN gateway_ip_limit AS p ON i.policy_id = p.policy_id
+        INNER JOIN base_api AS a ON i.api_id = a.api_id
+        where
+            p.policy_type = 1
+    </select>
+</mapper>

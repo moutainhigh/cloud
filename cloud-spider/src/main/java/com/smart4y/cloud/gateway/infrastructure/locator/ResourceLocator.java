@@ -3,6 +3,7 @@ package com.smart4y.cloud.gateway.infrastructure.locator;
 import com.google.common.collect.Lists;
 import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
 import com.smart4y.cloud.core.application.dto.IpLimitApiDTO;
+import com.smart4y.cloud.core.domain.ResultBody;
 import com.smart4y.cloud.core.domain.event.RemoteRefreshRouteEvent;
 import com.smart4y.cloud.gateway.infrastructure.feign.BaseAuthorityFeign;
 import com.smart4y.cloud.gateway.infrastructure.feign.GatewayFeign;
@@ -15,10 +16,7 @@ import org.springframework.security.access.SecurityConfig;
 import reactor.cache.CacheFlux;
 import reactor.core.publisher.Flux;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -133,8 +131,6 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
 
     /**
      * 获取路由后的地址
-     *
-     * @return
      */
     protected String getFullPath(String serviceId, String path) {
         final String[] fullPath = {path.startsWith("/") ? path : "/" + path};
@@ -156,32 +152,32 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
      * 加载授权列表
      */
     public Flux<AuthorityResourceDTO> loadAuthorityResources() {
-        List<AuthorityResourceDTO> resources = Lists.newArrayList();
-        Collection<ConfigAttribute> array;
-        ConfigAttribute cfg;
+        List<AuthorityResourceDTO> resources = null;
         try {
             // 查询所有接口
-            resources = baseAuthorityFeign.findAuthorityResource().getData();
-            if (resources != null) {
-                for (AuthorityResourceDTO item : resources) {
-                    String path = item.getPath();
-                    if (path == null) {
-                        continue;
-                    }
-                    String fullPath = getFullPath(item.getServiceId(), path);
-                    item.setPath(fullPath);
-                    array = configAttributes.get(fullPath);
-                    if (array == null) {
-                        array = new ArrayList<>();
-                    }
-                    if (!array.contains(item.getAuthority())) {
-                        cfg = new SecurityConfig(item.getAuthority());
-                        array.add(cfg);
-                    }
-                    configAttributes.put(fullPath, array);
+            ResultBody<List<AuthorityResourceDTO>> authorityResourceResponse = baseAuthorityFeign.findAuthorityResource();
+            resources = authorityResourceResponse.isOk() ? authorityResourceResponse.getData() : Collections.emptyList();
+
+            ConfigAttribute cfg;
+            Collection<ConfigAttribute> array;
+            for (AuthorityResourceDTO item : resources) {
+                String path = item.getPath();
+                if (path == null) {
+                    continue;
                 }
-                log.info("=============加载动态权限:{}==============", resources.size());
+                String fullPath = getFullPath(item.getServiceId(), path);
+                item.setPath(fullPath);
+                array = configAttributes.get(fullPath);
+                if (array == null) {
+                    array = new ArrayList<>();
+                }
+                cfg = new SecurityConfig(item.getAuthority());
+                if (!array.contains(cfg)) {
+                    array.add(cfg);
+                }
+                configAttributes.put(fullPath, array);
             }
+            log.info("=============加载动态权限:{}==============", resources.size());
         } catch (Exception e) {
             log.error("加载动态权限错误：{}", e.getLocalizedMessage(), e);
         }

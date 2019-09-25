@@ -1,7 +1,11 @@
 package com.smart4y.cloud.base.interfaces.web;
 
-import com.smart4y.cloud.base.application.GatewayService;
-import com.smart4y.cloud.core.application.dto.GatewayRouteDTO;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.smart4y.cloud.base.application.GatewayIpLimitService;
+import com.smart4y.cloud.base.application.GatewayRateLimitService;
+import com.smart4y.cloud.base.application.GatewayRouteService;
+import com.smart4y.cloud.base.domain.model.GatewayRoute;
 import com.smart4y.cloud.core.application.dto.IpLimitApiDTO;
 import com.smart4y.cloud.core.application.dto.RateLimitApiDTO;
 import com.smart4y.cloud.core.domain.ResultBody;
@@ -12,49 +16,83 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
- * TODO 网关对外管理
+ * 网关接口
  *
- * @author Youtao
- *         Created by youtao on 2019-09-06.
+ * @author: liuyadu
+ * @date: 2019/3/12 15:12
+ * @description:
  */
-@RestController
 @Api(tags = "网关对外接口")
+@RestController
 public class GatewayController {
 
-    private final GatewayService gatewayService;
-
     @Autowired
-    public GatewayController(GatewayService gatewayService) {
-        this.gatewayService = gatewayService;
+    private GatewayIpLimitService gatewayIpLimitService;
+    @Autowired
+    private GatewayRateLimitService gatewayRateLimitService;
+    @Autowired
+    private GatewayRouteService gatewayRouteService;
+
+    @ApiOperation(value = "获取服务列表", notes = "获取服务列表")
+    @GetMapping("/gateway/service/list")
+    public ResultBody getServiceList() {
+        List<Map> services = Lists.newArrayList();
+        List<GatewayRoute> routes = gatewayRouteService.findRouteList();
+        if (routes != null && routes.size() > 0) {
+            routes.forEach(route -> {
+                Map service = Maps.newHashMap();
+                service.put("serviceId", route.getRouteName());
+                service.put("serviceName", route.getRouteDesc());
+                services.add(service);
+            });
+        }
+        return ResultBody.ok().data(services);
     }
 
-    @GetMapping("/gateway/api/blackList")
+    /**
+     * 获取接口黑名单列表
+     *
+     * @return
+     */
     @ApiOperation(value = "获取接口黑名单列表", notes = "仅限内部调用")
+    @GetMapping("/gateway/api/blackList")
     public ResultBody<List<IpLimitApiDTO>> getApiBlackList() {
-        List<IpLimitApiDTO> result = gatewayService.getBlackList();
-        return ResultBody.ok().data(result);
+        return ResultBody.ok().data(gatewayIpLimitService.findBlackList());
     }
 
-    @GetMapping("/gateway/api/whiteList")
+    /**
+     * 获取接口白名单列表
+     *
+     * @return
+     */
     @ApiOperation(value = "获取接口白名单列表", notes = "仅限内部调用")
+    @GetMapping("/gateway/api/whiteList")
     public ResultBody<List<IpLimitApiDTO>> getApiWhiteList() {
-        List<IpLimitApiDTO> result = gatewayService.getWhiteList();
-        return ResultBody.ok().data(result);
+        return ResultBody.ok().data(gatewayIpLimitService.findWhiteList());
     }
 
-    @GetMapping("/gateway/api/rateLimit")
+    /**
+     * 获取限流列表
+     *
+     * @return
+     */
     @ApiOperation(value = "获取限流列表", notes = "仅限内部调用")
+    @GetMapping("/gateway/api/rateLimit")
     public ResultBody<List<RateLimitApiDTO>> getApiRateLimitList() {
-        List<RateLimitApiDTO> result = gatewayService.getRateLimitApiList();
-        return ResultBody.ok().data(result);
+        return ResultBody.ok().data(gatewayRateLimitService.findRateLimitApiList());
     }
 
-    @GetMapping("/gateway/api/route")
+    /**
+     * 获取路由列表
+     *
+     * @return
+     */
     @ApiOperation(value = "获取路由列表", notes = "仅限内部调用")
-    public ResultBody<List<GatewayRouteDTO>> getApiRouteList() {
-        List<GatewayRouteDTO> result = gatewayService.getRoutes();
-        return ResultBody.ok().data(result);
+    @GetMapping("/gateway/api/route")
+    public ResultBody<List<GatewayRoute>> getApiRouteList() {
+        return ResultBody.ok().data(gatewayRouteService.findRouteList());
     }
 }

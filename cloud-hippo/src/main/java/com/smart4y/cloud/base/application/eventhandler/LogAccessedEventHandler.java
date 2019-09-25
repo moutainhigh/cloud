@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.application.eventhandler;
 
 import com.smart4y.cloud.base.domain.model.GatewayAccessLogs;
-import com.smart4y.cloud.base.domain.service.GatewayAccessLogsDomainService;
+import com.smart4y.cloud.base.domain.repository.GatewayAccessLogsMapper;
 import com.smart4y.cloud.core.domain.event.LogAccessedEvent;
 import com.smart4y.cloud.core.infrastructure.constants.QueueConstants;
 import com.smart4y.cloud.core.infrastructure.toolkit.Kit;
@@ -27,13 +27,9 @@ import java.time.temporal.ChronoUnit;
 @Component
 public class LogAccessedEventHandler {
 
-    private IpHelper ipHelper = Kit.help().ip();
-    private final GatewayAccessLogsDomainService gatewayAccessLogsDomainService;
-
     @Autowired
-    public LogAccessedEventHandler(GatewayAccessLogsDomainService gatewayAccessLogsDomainService) {
-        this.gatewayAccessLogsDomainService = gatewayAccessLogsDomainService;
-    }
+    private GatewayAccessLogsMapper gatewayAccessLogsMapper;
+    private IpHelper ipHelper = Kit.help().ip();
 
     @RabbitListener(queues = QueueConstants.QUEUE_ACCESS_LOGS)
     public void handle(@Payload LogAccessedEvent event) {
@@ -67,7 +63,7 @@ public class LogAccessedEventHandler {
                 long millis = ChronoUnit.MILLIS.between(requestTime, responseTime);
                 record.setUseTime(millis);
             }
-            gatewayAccessLogsDomainService.save(record);
+            gatewayAccessLogsMapper.insertSelective(record);
         } catch (Exception e) {
             log.error("网关（日志）处理异常：{}", e.getLocalizedMessage(), e);
         }

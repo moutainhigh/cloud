@@ -87,6 +87,11 @@ public class BaseDeveloper extends BaseEntity {
     private Integer status;
 
     /**
+     * TODO 最新版本数据库已经没有此字段了 密码
+     */
+    private String password;
+
+    /**
      * 创建时间
      */
     @Column(name = "created_date")

@@ -1,17 +1,65 @@
 package com.smart4y.cloud.core.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * 功能权限
- *
- *  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * <p>
+ * * @author Youtao
+ * Created by youtao on 2019-09-05.
  */
+@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AuthorityAction extends BaseAction {
+public class AuthorityAction implements Serializable {
+
+    /**
+     * 资源ID
+     */
+    private Long actionId;
+
+    /**
+     * 资源编码
+     */
+    private String actionCode;
+
+    /**
+     * 资源名称
+     */
+    private String actionName;
+
+    /**
+     * 资源父节点
+     */
+    private Long menuId;
+
+    /**
+     * 优先级 越小越靠前
+     */
+    private Integer priority;
+
+    /**
+     * 资源描述
+     */
+    private String actionDesc;
+
+    /**
+     * 状态:0-无效 1-有效
+     */
+    private Integer status;
+
+    /**
+     * 保留数据0-否 1-是 不允许删除
+     */
+    private Integer isPersist;
+
+    /**
+     * 服务ID
+     */
+    private String serviceId;
 
     /**
      * 权限ID
@@ -23,35 +71,10 @@ public class AuthorityAction extends BaseAction {
      */
     private String authority;
 
-
     /**
      * 是否需要安全认证
      */
     private Boolean isAuth = true;
-
-    public Long getAuthorityId() {
-        return authorityId;
-    }
-
-    public void setAuthorityId(Long authorityId) {
-        this.authorityId = authorityId;
-    }
-
-    public String getAuthority() {
-        return authority;
-    }
-
-    public void setAuthority(String authority) {
-        this.authority = authority;
-    }
-
-    public Boolean getAuth() {
-        return isAuth;
-    }
-
-    public void setAuth(Boolean auth) {
-        isAuth = auth;
-    }
 
     @Override
     public boolean equals(Object obj) {

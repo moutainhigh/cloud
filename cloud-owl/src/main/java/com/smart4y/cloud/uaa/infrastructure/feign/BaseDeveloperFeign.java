@@ -23,7 +23,7 @@ public interface BaseDeveloperFeign {
     ResultBody<UserAccount> developerLogin(@RequestParam(value = "username") String username);
 
     /**
-     * TODO 注册第三方系统登录账号
+     * 注册第三方系统登录账号
      */
     @PostMapping("/developer/register/thirdParty")
     ResultBody addDeveloperThirdParty(
