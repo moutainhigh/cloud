@@ -4,6 +4,8 @@ import com.smart4y.cloud.base.application.BaseRoleService;
 import com.smart4y.cloud.base.application.BaseUserService;
 import com.smart4y.cloud.base.domain.model.BaseRole;
 import com.smart4y.cloud.base.domain.model.BaseUser;
+import com.smart4y.cloud.base.interfaces.command.AddAdminUserCommand;
+import com.smart4y.cloud.base.interfaces.command.RegisterAdminThirdPartyCommand;
 import com.smart4y.cloud.core.application.dto.UserAccount;
 import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
@@ -100,19 +102,18 @@ public class BaseUserController {
             @RequestParam(value = "email", required = false) String email,
             @RequestParam(value = "mobile", required = false) String mobile,
             @RequestParam(value = "userDesc", required = false) String userDesc,
-            @RequestParam(value = "avatar", required = false) String avatar
-    ) {
-        BaseUser user = new BaseUser();
-        user.setUserName(userName);
-        user.setPassword(password);
-        user.setNickName(nickName);
-        user.setUserType(userType);
-        user.setEmail(email);
-        user.setMobile(mobile);
-        user.setUserDesc(userDesc);
-        user.setAvatar(avatar);
-        user.setStatus(status);
-        baseUserService.addUser(user);
+            @RequestParam(value = "avatar", required = false) String avatar) {
+        AddAdminUserCommand command = new AddAdminUserCommand();
+        command.setUserName(userName);
+        command.setPassword(password);
+        command.setNickName(nickName);
+        command.setUserType(userType);
+        command.setEmail(email);
+        command.setMobile(mobile);
+        command.setUserDesc(userDesc);
+        command.setAvatar(avatar);
+        command.setStatus(status);
+        baseUserService.addUser(command);
         return ResultBody.ok();
     }
 
@@ -220,14 +221,13 @@ public class BaseUserController {
             @RequestParam(value = "password") String password,
             @RequestParam(value = "accountType") String accountType,
             @RequestParam(value = "nickName") String nickName,
-            @RequestParam(value = "avatar") String avatar
-    ) {
-        BaseUser user = new BaseUser();
-        user.setNickName(nickName);
-        user.setUserName(account);
-        user.setPassword(password);
-        user.setAvatar(avatar);
-        baseUserService.addUserThirdParty(user, accountType);
+            @RequestParam(value = "avatar") String avatar) {
+        RegisterAdminThirdPartyCommand command = new RegisterAdminThirdPartyCommand();
+        command.setNickName(nickName);
+        command.setUserName(account);
+        command.setPassword(password);
+        command.setAvatar(avatar);
+        baseUserService.addUserThirdParty(command, accountType);
         return ResultBody.ok();
     }
 }

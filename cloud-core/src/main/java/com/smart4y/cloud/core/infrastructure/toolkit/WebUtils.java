@@ -1,7 +1,10 @@
 package com.smart4y.cloud.core.infrastructure.toolkit;
 
 import com.alibaba.fastjson.JSONObject;
+import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
+import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
 import com.smart4y.cloud.core.infrastructure.spring.SpringContextHolder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
@@ -24,10 +27,11 @@ import java.util.Map.Entry;
 
 /**
  * Http与Servlet工具类.
- *
- *  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * <p>
+ * * @author Youtao
+ * Created by youtao on 2019-09-05.
  */
+@Slf4j
 public class WebUtils {
 
     private final static String staticSuffix = ".css,.js,.png,.jpg,.gif,.jpeg,.bmp,.ico,.swf,.psd,.htc,.htm,.html,.crx,.xpi,.exe,.ipa,.apk,.woff2,.ico,.swf,.ttf,.otf,.svg,.woff";
@@ -547,9 +551,11 @@ public class WebUtils {
 
     public static HttpServletRequest getHttpServletRequest() {
         try {
-            return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            return Objects.requireNonNull(requestAttributes).getRequest();
         } catch (Exception e) {
-            return null;
+            log.error("获取HttpServletRequest异常：{}", e.getLocalizedMessage(), e);
+            throw new OpenAlertException(ErrorCode.BAD_REQUEST.getCode(), "获取HttpServletRequest异常");
         }
     }
 

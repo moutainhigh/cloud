@@ -8,6 +8,8 @@ import com.smart4y.cloud.base.domain.model.BaseAccount;
 import com.smart4y.cloud.base.domain.model.BaseAccountLogs;
 import com.smart4y.cloud.base.domain.model.BaseDeveloper;
 import com.smart4y.cloud.base.domain.repository.BaseDeveloperMapper;
+import com.smart4y.cloud.base.interfaces.command.AddDeveloperUserCommand;
+import com.smart4y.cloud.base.interfaces.command.RegisterDeveloperThirdPartyCommand;
 import com.smart4y.cloud.core.application.annotation.ApplicationService;
 import com.smart4y.cloud.core.application.dto.UserAccount;
 import com.smart4y.cloud.core.domain.IPage;
@@ -75,23 +77,34 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
     }
 
     @Override
-    public void addUser(BaseDeveloper baseDeveloper) {
-        if (getUserByUsername(baseDeveloper.getUserName()) != null) {
-            throw new OpenAlertException("用户名:" + baseDeveloper.getUserName() + "已存在!");
+    public void addUser(AddDeveloperUserCommand command) {
+        if (getUserByUsername(command.getUserName()) != null) {
+            throw new OpenAlertException("用户名:" + command.getUserName() + "已存在!");
         }
-        baseDeveloper.setCreatedDate(LocalDateTime.now());
-        baseDeveloper.setLastModifiedDate(LocalDateTime.now());
-        //保存系统用户信息
-        baseDeveloperMapper.insert(baseDeveloper);
-        //默认注册用户名账户
-        baseAccountService.register(baseDeveloper.getUserId(), baseDeveloper.getUserName(), baseDeveloper.getPassword(), BaseConstants.ACCOUNT_TYPE_USERNAME, baseDeveloper.getStatus(), ACCOUNT_DOMAIN, null);
-        if (StringUtils.matchEmail(baseDeveloper.getEmail())) {
-            //注册email账号登陆
-            baseAccountService.register(baseDeveloper.getUserId(), baseDeveloper.getEmail(), baseDeveloper.getPassword(), BaseConstants.ACCOUNT_TYPE_EMAIL, baseDeveloper.getStatus(), ACCOUNT_DOMAIN, null);
+        // 保存用户信息
+        BaseDeveloper developer = new BaseDeveloper()
+                .setUserName(command.getUserName())
+                .setNickName(command.getNickName())
+                .setUserType(command.getUserType())
+                .setEmail(command.getEmail())
+                .setMobile(command.getMobile())
+                .setUserDesc(command.getUserDesc())
+                .setAvatar(command.getAvatar())
+                .setStatus(command.getStatus())
+                .setCreatedDate(LocalDateTime.now())
+                .setLastModifiedDate(LocalDateTime.now());
+        baseDeveloperMapper.insert(developer);
+        long userId = developer.getUserId();
+
+        // 默认注册用户名账户
+        baseAccountService.register(userId, command.getUserName(), command.getPassword(), BaseConstants.ACCOUNT_TYPE_USERNAME, command.getStatus(), ACCOUNT_DOMAIN, null);
+        if (StringUtils.matchEmail(command.getEmail())) {
+            // 注册email账号登陆
+            baseAccountService.register(userId, command.getEmail(), command.getPassword(), BaseConstants.ACCOUNT_TYPE_EMAIL, command.getStatus(), ACCOUNT_DOMAIN, null);
         }
-        if (StringUtils.matchMobile(baseDeveloper.getMobile())) {
-            //注册手机号账号登陆
-            baseAccountService.register(baseDeveloper.getUserId(), baseDeveloper.getMobile(), baseDeveloper.getPassword(), BaseConstants.ACCOUNT_TYPE_MOBILE, baseDeveloper.getStatus(), ACCOUNT_DOMAIN, null);
+        if (StringUtils.matchMobile(command.getMobile())) {
+            // 注册手机号账号登陆
+            baseAccountService.register(userId, command.getMobile(), command.getPassword(), BaseConstants.ACCOUNT_TYPE_MOBILE, command.getStatus(), ACCOUNT_DOMAIN, null);
         }
     }
 
@@ -107,15 +120,21 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
     }
 
     @Override
-    public void addUserThirdParty(BaseDeveloper baseDeveloper, String accountType) {
-        if (!baseAccountService.isExist(baseDeveloper.getUserName(), accountType, ACCOUNT_DOMAIN)) {
-            baseDeveloper.setUserType(BaseConstants.USER_TYPE_ADMIN);
-            baseDeveloper.setCreatedDate(LocalDateTime.now());
-            baseDeveloper.setLastModifiedDate(LocalDateTime.now());
-            //保存系统用户信息
-            baseDeveloperMapper.insert(baseDeveloper);
+    public void addUserThirdParty(RegisterDeveloperThirdPartyCommand command, String accountType) {
+        if (!baseAccountService.isExist(command.getUserName(), accountType, ACCOUNT_DOMAIN)) {
+            // 保存系统用户信息
+            BaseDeveloper developer = new BaseDeveloper()
+                    .setUserName(command.getUserName())
+                    .setNickName(command.getNickName())
+                    .setAvatar(command.getAvatar())
+                    .setUserType(BaseConstants.USER_TYPE_ADMIN)
+                    .setCreatedDate(LocalDateTime.now())
+                    .setLastModifiedDate(LocalDateTime.now());
+            baseDeveloperMapper.insert(developer);
+            long userId = developer.getUserId();
+
             // 注册账号信息
-            baseAccountService.register(baseDeveloper.getUserId(), baseDeveloper.getUserName(), baseDeveloper.getPassword(), accountType, BaseConstants.ACCOUNT_STATUS_NORMAL, ACCOUNT_DOMAIN, null);
+            baseAccountService.register(userId, command.getUserName(), command.getPassword(), accountType, BaseConstants.ACCOUNT_STATUS_NORMAL, ACCOUNT_DOMAIN, null);
         }
     }
 
@@ -173,17 +192,15 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
             //添加登录日志
             try {
                 HttpServletRequest request = WebUtils.getHttpServletRequest();
-                if (request != null) {
-                    BaseAccountLogs log = new BaseAccountLogs();
-                    log.setDomain(ACCOUNT_DOMAIN);
-                    log.setUserId(baseAccount.getUserId());
-                    log.setAccount(baseAccount.getAccount());
-                    log.setAccountId(baseAccount.getAccountId());
-                    log.setAccountType(baseAccount.getAccountType());
-                    log.setLoginIp(WebUtils.getRemoteAddress(request));
-                    log.setLoginAgent(request.getHeader(HttpHeaders.USER_AGENT));
-                    baseAccountService.addLoginLog(log);
-                }
+                BaseAccountLogs log = new BaseAccountLogs();
+                log.setDomain(ACCOUNT_DOMAIN);
+                log.setUserId(baseAccount.getUserId());
+                log.setAccount(baseAccount.getAccount());
+                log.setAccountId(baseAccount.getAccountId());
+                log.setAccountType(baseAccount.getAccountType());
+                log.setLoginIp(WebUtils.getRemoteAddress(request));
+                log.setLoginAgent(request.getHeader(HttpHeaders.USER_AGENT));
+                baseAccountService.addLoginLog(log);
             } catch (Exception e) {
                 log.error("添加登录日志失败；{}", e.getLocalizedMessage(), e);
             }

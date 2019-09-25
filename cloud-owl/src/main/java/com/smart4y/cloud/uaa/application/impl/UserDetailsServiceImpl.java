@@ -5,7 +5,7 @@ import com.smart4y.cloud.core.domain.ResultBody;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.security.OpenUserDetails;
 import com.smart4y.cloud.core.infrastructure.security.oauth2.client.OpenOAuth2ClientProperties;
-import com.smart4y.cloud.uaa.infrastructure.feign.BaseDeveloperFeign;
+import com.smart4y.cloud.uaa.infrastructure.feign.BaseUserFeign;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,11 +25,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private OpenOAuth2ClientProperties clientProperties;
     @Autowired
-    private BaseDeveloperFeign baseDeveloperFeign;
+    private BaseUserFeign baseUserFeign;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        ResultBody<UserAccount> resp = baseDeveloperFeign.developerLogin(username);
+        ResultBody<UserAccount> resp = baseUserFeign.userLogin(username);
         UserAccount account = resp.getData();
         if (account == null || account.getAccountId() == null) {
             throw new UsernameNotFoundException("系统用户 " + username + " 不存在!");

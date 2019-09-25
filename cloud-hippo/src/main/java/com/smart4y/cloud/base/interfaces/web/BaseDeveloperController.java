@@ -3,6 +3,8 @@ package com.smart4y.cloud.base.interfaces.web;
 import com.smart4y.cloud.base.application.BaseDeveloperService;
 import com.smart4y.cloud.base.domain.model.BaseDeveloper;
 import com.smart4y.cloud.base.domain.model.BaseRole;
+import com.smart4y.cloud.base.interfaces.command.AddDeveloperUserCommand;
+import com.smart4y.cloud.base.interfaces.command.RegisterDeveloperThirdPartyCommand;
 import com.smart4y.cloud.core.application.dto.UserAccount;
 import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
@@ -97,7 +99,7 @@ public class BaseDeveloperController {
             @RequestParam(value = "userDesc", required = false) String userDesc,
             @RequestParam(value = "avatar", required = false) String avatar
     ) {
-        BaseDeveloper developer = new BaseDeveloper();
+        AddDeveloperUserCommand developer = new AddDeveloperUserCommand();
         developer.setUserName(userName);
         developer.setPassword(password);
         developer.setNickName(nickName);
@@ -167,14 +169,8 @@ public class BaseDeveloperController {
         return ResultBody.ok();
     }
 
-
     /**
      * 注册第三方系统登录账号
-     *
-     * @param account
-     * @param password
-     * @param accountType
-     * @return
      */
     @ApiOperation(value = "注册第三方系统登录账号", notes = "仅限系统内部调用")
     @PostMapping("/developer/add/thirdParty")
@@ -183,14 +179,13 @@ public class BaseDeveloperController {
             @RequestParam(value = "password") String password,
             @RequestParam(value = "accountType") String accountType,
             @RequestParam(value = "nickName") String nickName,
-            @RequestParam(value = "avatar") String avatar
-    ) {
-        BaseDeveloper developer = new BaseDeveloper();
-        developer.setNickName(nickName);
-        developer.setUserName(account);
-        developer.setPassword(password);
-        developer.setAvatar(avatar);
-        baseDeveloperService.addUserThirdParty(developer, accountType);
+            @RequestParam(value = "avatar") String avatar) {
+        RegisterDeveloperThirdPartyCommand command = new RegisterDeveloperThirdPartyCommand();
+        command.setNickName(nickName);
+        command.setUserName(account);
+        command.setPassword(password);
+        command.setAvatar(avatar);
+        baseDeveloperService.addUserThirdParty(command, accountType);
         return ResultBody.ok();
     }
 }

@@ -13,6 +13,8 @@ import com.smart4y.cloud.base.domain.model.BaseAccountLogs;
 import com.smart4y.cloud.base.domain.model.BaseRole;
 import com.smart4y.cloud.base.domain.model.BaseUser;
 import com.smart4y.cloud.base.domain.repository.BaseUserMapper;
+import com.smart4y.cloud.base.interfaces.command.AddAdminUserCommand;
+import com.smart4y.cloud.base.interfaces.command.RegisterAdminThirdPartyCommand;
 import com.smart4y.cloud.core.application.annotation.ApplicationService;
 import com.smart4y.cloud.core.application.dto.UserAccount;
 import com.smart4y.cloud.core.domain.IPage;
@@ -58,23 +60,34 @@ public class BaseUserServiceImpl implements BaseUserService {
     private BaseAccountService baseAccountService;
 
     @Override
-    public void addUser(BaseUser baseUser) {
-        if (getUserByUsername(baseUser.getUserName()) != null) {
-            throw new OpenAlertException("用户名:" + baseUser.getUserName() + "已存在!");
+    public void addUser(AddAdminUserCommand command) {
+        if (getUserByUsername(command.getUserName()) != null) {
+            throw new OpenAlertException("用户名:" + command.getUserName() + "已存在!");
         }
-        baseUser.setCreatedDate(LocalDateTime.now());
-        baseUser.setLastModifiedDate(LocalDateTime.now());
         // 保存系统用户信息
-        baseUserMapper.insert(baseUser);
+        BaseUser user = new BaseUser()
+                .setUserName(command.getUserName())
+                .setNickName(command.getNickName())
+                .setUserType(command.getUserType())
+                .setEmail(command.getEmail())
+                .setMobile(command.getMobile())
+                .setUserDesc(command.getUserDesc())
+                .setAvatar(command.getAvatar())
+                .setStatus(command.getStatus())
+                .setCreatedDate(LocalDateTime.now())
+                .setLastModifiedDate(LocalDateTime.now());
+        baseUserMapper.insertSelective(user);
+        long userId = user.getUserId();
+
         // 默认注册用户名账户
-        baseAccountService.register(baseUser.getUserId(), baseUser.getUserName(), baseUser.getPassword(), BaseConstants.ACCOUNT_TYPE_USERNAME, baseUser.getStatus(), ACCOUNT_DOMAIN, null);
-        if (StringUtils.matchEmail(baseUser.getEmail())) {
+        baseAccountService.register(userId, command.getUserName(), command.getPassword(), BaseConstants.ACCOUNT_TYPE_USERNAME, command.getStatus(), ACCOUNT_DOMAIN, null);
+        if (StringUtils.matchEmail(command.getEmail())) {
             // 注册email账号登陆
-            baseAccountService.register(baseUser.getUserId(), baseUser.getEmail(), baseUser.getPassword(), BaseConstants.ACCOUNT_TYPE_EMAIL, baseUser.getStatus(), ACCOUNT_DOMAIN, null);
+            baseAccountService.register(userId, command.getEmail(), command.getPassword(), BaseConstants.ACCOUNT_TYPE_EMAIL, command.getStatus(), ACCOUNT_DOMAIN, null);
         }
-        if (StringUtils.matchMobile(baseUser.getMobile())) {
+        if (StringUtils.matchMobile(command.getMobile())) {
             // 注册手机号账号登陆
-            baseAccountService.register(baseUser.getUserId(), baseUser.getMobile(), baseUser.getPassword(), BaseConstants.ACCOUNT_TYPE_MOBILE, baseUser.getStatus(), ACCOUNT_DOMAIN, null);
+            baseAccountService.register(userId, command.getMobile(), command.getPassword(), BaseConstants.ACCOUNT_TYPE_MOBILE, command.getStatus(), ACCOUNT_DOMAIN, null);
         }
     }
 
@@ -90,15 +103,21 @@ public class BaseUserServiceImpl implements BaseUserService {
     }
 
     @Override
-    public void addUserThirdParty(BaseUser baseUser, String accountType) {
-        if (!baseAccountService.isExist(baseUser.getUserName(), accountType, ACCOUNT_DOMAIN)) {
-            baseUser.setUserType(BaseConstants.USER_TYPE_ADMIN);
-            baseUser.setCreatedDate(LocalDateTime.now());
-            baseUser.setLastModifiedDate(LocalDateTime.now());
+    public void addUserThirdParty(RegisterAdminThirdPartyCommand command, String accountType) {
+        if (!baseAccountService.isExist(command.getUserName(), accountType, ACCOUNT_DOMAIN)) {
             //保存系统用户信息
-            baseUserMapper.insert(baseUser);
+            BaseUser user = new BaseUser()
+                    .setUserName(command.getUserName())
+                    .setNickName(command.getNickName())
+                    .setAvatar(command.getAvatar())
+                    .setUserType(BaseConstants.USER_TYPE_ADMIN)
+                    .setCreatedDate(LocalDateTime.now())
+                    .setLastModifiedDate(LocalDateTime.now());
+            baseUserMapper.insert(user);
+            long userId = user.getUserId();
+
             // 注册账号信息
-            baseAccountService.register(baseUser.getUserId(), baseUser.getUserName(), baseUser.getPassword(), accountType, BaseConstants.ACCOUNT_STATUS_NORMAL, ACCOUNT_DOMAIN, null);
+            baseAccountService.register(userId, command.getUserName(), command.getPassword(), accountType, BaseConstants.ACCOUNT_STATUS_NORMAL, ACCOUNT_DOMAIN, null);
         }
     }
 
@@ -227,17 +246,15 @@ public class BaseUserServiceImpl implements BaseUserService {
             //添加登录日志
             try {
                 HttpServletRequest request = WebUtils.getHttpServletRequest();
-                if (request != null) {
-                    BaseAccountLogs log = new BaseAccountLogs();
-                    log.setDomain(ACCOUNT_DOMAIN);
-                    log.setUserId(baseAccount.getUserId());
-                    log.setAccount(baseAccount.getAccount());
-                    log.setAccountId(baseAccount.getAccountId());
-                    log.setAccountType(baseAccount.getAccountType());
-                    log.setLoginIp(WebUtils.getRemoteAddress(request));
-                    log.setLoginAgent(request.getHeader(HttpHeaders.USER_AGENT));
-                    baseAccountService.addLoginLog(log);
-                }
+                BaseAccountLogs log = new BaseAccountLogs();
+                log.setDomain(ACCOUNT_DOMAIN);
+                log.setUserId(baseAccount.getUserId());
+                log.setAccount(baseAccount.getAccount());
+                log.setAccountId(baseAccount.getAccountId());
+                log.setAccountType(baseAccount.getAccountType());
+                log.setLoginIp(WebUtils.getRemoteAddress(request));
+                log.setLoginAgent(request.getHeader(HttpHeaders.USER_AGENT));
+                baseAccountService.addLoginLog(log);
             } catch (Exception e) {
                 log.error("添加登录日志失败：{}", e.getLocalizedMessage(), e);
             }

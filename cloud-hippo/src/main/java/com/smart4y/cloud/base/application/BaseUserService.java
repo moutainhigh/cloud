@@ -1,6 +1,8 @@
 package com.smart4y.cloud.base.application;
 
 import com.smart4y.cloud.base.domain.model.BaseUser;
+import com.smart4y.cloud.base.interfaces.command.AddAdminUserCommand;
+import com.smart4y.cloud.base.interfaces.command.RegisterAdminThirdPartyCommand;
 import com.smart4y.cloud.core.application.dto.UserAccount;
 import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
@@ -18,11 +20,8 @@ public interface BaseUserService {
 
     /**
      * 添加用户信息
-     *
-     * @param baseUser
-     * @return
      */
-    void addUser(BaseUser baseUser);
+    void addUser(AddAdminUserCommand command);
 
     /**
      * 更新系统用户
@@ -34,12 +33,8 @@ public interface BaseUserService {
 
     /**
      * 添加第三方登录用户
-     *
-     * @param baseUser
-     * @param accountType
-     * @param
      */
-    void addUserThirdParty(BaseUser baseUser, String accountType);
+    void addUserThirdParty(RegisterAdminThirdPartyCommand command, String accountType);
 
     /**
      * 更新密码
