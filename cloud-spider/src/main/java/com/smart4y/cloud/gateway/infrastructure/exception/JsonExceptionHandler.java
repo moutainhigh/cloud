@@ -1,6 +1,6 @@
 package com.smart4y.cloud.gateway.infrastructure.exception;
 
-import com.smart4y.cloud.core.domain.ResultBody;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import com.smart4y.cloud.core.infrastructure.exception.OpenGlobalExceptionHandler;
 import com.smart4y.cloud.gateway.application.AccessLogService;
@@ -50,7 +50,7 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
     /**
      * 存储处理异常后的信息
      */
-    private ThreadLocal<ResultBody> exceptionHandlerResult = new ThreadLocal<>();
+    private ThreadLocal<ResultEntity> exceptionHandlerResult = new ThreadLocal<>();
 
     public JsonExceptionHandler(AccessLogService accessLogService) {
         this.accessLogService = accessLogService;
@@ -84,16 +84,16 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
         /*
          * 按照异常类型进行处理
          */
-        ResultBody resultBody;
+        ResultEntity resultEntity;
         ServerHttpRequest request = exchange.getRequest();
         if ("/favicon.ico".equals(exchange.getRequest().getURI().getPath())) {
             return Mono.empty();
         }
         if (ex instanceof NotFoundException) {
-            resultBody = ResultBody.failed().code(ErrorCode.SERVICE_UNAVAILABLE.getCode()).msg(ErrorCode.SERVICE_UNAVAILABLE.getMessage()).httpStatus(HttpStatus.SERVICE_UNAVAILABLE.value()).path(request.getURI().getPath());
-            log.error("==> 错误解析:{}", resultBody);
+            resultEntity = ResultEntity.failed().code(ErrorCode.SERVICE_UNAVAILABLE.getCode()).msg(ErrorCode.SERVICE_UNAVAILABLE.getMessage()).httpStatus(HttpStatus.SERVICE_UNAVAILABLE.value()).path(request.getURI().getPath());
+            log.error("==> 错误解析:{}", resultEntity);
         } else {
-            resultBody = OpenGlobalExceptionHandler.resolveException((Exception) ex, exchange.getRequest().getURI().getPath());
+            resultEntity = OpenGlobalExceptionHandler.resolveException((Exception) ex, exchange.getRequest().getURI().getPath());
         }
         /*
          * 参考AbstractErrorWebExceptionHandler
@@ -101,7 +101,7 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
         if (exchange.getResponse().isCommitted()) {
             return Mono.error(ex);
         }
-        exceptionHandlerResult.set(resultBody);
+        exceptionHandlerResult.set(resultEntity);
         ServerRequest newRequest = ServerRequest.create(exchange, this.messageReaders);
         return RouterFunctions.route(RequestPredicates.all(), this::renderErrorResponse).route(newRequest)
                 .switchIfEmpty(Mono.error(ex))
@@ -113,7 +113,7 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
      * 参考DefaultErrorWebExceptionHandler
      */
     private Mono<ServerResponse> renderErrorResponse(ServerRequest request) {
-        ResultBody result = exceptionHandlerResult.get();
+        ResultEntity result = exceptionHandlerResult.get();
         return ServerResponse.status(result.getHttpStatus())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .body(BodyInserters.fromObject(result));
