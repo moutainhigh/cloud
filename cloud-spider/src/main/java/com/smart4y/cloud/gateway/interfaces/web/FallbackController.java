@@ -1,6 +1,6 @@
 package com.smart4y.cloud.gateway.interfaces.web;
 
-import com.smart4y.cloud.core.domain.ResultBody;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 public class FallbackController {
 
     @RequestMapping("/fallback")
-    public Mono<ResultBody> fallback() {
-        return Mono.just(ResultBody.failed().code(ErrorCode.GATEWAY_TIMEOUT.getCode()).msg("访问超时，请稍后再试!"));
+    public Mono<ResultEntity> fallback() {
+        return Mono.just(ResultEntity.failed(ErrorCode.GATEWAY_TIMEOUT, "访问超时，请稍后再试!"));
     }
 }
