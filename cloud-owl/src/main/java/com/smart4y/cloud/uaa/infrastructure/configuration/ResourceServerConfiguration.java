@@ -47,7 +47,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .and()
                 .authorizeRequests()
                 .antMatchers(
-                        //"/v2/api-docs",// TODO 这里要去掉
+                        "/v2/api-docs",// TODO 这里要去掉，原项目没有这行
                         "/login/**",
                         "/oauth/**")
                 .permitAll()

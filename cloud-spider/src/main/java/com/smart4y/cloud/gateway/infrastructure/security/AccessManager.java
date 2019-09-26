@@ -43,7 +43,6 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
     private ResourceLocator resourceLocator;
     private ApiProperties apiProperties;
     private Set<String> permitAll = new ConcurrentHashSet<>();
-
     private Set<String> authorityIgnores = new ConcurrentHashSet<>();
 
     public AccessManager(ResourceLocator resourceLocator, ApiProperties apiProperties) {
@@ -249,13 +248,5 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
             }
         }
         return false;
-    }
-
-    public ApiProperties getApiProperties() {
-        return apiProperties;
-    }
-
-    public void setApiProperties(ApiProperties apiProperties) {
-        this.apiProperties = apiProperties;
     }
 }

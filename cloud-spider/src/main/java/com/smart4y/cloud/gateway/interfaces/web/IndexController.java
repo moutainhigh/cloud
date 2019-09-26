@@ -3,7 +3,6 @@ package com.smart4y.cloud.gateway.interfaces.web;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -18,12 +17,10 @@ public class IndexController {
     private String serviceId;
 
     private final ApiProperties apiProperties;
-    private final RouteDefinitionLocator routeDefinitionLocator;
 
     @Autowired
-    public IndexController(ApiProperties apiProperties, RouteDefinitionLocator routeDefinitionLocator) {
+    public IndexController(ApiProperties apiProperties) {
         this.apiProperties = apiProperties;
-        this.routeDefinitionLocator = routeDefinitionLocator;
     }
 
     @GetMapping("/")

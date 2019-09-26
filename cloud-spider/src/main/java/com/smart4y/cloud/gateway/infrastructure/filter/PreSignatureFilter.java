@@ -50,7 +50,7 @@ public class PreSignatureFilter implements WebFilter {
             if (apiProperties.getSignIgnores() != null) {
                 signIgnores.addAll(apiProperties.getSignIgnores());
             }
-            if (apiProperties.isApiDebug()) {// TODO XXX
+            if (apiProperties.isApiDebug()) {
                 signIgnores.add("/**/v2/api-docs/**");
                 signIgnores.add("/**/swagger-resources/**");
                 signIgnores.add("/webjars/**");
@@ -70,9 +70,6 @@ public class PreSignatureFilter implements WebFilter {
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String requestPath = request.getURI().getPath();
-        if (requestPath.contains("v2/api-docs")) {
-            System.out.println("...");
-        }
         if (apiProperties.isCheckSign() && !notSign(requestPath)) {
             try {
                 Map params = Maps.newHashMap();

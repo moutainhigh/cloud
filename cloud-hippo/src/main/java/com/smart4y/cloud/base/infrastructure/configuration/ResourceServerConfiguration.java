@@ -60,7 +60,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
                 // feign访问或无需身份认证
                 .antMatchers(
-                        //"/v2/api-docs",// TODO 这里要去掉
+                        "/v2/api-docs",// TODO 这里要去掉，原项目没有这行
                         "/authority/access",
                         "/authority/app",
                         "/app/*/info",

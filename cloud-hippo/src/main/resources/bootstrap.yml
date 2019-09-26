@@ -34,5 +34,5 @@ management:
 opencloud:
   swagger2:
     enabled: true
-    description: 基础服务
-    title: 基础服务
+    description: 平台基础服务
+    title: 平台基础服务

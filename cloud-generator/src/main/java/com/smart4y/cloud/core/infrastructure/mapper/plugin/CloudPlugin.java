@@ -127,7 +127,6 @@ public final class CloudPlugin extends MethodPlugin {
         } else if (forceAnnotation) {
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
         }
-        System.out.println("...");
     }
 
     /**

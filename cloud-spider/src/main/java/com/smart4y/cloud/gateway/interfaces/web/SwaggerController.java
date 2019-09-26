@@ -36,30 +36,30 @@ public class SwaggerController {
      */
     @Bean
     public SecurityConfiguration security() {
-        return SecurityConfigurationBuilder.builder()
-                .clientId(commonProperties.getClientId())
-                .clientSecret(commonProperties.getClientSecret())
-                .realm("realm")
-                .appName(commonProperties.getClientId())
-                .scopeSeparator(",")
-                .build();
-        //return new SecurityConfiguration(commonProperties.getClientId(),
-        //        commonProperties.getClientSecret(),
-        //        "realm", commonProperties.getClientId(),
-        //        "", ApiKeyVehicle.HEADER, "", ",");
+        //return SecurityConfigurationBuilder.builder()
+        //        .clientId(commonProperties.getClientId())
+        //        .clientSecret(commonProperties.getClientSecret())
+        //        .realm("realm")
+        //        .appName(commonProperties.getClientId())
+        //        .scopeSeparator(",")
+        //        .build();
+        return new SecurityConfiguration(commonProperties.getClientId(),
+                commonProperties.getClientSecret(),
+                "realm", commonProperties.getClientId(),
+                "", ApiKeyVehicle.HEADER, "", ",");
     }
 
     @Bean
     public UiConfiguration uiConfig() {
-        return UiConfigurationBuilder.builder()
-                .validatorUrl(null)
-                .docExpansion(DocExpansion.LIST)
-                .operationsSorter(OperationsSorter.ALPHA)
-                .defaultModelRendering(ModelRendering.EXAMPLE)
-                .supportedSubmitMethods(UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS)
-                .build();
-        //return new UiConfiguration(null, "list", "alpha", "schema",
-        //        UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS, false, true, 60000L);
+        //return UiConfigurationBuilder.builder()
+        //        .validatorUrl(null)
+        //        .docExpansion(DocExpansion.LIST)
+        //        .operationsSorter(OperationsSorter.ALPHA)
+        //        .defaultModelRendering(ModelRendering.EXAMPLE)
+        //        .supportedSubmitMethods(UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS)
+        //        .build();
+        return new UiConfiguration(null, "list", "alpha", "schema",
+                UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS, false, true, 60000L);
     }
 
     @GetMapping

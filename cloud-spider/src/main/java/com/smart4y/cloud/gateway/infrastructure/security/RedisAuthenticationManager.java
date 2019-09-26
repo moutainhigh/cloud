@@ -21,6 +21,14 @@ public class RedisAuthenticationManager implements ReactiveAuthenticationManager
 
     private TokenStore tokenStore;
 
+    public TokenStore getTokenStore() {
+        return tokenStore;
+    }
+
+    public void setTokenStore(TokenStore tokenStore) {
+        this.tokenStore = tokenStore;
+    }
+
     public RedisAuthenticationManager(TokenStore tokenStore) {
         this.tokenStore = tokenStore;
     }
@@ -40,13 +48,5 @@ public class RedisAuthenticationManager implements ReactiveAuthenticationManager
                     }
                 }))
                 .cast(Authentication.class);
-    }
-
-    public TokenStore getTokenStore() {
-        return tokenStore;
-    }
-
-    public void setTokenStore(TokenStore tokenStore) {
-        this.tokenStore = tokenStore;
     }
 }

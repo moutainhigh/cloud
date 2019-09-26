@@ -1,9 +1,6 @@
 package com.smart4y.cloud.gateway.infrastructure.configuration;
 
 import com.smart4y.cloud.gateway.application.MessageQueueAccessLogService;
-import com.smart4y.cloud.gateway.infrastructure.security.AccessManager;
-import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
-import com.smart4y.cloud.gateway.infrastructure.security.RedisAuthenticationManager;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonAccessDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonAuthenticationDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonSignatureDeniedHandler;
@@ -12,7 +9,10 @@ import com.smart4y.cloud.gateway.infrastructure.filter.AccessLogFilter;
 import com.smart4y.cloud.gateway.infrastructure.filter.PreCheckFilter;
 import com.smart4y.cloud.gateway.infrastructure.filter.PreRequestFilter;
 import com.smart4y.cloud.gateway.infrastructure.filter.PreSignatureFilter;
+import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
+import com.smart4y.cloud.gateway.infrastructure.security.AccessManager;
+import com.smart4y.cloud.gateway.infrastructure.security.RedisAuthenticationManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -119,7 +119,10 @@ public class ResourceServerConfiguration {
                 .httpBasic().disable()
                 .csrf().disable()
                 .authorizeExchange()
-                .pathMatchers("/").permitAll()
+                .pathMatchers(
+                        "/v2/api-docs",// TODO 这里要去掉
+                        "/")
+                .permitAll()
                 // 动态权限验证
                 .anyExchange().access(accessManager)
                 .and().exceptionHandling()
