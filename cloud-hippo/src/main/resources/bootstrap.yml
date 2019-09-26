@@ -24,7 +24,7 @@ spring:
     ##解决 Restful 404错误 spring.mvc.throw-exception-if-no-handler-found=true spring.resources.add-mappings=false
     throw-exception-if-no-handler-found: true
   resources:
-    add-mappings: true
+    add-mappings: false
 management:
   endpoints:
     web:

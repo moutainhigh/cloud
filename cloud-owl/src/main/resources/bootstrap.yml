@@ -54,8 +54,8 @@ management:
 opencloud:
   swagger2:
     enabled: true
-    description: 门户开发者认证服务
-    title: 门户开发者认证服务
+    description: 平台认证服务
+    title: 平台认证服务
   client:
     oauth2:
       admin:

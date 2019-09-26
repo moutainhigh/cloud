@@ -46,7 +46,11 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login/**", "/oauth/**").permitAll()
+                .antMatchers(
+                        //"/v2/api-docs",// TODO 这里要去掉
+                        "/login/**",
+                        "/oauth/**")
+                .permitAll()
                 // 监控端点内部放行
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
                 .anyRequest().authenticated()

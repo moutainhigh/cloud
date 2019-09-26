@@ -2,8 +2,8 @@ package com.smart4y.cloud.gateway.infrastructure.filter;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
 import com.google.common.collect.Maps;
-import com.smart4y.cloud.core.domain.ResultBody;
 import com.smart4y.cloud.core.application.dto.AppDTO;
+import com.smart4y.cloud.core.domain.ResultBody;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenSignatureException;
 import com.smart4y.cloud.core.infrastructure.toolkit.secret.SignatureUtils;
@@ -50,7 +50,7 @@ public class PreSignatureFilter implements WebFilter {
             if (apiProperties.getSignIgnores() != null) {
                 signIgnores.addAll(apiProperties.getSignIgnores());
             }
-            if (apiProperties.isApiDebug()) {
+            if (apiProperties.isApiDebug()) {// TODO XXX
                 signIgnores.add("/**/v2/api-docs/**");
                 signIgnores.add("/**/swagger-resources/**");
                 signIgnores.add("/webjars/**");
@@ -70,6 +70,9 @@ public class PreSignatureFilter implements WebFilter {
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String requestPath = request.getURI().getPath();
+        if (requestPath.contains("v2/api-docs")) {
+            System.out.println("...");
+        }
         if (apiProperties.isCheckSign() && !notSign(requestPath)) {
             try {
                 Map params = Maps.newHashMap();

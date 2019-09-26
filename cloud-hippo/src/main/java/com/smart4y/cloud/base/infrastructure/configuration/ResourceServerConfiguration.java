@@ -58,8 +58,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .authorizeRequests()
                 // 监控端点内部放行
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
-                // fegin访问或无需身份认证
+                // feign访问或无需身份认证
                 .antMatchers(
+                        //"/v2/api-docs",// TODO 这里要去掉
                         "/authority/access",
                         "/authority/app",
                         "/app/*/info",
@@ -70,11 +71,11 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                         "/user/login",
                         "/developer/add/thirdParty",
                         "/developer/info",
-                        "/developer/login"
-                ).permitAll()
+                        "/developer/login")
+                .permitAll()
                 .anyRequest().authenticated()
                 .and()
-                //认证鉴权错误处理,为了统一异常处理。每个资源服务器都应该加上。
+                // 认证鉴权错误处理,为了统一异常处理。每个资源服务器都应该加上。
                 .exceptionHandling()
                 .accessDeniedHandler(new OpenAccessDeniedHandler())
                 .authenticationEntryPoint(new OpenAuthenticationEntryPoint())

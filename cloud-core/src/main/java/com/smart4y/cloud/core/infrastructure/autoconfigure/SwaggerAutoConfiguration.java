@@ -55,21 +55,23 @@ public class SwaggerAutoConfiguration {
 
     @Bean
     public Docket createRestApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
                 .paths(PathSelectors.any())
                 .build()
                 .securitySchemes(Collections.singletonList(securityScheme()));
+        return docket;
     }
 
     @Bean
     public SecurityConfiguration security() {
-        return new SecurityConfiguration(openSwaggerProperties.getClientId(),
+        SecurityConfiguration realm = new SecurityConfiguration(openSwaggerProperties.getClientId(),
                 openSwaggerProperties.getClientSecret(),
                 "realm", openSwaggerProperties.getClientId(),
                 "", ApiKeyVehicle.HEADER, "", ",");
+        return realm;
     }
 
     @Bean
@@ -86,8 +88,9 @@ public class SwaggerAutoConfiguration {
 
     @Bean
     public UiConfiguration uiConfig() {
-        return new UiConfiguration(null, "list", "alpha", "schema",
+        UiConfiguration uiConfiguration = new UiConfiguration(null, "list", "alpha", "schema",
                 UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS, false, true, 60000L);
+        return uiConfiguration;
     }
 
     /***
@@ -97,7 +100,17 @@ public class SwaggerAutoConfiguration {
      */
     @Bean
     public SecurityScheme securityScheme() {
-        return new ApiKey("BearerToken", "Authorization", "header");
+        ApiKey apiKey = new ApiKey("BearerToken", "Authorization", "header");
+        return apiKey;
+    }
+
+    private ApiInfo apiInfo() {
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                .title(openSwaggerProperties.getTitle())
+                .description(openSwaggerProperties.getDescription())
+                .version("1.0")
+                .build();
+        return apiInfo;
     }
 
     /**
@@ -139,14 +152,6 @@ public class SwaggerAutoConfiguration {
                 .required(false);
         pars.add(builder.build());
         return pars;
-    }
-
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title(openSwaggerProperties.getTitle())
-                .description(openSwaggerProperties.getDescription())
-                .version("1.0")
-                .build();
     }
 
     private List<AuthorizationScope> scopes() {
