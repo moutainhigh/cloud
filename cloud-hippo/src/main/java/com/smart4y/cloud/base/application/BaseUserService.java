@@ -21,7 +21,7 @@ public interface BaseUserService {
     /**
      * 添加用户信息
      */
-    void addUser(AddAdminUserCommand command);
+    long addUser(AddAdminUserCommand command);
 
     /**
      * 更新系统用户

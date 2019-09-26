@@ -60,7 +60,7 @@ public class BaseUserServiceImpl implements BaseUserService {
     private BaseAccountService baseAccountService;
 
     @Override
-    public void addUser(AddAdminUserCommand command) {
+    public long addUser(AddAdminUserCommand command) {
         if (getUserByUsername(command.getUserName()) != null) {
             throw new OpenAlertException("用户名:" + command.getUserName() + "已存在!");
         }
@@ -89,6 +89,7 @@ public class BaseUserServiceImpl implements BaseUserService {
             // 注册手机号账号登陆
             baseAccountService.register(userId, command.getMobile(), command.getPassword(), BaseConstants.ACCOUNT_TYPE_MOBILE, command.getStatus(), ACCOUNT_DOMAIN, null);
         }
+        return userId;
     }
 
     @Override

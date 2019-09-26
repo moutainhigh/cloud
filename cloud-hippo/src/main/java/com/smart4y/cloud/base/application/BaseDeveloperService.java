@@ -21,7 +21,7 @@ public interface BaseDeveloperService {
     /**
      * 添加用户信息
      */
-    void addUser(AddDeveloperUserCommand command);
+    long addUser(AddDeveloperUserCommand command);
 
     /**
      * 更新系统用户

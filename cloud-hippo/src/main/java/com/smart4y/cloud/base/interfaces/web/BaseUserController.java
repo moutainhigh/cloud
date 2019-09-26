@@ -9,7 +9,7 @@ import com.smart4y.cloud.base.interfaces.command.RegisterAdminThirdPartyCommand;
 import com.smart4y.cloud.core.application.dto.UserAccount;
 import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
-import com.smart4y.cloud.core.domain.ResultBody;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -50,9 +50,9 @@ public class BaseUserController {
             @ApiImplicitParam(name = "username", required = true, value = "登录名", paramType = "path"),
     })
     @PostMapping("/user/login")
-    public ResultBody<UserAccount> userLogin(@RequestParam(value = "username") String username) {
+    public ResultEntity<UserAccount> userLogin(@RequestParam(value = "username") String username) {
         UserAccount account = baseUserService.login(username);
-        return ResultBody.ok().data(account);
+        return ResultEntity.ok(account);
     }
 
     /**
@@ -62,8 +62,8 @@ public class BaseUserController {
      */
     @ApiOperation(value = "系统分页用户列表", notes = "系统分页用户列表")
     @GetMapping("/user")
-    public ResultBody<IPage<BaseUser>> getUserList(@RequestParam(required = false) Map map) {
-        return ResultBody.ok().data(baseUserService.findListPage(new PageParams(map)));
+    public ResultEntity<IPage<BaseUser>> getUserList(@RequestParam(required = false) Map map) {
+        return ResultEntity.ok(baseUserService.findListPage(new PageParams(map)));
     }
 
     /**
@@ -73,8 +73,9 @@ public class BaseUserController {
      */
     @ApiOperation(value = "获取所有用户列表", notes = "获取所有用户列表")
     @GetMapping("/user/all")
-    public ResultBody<List<BaseRole>> getUserAllList() {
-        return ResultBody.ok().data(baseUserService.findAllList());
+    public ResultEntity<List<BaseUser>> getUserAllList() {
+        List<BaseUser> list = baseUserService.findAllList();
+        return ResultEntity.ok(list);
     }
 
     /**
@@ -93,7 +94,7 @@ public class BaseUserController {
      */
     @ApiOperation(value = "添加系统用户", notes = "添加系统用户")
     @PostMapping("/user/add")
-    public ResultBody<Long> addUser(
+    public ResultEntity<Long> addUser(
             @RequestParam(value = "userName") String userName,
             @RequestParam(value = "password") String password,
             @RequestParam(value = "nickName") String nickName,
@@ -113,8 +114,8 @@ public class BaseUserController {
         command.setUserDesc(userDesc);
         command.setAvatar(avatar);
         command.setStatus(status);
-        baseUserService.addUser(command);
-        return ResultBody.ok();
+        long userId = baseUserService.addUser(command);
+        return ResultEntity.ok(userId);
     }
 
     /**
@@ -132,7 +133,7 @@ public class BaseUserController {
      */
     @ApiOperation(value = "更新系统用户", notes = "更新系统用户")
     @PostMapping("/user/update")
-    public ResultBody updateUser(
+    public ResultEntity updateUser(
             @RequestParam(value = "userId") Long userId,
             @RequestParam(value = "nickName") String nickName,
             @RequestParam(value = "status") Integer status,
@@ -152,7 +153,7 @@ public class BaseUserController {
         user.setAvatar(avatar);
         user.setStatus(status);
         baseUserService.updateUser(user);
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 
 
@@ -165,12 +166,12 @@ public class BaseUserController {
      */
     @ApiOperation(value = "修改用户密码", notes = "修改用户密码")
     @PostMapping("/user/update/password")
-    public ResultBody updatePassword(
+    public ResultEntity updatePassword(
             @RequestParam(value = "userId") Long userId,
             @RequestParam(value = "password") String password
     ) {
         baseUserService.updatePassword(userId, password);
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 
     /**
@@ -182,14 +183,14 @@ public class BaseUserController {
      */
     @ApiOperation(value = "用户分配角色", notes = "用户分配角色")
     @PostMapping("/user/roles/add")
-    public ResultBody addUserRoles(
+    public ResultEntity addUserRoles(
             @RequestParam(value = "userId") Long userId,
             @RequestParam(value = "roleIds", required = false) String roleIds) {
         List<Long> collect = Arrays.stream(roleIds.split(","))
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
         baseRoleService.saveUserRoles(userId, collect);
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 
     /**
@@ -200,9 +201,9 @@ public class BaseUserController {
      */
     @ApiOperation(value = "获取用户已分配角色", notes = "获取用户已分配角色")
     @GetMapping("/user/roles")
-    public ResultBody<List<BaseRole>> getUserRoles(
+    public ResultEntity<List<BaseRole>> getUserRoles(
             @RequestParam(value = "userId") Long userId) {
-        return ResultBody.ok().data(baseRoleService.getUserRoles(userId));
+        return ResultEntity.ok(baseRoleService.getUserRoles(userId));
     }
 
 
@@ -216,7 +217,7 @@ public class BaseUserController {
      */
     @ApiOperation(value = "注册第三方系统登录账号", notes = "仅限系统内部调用")
     @PostMapping("/user/add/thirdParty")
-    public ResultBody addUserThirdParty(
+    public ResultEntity addUserThirdParty(
             @RequestParam(value = "account") String account,
             @RequestParam(value = "password") String password,
             @RequestParam(value = "accountType") String accountType,
@@ -228,6 +229,6 @@ public class BaseUserController {
         command.setPassword(password);
         command.setAvatar(avatar);
         baseUserService.addUserThirdParty(command, accountType);
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 }

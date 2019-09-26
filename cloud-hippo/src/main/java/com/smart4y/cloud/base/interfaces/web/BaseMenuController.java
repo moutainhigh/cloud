@@ -6,7 +6,7 @@ import com.smart4y.cloud.base.domain.model.BaseAction;
 import com.smart4y.cloud.base.domain.model.BaseMenu;
 import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
-import com.smart4y.cloud.core.domain.ResultBody;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -41,8 +41,8 @@ public class BaseMenuController {
      */
     @ApiOperation(value = "获取分页菜单资源列表", notes = "获取分页菜单资源列表")
     @GetMapping("/menu")
-    public ResultBody<IPage<BaseMenu>> getMenuListPage(@RequestParam(required = false) Map map) {
-        return ResultBody.ok().data(baseResourceMenuService.findListPage(new PageParams(map)));
+    public ResultEntity<IPage<BaseMenu>> getMenuListPage(@RequestParam(required = false) Map map) {
+        return ResultEntity.ok(baseResourceMenuService.findListPage(new PageParams(map)));
     }
 
     /**
@@ -52,8 +52,8 @@ public class BaseMenuController {
      */
     @ApiOperation(value = "菜单所有资源列表", notes = "菜单所有资源列表")
     @GetMapping("/menu/all")
-    public ResultBody<List<BaseMenu>> getMenuAllList() {
-        return ResultBody.ok().data(baseResourceMenuService.findAllList());
+    public ResultEntity<List<BaseMenu>> getMenuAllList() {
+        return ResultEntity.ok(baseResourceMenuService.findAllList());
     }
 
 
@@ -68,8 +68,8 @@ public class BaseMenuController {
             @ApiImplicitParam(name = "menuId", value = "menuId", paramType = "form"),
     })
     @GetMapping("/menu/action")
-    public ResultBody<List<BaseAction>> getMenuAction(Long menuId) {
-        return ResultBody.ok().data(baseResourceOperationService.findListByMenuId(menuId));
+    public ResultEntity<List<BaseAction>> getMenuAction(Long menuId) {
+        return ResultEntity.ok(baseResourceOperationService.findListByMenuId(menuId));
     }
 
     /**
@@ -83,8 +83,8 @@ public class BaseMenuController {
             @ApiImplicitParam(name = "menuId", required = true, value = "menuId"),
     })
     @GetMapping("/menu/{menuId}/info")
-    public ResultBody<BaseMenu> getMenu(@PathVariable("menuId") Long menuId) {
-        return ResultBody.ok().data(baseResourceMenuService.getMenu(menuId));
+    public ResultEntity<BaseMenu> getMenu(@PathVariable("menuId") Long menuId) {
+        return ResultEntity.ok(baseResourceMenuService.getMenu(menuId));
     }
 
     /**
@@ -116,7 +116,7 @@ public class BaseMenuController {
             @ApiImplicitParam(name = "menuDesc", required = false, value = "描述", paramType = "form"),
     })
     @PostMapping("/menu/add")
-    public ResultBody<Long> addMenu(
+    public ResultEntity<Long> addMenu(
             @RequestParam(value = "menuCode") String menuCode,
             @RequestParam(value = "menuName") String menuName,
             @RequestParam(value = "icon", required = false) String icon,
@@ -144,7 +144,7 @@ public class BaseMenuController {
         if (result != null) {
             menuId = result.getMenuId();
         }
-        return ResultBody.ok().data(menuId);
+        return ResultEntity.ok(menuId);
     }
 
     /**
@@ -177,7 +177,7 @@ public class BaseMenuController {
             @ApiImplicitParam(name = "menuDesc", required = false, value = "描述", paramType = "form"),
     })
     @PostMapping("/menu/update")
-    public ResultBody updateMenu(
+    public ResultEntity updateMenu(
             @RequestParam("menuId") Long menuId,
             @RequestParam(value = "menuCode") String menuCode,
             @RequestParam(value = "menuName") String menuName,
@@ -204,7 +204,7 @@ public class BaseMenuController {
         menu.setMenuDesc(menuDesc);
         baseResourceMenuService.updateMenu(menu);
         openRestTemplate.refreshGateway();
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 
     /**
@@ -218,11 +218,11 @@ public class BaseMenuController {
             @ApiImplicitParam(name = "menuId", required = true, value = "menuId", paramType = "form"),
     })
     @PostMapping("/menu/remove")
-    public ResultBody<Boolean> removeMenu(
+    public ResultEntity<Boolean> removeMenu(
             @RequestParam("menuId") Long menuId
     ) {
         baseResourceMenuService.removeMenu(menuId);
         openRestTemplate.refreshGateway();
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 }

@@ -174,7 +174,7 @@ public class OpenGlobalExceptionHandler {
         } else if (className.contains("MethodArgumentNotValidException")) {
             BindingResult bindingResult = ((MethodArgumentNotValidException) ex).getBindingResult();
             code = ErrorCode.ALERT;
-            return ResultEntity.failed().code(code.getCode()).msg(bindingResult.getFieldError().getDefaultMessage());
+            return ResultEntity.failed(code, bindingResult.getFieldError().getDefaultMessage());
         } else if (className.contains("IllegalArgumentException")) {
             //参数错误
             code = ErrorCode.ALERT;
@@ -197,7 +197,10 @@ public class OpenGlobalExceptionHandler {
         if (resultCode == null) {
             resultCode = ErrorCode.ERROR;
         }
-        ResultEntity resultBody = ResultEntity.failed().code(resultCode.getCode()).msg(exception.getMessage()).path(path).httpStatus(httpStatus);
+        ResultEntity resultBody = ResultEntity
+                .failed(resultCode, exception.getMessage())
+                .path(path)
+                .httpStatus(httpStatus);
         log.error("==> error:{} exception: {}", resultBody, exception);
         return resultBody;
     }

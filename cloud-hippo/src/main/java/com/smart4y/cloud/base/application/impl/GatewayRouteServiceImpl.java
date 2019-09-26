@@ -53,7 +53,7 @@ public class GatewayRouteServiceImpl implements GatewayRouteService {
     }
 
     @Override
-    public void addRoute(GatewayRoute route) {
+    public long addRoute(GatewayRoute route) {
         if (StringUtils.isBlank(route.getPath())) {
             throw new OpenAlertException("path不能为空！");
         }
@@ -62,6 +62,7 @@ public class GatewayRouteServiceImpl implements GatewayRouteService {
         }
         route.setIsPersist(0);
         gatewayRouteMapper.insertSelective(route);
+        return route.getRouteId();
     }
 
     @Override

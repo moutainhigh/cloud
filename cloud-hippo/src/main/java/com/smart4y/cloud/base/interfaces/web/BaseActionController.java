@@ -4,8 +4,7 @@ import com.smart4y.cloud.base.application.BaseActionService;
 import com.smart4y.cloud.base.domain.model.BaseAction;
 import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
-import com.smart4y.cloud.core.domain.ResultBody;
-import com.smart4y.cloud.core.domain.model.AuthorityAction;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -33,9 +32,10 @@ public class BaseActionController {
      */
     @ApiOperation(value = "获取分页功能按钮列表", notes = "获取分页功能按钮列表")
     @GetMapping("/action")
-    public ResultBody<IPage<AuthorityAction>> findActionListPage(
+    public ResultEntity<IPage<BaseAction>> findActionListPage(
             @RequestParam(required = false) Map map) {
-        return ResultBody.ok().data(baseActionService.findListPage(new PageParams(map)));
+        IPage<BaseAction> listPage = baseActionService.findListPage(new PageParams(map));
+        return ResultEntity.ok(listPage);
     }
 
 
@@ -50,9 +50,10 @@ public class BaseActionController {
             @ApiImplicitParam(name = "actionId", required = true, value = "功能按钮Id", paramType = "path"),
     })
     @GetMapping("/action/{actionId}/info")
-    public ResultBody<AuthorityAction> getAction(
+    public ResultEntity<BaseAction> getAction(
             @PathVariable("actionId") Long actionId) {
-        return ResultBody.ok().data(baseActionService.getAction(actionId));
+        BaseAction action = baseActionService.getAction(actionId);
+        return ResultEntity.ok(action);
     }
 
     /**
@@ -75,7 +76,7 @@ public class BaseActionController {
             @ApiImplicitParam(name = "actionDesc", required = false, value = "描述", paramType = "form"),
     })
     @PostMapping("/action/add")
-    public ResultBody<Long> addAction(
+    public ResultEntity<Long> addAction(
             @RequestParam(value = "actionCode") String actionCode,
             @RequestParam(value = "actionName") String actionName,
             @RequestParam(value = "menuId") Long menuId,
@@ -95,7 +96,7 @@ public class BaseActionController {
             actionId = result.getActionId();
             openRestTemplate.refreshGateway();
         }
-        return ResultBody.ok().data(actionId);
+        return ResultEntity.ok(actionId);
     }
 
     /**
@@ -120,7 +121,7 @@ public class BaseActionController {
             @ApiImplicitParam(name = "actionDesc", required = false, value = "描述", paramType = "form"),
     })
     @PostMapping("/action/update")
-    public ResultBody updateAction(
+    public ResultEntity updateAction(
             @RequestParam("actionId") Long actionId,
             @RequestParam(value = "actionCode") String actionCode,
             @RequestParam(value = "actionName") String actionName,
@@ -139,7 +140,7 @@ public class BaseActionController {
         baseActionService.updateAction(action);
         // 刷新网关
         openRestTemplate.refreshGateway();
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 
     /**
@@ -150,11 +151,11 @@ public class BaseActionController {
             @ApiImplicitParam(name = "actionId", required = true, value = "功能按钮ID", paramType = "form")
     })
     @PostMapping("/action/remove")
-    public ResultBody removeAction(
+    public ResultEntity removeAction(
             @RequestParam("actionId") Long actionId) {
         baseActionService.removeAction(actionId);
         // 刷新网关
         openRestTemplate.refreshGateway();
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 }

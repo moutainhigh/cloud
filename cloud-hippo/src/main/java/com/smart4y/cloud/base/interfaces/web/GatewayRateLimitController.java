@@ -2,9 +2,10 @@ package com.smart4y.cloud.base.interfaces.web;
 
 import com.smart4y.cloud.base.application.GatewayRateLimitService;
 import com.smart4y.cloud.base.domain.model.GatewayRateLimit;
+import com.smart4y.cloud.base.domain.model.GatewayRateLimitApi;
 import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
-import com.smart4y.cloud.core.domain.ResultBody;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
 import io.swagger.annotations.Api;
@@ -14,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,30 +36,25 @@ public class GatewayRateLimitController {
 
     /**
      * 获取分页接口列表
-     *
-     * @return
      */
     @ApiOperation(value = "获取分页接口列表", notes = "获取分页接口列表")
     @GetMapping("/gateway/limit/rate")
-    public ResultBody<IPage<GatewayRateLimit>> getRateLimitListPage(@RequestParam(required = false) Map map) {
-        return ResultBody.ok().data(gatewayRateLimitService.findListPage(new PageParams(map)));
+    public ResultEntity<IPage<GatewayRateLimit>> getRateLimitListPage(@RequestParam(required = false) Map map) {
+        IPage<GatewayRateLimit> listPage = gatewayRateLimitService.findListPage(new PageParams(map));
+        return ResultEntity.ok(listPage);
     }
 
     /**
      * 查询策略已绑定API列表
-     *
-     * @param policyId
-     * @return
      */
     @ApiOperation(value = "查询策略已绑定API列表", notes = "获取分页接口列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "policyId", value = "策略ID", paramType = "form"),
     })
     @GetMapping("/gateway/limit/rate/api/list")
-    public ResultBody<IPage<GatewayRateLimit>> getRateLimitApiList(
-            @RequestParam("policyId") Long policyId
-    ) {
-        return ResultBody.ok().data(gatewayRateLimitService.findRateLimitApiList(policyId));
+    public ResultEntity<List<GatewayRateLimitApi>> getRateLimitApiList(@RequestParam("policyId") Long policyId) {
+        List<GatewayRateLimitApi> list = gatewayRateLimitService.findRateLimitApiList(policyId);
+        return ResultEntity.ok(list);
     }
 
     /**
@@ -65,7 +62,6 @@ public class GatewayRateLimitController {
      *
      * @param policyId 策略ID
      * @param apiIds   API接口ID.多个以,隔开.选填
-     * @return
      */
     @ApiOperation(value = "绑定API", notes = "一个API只能绑定一个策略")
     @ApiImplicitParams({
@@ -73,28 +69,26 @@ public class GatewayRateLimitController {
             @ApiImplicitParam(name = "apiIds", value = "API接口ID.多个以,隔开.选填", defaultValue = "", required = false, paramType = "form")
     })
     @PostMapping("/gateway/limit/rate/api/add")
-    public ResultBody addRateLimitApis(
+    public ResultEntity addRateLimitApis(
             @RequestParam("policyId") Long policyId,
             @RequestParam(value = "apiIds", required = false) String apiIds
     ) {
         gatewayRateLimitService.addRateLimitApis(policyId, StringUtils.isNotBlank(apiIds) ? apiIds.split(",") : new String[]{});
         openRestTemplate.refreshGateway();
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 
     /**
      * 获取流量控制
-     *
-     * @param policyId
-     * @return
      */
     @ApiOperation(value = "获取流量控制", notes = "获取流量控制")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "policyId", required = true, value = "策略ID", paramType = "path"),
     })
     @GetMapping("/gateway/limit/rate/{policyId}/info")
-    public ResultBody<GatewayRateLimit> getRateLimit(@PathVariable("policyId") Long policyId) {
-        return ResultBody.ok().data(gatewayRateLimitService.getRateLimitPolicy(policyId));
+    public ResultEntity<GatewayRateLimit> getRateLimit(@PathVariable("policyId") Long policyId) {
+        GatewayRateLimit policy = gatewayRateLimitService.getRateLimitPolicy(policyId);
+        return ResultEntity.ok(policy);
     }
 
     /**
@@ -104,7 +98,6 @@ public class GatewayRateLimitController {
      * @param limitQuota   限制数
      * @param intervalUnit 单位时间
      * @param policyType   限流规则类型
-     * @return
      */
     @ApiOperation(value = "添加流量控制", notes = "添加流量控制")
     @ApiImplicitParams({
@@ -114,7 +107,7 @@ public class GatewayRateLimitController {
             @ApiImplicitParam(name = "intervalUnit", required = true, value = "单位时间:seconds-秒,minutes-分钟,hours-小时,days-天", allowableValues = "seconds,minutes,hours,days", paramType = "form"),
     })
     @PostMapping("/gateway/limit/rate/add")
-    public ResultBody<Long> addRateLimit(
+    public ResultEntity<Long> addRateLimit(
             @RequestParam(value = "policyName") String policyName,
             @RequestParam(value = "policyType") String policyType,
             @RequestParam(value = "limitQuota") Long limitQuota,
@@ -131,7 +124,7 @@ public class GatewayRateLimitController {
         if (result != null) {
             policyId = result.getPolicyId();
         }
-        return ResultBody.ok().data(policyId);
+        return ResultEntity.ok(policyId);
     }
 
     /**
@@ -153,7 +146,7 @@ public class GatewayRateLimitController {
             @ApiImplicitParam(name = "intervalUnit", required = true, value = "单位时间:seconds-秒,minutes-分钟,hours-小时,days-天", allowableValues = "seconds,minutes,hours,days", paramType = "form"),
     })
     @PostMapping("/gateway/limit/rate/update")
-    public ResultBody updateRateLimit(
+    public ResultEntity updateRateLimit(
             @RequestParam("policyId") Long policyId,
             @RequestParam(value = "policyName") String policyName,
             @RequestParam(value = "policyType") String policyType,
@@ -168,7 +161,7 @@ public class GatewayRateLimitController {
         rateLimit.setPolicyType(policyType);
         gatewayRateLimitService.updateRateLimitPolicy(rateLimit);
         openRestTemplate.refreshGateway();
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 
 
@@ -183,12 +176,12 @@ public class GatewayRateLimitController {
             @ApiImplicitParam(name = "policyId", required = true, value = "policyId", paramType = "form"),
     })
     @PostMapping("/gateway/limit/rate/remove")
-    public ResultBody removeRateLimit(
+    public ResultEntity removeRateLimit(
             @RequestParam("policyId") Long policyId
     ) {
         gatewayRateLimitService.removeRateLimitPolicy(policyId);
         // 刷新网关
         openRestTemplate.refreshGateway();
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 }

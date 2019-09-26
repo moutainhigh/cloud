@@ -77,7 +77,7 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
     }
 
     @Override
-    public void addUser(AddDeveloperUserCommand command) {
+    public long addUser(AddDeveloperUserCommand command) {
         if (getUserByUsername(command.getUserName()) != null) {
             throw new OpenAlertException("用户名:" + command.getUserName() + "已存在!");
         }
@@ -106,6 +106,7 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
             // 注册手机号账号登陆
             baseAccountService.register(userId, command.getMobile(), command.getPassword(), BaseConstants.ACCOUNT_TYPE_MOBILE, command.getStatus(), ACCOUNT_DOMAIN, null);
         }
+        return userId;
     }
 
     @Override

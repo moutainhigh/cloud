@@ -4,7 +4,7 @@ import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.application.BaseUserService;
 import com.smart4y.cloud.base.domain.model.BaseUser;
 import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
-import com.smart4y.cloud.core.domain.ResultBody;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.security.OpenHelper;
 import com.smart4y.cloud.core.infrastructure.security.OpenUserDetails;
@@ -42,9 +42,9 @@ public class CurrentUserController {
      */
     @ApiOperation(value = "修改当前登录用户密码", notes = "修改当前登录用户密码")
     @GetMapping("/current/user/rest/password")
-    public ResultBody restPassword(@RequestParam(value = "password") String password) {
+    public ResultEntity restPassword(@RequestParam(value = "password") String password) {
         baseUserService.updatePassword(OpenHelper.getUser().getUserId(), password);
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 
     /**
@@ -57,7 +57,7 @@ public class CurrentUserController {
      */
     @ApiOperation(value = "修改当前登录用户基本信息", notes = "修改当前登录用户基本信息")
     @PostMapping("/current/user/update")
-    public ResultBody updateUserInfo(
+    public ResultEntity updateUserInfo(
             @RequestParam(value = "nickName") String nickName,
             @RequestParam(value = "userDesc", required = false) String userDesc,
             @RequestParam(value = "avatar", required = false) String avatar
@@ -72,7 +72,7 @@ public class CurrentUserController {
         openUserDetails.setNickName(nickName);
         openUserDetails.setAvatar(avatar);
         OpenHelper.updateOpenUser(redisTokenStore, openUserDetails);
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 
     /**
@@ -82,8 +82,8 @@ public class CurrentUserController {
      */
     @ApiOperation(value = "获取当前登录用户已分配菜单权限", notes = "获取当前登录用户已分配菜单权限")
     @GetMapping("/current/user/menu")
-    public ResultBody<List<AuthorityMenuDTO>> findAuthorityMenu() {
+    public ResultEntity<List<AuthorityMenuDTO>> findAuthorityMenu() {
         List<AuthorityMenuDTO> result = baseAuthorityService.findAuthorityMenuByUser(OpenHelper.getUser().getUserId(), CommonConstants.ROOT.equals(OpenHelper.getUser().getUsername()));
-        return ResultBody.ok().data(result);
+        return ResultEntity.ok(result);
     }
 }

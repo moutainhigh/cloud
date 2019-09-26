@@ -7,7 +7,7 @@ import com.smart4y.cloud.base.domain.model.BaseUser;
 import com.smart4y.cloud.core.application.dto.AuthorityApiDTO;
 import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
 import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
-import com.smart4y.cloud.core.domain.ResultBody;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.domain.model.OpenAuthority;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
@@ -50,9 +50,9 @@ public class BaseAuthorityController {
      */
     @ApiOperation(value = "获取所有访问权限列表", notes = "获取所有访问权限列表")
     @GetMapping("/authority/access")
-    public ResultBody<List<AuthorityResourceDTO>> findAuthorityResource() {
+    public ResultEntity<List<AuthorityResourceDTO>> findAuthorityResource() {
         List<AuthorityResourceDTO> result = baseAuthorityService.findAuthorityResource();
-        return ResultBody.ok().data(result);
+        return ResultEntity.ok(result);
     }
 
     /**
@@ -62,11 +62,11 @@ public class BaseAuthorityController {
      */
     @ApiOperation(value = "获取接口权限列表", notes = "获取接口权限列表")
     @GetMapping("/authority/api")
-    public ResultBody<List<AuthorityApiDTO>> findAuthorityApi(
+    public ResultEntity<List<AuthorityApiDTO>> findAuthorityApi(
             @RequestParam(value = "serviceId", required = false) String serviceId
     ) {
         List<AuthorityApiDTO> result = baseAuthorityService.findAuthorityApi(serviceId);
-        return ResultBody.ok().data(result);
+        return ResultEntity.ok(result);
     }
 
 
@@ -77,9 +77,9 @@ public class BaseAuthorityController {
      */
     @ApiOperation(value = "获取菜单权限列表", notes = "获取菜单权限列表")
     @GetMapping("/authority/menu")
-    public ResultBody<List<AuthorityMenuDTO>> findAuthorityMenu() {
+    public ResultEntity<List<AuthorityMenuDTO>> findAuthorityMenu() {
         List<AuthorityMenuDTO> result = baseAuthorityService.findAuthorityMenu(1);
-        return ResultBody.ok().data(result);
+        return ResultEntity.ok(result);
     }
 
     /**
@@ -93,11 +93,11 @@ public class BaseAuthorityController {
             @ApiImplicitParam(name = "actionId", required = true, value = "功能按钮ID", paramType = "form")
     })
     @GetMapping("/authority/action")
-    public ResultBody<List<BaseAuthorityAction>> findAuthorityAction(
+    public ResultEntity<List<BaseAuthorityAction>> findAuthorityAction(
             @RequestParam(value = "actionId") Long actionId
     ) {
         List<BaseAuthorityAction> list = baseAuthorityService.findAuthorityAction(actionId);
-        return ResultBody.ok().data(list);
+        return ResultEntity.ok(list);
     }
 
 
@@ -112,9 +112,9 @@ public class BaseAuthorityController {
             @ApiImplicitParam(name = "roleId", value = "角色ID", defaultValue = "", required = true, paramType = "form")
     })
     @GetMapping("/authority/role")
-    public ResultBody<List<OpenAuthority>> findAuthorityRole(Long roleId) {
+    public ResultEntity<List<OpenAuthority>> findAuthorityRole(Long roleId) {
         List<OpenAuthority> result = baseAuthorityService.findAuthorityByRole(roleId);
-        return ResultBody.ok().data(result);
+        return ResultEntity.ok(result);
     }
 
 
@@ -129,12 +129,12 @@ public class BaseAuthorityController {
             @ApiImplicitParam(name = "userId", value = "用户ID", defaultValue = "", required = true, paramType = "form")
     })
     @GetMapping("/authority/user")
-    public ResultBody<List<OpenAuthority>> findAuthorityUser(
+    public ResultEntity<List<OpenAuthority>> findAuthorityUser(
             @RequestParam(value = "userId") Long userId
     ) {
         BaseUser user = baseUserService.getUserById(userId);
         List<OpenAuthority> result = baseAuthorityService.findAuthorityByUser(userId, CommonConstants.ROOT.equals(user.getUserName()));
-        return ResultBody.ok().data(result);
+        return ResultEntity.ok(result);
     }
 
 
@@ -149,11 +149,11 @@ public class BaseAuthorityController {
             @ApiImplicitParam(name = "appId", value = "应用Id", defaultValue = "", required = true, paramType = "form")
     })
     @GetMapping("/authority/app")
-    public ResultBody<List<OpenAuthority>> findAuthorityApp(
+    public ResultEntity<List<OpenAuthority>> findAuthorityApp(
             @RequestParam(value = "appId") String appId
     ) {
         List<OpenAuthority> result = baseAuthorityService.findAuthorityByApp(appId);
-        return ResultBody.ok().data(result);
+        return ResultEntity.ok(result);
     }
 
     /**
@@ -171,7 +171,7 @@ public class BaseAuthorityController {
             @ApiImplicitParam(name = "authorityIds", value = "权限ID.多个以,隔开.选填", defaultValue = "", required = false, paramType = "form")
     })
     @PostMapping("/authority/role/grant")
-    public ResultBody grantAuthorityRole(
+    public ResultEntity grantAuthorityRole(
             @RequestParam(value = "roleId") Long roleId,
             @RequestParam(value = "expireTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime expireTime,
             @RequestParam(value = "authorityIds", required = false) String authorityIds) {
@@ -180,7 +180,7 @@ public class BaseAuthorityController {
                 .collect(Collectors.toList());
         baseAuthorityService.addAuthorityRole(roleId, expireTime, collect);
         openRestTemplate.refreshGateway();
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 
 
@@ -199,7 +199,7 @@ public class BaseAuthorityController {
             @ApiImplicitParam(name = "authorityIds", value = "权限ID.多个以,隔开.选填", defaultValue = "", required = false, paramType = "form")
     })
     @PostMapping("/authority/user/grant")
-    public ResultBody grantAuthorityUser(
+    public ResultEntity grantAuthorityUser(
             @RequestParam(value = "userId") Long userId,
             @RequestParam(value = "expireTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime expireTime,
             @RequestParam(value = "authorityIds", required = false) String authorityIds) {
@@ -208,7 +208,7 @@ public class BaseAuthorityController {
                 .collect(Collectors.toList());
         baseAuthorityService.addAuthorityUser(userId, expireTime, collect);
         openRestTemplate.refreshGateway();
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 
 
@@ -227,7 +227,7 @@ public class BaseAuthorityController {
             @ApiImplicitParam(name = "authorityIds", value = "权限ID.多个以,隔开.选填", defaultValue = "", required = false, paramType = "form")
     })
     @PostMapping("/authority/app/grant")
-    public ResultBody grantAuthorityApp(
+    public ResultEntity grantAuthorityApp(
             @RequestParam(value = "appId") String appId,
             @RequestParam(value = "expireTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime expireTime,
             @RequestParam(value = "authorityIds", required = false) String authorityIds) {
@@ -236,7 +236,7 @@ public class BaseAuthorityController {
                 .collect(Collectors.toList());
         baseAuthorityService.addAuthorityApp(appId, expireTime, collect);
         openRestTemplate.refreshGateway();
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 
     /**
@@ -252,7 +252,7 @@ public class BaseAuthorityController {
             @ApiImplicitParam(name = "authorityIds", required = false, value = "全新ID:多个用,号隔开", paramType = "form"),
     })
     @PostMapping("/authority/action/grant")
-    public ResultBody grantAuthorityAction(
+    public ResultEntity grantAuthorityAction(
             @RequestParam(value = "actionId") Long actionId,
             @RequestParam(value = "authorityIds", required = false) String authorityIds) {
         List<Long> collect = Arrays.stream(authorityIds.split(","))
@@ -260,6 +260,6 @@ public class BaseAuthorityController {
                 .collect(Collectors.toList());
         baseAuthorityService.addAuthorityAction(actionId, collect);
         openRestTemplate.refreshGateway();
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 }

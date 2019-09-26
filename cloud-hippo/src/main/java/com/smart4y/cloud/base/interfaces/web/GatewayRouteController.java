@@ -4,7 +4,7 @@ import com.smart4y.cloud.base.application.GatewayRouteService;
 import com.smart4y.cloud.base.domain.model.GatewayRoute;
 import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
-import com.smart4y.cloud.core.domain.ResultBody;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
 import io.swagger.annotations.Api;
@@ -34,28 +34,25 @@ public class GatewayRouteController {
 
     /**
      * 获取分页路由列表
-     *
-     * @return
      */
     @ApiOperation(value = "获取分页路由列表", notes = "获取分页路由列表")
     @GetMapping("/gateway/route")
-    public ResultBody<IPage<GatewayRoute>> getRouteListPage(@RequestParam(required = false) Map map) {
-        return ResultBody.ok().data(gatewayRouteService.findListPage(new PageParams(map)));
+    public ResultEntity<IPage<GatewayRoute>> getRouteListPage(@RequestParam(required = false) Map map) {
+        IPage<GatewayRoute> listPage = gatewayRouteService.findListPage(new PageParams(map));
+        return ResultEntity.ok(listPage);
     }
 
     /**
      * 获取路由
-     *
-     * @param routeId
-     * @return
      */
     @ApiOperation(value = "获取路由", notes = "获取路由")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "routeId", required = true, value = "路由ID", paramType = "path"),
     })
     @GetMapping("/gateway/route/{routeId}/info")
-    public ResultBody<GatewayRoute> getRoute(@PathVariable("routeId") Long routeId) {
-        return ResultBody.ok().data(gatewayRouteService.getRoute(routeId));
+    public ResultEntity<GatewayRoute> getRoute(@PathVariable("routeId") Long routeId) {
+        GatewayRoute route = gatewayRouteService.getRoute(routeId);
+        return ResultEntity.ok(route);
     }
 
     /**
@@ -68,7 +65,6 @@ public class GatewayRouteController {
      * @param stripPrefix 忽略前缀
      * @param retryable   支持重试
      * @param status      是否启用
-     * @return
      */
     @ApiOperation(value = "添加路由", notes = "添加路由")
     @ApiImplicitParams({
@@ -82,7 +78,7 @@ public class GatewayRouteController {
             @ApiImplicitParam(name = "status", required = false, allowableValues = "0,1", defaultValue = "1", value = "是否启用", paramType = "form")
     })
     @PostMapping("/gateway/route/add")
-    public ResultBody<Long> addRoute(
+    public ResultEntity<Long> addRoute(
             @RequestParam(value = "routeName", required = true, defaultValue = "") String routeName,
             @RequestParam(value = "routeDesc", required = true, defaultValue = "") String routeDesc,
             @RequestParam(value = "path") String path,
@@ -104,10 +100,10 @@ public class GatewayRouteController {
         if (route.getUrl() != null && StringUtils.isNotEmpty(route.getUrl())) {
             route.setServiceId(null);
         }
-        gatewayRouteService.addRoute(route);
+        long routeId = gatewayRouteService.addRoute(route);
         // 刷新网关
         openRestTemplate.refreshGateway();
-        return ResultBody.ok();
+        return ResultEntity.ok(routeId);
     }
 
     /**
@@ -136,7 +132,7 @@ public class GatewayRouteController {
             @ApiImplicitParam(name = "status", required = false, allowableValues = "0,1", defaultValue = "1", value = "是否启用", paramType = "form")
     })
     @PostMapping("/gateway/route/update")
-    public ResultBody updateRoute(
+    public ResultEntity updateRoute(
             @RequestParam("routeId") Long routeId,
             @RequestParam(value = "routeName", defaultValue = "") String routeName,
             @RequestParam(value = "routeDesc", defaultValue = "") String routeDesc,
@@ -163,27 +159,23 @@ public class GatewayRouteController {
         gatewayRouteService.updateRoute(route);
         // 刷新网关
         openRestTemplate.refreshGateway();
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
-
 
     /**
      * 移除路由
-     *
-     * @param routeId
-     * @return
      */
     @ApiOperation(value = "移除路由", notes = "移除路由")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "routeId", required = true, value = "routeId", paramType = "form"),
     })
     @PostMapping("/gateway/route/remove")
-    public ResultBody removeRoute(
+    public ResultEntity removeRoute(
             @RequestParam("routeId") Long routeId
     ) {
         gatewayRouteService.removeRoute(routeId);
         // 刷新网关
         openRestTemplate.refreshGateway();
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 }

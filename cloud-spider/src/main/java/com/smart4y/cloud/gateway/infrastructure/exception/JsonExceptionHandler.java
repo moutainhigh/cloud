@@ -90,7 +90,10 @@ public class JsonExceptionHandler implements ErrorWebExceptionHandler {
             return Mono.empty();
         }
         if (ex instanceof NotFoundException) {
-            resultEntity = ResultEntity.failed().code(ErrorCode.SERVICE_UNAVAILABLE.getCode()).msg(ErrorCode.SERVICE_UNAVAILABLE.getMessage()).httpStatus(HttpStatus.SERVICE_UNAVAILABLE.value()).path(request.getURI().getPath());
+            resultEntity = ResultEntity
+                    .failed(ErrorCode.SERVICE_UNAVAILABLE, ErrorCode.SERVICE_UNAVAILABLE.getMessage())
+                    .path(request.getURI().getPath())
+                    .httpStatus(HttpStatus.SERVICE_UNAVAILABLE.value());
             log.error("==> 错误解析:{}", resultEntity);
         } else {
             resultEntity = OpenGlobalExceptionHandler.resolveException((Exception) ex, exchange.getRequest().getURI().getPath());
