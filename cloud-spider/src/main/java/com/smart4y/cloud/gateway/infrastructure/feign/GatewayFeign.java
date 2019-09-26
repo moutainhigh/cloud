@@ -1,6 +1,6 @@
 package com.smart4y.cloud.gateway.infrastructure.feign;
 
-import com.smart4y.cloud.core.domain.ResultBody;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.application.dto.GatewayRouteDTO;
 import com.smart4y.cloud.core.application.dto.IpLimitApiDTO;
 import com.smart4y.cloud.core.application.dto.RateLimitApiDTO;
@@ -25,23 +25,23 @@ public interface GatewayFeign {
      * 获取接口黑名单列表
      */
     @GetMapping("/gateway/api/blackList")
-    ResultBody<List<IpLimitApiDTO>> getApiBlackList();
+    ResultEntity<List<IpLimitApiDTO>> getApiBlackList();
 
     /**
      * 获取接口白名单列表
      */
     @GetMapping("/gateway/api/whiteList")
-    ResultBody<List<IpLimitApiDTO>> getApiWhiteList();
+    ResultEntity<List<IpLimitApiDTO>> getApiWhiteList();
 
     /**
      * 获取限流列表
      */
     @GetMapping("/gateway/api/rateLimit")
-    ResultBody<List<RateLimitApiDTO>> getApiRateLimitList();
+    ResultEntity<List<RateLimitApiDTO>> getApiRateLimitList();
 
     /**
      * 获取路由列表
      */
     @GetMapping("/gateway/api/route")
-    ResultBody<List<GatewayRouteDTO>> getApiRouteList();
+    ResultEntity<List<GatewayRouteDTO>> getApiRouteList();
 }

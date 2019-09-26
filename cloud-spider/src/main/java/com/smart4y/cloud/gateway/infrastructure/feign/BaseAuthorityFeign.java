@@ -1,8 +1,8 @@
 package com.smart4y.cloud.gateway.infrastructure.feign;
 
-import com.smart4y.cloud.core.domain.ResultBody;
 import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
 import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -24,11 +24,11 @@ public interface BaseAuthorityFeign {
      * 获取所有访问权限列表
      */
     @GetMapping("/authority/access")
-    ResultBody<List<AuthorityResourceDTO>> findAuthorityResource();
+    ResultEntity<List<AuthorityResourceDTO>> findAuthorityResource();
 
     /**
      * 获取菜单权限列表
      */
     @GetMapping("/authority/menu")
-    ResultBody<List<AuthorityMenuDTO>> findAuthorityMenu();
+    ResultEntity<List<AuthorityMenuDTO>> findAuthorityMenu();
 }
