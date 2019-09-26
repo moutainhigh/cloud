@@ -3,7 +3,7 @@ package com.smart4y.cloud.gateway.infrastructure.filter;
 import cn.hutool.core.collection.ConcurrentHashSet;
 import com.google.common.collect.Maps;
 import com.smart4y.cloud.core.application.dto.AppDTO;
-import com.smart4y.cloud.core.domain.ResultBody;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenSignatureException;
 import com.smart4y.cloud.core.infrastructure.toolkit.secret.SignatureUtils;
@@ -84,7 +84,7 @@ public class PreSignatureFilter implements WebFilter {
                 if (baseAppFeign != null) {
                     String appId = params.get(CommonConstants.SIGN_APP_ID_KEY).toString();
                     // 获取客户端信息
-                    ResultBody<AppDTO> result = baseAppFeign.getApp(appId);
+                    ResultEntity<AppDTO> result = baseAppFeign.getApp(appId);
                     AppDTO app = result.getData();
                     if (app == null || app.getAppId() == null) {
                         return signatureDeniedHandler.handle(exchange, new OpenSignatureException("appId无效"));
