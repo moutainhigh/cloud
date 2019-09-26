@@ -30,12 +30,11 @@ public class GatewayAccessLogsController {
 
     /**
      * 获取分页列表
-     *
-     * @return
      */
     @ApiOperation(value = "获取分页访问日志列表", notes = "获取分页访问日志列表")
     @GetMapping("/gateway/access/logs")
     public ResultBody<IPage<GatewayAccessLogs>> getAccessLogListPage(@RequestParam(required = false) Map map) {
-        return ResultBody.ok().data(gatewayAccessLogsService.findListPage(new PageParams(map)));
+        IPage<GatewayAccessLogs> listPage = gatewayAccessLogsService.findListPage(new PageParams(map));
+        return ResultBody.ok().data(listPage);
     }
 }

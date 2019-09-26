@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import java.io.IOException;
 
 /**
- *  * @author Youtao
+ * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
 public class XssStringJsonDeserializer extends JsonDeserializer<String> {
@@ -20,5 +20,4 @@ public class XssStringJsonDeserializer extends JsonDeserializer<String> {
         //  富文本解码
         return StringEscapeUtils.unescapeHtml4(source);
     }
-
 }
