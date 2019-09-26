@@ -1,7 +1,7 @@
 package com.smart4y.cloud.uaa.infrastructure.feign;
 
 import com.smart4y.cloud.core.application.dto.UserAccount;
-import com.smart4y.cloud.core.domain.ResultBody;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -20,5 +20,5 @@ public interface BaseUserFeign {
      * 系统用户登录
      */
     @PostMapping("/user/login")
-    ResultBody<UserAccount> userLogin(@RequestParam(value = "username") String username);
+    ResultEntity<UserAccount> userLogin(@RequestParam(value = "username") String username);
 }
