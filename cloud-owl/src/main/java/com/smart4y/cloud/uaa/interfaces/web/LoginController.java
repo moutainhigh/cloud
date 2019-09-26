@@ -1,6 +1,6 @@
 package com.smart4y.cloud.uaa.interfaces.web;
 
-import com.smart4y.cloud.core.domain.ResultBody;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.OpenHelper;
 import com.smart4y.cloud.core.infrastructure.security.OpenUserDetails;
 import com.smart4y.cloud.core.infrastructure.security.oauth2.client.OpenOAuth2ClientDetails;
@@ -38,9 +38,9 @@ public class LoginController {
      */
     @ApiOperation(value = "获取用户基础信息")
     @GetMapping("/current/user")
-    public ResultBody getUserProfile() {
+    public ResultEntity<OpenUserDetails> getUserProfile() {
         OpenUserDetails user = OpenHelper.getUser();
-        return ResultBody.ok().data(user);
+        return ResultEntity.ok(user);
     }
 
     /**
@@ -66,9 +66,9 @@ public class LoginController {
             @ApiImplicitParam(name = "password", required = true, value = "登录密码", paramType = "form")
     })
     @PostMapping("/login/token")
-    public ResultBody<OAuth2AccessToken> getLoginToken(@RequestParam String username, @RequestParam String password) throws Exception {
+    public ResultEntity<OAuth2AccessToken> getLoginToken(@RequestParam String username, @RequestParam String password) throws Exception {
         OAuth2AccessToken result = getToken(username, password, null);
-        return ResultBody.ok().data(result);
+        return ResultEntity.ok(result);
     }
 
     /**
@@ -79,9 +79,9 @@ public class LoginController {
             @ApiImplicitParam(name = "token", required = true, value = "访问令牌", paramType = "form")
     })
     @PostMapping("/logout/token")
-    public ResultBody removeToken(@RequestParam String token) {
+    public ResultEntity removeToken(@RequestParam String token) {
         tokenStore.removeAccessToken(tokenStore.readAccessToken(token));
-        return ResultBody.ok();
+        return ResultEntity.ok();
     }
 
     /**

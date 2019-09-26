@@ -2,7 +2,7 @@ package com.smart4y.cloud.uaa.interfaces.web;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
-import com.smart4y.cloud.core.domain.ResultBody;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.uaa.application.impl.GiteeAuthServiceImpl;
 import com.smart4y.cloud.uaa.application.impl.QQAuthServiceImpl;
 import com.smart4y.cloud.uaa.application.impl.WechatAuthServiceImpl;
@@ -153,11 +153,11 @@ public class IndexController {
     @ApiOperation(value = "获取第三方登录配置", notes = "任何人都可访问")
     @GetMapping("/login/config")
     @ResponseBody
-    public ResultBody getLoginConfig() {
+    public ResultEntity<Map<String, String>> getLoginConfig() {
         Map<String, String> map = Maps.newHashMap();
         map.put("qq", qqAuthService.getAuthorizationUrl());
         map.put("wechat", wechatAuthService.getAuthorizationUrl());
         map.put("gitee", giteeAuthService.getAuthorizationUrl());
-        return ResultBody.ok().data(map);
+        return ResultEntity.ok(map);
     }
 }
