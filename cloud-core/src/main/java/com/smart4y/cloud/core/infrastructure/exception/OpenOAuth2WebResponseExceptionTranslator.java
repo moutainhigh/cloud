@@ -1,6 +1,6 @@
 package com.smart4y.cloud.core.infrastructure.exception;
 
-import com.smart4y.cloud.core.domain.ResultBody;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
@@ -21,7 +21,7 @@ public class OpenOAuth2WebResponseExceptionTranslator implements WebResponseExce
     @Override
     public ResponseEntity translate(Exception e) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        ResultBody responseData = OpenGlobalExceptionHandler.resolveOauthException(e, request.getRequestURI());
+        ResultEntity responseData = OpenGlobalExceptionHandler.resolveOauthException(e, request.getRequestURI());
         return ResponseEntity.status(responseData.getHttpStatus()).body(responseData);
     }
 }

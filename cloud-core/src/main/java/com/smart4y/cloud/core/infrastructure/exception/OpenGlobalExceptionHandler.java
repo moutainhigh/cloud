@@ -1,6 +1,6 @@
 package com.smart4y.cloud.core.infrastructure.exception;
 
-import com.smart4y.cloud.core.domain.ResultBody;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -30,8 +30,8 @@ public class OpenGlobalExceptionHandler {
      * AuthenticationException
      */
     @ExceptionHandler({AuthenticationException.class})
-    public static ResultBody authenticationException(Exception ex, HttpServletRequest request, HttpServletResponse response) {
-        ResultBody resultBody = resolveException(ex, request.getRequestURI());
+    public static ResultEntity authenticationException(Exception ex, HttpServletRequest request, HttpServletResponse response) {
+        ResultEntity resultBody = resolveException(ex, request.getRequestURI());
         response.setStatus(resultBody.getHttpStatus());
         return resultBody;
     }
@@ -40,8 +40,8 @@ public class OpenGlobalExceptionHandler {
      * OAuth2Exception
      */
     @ExceptionHandler({OAuth2Exception.class, InvalidTokenException.class})
-    public static ResultBody oauth2Exception(Exception ex, HttpServletRequest request, HttpServletResponse response) {
-        ResultBody resultBody = resolveException(ex, request.getRequestURI());
+    public static ResultEntity oauth2Exception(Exception ex, HttpServletRequest request, HttpServletResponse response) {
+        ResultEntity resultBody = resolveException(ex, request.getRequestURI());
         response.setStatus(resultBody.getHttpStatus());
         return resultBody;
     }
@@ -50,8 +50,8 @@ public class OpenGlobalExceptionHandler {
      * 自定义异常
      */
     @ExceptionHandler({OpenException.class})
-    public static ResultBody openException(Exception ex, HttpServletRequest request, HttpServletResponse response) {
-        ResultBody resultBody = resolveException(ex, request.getRequestURI());
+    public static ResultEntity openException(Exception ex, HttpServletRequest request, HttpServletResponse response) {
+        ResultEntity resultBody = resolveException(ex, request.getRequestURI());
         response.setStatus(resultBody.getHttpStatus());
         return resultBody;
     }
@@ -60,8 +60,8 @@ public class OpenGlobalExceptionHandler {
      * 其他异常
      */
     @ExceptionHandler({Exception.class})
-    public static ResultBody exception(Exception ex, HttpServletRequest request, HttpServletResponse response) {
-        ResultBody resultBody = resolveException(ex, request.getRequestURI());
+    public static ResultEntity exception(Exception ex, HttpServletRequest request, HttpServletResponse response) {
+        ResultEntity resultBody = resolveException(ex, request.getRequestURI());
         response.setStatus(resultBody.getHttpStatus());
         return resultBody;
     }
@@ -69,7 +69,7 @@ public class OpenGlobalExceptionHandler {
     /**
      * 静态解析认证异常
      */
-    public static ResultBody resolveOauthException(Exception ex, String path) {
+    public static ResultEntity resolveOauthException(Exception ex, String path) {
         ErrorCode code = ErrorCode.BAD_CREDENTIALS;
         int httpStatus = HttpStatus.OK.value();
         String error = Optional.ofNullable(ex.getMessage()).orElse("");
@@ -82,7 +82,7 @@ public class OpenGlobalExceptionHandler {
     /**
      * 静态解析异常。可以直接调用
      */
-    public static ResultBody resolveException(Exception ex, String path) {
+    public static ResultEntity resolveException(Exception ex, String path) {
         ErrorCode code = ErrorCode.ERROR;
         int httpStatus = HttpStatus.INTERNAL_SERVER_ERROR.value();
         String message = ex.getMessage();
@@ -174,7 +174,7 @@ public class OpenGlobalExceptionHandler {
         } else if (className.contains("MethodArgumentNotValidException")) {
             BindingResult bindingResult = ((MethodArgumentNotValidException) ex).getBindingResult();
             code = ErrorCode.ALERT;
-            return ResultBody.failed().code(code.getCode()).msg(bindingResult.getFieldError().getDefaultMessage());
+            return ResultEntity.failed().code(code.getCode()).msg(bindingResult.getFieldError().getDefaultMessage());
         } else if (className.contains("IllegalArgumentException")) {
             //参数错误
             code = ErrorCode.ALERT;
@@ -193,11 +193,11 @@ public class OpenGlobalExceptionHandler {
     /**
      * 构建返回结果对象
      */
-    private static ResultBody buildBody(Exception exception, ErrorCode resultCode, String path, int httpStatus) {
+    private static ResultEntity buildBody(Exception exception, ErrorCode resultCode, String path, int httpStatus) {
         if (resultCode == null) {
             resultCode = ErrorCode.ERROR;
         }
-        ResultBody resultBody = ResultBody.failed().code(resultCode.getCode()).msg(exception.getMessage()).path(path).httpStatus(httpStatus);
+        ResultEntity resultBody = ResultEntity.failed().code(resultCode.getCode()).msg(exception.getMessage()).path(path).httpStatus(httpStatus);
         log.error("==> error:{} exception: {}", resultBody, exception);
         return resultBody;
     }

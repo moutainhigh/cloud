@@ -1,6 +1,6 @@
 package com.smart4y.cloud.core.infrastructure.exception;
 
-import com.smart4y.cloud.core.domain.ResultBody;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.toolkit.WebUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
@@ -20,7 +20,7 @@ public class OpenAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException exception) {
-        ResultBody resultBody = OpenGlobalExceptionHandler.resolveException(exception, request.getRequestURI());
+        ResultEntity resultBody = OpenGlobalExceptionHandler.resolveException(exception, request.getRequestURI());
         response.setStatus(resultBody.getHttpStatus());
         WebUtils.writeJson(response, resultBody);
     }
