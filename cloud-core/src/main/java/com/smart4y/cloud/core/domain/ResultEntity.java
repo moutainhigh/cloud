@@ -20,15 +20,9 @@ import java.util.ResourceBundle;
  */
 @ToString
 @SuppressWarnings("unused")
-@ApiModel(value = "响应结果")
+@ApiModel(value = "ResultEntity")
 public class ResultEntity<T> implements Serializable {
 
-    /**
-     * 错误信息配置
-     */
-    @JsonIgnore
-    @JSONField(serialize = false, deserialize = false)
-    private static ResourceBundle resourceBundle = ResourceBundle.getBundle("error");
     /**
      * 响应编码
      */
@@ -102,6 +96,13 @@ public class ResultEntity<T> implements Serializable {
                 .code(errorCode.getCode())
                 .message(defaultMessage);
     }
+
+    /**
+     * 错误信息配置
+     */
+    @JsonIgnore
+    @JSONField(serialize = false, deserialize = false)
+    private static ResourceBundle resourceBundle = ResourceBundle.getBundle("error");
 
     /**
      * 提示信息国际化

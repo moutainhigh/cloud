@@ -1,5 +1,7 @@
 package com.smart4y.cloud.core.domain;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.Collections;
@@ -11,39 +13,48 @@ import java.util.List;
  * @author Youtao
  *         Created by youtao on 2019-04-30.
  */
+@ApiModel(value = "分页参数")
 public class Page<T> implements IPage<T> {
 
     /**
      * 查询数据列表
      */
+    @ApiModelProperty(value = "数据列表")
     private List<T> records = Collections.emptyList();
     /**
      * 总数
      */
+    @ApiModelProperty(value = "总数")
     private long total = 0;
     /**
      * 每页显示条数，默认 10
      */
+    @ApiModelProperty(value = "每页显示条数（默认10）")
     private long size = 10;
     /**
      * 当前页
      */
+    @ApiModelProperty(value = "当前页")
     private long current = 1;
     /**
-     * SQL 排序 ASC 数组
+     * SQL排序（ASC数组）
      */
+    @ApiModelProperty(value = "SQL排序（ASC数组）")
     private String[] ascs;
     /**
-     * SQL 排序 DESC 数组
+     * SQL排序（DESC数组）
      */
+    @ApiModelProperty(value = "SQL排序（DESC数组）")
     private String[] descs;
     /**
-     * 自动优化 COUNT SQL
+     * 自动优化（COUNT_SQL）
      */
+    @ApiModelProperty(value = "自动优化（COUNT_SQL）")
     private boolean optimizeCountSql = true;
     /**
-     * 是否进行 count 查询
+     * 是否进行COUNT查询
      */
+    @ApiModelProperty(value = "是否进行COUNT查询")
     private boolean isSearchCount = true;
 
     public Page() {
@@ -150,7 +161,6 @@ public class Page<T> implements IPage<T> {
         }
         return this;
     }
-
 
     /**
      * 升序

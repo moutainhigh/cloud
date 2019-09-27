@@ -31,8 +31,8 @@ public class BaseActionController {
     /**
      * 获取分页功能按钮列表
      */
-    @ApiOperation(value = "获取分页功能按钮列表", notes = "获取分页功能按钮列表")
     @GetMapping("/action")
+    @ApiOperation(value = "获取分页功能按钮列表", notes = "获取分页功能按钮列表")
     public ResultEntity<IPage<BaseAction>> findActionListPage(
             @RequestParam(required = false) Map map) {
         IPage<BaseAction> listPage = baseActionService.findListPage(new PageParams(map));

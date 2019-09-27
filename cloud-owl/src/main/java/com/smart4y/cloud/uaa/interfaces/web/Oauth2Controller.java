@@ -18,7 +18,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.oauth2.provider.AuthorizationRequest;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -130,7 +133,7 @@ public class Oauth2Controller extends BaseController {
     /**
      * 确认授权页
      */
-    @RequestMapping("/oauth/confirm_access")
+    @GetMapping("/oauth/confirm_access")
     @ApiOperation(value = "确认授权", notes = "确认授权")
     public String confirm_access(HttpServletRequest request, HttpSession session, Map model) {
         Map<String, String> scopes = (Map<String, String>) (model.containsKey("scopes") ? model.get("scopes") : request.getAttribute("scopes"));
@@ -155,7 +158,7 @@ public class Oauth2Controller extends BaseController {
      * 自定义Oauth2错误页
      */
     @ResponseBody
-    @RequestMapping("/oauth/error")
+    @GetMapping("/oauth/error")
     @ApiOperation(value = "自定义Oauth2错误处理", notes = "自定义Oauth2错误处理")
     public Object handleError(HttpServletRequest request) {
         return request.getAttribute("error");
