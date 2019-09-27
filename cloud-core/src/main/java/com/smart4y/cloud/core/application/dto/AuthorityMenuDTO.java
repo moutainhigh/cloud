@@ -26,7 +26,9 @@ public class AuthorityMenuDTO extends BaseMenuDTO implements Serializable {
      * 权限标识
      */
     private String authority;
-
+    /**
+     * 功能权限列表
+     */
     private List<AuthorityAction> actionList;
 
     @Override

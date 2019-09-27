@@ -9,7 +9,8 @@ import java.util.Objects;
 /**
  * API权限
  *
- * @author liuyadu
+ * @author Youtao
+ *         Created by youtao on 2019-04-30.
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -19,12 +20,10 @@ public class AuthorityApiDTO extends BaseApiDTO implements Serializable {
      * 权限ID
      */
     private Long authorityId;
-
     /**
      * 权限标识
      */
     private String authority;
-
     /**
      * 前缀
      */

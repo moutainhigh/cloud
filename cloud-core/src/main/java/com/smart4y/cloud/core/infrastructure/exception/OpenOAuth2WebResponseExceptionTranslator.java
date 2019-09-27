@@ -10,7 +10,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 自定义oauth2异常提示
+ * 自定义Oauth2异常提示
  *
  * @author Youtao
  *         Created by youtao on 2019-09-05.

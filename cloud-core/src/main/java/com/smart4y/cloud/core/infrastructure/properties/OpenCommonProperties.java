@@ -25,17 +25,14 @@ public class OpenCommonProperties {
      * 网关服务地址
      */
     private String apiServerAddr;
-
     /**
      * 平台认证服务地址
      */
     private String authServerAddr;
-
     /**
      * 后台部署地址
      */
     private String adminServerAddr;
-
     /**
      * 认证范围
      */
@@ -56,9 +53,8 @@ public class OpenCommonProperties {
      * 获取用户信息地址
      */
     private String userInfoUri;
-
     /**
-     * jwt签名key
+     * JWT签名key
      */
     private String jwtSigningKey;
 }

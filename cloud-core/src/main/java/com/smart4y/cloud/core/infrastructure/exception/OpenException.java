@@ -5,7 +5,8 @@ import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 /**
  * 基础错误异常
  *
- * @author admin
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 public class OpenException extends RuntimeException {
 

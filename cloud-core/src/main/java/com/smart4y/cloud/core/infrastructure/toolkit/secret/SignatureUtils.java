@@ -3,8 +3,8 @@ package com.smart4y.cloud.core.infrastructure.toolkit.secret;
 import com.alibaba.fastjson.JSONObject;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.toolkit.DateUtils;
-import com.smart4y.cloud.core.infrastructure.toolkit.random.RandomValueUtils;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.random.RandomValueUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 
@@ -15,8 +15,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * * @author Youtao
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class SignatureUtils {

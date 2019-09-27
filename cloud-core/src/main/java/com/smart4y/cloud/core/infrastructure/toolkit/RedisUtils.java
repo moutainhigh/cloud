@@ -10,14 +10,17 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Redis工具类
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 public class RedisUtils<T> {
+
+    private RedisTemplate<String, T> redisTemplate;
 
     public RedisUtils(RedisTemplate<String, T> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
-
-    private RedisTemplate<String, T> redisTemplate;
 
     /**
      * 指定缓存失效时间

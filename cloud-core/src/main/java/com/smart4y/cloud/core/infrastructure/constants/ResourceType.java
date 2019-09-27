@@ -2,6 +2,9 @@ package com.smart4y.cloud.core.infrastructure.constants;
 
 /**
  * 资源类型
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 public enum ResourceType {
 

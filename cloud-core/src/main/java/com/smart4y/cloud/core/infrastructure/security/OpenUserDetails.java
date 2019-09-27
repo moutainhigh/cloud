@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * 自定义认证用户信息
  *
- *  * @author Youtao
+ * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
 public class OpenUserDetails implements UserDetails {
@@ -84,23 +84,23 @@ public class OpenUserDetails implements UserDetails {
      */
     private Map<String, Object> attrs;
 
-
     /**
      * 只是客户端模式.不包含用户信息
-     *
-     * @return
      */
     public Boolean isClientOnly() {
         return clientId != null && username == null;
     }
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (authorities == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         return this.authorities;
+    }
+
+    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        this.authorities = authorities;
     }
 
     @JsonIgnore
@@ -109,9 +109,17 @@ public class OpenUserDetails implements UserDetails {
         return this.password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String getUsername() {
         return this.username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
@@ -119,9 +127,17 @@ public class OpenUserDetails implements UserDetails {
         return this.accountNonExpired;
     }
 
+    public void setAccountNonExpired(boolean accountNonExpired) {
+        this.accountNonExpired = accountNonExpired;
+    }
+
     @Override
     public boolean isAccountNonLocked() {
         return this.accountNonLocked;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
     }
 
     @Override
@@ -129,9 +145,17 @@ public class OpenUserDetails implements UserDetails {
         return this.credentialsNonExpired;
     }
 
+    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+        this.credentialsNonExpired = credentialsNonExpired;
+    }
+
     @Override
     public boolean isEnabled() {
         return this.enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Long getUserId() {
@@ -140,30 +164,6 @@ public class OpenUserDetails implements UserDetails {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setAccountNonLocked(boolean accountNonLocked) {
-        this.accountNonLocked = accountNonLocked;
-    }
-
-    public void setAccountNonExpired(boolean accountNonExpired) {
-        this.accountNonExpired = accountNonExpired;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
-        this.credentialsNonExpired = credentialsNonExpired;
     }
 
     public String getClientId() {
@@ -181,11 +181,6 @@ public class OpenUserDetails implements UserDetails {
     public void setDomain(String domain) {
         this.domain = domain;
     }
-
-    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
-        this.authorities = authorities;
-    }
-
 
     public String getNickName() {
         return nickName;

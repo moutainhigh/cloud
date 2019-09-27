@@ -31,9 +31,9 @@ import java.util.Map;
 
 /**
  * 认证信息帮助类
- * <p>
- * * @author Youtao
- * Created by youtao on 2019-09-05.
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class OpenHelper {
@@ -83,7 +83,7 @@ public class OpenHelper {
         }
     }
 
-    /***
+    /**
      * 更新客户端权限
      */
     public static void updateOpenClientAuthorities(TokenStore tokenStore, String clientId, Collection<? extends GrantedAuthority> authorities) {

@@ -42,8 +42,8 @@ import java.util.Locale;
 @Import({Swagger2DocumentationConfiguration.class})
 public class SwaggerAutoConfiguration {
 
-    private OpenSwaggerProperties openSwaggerProperties;
     private static final String SCOPE_PREFIX = "scope.";
+    private OpenSwaggerProperties openSwaggerProperties;
     private Locale locale = LocaleContextHolder.getLocale();
     private MessageSource messageSource;
 

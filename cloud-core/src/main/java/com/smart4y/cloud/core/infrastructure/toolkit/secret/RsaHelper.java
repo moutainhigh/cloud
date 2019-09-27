@@ -34,6 +34,7 @@ public enum RsaHelper {
      * RSA密钥长度，RSA算法的默认密钥长度是1024密钥长度必须是64的倍数，在512到65536位之间
      */
     private static final int KEY_SIZE = 1024;
+
     RsaHelper() {
     }
 

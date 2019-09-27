@@ -7,6 +7,9 @@ import java.io.Serializable;
 
 /**
  * 系统资源-API接口
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-04-30.
  */
 @Data
 @NoArgsConstructor

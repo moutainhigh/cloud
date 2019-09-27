@@ -3,9 +3,9 @@ package com.smart4y.cloud.core.infrastructure.exception;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
- * 自定义oauth2异常提示
+ * 自定义Oauth2异常提示
  *
- *  * @author Youtao
+ * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
 @JsonSerialize(using = OpenOAuth2ExceptionSerializer.class)

@@ -6,6 +6,8 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
 
 /**
+ * MQ 配置
+ *
  * @author Youtao
  *         Created by youtao on 2019-09-05.
  */

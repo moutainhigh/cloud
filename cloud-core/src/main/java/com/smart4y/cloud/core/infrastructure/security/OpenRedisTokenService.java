@@ -1,5 +1,6 @@
 package com.smart4y.cloud.core.infrastructure.security;
 
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -9,12 +10,13 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
 /**
- *  * @author Youtao
+ * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class OpenRedisTokenService implements ResourceServerTokenServices {
 
+    @Setter
     private TokenStore tokenStore;
 
     @Override
@@ -25,13 +27,5 @@ public class OpenRedisTokenService implements ResourceServerTokenServices {
     @Override
     public OAuth2AccessToken readAccessToken(String accessToken) {
         return tokenStore.readAccessToken(accessToken);
-    }
-
-    public TokenStore getTokenStore() {
-        return tokenStore;
-    }
-
-    public void setTokenStore(TokenStore tokenStore) {
-        this.tokenStore = tokenStore;
     }
 }

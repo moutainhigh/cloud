@@ -19,8 +19,7 @@ public class XssStringJsonSerializer extends JsonSerializer<String> {
     }
 
     @Override
-    public void serialize(String value, JsonGenerator jsonGenerator,
-                          SerializerProvider serializerProvider) throws IOException {
+    public void serialize(String value, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         if (value != null) {
             String encodedValue = StringUtils.stripXss(value).trim();
             jsonGenerator.writeString(encodedValue);

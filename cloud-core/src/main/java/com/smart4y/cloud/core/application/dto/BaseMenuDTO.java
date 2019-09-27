@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 
 /**
  * 系统资源-菜单信息
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-04-30.
  */
 @Data
 @NoArgsConstructor

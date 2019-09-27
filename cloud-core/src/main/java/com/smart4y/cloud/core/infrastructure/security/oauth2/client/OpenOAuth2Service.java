@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 
 /**
  * 第三方登录接口
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 public interface OpenOAuth2Service {
 

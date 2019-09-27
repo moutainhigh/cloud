@@ -1,16 +1,18 @@
 package com.smart4y.cloud.core.infrastructure.properties;
 
 import com.google.common.collect.Lists;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.List;
 
 /**
- * 自定义swagger配置
+ * 自定义Swagger配置
  *
- * @author LYD
- * @date 2018/7/29
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
+@Data
 @ConfigurationProperties(prefix = "opencloud.swagger2")
 public class OpenSwaggerProperties {
 
@@ -46,93 +48,8 @@ public class OpenSwaggerProperties {
      * 认证地址
      */
     private String userAuthorizationUri;
-
+    /**
+     * 忽略列表
+     */
     private List<String> ignores = Lists.newArrayList();
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public boolean getEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public List<String> getIgnores() {
-        return ignores;
-    }
-
-    public void setIgnores(List<String> ignores) {
-        this.ignores = ignores;
-    }
-
-    public String getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
-
-    public String getClientSecret() {
-        return clientSecret;
-    }
-
-    public void setClientSecret(String clientSecret) {
-        this.clientSecret = clientSecret;
-    }
-
-    public String getScope() {
-        return scope;
-    }
-
-    public void setScope(String scope) {
-        this.scope = scope;
-    }
-
-    public String getAccessTokenUri() {
-        return accessTokenUri;
-    }
-
-    public void setAccessTokenUri(String accessTokenUri) {
-        this.accessTokenUri = accessTokenUri;
-    }
-
-    public String getUserAuthorizationUri() {
-        return userAuthorizationUri;
-    }
-
-    public void setUserAuthorizationUri(String userAuthorizationUri) {
-        this.userAuthorizationUri = userAuthorizationUri;
-    }
-
-    @Override
-    public String toString() {
-        return "OpenSwaggerProperties{" +
-                "enabled=" + enabled +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", clientId='" + clientId + '\'' +
-                ", clientSecret='" + clientSecret + '\'' +
-                ", scope='" + scope + '\'' +
-                ", accessTokenUri='" + accessTokenUri + '\'' +
-                ", userAuthorizationUri='" + userAuthorizationUri + '\'' +
-                ", ignores=" + ignores +
-                '}';
-    }
 }

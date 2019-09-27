@@ -3,7 +3,8 @@ package com.smart4y.cloud.core.infrastructure.exception;
 /**
  * 签名异常
  *
- * @author admin
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 public class OpenSignatureException extends OpenException {
 

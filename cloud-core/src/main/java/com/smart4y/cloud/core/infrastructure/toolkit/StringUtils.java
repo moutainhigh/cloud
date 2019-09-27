@@ -15,11 +15,18 @@ import java.util.regex.Pattern;
 
 /**
  * 字符串工具类, 继承org.apache.commons.lang3.StringUtils类
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
     private static final char SEPARATOR = '_';
     private static final String CHARSET = "UTF-8";
+    /**
+     * 处理非法字符
+     */
+    private static List<Pattern> patterns = null;
 
     /**
      * 转换为字节数组
@@ -59,7 +66,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
         return BooleanUtils.toBoolean(val.toString()) || "1".equals(val.toString());
     }
-
 
     /**
      * 如果对象为空，则使用defaultVal值
@@ -230,7 +236,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return url;
     }
 
-
     /**
      * 驼峰转下划线
      * createTime > create_time
@@ -376,7 +381,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return Pattern.matches(regex, email);
     }
 
-
     /**
      * 检测域名
      *
@@ -464,12 +468,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
         return (luhmSum % 10 == 0) ? '0' : (char) ((10 - luhmSum % 10) + '0');
     }
-
-
-    /**
-     * 处理非法字符
-     */
-    private static List<Pattern> patterns = null;
 
     private static List<Object[]> getXssPatternList() {
         List<Object[]> ret = new ArrayList<Object[]>();

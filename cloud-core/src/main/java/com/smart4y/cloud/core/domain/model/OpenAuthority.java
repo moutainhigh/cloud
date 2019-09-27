@@ -10,7 +10,7 @@ import java.util.Date;
 /**
  * 自定义已授权权限标识
  *
- *  * @author Youtao
+ * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -34,14 +34,6 @@ public final class OpenAuthority implements GrantedAuthority {
      */
     private String owner;
 
-    @JsonProperty("isExpired")
-    public Boolean getIsExpired() {
-        if (expireTime != null && System.currentTimeMillis() > expireTime.getTime()) {
-            return true;
-        }
-        return false;
-    }
-
     public OpenAuthority() {
     }
 
@@ -63,8 +55,12 @@ public final class OpenAuthority implements GrantedAuthority {
         this.owner = owner;
     }
 
-    public void setAuthority(String authority) {
-        this.authority = authority;
+    @JsonProperty("isExpired")
+    public Boolean getIsExpired() {
+        if (expireTime != null && System.currentTimeMillis() > expireTime.getTime()) {
+            return true;
+        }
+        return false;
     }
 
     public Date getExpireTime() {
@@ -78,6 +74,10 @@ public final class OpenAuthority implements GrantedAuthority {
     @Override
     public String getAuthority() {
         return this.authority;
+    }
+
+    public void setAuthority(String authority) {
+        this.authority = authority;
     }
 
     @Override

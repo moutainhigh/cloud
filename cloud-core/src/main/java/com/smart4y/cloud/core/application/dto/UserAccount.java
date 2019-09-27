@@ -10,6 +10,12 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 用户账号
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-04-30.
+ */
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)

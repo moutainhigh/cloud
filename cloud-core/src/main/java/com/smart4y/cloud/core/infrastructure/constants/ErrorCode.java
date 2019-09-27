@@ -3,9 +3,9 @@ package com.smart4y.cloud.core.infrastructure.constants;
 /**
  * 自定义返回码
  *
- * @author admin
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
-
 public enum ErrorCode {
 
     /**

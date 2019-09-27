@@ -9,7 +9,7 @@ import com.smart4y.cloud.base.domain.model.BaseMenu;
 import com.smart4y.cloud.base.domain.repository.BaseMenuMapper;
 import com.smart4y.cloud.core.application.annotation.ApplicationService;
 import com.smart4y.cloud.core.domain.IPage;
-import com.smart4y.cloud.core.domain.Page;
+import com.smart4y.cloud.core.domain.model.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;

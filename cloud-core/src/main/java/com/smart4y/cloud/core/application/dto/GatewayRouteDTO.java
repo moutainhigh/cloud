@@ -8,6 +8,9 @@ import java.io.Serializable;
 
 /**
  * 网关动态路由
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-04-30.
  */
 @Data
 @NoArgsConstructor

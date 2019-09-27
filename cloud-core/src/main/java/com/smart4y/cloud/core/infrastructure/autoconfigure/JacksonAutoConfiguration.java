@@ -23,11 +23,49 @@ import java.util.TimeZone;
 import static com.smart4y.cloud.core.infrastructure.autoconfigure.JacksonAutoConfiguration.SerializerFeature.*;
 
 /**
+ * Jackson 序列化配置
+ *
  * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class JacksonAutoConfiguration {
+
+    @Bean
+    @Primary
+    @ConditionalOnMissingBean(ObjectMapper.class)
+    public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        // 排序key
+        objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+        //忽略空bean转json错误
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        //忽略在json字符串中存在，在java类中不存在字段，防止错误。
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        /*
+         * 序列换成json时,将所有的long变成string
+         * 因为js中得数字类型不能包含所有的java long值
+         */
+        SimpleModule simpleModule = new SimpleModule();
+        simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+        simpleModule.addSerializer(String.class, new XssStringJsonSerializer());
+        simpleModule.addDeserializer(String.class, new XssStringJsonDeserializer());
+        objectMapper.registerModule(simpleModule);
+        // 兼容fastJson 的一些空值处理
+        SerializerFeature[] features = new SerializerFeature[]{
+                WriteNullListAsEmpty,
+                WriteNullStringAsEmpty,
+                WriteNullNumberAsZero,
+                WriteNullBooleanAsFalse,
+                WriteNullMapAsEmpty
+        };
+        objectMapper.setSerializerFactory(objectMapper.getSerializerFactory().withSerializerModifier(new FastJsonSerializerFeatureCompatibleForJackson(features)));
+        log.info("ObjectMapper [{}]", objectMapper);
+        return objectMapper;
+    }
 
     public enum SerializerFeature {
         WriteNullListAsEmpty,
@@ -117,41 +155,5 @@ public class JacksonAutoConfiguration {
                 jgen.writeEndObject();
             }
         }
-    }
-
-    @Bean
-    @Primary
-    @ConditionalOnMissingBean(ObjectMapper.class)
-    public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-        objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-        // 排序key
-        objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
-        //忽略空bean转json错误
-        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        //忽略在json字符串中存在，在java类中不存在字段，防止错误。
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        /*
-         * 序列换成json时,将所有的long变成string
-         * 因为js中得数字类型不能包含所有的java long值
-         */
-        SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
-        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
-        simpleModule.addSerializer(String.class, new XssStringJsonSerializer());
-        simpleModule.addDeserializer(String.class, new XssStringJsonDeserializer());
-        objectMapper.registerModule(simpleModule);
-        // 兼容fastJson 的一些空值处理
-        SerializerFeature[] features = new SerializerFeature[]{
-                WriteNullListAsEmpty,
-                WriteNullStringAsEmpty,
-                WriteNullNumberAsZero,
-                WriteNullBooleanAsFalse,
-                WriteNullMapAsEmpty
-        };
-        objectMapper.setSerializerFactory(objectMapper.getSerializerFactory().withSerializerModifier(new FastJsonSerializerFeatureCompatibleForJackson(features)));
-        log.info("ObjectMapper [{}]", objectMapper);
-        return objectMapper;
     }
 }

@@ -10,6 +10,9 @@ import java.util.Map;
 
 /**
  * 自定义JwtAccessToken转换器
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 public class OpenJwtAccessTokenEnhancer extends JwtAccessTokenConverter {
 

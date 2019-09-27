@@ -14,7 +14,7 @@ import java.util.UUID;
 
 /**
  * 微服务之间feign调用请求头丢失的问题
- * 加入微服务之间传递的唯一标识,便于追踪
+ * 加入微服务之间传递的唯一标识，便于追踪。
  *
  * @author Youtao
  *         Created by youtao on 2019-09-05.

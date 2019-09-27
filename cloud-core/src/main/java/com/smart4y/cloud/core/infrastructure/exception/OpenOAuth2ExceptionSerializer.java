@@ -7,12 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Map;
 
 /**
- * 自定义oauth2异常提示
+ * 自定义Oauth2异常提示序列化
  *
- *  * @author Youtao
+ * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
 @Slf4j
@@ -27,7 +28,7 @@ public class OpenOAuth2ExceptionSerializer extends StdSerializer<OpenOAuth2Excep
         gen.writeStartObject();
         gen.writeStringField("message", ex.getMessage());
         gen.writeStringField("data", "");
-        gen.writeNumberField("timestamp", System.currentTimeMillis());
+        gen.writeNumberField("timestamp", Instant.now().toEpochMilli());
         if (ex.getAdditionalInformation() != null) {
             for (Map.Entry<String, String> entry : ex.getAdditionalInformation().entrySet()) {
                 String key = entry.getKey();

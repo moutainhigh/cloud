@@ -19,7 +19,13 @@ import java.util.List;
 @Accessors(chain = true)
 public class ResourceScannedEvent implements Serializable {
 
+    /**
+     * 服务名
+     */
     private String application;
+    /**
+     * 资源列表
+     */
     private List<Mapping> mappings = Collections.emptyList();
 
     @Data

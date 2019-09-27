@@ -24,6 +24,12 @@ import java.util.ResourceBundle;
 public class ResultEntity<T> implements Serializable {
 
     /**
+     * 错误信息配置
+     */
+    @JsonIgnore
+    @JSONField(serialize = false, deserialize = false)
+    private static ResourceBundle resourceBundle = ResourceBundle.getBundle("error");
+    /**
      * 响应编码
      */
     @Getter
@@ -66,12 +72,6 @@ public class ResultEntity<T> implements Serializable {
     @ApiModelProperty(value = "响应时间")
     private long timestamp = System.currentTimeMillis();
 
-    @JsonIgnore
-    @JSONField(serialize = false, deserialize = false)
-    public boolean isOk() {
-        return this.code == ErrorCode.OK.getCode();
-    }
-
     public ResultEntity() {
         super();
     }
@@ -104,19 +104,18 @@ public class ResultEntity<T> implements Serializable {
     }
 
     /**
-     * 错误信息配置
-     */
-    @JsonIgnore
-    @JSONField(serialize = false, deserialize = false)
-    private static ResourceBundle resourceBundle = ResourceBundle.getBundle("error");
-
-    /**
      * 提示信息国际化
      */
     @JsonIgnore
     @JSONField(serialize = false, deserialize = false)
     private static String i18n(String message, String defaultMessage) {
         return resourceBundle.containsKey(message) ? resourceBundle.getString(message) : defaultMessage;
+    }
+
+    @JsonIgnore
+    @JSONField(serialize = false, deserialize = false)
+    public boolean isOk() {
+        return this.code == ErrorCode.OK.getCode();
     }
 
     private ResultEntity<T> code(int code) {

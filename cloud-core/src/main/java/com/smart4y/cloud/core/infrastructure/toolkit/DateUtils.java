@@ -13,12 +13,10 @@ import java.util.Locale;
  * 日期工具类,
  * 继承org.apache.commons.lang.time.DateUtils类
  *
- *  * @author Youtao
+ * @author Youtao
  *         Created by youtao on 2019-09-05.
- * @version 2014-4-15
  */
 public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
-
 
     private static final long ONE_MILLIS = 1000;
     private static final long ONE_MINUTE = 60;
@@ -26,7 +24,6 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     private static final long ONE_DAY = 86400;
     private static final long ONE_MONTH = 2592000;
     private static final long ONE_YEAR = 31104000;
-
 
     private static String[] parsePatterns = {
             "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM",
@@ -445,13 +442,12 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return "";
     }
 
-
-    public static void main(String[] args) {
-        System.out.println(formatDate(getBeforeDay(new Date()), "yyyy-MM-dd"));
-        System.out.println(formatDate(getBeforeWeek(new Date()), "yyyy-MM-dd"));
-        System.out.println(formatDate(getBeforeYear(new Date()), "yyyy-MM-dd"));
-        System.out.println(formatDate(getAfterDay(new Date()), "yyyy-MM-dd"));
-        System.out.println(formatDate(getAfterWeek(new Date()), "yyyy-MM-dd"));
-        System.out.println(formatDate(getAfterYear(new Date()), "yyyy-MM-dd"));
-    }
+    //public static void main(String[] args) {
+    //    System.out.println(formatDate(getBeforeDay(new Date()), "yyyy-MM-dd"));
+    //    System.out.println(formatDate(getBeforeWeek(new Date()), "yyyy-MM-dd"));
+    //    System.out.println(formatDate(getBeforeYear(new Date()), "yyyy-MM-dd"));
+    //    System.out.println(formatDate(getAfterDay(new Date()), "yyyy-MM-dd"));
+    //    System.out.println(formatDate(getAfterWeek(new Date()), "yyyy-MM-dd"));
+    //    System.out.println(formatDate(getAfterYear(new Date()), "yyyy-MM-dd"));
+    //}
 }

@@ -1,12 +1,18 @@
 package com.smart4y.cloud.core.infrastructure.properties;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * 自定义ID生成器配置
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
+@Data
 @ConfigurationProperties(prefix = "opencloud.id")
 public class OpenIdGenProperties {
+
     /**
      * 工作ID (0~31)
      */
@@ -15,29 +21,4 @@ public class OpenIdGenProperties {
      * 数据中心ID (0~31)
      */
     private long centerId = 0;
-
-    public long getWorkId() {
-        return workId;
-    }
-
-    public void setWorkId(long workId) {
-        this.workId = workId;
-    }
-
-    public long getCenterId() {
-        return centerId;
-    }
-
-    public void setCenterId(long centerId) {
-        this.centerId = centerId;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("OpenIdGenProperties{");
-        sb.append("workId=").append(workId);
-        sb.append(", centerId=").append(centerId);
-        sb.append('}');
-        return sb.toString();
-    }
 }

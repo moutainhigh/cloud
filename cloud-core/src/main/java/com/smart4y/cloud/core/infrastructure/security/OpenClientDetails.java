@@ -14,9 +14,8 @@ import java.util.*;
 /**
  * 自定义客户端信息
  *
- * @author: liuyadu
- * @date: 2019/5/30 18:07
- * @description:
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @org.codehaus.jackson.map.annotate.JsonSerialize(include = org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion.NON_DEFAULT)
 @org.codehaus.jackson.annotate.JsonIgnoreProperties(ignoreUnknown = true)
@@ -147,10 +146,6 @@ public class OpenClientDetails implements ClientDetails, Serializable {
         this.clientId = clientId;
     }
 
-    public void setAutoApproveScopes(Collection<String> autoApproveScopes) {
-        this.autoApproveScopes = new HashSet<String>(autoApproveScopes);
-    }
-
     @Override
     public boolean isAutoApprove(String scope) {
         if (autoApproveScopes == null) {
@@ -168,6 +163,10 @@ public class OpenClientDetails implements ClientDetails, Serializable {
     @com.fasterxml.jackson.annotation.JsonIgnore
     public Set<String> getAutoApproveScopes() {
         return autoApproveScopes;
+    }
+
+    public void setAutoApproveScopes(Collection<String> autoApproveScopes) {
+        this.autoApproveScopes = new HashSet<String>(autoApproveScopes);
     }
 
     @Override
@@ -287,16 +286,16 @@ public class OpenClientDetails implements ClientDetails, Serializable {
         this.refreshTokenValiditySeconds = refreshTokenValiditySeconds;
     }
 
-    public void setAdditionalInformation(Map<String, ?> additionalInformation) {
-        this.additionalInformation = new LinkedHashMap<String, Object>(
-                additionalInformation);
-    }
-
     @org.codehaus.jackson.annotate.JsonAnySetter
     @com.fasterxml.jackson.annotation.JsonAnySetter
     @Override
     public Map<String, Object> getAdditionalInformation() {
         return Collections.unmodifiableMap(this.additionalInformation);
+    }
+
+    public void setAdditionalInformation(Map<String, ?> additionalInformation) {
+        this.additionalInformation = new LinkedHashMap<String, Object>(
+                additionalInformation);
     }
 
     @org.codehaus.jackson.annotate.JsonAnySetter

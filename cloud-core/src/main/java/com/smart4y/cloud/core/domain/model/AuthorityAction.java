@@ -8,9 +8,9 @@ import java.util.Objects;
 
 /**
  * 功能权限
- * <p>
- * * @author Youtao
- * Created by youtao on 2019-09-05.
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)

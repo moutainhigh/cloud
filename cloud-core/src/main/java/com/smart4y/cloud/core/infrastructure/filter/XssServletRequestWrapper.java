@@ -7,10 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 /**
- * xss 过滤
+ * XSS 过滤
  * body 缓存
  *
- *  * @author Youtao
+ * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
 public class XssServletRequestWrapper extends HttpServletRequestWrapper {

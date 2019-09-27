@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.domain;
+package com.smart4y.cloud.core.domain.model;
 
 /**
  * 本地线程数据

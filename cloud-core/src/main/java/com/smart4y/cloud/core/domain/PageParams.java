@@ -1,6 +1,7 @@
 package com.smart4y.cloud.core.domain;
 
 import com.google.common.collect.Maps;
+import com.smart4y.cloud.core.domain.model.Page;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.toolkit.BeanConvertUtils;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
@@ -10,6 +11,9 @@ import java.util.Map;
 
 /**
  * 分页参数
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-04-30.
  */
 public class PageParams extends Page implements Serializable {
 

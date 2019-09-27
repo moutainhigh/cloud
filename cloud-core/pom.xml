@@ -14,6 +14,7 @@
 
         <alibaba.fastjson.version>1.2.37</alibaba.fastjson.version>
         <apache.commons.collections4>4.3</apache.commons.collections4>
+        <apache.commons.text>1.8</apache.commons.text>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <libphonenumber.version>8.10.14</libphonenumber.version>
         <libphonenumber-carrier.version>1.110</libphonenumber-carrier.version>
@@ -181,6 +182,11 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>${apache.commons.text}</version>
         </dependency>
         <dependency>
             <groupId>commons-beanutils</groupId>

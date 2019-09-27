@@ -40,15 +40,15 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * 自定义注解扫描
- * <p>
- * * @author Youtao
- * Created by youtao on 2019-09-05.
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class ResourceAnnotationScan implements ApplicationListener<ApplicationReadyEvent> {
 
-    private AmqpTemplate amqpTemplate;
     private static final AntPathMatcher pathMatch = new AntPathMatcher();
+    private AmqpTemplate amqpTemplate;
 
     public ResourceAnnotationScan(AmqpTemplate amqpTemplate) {
         this.amqpTemplate = amqpTemplate;
