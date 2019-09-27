@@ -16,7 +16,8 @@ import org.springframework.stereotype.Service;
 /**
  * Security用户信息获取实现类
  *
- * @author liuyadu
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 @Service("userDetailService")

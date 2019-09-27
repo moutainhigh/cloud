@@ -19,7 +19,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * @author liuyadu
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Api(tags = "系统接口资源管理")
 @RestController

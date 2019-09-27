@@ -28,7 +28,8 @@ import java.util.stream.Collectors;
 /**
  * 系统用户信息
  *
- * @author liuyadu
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Api(tags = "系统用户管理")
 @RestController

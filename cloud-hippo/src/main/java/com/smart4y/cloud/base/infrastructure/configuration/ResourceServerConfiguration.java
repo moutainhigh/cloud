@@ -21,6 +21,9 @@ import javax.sql.DataSource;
 
 /**
  * Oauth2资源服务器配置
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Configuration
 @EnableResourceServer

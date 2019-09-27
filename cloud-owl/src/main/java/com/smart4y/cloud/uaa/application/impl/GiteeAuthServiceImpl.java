@@ -13,7 +13,10 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 /**
- * 微信oauth2认证实现类
+ * 微信Oauth2认证实现类
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 @Service("giteeService")

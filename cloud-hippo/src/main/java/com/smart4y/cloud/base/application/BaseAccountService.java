@@ -7,7 +7,8 @@ import com.smart4y.cloud.base.domain.model.BaseAccountLogs;
  * 系统用户登录账号管理
  * 支持多账号登陆
  *
- * @author liuyadu
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 public interface BaseAccountService {
 

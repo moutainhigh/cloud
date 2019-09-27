@@ -8,6 +8,10 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
+ */
 @Slf4j
 @Service
 public class ClientDetailsServiceImpl implements ClientDetailsService {

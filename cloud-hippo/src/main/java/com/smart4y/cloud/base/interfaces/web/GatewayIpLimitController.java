@@ -22,9 +22,8 @@ import java.util.stream.Collectors;
 /**
  * 网关IP访问控制
  *
- * @author: liuyadu
- * @date: 2019/3/12 15:12
- * @description:
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Api(tags = "网关IP访问控制")
 @RestController

@@ -20,9 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * @author: liuyadu
- * @date: 2019/5/24 13:31
- * @description:
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Api(tags = "当前登陆用户")
 @RestController

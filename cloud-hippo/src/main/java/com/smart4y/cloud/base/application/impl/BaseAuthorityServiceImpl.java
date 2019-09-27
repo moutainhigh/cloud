@@ -35,7 +35,8 @@ import java.util.stream.Collectors;
  * 系统权限管理
  * 对菜单、操作、API等进行权限分配操作
  *
- * @author liuyadu
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 @ApplicationService

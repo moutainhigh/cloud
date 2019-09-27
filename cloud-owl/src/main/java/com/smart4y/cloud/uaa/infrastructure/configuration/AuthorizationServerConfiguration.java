@@ -30,6 +30,9 @@ import javax.sql.DataSource;
 
 /**
  * 平台认证服务器配置
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Configuration
 @EnableAuthorizationServer

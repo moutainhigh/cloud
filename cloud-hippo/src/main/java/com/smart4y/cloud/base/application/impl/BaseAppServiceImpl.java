@@ -8,8 +8,8 @@ import com.smart4y.cloud.base.domain.model.BaseApp;
 import com.smart4y.cloud.base.domain.repository.BaseAppMapper;
 import com.smart4y.cloud.core.application.annotation.ApplicationService;
 import com.smart4y.cloud.core.domain.IPage;
-import com.smart4y.cloud.core.domain.model.Page;
 import com.smart4y.cloud.core.domain.PageParams;
+import com.smart4y.cloud.core.domain.model.Page;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
 import com.smart4y.cloud.core.infrastructure.security.OpenClientDetails;
@@ -34,9 +34,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author: liuyadu
- * @date: 2018/11/12 16:26
- * @description:
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 @ApplicationService

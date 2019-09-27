@@ -15,7 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * QQ互联oauth2认证实现类
+ * QQ互联Oauth2认证实现类
+ *
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @Slf4j
 @Service("qqAuthService")

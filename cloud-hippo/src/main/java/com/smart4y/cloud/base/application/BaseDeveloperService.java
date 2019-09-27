@@ -12,9 +12,8 @@ import java.util.List;
 /**
  * 系统用户资料管理
  *
- * @author: liuyadu
- * @date: 2018/10/24 16:38
- * @description:
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 public interface BaseDeveloperService {
 

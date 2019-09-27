@@ -22,6 +22,10 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
+ */
 @Api(tags = "用户认证中心")
 @RestController
 public class LoginController {

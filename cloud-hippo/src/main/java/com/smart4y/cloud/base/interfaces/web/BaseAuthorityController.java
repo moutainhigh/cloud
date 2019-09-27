@@ -28,9 +28,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author: liuyadu
- * @date: 2018/11/26 18:20
- * @description:
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 @RestController
 @Api(tags = "系统权限管理")

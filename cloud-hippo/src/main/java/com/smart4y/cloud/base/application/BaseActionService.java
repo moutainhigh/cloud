@@ -9,7 +9,8 @@ import java.util.List;
 /**
  * 操作资源管理
  *
- * @author liuyadu
+ * @author Youtao
+ *         Created by youtao on 2019-09-05.
  */
 public interface BaseActionService {
 
