@@ -18,7 +18,7 @@
         AND
             a.status = 1
     </select>
-    <select id="selectAuthorityByRole" resultType="com.smart4y.cloud.core.domain.model.OpenAuthority">
+    <select id="selectAuthorityByRole" resultType="com.smart4y.cloud.core.domain.OpenAuthority">
         SELECT
             a.authority_id,
             a.authority,

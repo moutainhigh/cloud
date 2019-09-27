@@ -85,7 +85,7 @@
         </where>
         ORDER BY api.created_date DESC
     </select>
-    <select id="selectAuthorityAll" resultType="com.smart4y.cloud.core.domain.model.OpenAuthority">
+    <select id="selectAuthorityAll" resultType="com.smart4y.cloud.core.domain.OpenAuthority">
         SELECT
         authority_id,
         authority,

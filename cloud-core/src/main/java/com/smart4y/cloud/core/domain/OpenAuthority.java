@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.domain.model;
+package com.smart4y.cloud.core.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

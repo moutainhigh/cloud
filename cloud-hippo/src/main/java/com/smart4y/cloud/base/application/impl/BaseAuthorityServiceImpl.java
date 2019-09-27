@@ -10,7 +10,7 @@ import com.smart4y.cloud.core.application.dto.AuthorityApiDTO;
 import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
 import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
 import com.smart4y.cloud.core.application.dto.BaseMenuDTO;
-import com.smart4y.cloud.core.domain.model.OpenAuthority;
+import com.smart4y.cloud.core.domain.OpenAuthority;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;

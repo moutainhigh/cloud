@@ -1,7 +1,7 @@
 package com.smart4y.cloud.core.application.dto;
 
 import com.google.common.collect.Lists;
-import com.smart4y.cloud.core.domain.model.OpenAuthority;
+import com.smart4y.cloud.core.domain.OpenAuthority;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;

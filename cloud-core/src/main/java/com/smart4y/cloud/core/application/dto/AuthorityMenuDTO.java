@@ -1,7 +1,7 @@
 package com.smart4y.cloud.core.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.smart4y.cloud.core.domain.model.AuthorityAction;
+import com.smart4y.cloud.core.domain.AuthorityAction;
 import lombok.Data;
 
 import java.io.Serializable;

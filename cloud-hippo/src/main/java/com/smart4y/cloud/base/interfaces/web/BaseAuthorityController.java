@@ -8,7 +8,7 @@ import com.smart4y.cloud.core.application.dto.AuthorityApiDTO;
 import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
 import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
 import com.smart4y.cloud.core.domain.ResultEntity;
-import com.smart4y.cloud.core.domain.model.OpenAuthority;
+import com.smart4y.cloud.core.domain.OpenAuthority;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import io.swagger.annotations.Api;

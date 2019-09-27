@@ -11,7 +11,7 @@ import com.smart4y.cloud.base.domain.repository.GatewayRateLimitMapper;
 import com.smart4y.cloud.core.application.annotation.ApplicationService;
 import com.smart4y.cloud.core.application.dto.RateLimitApiDTO;
 import com.smart4y.cloud.core.domain.IPage;
-import com.smart4y.cloud.core.domain.model.Page;
+import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
 import lombok.extern.slf4j.Slf4j;

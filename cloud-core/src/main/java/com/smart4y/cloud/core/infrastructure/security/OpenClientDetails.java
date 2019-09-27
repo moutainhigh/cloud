@@ -1,6 +1,6 @@
 package com.smart4y.cloud.core.infrastructure.security;
 
-import com.smart4y.cloud.core.domain.model.OpenAuthority;
+import com.smart4y.cloud.core.domain.OpenAuthority;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.provider.ClientDetails;

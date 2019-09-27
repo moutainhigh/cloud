@@ -1,6 +1,5 @@
-package com.smart4y.cloud.core.domain.model;
+package com.smart4y.cloud.core.domain;
 
-import com.smart4y.cloud.core.domain.IPage;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.Collections;
