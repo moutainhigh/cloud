@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.application;
 
+import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.BaseAction;
-import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
 
 import java.util.List;
@@ -16,17 +16,11 @@ public interface BaseActionService {
 
     /**
      * 分页查询
-     *
-     * @param pageParams
-     * @return
      */
-    IPage<BaseAction> findListPage(PageParams pageParams);
+    PageInfo<BaseAction> findListPage(PageParams pageParams);
 
     /**
      * 根据主键获取操作
-     *
-     * @param actionId
-     * @return
      */
     BaseAction getAction(long actionId);
 

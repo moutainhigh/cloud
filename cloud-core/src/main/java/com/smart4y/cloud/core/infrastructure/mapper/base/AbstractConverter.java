@@ -1,7 +1,7 @@
 package com.smart4y.cloud.core.infrastructure.mapper.base;
 
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.BeanUtils;
+import com.smart4y.cloud.core.domain.Page;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,41 +14,42 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractConverter<Source, Target> {
 
-    public Target convert(Source source) {
-        return convert(source, Collections.emptyMap());
-    }
-
     public abstract Target convert(Source source, Map<String, Object> parameters);
 
-    public List<Target> convertToList(Collection<Source> sources) {
-        return convertToList(sources, Collections.emptyMap());
+    public Target convert(Source source) {
+        return this.convert(source, Collections.emptyMap());
     }
 
-    public final List<Target> convertToList(Collection<Source> sources, Map<String, Object> parameters) {
+    public List<Target> convertList(Collection<Source> sources) {
+        return this.convertList(sources, Collections.emptyMap());
+    }
+
+    public final List<Target> convertList(Collection<Source> sources, Map<String, Object> parameters) {
         if (sources == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<Target> targets = new ArrayList<>(sources.size());
         for (Source source : sources) {
-            targets.add(convert(source, parameters));
+            targets.add(this.convert(source, parameters));
         }
         return targets;
     }
 
-    public PageInfo<Target> convertToPage(PageInfo<Source> sourcePage) {
-        return convertToPage(sourcePage, Collections.emptyMap());
+    public Page<Target> convertPage(PageInfo<Source> sources) {
+        return this.convertPage(sources, Collections.emptyMap());
     }
 
-    public PageInfo<Target> convertToPage(PageInfo<Source> sourcePage, Map<String, Object> parameters) {
-        PageInfo<Target> targetPage = new PageInfo<>();
-        BeanUtils.copyProperties(sourcePage, targetPage);
-        targetPage.setList(null);
-
-        List<Target> targets = sourcePage.getList().stream()
-                .map(x -> convert(x, parameters))
+    public Page<Target> convertPage(PageInfo<Source> sources, Map<String, Object> parameters) {
+        if (null == sources) {
+            return new Page<>();
+        }
+        int total = (int) sources.getTotal();
+        List<Target> targets = sources.getList().stream()
+                .map(s -> this.convert(s, parameters))
                 .collect(Collectors.toList());
-        targetPage.setList(targets);
-
-        return targetPage;
+        Page<Target> page = new Page<>();
+        page.setTotal(total);
+        page.setRecords(targets);
+        return page;
     }
 }

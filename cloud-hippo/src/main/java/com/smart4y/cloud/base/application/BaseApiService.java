@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.application;
 
+import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.BaseApi;
-import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public interface BaseApiService {
      * @param pageParams
      * @return
      */
-    IPage<BaseApi> findListPage(PageParams pageParams);
+    PageInfo<BaseApi> findListPage(PageParams pageParams);
 
     /**
      * 查询列表

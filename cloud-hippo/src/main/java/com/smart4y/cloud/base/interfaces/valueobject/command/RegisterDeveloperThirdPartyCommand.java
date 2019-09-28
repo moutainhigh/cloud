@@ -1,4 +1,4 @@
-package com.smart4y.cloud.base.interfaces.command;
+package com.smart4y.cloud.base.interfaces.valueobject.command;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * 注册系统登录账号命令
+ * 注册第三方系统登录账号命令
  *
  * @author Youtao
  *         Created by youtao on 2019/9/25.
@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
-public class RegisterAdminThirdPartyCommand implements Serializable {
+public class RegisterDeveloperThirdPartyCommand implements Serializable {
 
     /**
      * 登陆账号

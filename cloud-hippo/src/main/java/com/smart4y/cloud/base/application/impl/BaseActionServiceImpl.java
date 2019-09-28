@@ -7,8 +7,6 @@ import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.domain.model.BaseAction;
 import com.smart4y.cloud.base.domain.repository.BaseActionMapper;
 import com.smart4y.cloud.core.application.annotation.ApplicationService;
-import com.smart4y.cloud.core.domain.IPage;
-import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;
@@ -34,13 +32,14 @@ public class BaseActionServiceImpl implements BaseActionService {
 
     @Value("${spring.application.name}")
     private String DEFAULT_SERVICE_ID;
+
     @Autowired
     private BaseActionMapper baseActionMapper;
     @Autowired
     private BaseAuthorityService baseAuthorityService;
 
     @Override
-    public IPage<BaseAction> findListPage(PageParams pageParams) {
+    public PageInfo<BaseAction> findListPage(PageParams pageParams) {
         BaseAction query = pageParams.mapToObject(BaseAction.class);
 
         Weekend<BaseAction> queryWrapper = Weekend.of(BaseAction.class);
@@ -55,12 +54,7 @@ public class BaseActionServiceImpl implements BaseActionService {
 
         PageHelper.startPage(pageParams.getPage(), pageParams.getLimit(), Boolean.TRUE);
         List<BaseAction> list = baseActionMapper.selectByExample(queryWrapper);
-        PageInfo<BaseAction> pageInfo = new PageInfo<>(list);
-        IPage<BaseAction> page = new Page<>();
-        page.setRecords(pageInfo.getList());
-        page.setTotal(pageInfo.getTotal());
-
-        return page;
+        return new PageInfo<>(list);
     }
 
     @Override

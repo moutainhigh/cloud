@@ -7,9 +7,7 @@ import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.domain.model.BaseApp;
 import com.smart4y.cloud.base.domain.repository.BaseAppMapper;
 import com.smart4y.cloud.core.application.annotation.ApplicationService;
-import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
-import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
 import com.smart4y.cloud.core.infrastructure.security.OpenClientDetails;
@@ -58,7 +56,7 @@ public class BaseAppServiceImpl implements BaseAppService {
     private JdbcClientDetailsService jdbcClientDetailsService;
 
     @Override
-    public IPage<BaseApp> findListPage(PageParams pageParams) {
+    public PageInfo<BaseApp> findListPage(PageParams pageParams) {
         BaseApp query = pageParams.mapToObject(BaseApp.class);
         Weekend<BaseApp> wrapper = Weekend.of(BaseApp.class);
         WeekendCriteria<BaseApp, Object> criteria = wrapper.weekendCriteria();
@@ -83,10 +81,7 @@ public class BaseAppServiceImpl implements BaseAppService {
         PageHelper.startPage(pageParams.getPage(), pageParams.getLimit(), Boolean.TRUE);
         List<BaseApp> list = baseAppMapper.selectByExample(wrapper);
         PageInfo<BaseApp> pageInfo = new PageInfo<>(list);
-        IPage<BaseApp> page = new Page<>();
-        page.setRecords(pageInfo.getList());
-        page.setTotal(pageInfo.getTotal());
-        return page;
+        return pageInfo;
     }
 
     @Cacheable(value = "apps", key = "#appId")

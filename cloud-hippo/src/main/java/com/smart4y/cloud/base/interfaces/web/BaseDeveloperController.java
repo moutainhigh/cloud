@@ -2,8 +2,8 @@ package com.smart4y.cloud.base.interfaces.web;
 
 import com.smart4y.cloud.base.application.BaseDeveloperService;
 import com.smart4y.cloud.base.domain.model.BaseDeveloper;
-import com.smart4y.cloud.base.interfaces.command.AddDeveloperUserCommand;
-import com.smart4y.cloud.base.interfaces.command.RegisterDeveloperThirdPartyCommand;
+import com.smart4y.cloud.base.interfaces.valueobject.command.AddDeveloperUserCommand;
+import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterDeveloperThirdPartyCommand;
 import com.smart4y.cloud.core.application.dto.UserAccount;
 import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;

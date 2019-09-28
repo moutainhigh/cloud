@@ -1,8 +1,11 @@
 package com.smart4y.cloud.base.interfaces.web;
 
+import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.BaseApiService;
 import com.smart4y.cloud.base.domain.model.BaseApi;
-import com.smart4y.cloud.core.domain.IPage;
+import com.smart4y.cloud.base.interfaces.converter.BaseApiConverter;
+import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseApiVO;
+import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
@@ -27,6 +30,8 @@ import java.util.stream.Collectors;
 public class BaseApiController {
 
     @Autowired
+    private BaseApiConverter baseApiConverter;
+    @Autowired
     private BaseApiService apiService;
     @Autowired
     private OpenRestTemplate openRestTemplate;
@@ -36,8 +41,10 @@ public class BaseApiController {
      */
     @ApiOperation(value = "获取分页接口列表", notes = "获取分页接口列表")
     @GetMapping(value = "/api")
-    public ResultEntity<IPage<BaseApi>> getApiList(@RequestParam(required = false) Map map) {
-        return ResultEntity.ok(apiService.findListPage(new PageParams(map)));
+    public ResultEntity<Page<BaseApiVO>> getApiList(@RequestParam(required = false) Map map) {
+        PageInfo<BaseApi> listPage = apiService.findListPage(new PageParams(map));
+        Page<BaseApiVO> result = baseApiConverter.convertPage(listPage);
+        return ResultEntity.ok(result);
     }
 
     /**
@@ -45,23 +52,24 @@ public class BaseApiController {
      */
     @ApiOperation(value = "获取所有接口列表", notes = "获取所有接口列表")
     @GetMapping("/api/all")
-    public ResultEntity<List<BaseApi>> getApiAllList(String serviceId) {
-        return ResultEntity.ok(apiService.findAllList(serviceId));
+    public ResultEntity<List<BaseApiVO>> getApiAllList(String serviceId) {
+        List<BaseApi> allList = apiService.findAllList(serviceId);
+        List<BaseApiVO> result = baseApiConverter.convertList(allList);
+        return ResultEntity.ok(result);
     }
 
     /**
      * 获取接口资源
-     *
-     * @param apiId
-     * @return
      */
     @ApiOperation(value = "获取接口资源", notes = "获取接口资源")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "apiId", required = true, value = "ApiId", paramType = "path"),
     })
     @GetMapping("/api/{apiId}/info")
-    public ResultEntity<BaseApi> getApi(@PathVariable("apiId") Long apiId) {
-        return ResultEntity.ok(apiService.getApi(apiId));
+    public ResultEntity<BaseApiVO> getApi(@PathVariable("apiId") Long apiId) {
+        BaseApi api = apiService.getApi(apiId);
+        BaseApiVO result = baseApiConverter.convert(api);
+        return ResultEntity.ok(result);
     }
 
     /**

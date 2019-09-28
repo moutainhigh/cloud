@@ -13,7 +13,7 @@ import java.util.List;
  * @author Youtao
  *         Created by youtao on 2019-04-30.
  */
-@ApiModel(value = "分页参数")
+@ApiModel(value = "Page", description = "分页参数")
 public class Page<T> implements IPage<T> {
 
     /**

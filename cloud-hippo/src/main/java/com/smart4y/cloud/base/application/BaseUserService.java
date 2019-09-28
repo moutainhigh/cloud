@@ -1,8 +1,8 @@
 package com.smart4y.cloud.base.application;
 
 import com.smart4y.cloud.base.domain.model.BaseUser;
-import com.smart4y.cloud.base.interfaces.command.AddAdminUserCommand;
-import com.smart4y.cloud.base.interfaces.command.RegisterAdminThirdPartyCommand;
+import com.smart4y.cloud.base.interfaces.valueobject.command.AddAdminUserCommand;
+import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterAdminThirdPartyCommand;
 import com.smart4y.cloud.core.application.dto.UserAccount;
 import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;

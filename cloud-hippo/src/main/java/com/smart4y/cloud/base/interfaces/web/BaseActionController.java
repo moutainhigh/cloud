@@ -1,8 +1,11 @@
 package com.smart4y.cloud.base.interfaces.web;
 
+import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.BaseActionService;
+import com.smart4y.cloud.base.interfaces.converter.BaseActionConverter;
 import com.smart4y.cloud.base.domain.model.BaseAction;
-import com.smart4y.cloud.core.domain.IPage;
+import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseActionVO;
+import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
@@ -24,6 +27,8 @@ import java.util.Map;
 public class BaseActionController {
 
     @Autowired
+    private BaseActionConverter baseActionConverter;
+    @Autowired
     private BaseActionService baseActionService;
     @Autowired
     private OpenRestTemplate openRestTemplate;
@@ -33,28 +38,26 @@ public class BaseActionController {
      */
     @GetMapping("/action")
     @ApiOperation(value = "获取分页功能按钮列表", notes = "获取分页功能按钮列表")
-    public ResultEntity<IPage<BaseAction>> findActionListPage(
+    public ResultEntity<Page<BaseActionVO>> findActionListPage(
             @RequestParam(required = false) Map map) {
-        IPage<BaseAction> listPage = baseActionService.findListPage(new PageParams(map));
-        return ResultEntity.ok(listPage);
+        PageInfo<BaseAction> listPage = baseActionService.findListPage(new PageParams(map));
+        Page<BaseActionVO> page = baseActionConverter.convertPage(listPage);
+        return ResultEntity.ok(page);
     }
-
 
     /**
      * 获取功能按钮详情
-     *
-     * @param actionId
-     * @return
      */
     @ApiOperation(value = "获取功能按钮详情", notes = "获取功能按钮详情")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "actionId", required = true, value = "功能按钮Id", paramType = "path"),
     })
     @GetMapping("/action/{actionId}/info")
-    public ResultEntity<BaseAction> getAction(
+    public ResultEntity<BaseActionVO> getAction(
             @PathVariable("actionId") Long actionId) {
         BaseAction action = baseActionService.getAction(actionId);
-        return ResultEntity.ok(action);
+        BaseActionVO vo = baseActionConverter.convert(action);
+        return ResultEntity.ok(vo);
     }
 
     /**

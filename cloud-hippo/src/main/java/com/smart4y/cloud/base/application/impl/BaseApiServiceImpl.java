@@ -7,8 +7,6 @@ import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.domain.model.BaseApi;
 import com.smart4y.cloud.base.domain.repository.BaseApiMapper;
 import com.smart4y.cloud.core.application.annotation.ApplicationService;
-import com.smart4y.cloud.core.domain.IPage;
-import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;
@@ -36,7 +34,7 @@ public class BaseApiServiceImpl implements BaseApiService {
     private BaseAuthorityService baseAuthorityService;
 
     @Override
-    public IPage<BaseApi> findListPage(PageParams pageParams) {
+    public PageInfo<BaseApi> findListPage(PageParams pageParams) {
         BaseApi query = pageParams.mapToObject(BaseApi.class);
         Weekend<BaseApi> queryWrapper = Weekend.of(BaseApi.class);
         WeekendCriteria<BaseApi, Object> criteria = queryWrapper.weekendCriteria();
@@ -62,11 +60,7 @@ public class BaseApiServiceImpl implements BaseApiService {
 
         PageHelper.startPage(pageParams.getPage(), pageParams.getLimit(), Boolean.TRUE);
         List<BaseApi> list = baseApiMapper.selectByExample(queryWrapper);
-        PageInfo<BaseApi> pageInfo = new PageInfo<>(list);
-        IPage<BaseApi> page = new Page<>();
-        page.setRecords(pageInfo.getList());
-        page.setTotal(pageInfo.getTotal());
-        return page;
+        return new PageInfo<>(list);
     }
 
     @Override
