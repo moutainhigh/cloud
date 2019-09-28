@@ -4,13 +4,15 @@ import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.application.BaseUserService;
 import com.smart4y.cloud.base.domain.model.BaseAuthorityAction;
 import com.smart4y.cloud.base.domain.model.BaseUser;
-import com.smart4y.cloud.core.application.dto.AuthorityApiDTO;
-import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
-import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
-import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.base.interfaces.converter.BaseAuthorityActionConverter;
+import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseAuthorityActionVO;
 import com.smart4y.cloud.core.domain.OpenAuthority;
+import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
+import com.smart4y.cloud.core.interfaces.AuthorityApiDTO;
+import com.smart4y.cloud.core.interfaces.AuthorityMenuDTO;
+import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -36,6 +38,8 @@ import java.util.stream.Collectors;
 public class BaseAuthorityController {
 
     @Autowired
+    private BaseAuthorityActionConverter baseAuthorityActionConverter;
+    @Autowired
     private BaseAuthorityService baseAuthorityService;
     @Autowired
     private BaseUserService baseUserService;
@@ -44,8 +48,6 @@ public class BaseAuthorityController {
 
     /**
      * 获取所有访问权限列表
-     *
-     * @return
      */
     @ApiOperation(value = "获取所有访问权限列表", notes = "获取所有访问权限列表")
     @GetMapping("/authority/access")
@@ -56,8 +58,6 @@ public class BaseAuthorityController {
 
     /**
      * 获取权限列表
-     *
-     * @return
      */
     @ApiOperation(value = "获取接口权限列表", notes = "获取接口权限列表")
     @GetMapping("/authority/api")
@@ -68,11 +68,8 @@ public class BaseAuthorityController {
         return ResultEntity.ok(result);
     }
 
-
     /**
      * 获取菜单权限列表
-     *
-     * @return
      */
     @ApiOperation(value = "获取菜单权限列表", notes = "获取菜单权限列表")
     @GetMapping("/authority/menu")
@@ -83,28 +80,21 @@ public class BaseAuthorityController {
 
     /**
      * 获取功能权限列表
-     *
-     * @param actionId
-     * @return
      */
     @ApiOperation(value = "获取功能权限列表", notes = "获取功能权限列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "actionId", required = true, value = "功能按钮ID", paramType = "form")
     })
     @GetMapping("/authority/action")
-    public ResultEntity<List<BaseAuthorityAction>> findAuthorityAction(
-            @RequestParam(value = "actionId") Long actionId
-    ) {
+    public ResultEntity<List<BaseAuthorityActionVO>> findAuthorityAction(
+            @RequestParam(value = "actionId") Long actionId) {
         List<BaseAuthorityAction> list = baseAuthorityService.findAuthorityAction(actionId);
-        return ResultEntity.ok(list);
+        List<BaseAuthorityActionVO> result = baseAuthorityActionConverter.convertList(list);
+        return ResultEntity.ok(result);
     }
-
 
     /**
      * 获取角色已分配权限
-     *
-     * @param roleId 角色ID
-     * @return
      */
     @ApiOperation(value = "获取角色已分配权限", notes = "获取角色已分配权限")
     @ApiImplicitParams({
@@ -116,12 +106,10 @@ public class BaseAuthorityController {
         return ResultEntity.ok(result);
     }
 
-
     /**
      * 获取用户已分配权限
      *
      * @param userId 用户ID
-     * @return
      */
     @ApiOperation(value = "获取用户已分配权限", notes = "获取用户已分配权限")
     @ApiImplicitParams({
@@ -217,7 +205,6 @@ public class BaseAuthorityController {
      * @param appId        应用Id
      * @param expireTime   授权过期时间
      * @param authorityIds 权限ID.多个以,隔开
-     * @return
      */
     @ApiOperation(value = "分配应用权限", notes = "分配应用权限")
     @ApiImplicitParams({
@@ -240,10 +227,6 @@ public class BaseAuthorityController {
 
     /**
      * 功能按钮绑定API
-     *
-     * @param actionId
-     * @param authorityIds
-     * @return
      */
     @ApiOperation(value = "功能按钮授权", notes = "功能按钮授权")
     @ApiImplicitParams({

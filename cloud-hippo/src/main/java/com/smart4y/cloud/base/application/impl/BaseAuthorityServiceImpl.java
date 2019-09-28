@@ -6,10 +6,6 @@ import com.smart4y.cloud.base.application.*;
 import com.smart4y.cloud.base.domain.model.*;
 import com.smart4y.cloud.base.domain.repository.*;
 import com.smart4y.cloud.core.application.annotation.ApplicationService;
-import com.smart4y.cloud.core.application.dto.AuthorityApiDTO;
-import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
-import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
-import com.smart4y.cloud.core.application.dto.BaseMenuDTO;
 import com.smart4y.cloud.core.domain.OpenAuthority;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;
@@ -18,6 +14,9 @@ import com.smart4y.cloud.core.infrastructure.exception.OpenException;
 import com.smart4y.cloud.core.infrastructure.security.OpenHelper;
 import com.smart4y.cloud.core.infrastructure.security.OpenSecurityConstants;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
+import com.smart4y.cloud.core.interfaces.AuthorityApiDTO;
+import com.smart4y.cloud.core.interfaces.AuthorityMenuDTO;
+import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,7 +95,7 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
         Map<String, Object> map = Maps.newHashMap();
         map.put("status", status);
         List<AuthorityMenuDTO> authorities = baseAuthorityCustomMapper.selectAuthorityMenu(map);
-        authorities.sort(Comparator.comparing(BaseMenuDTO::getPriority));
+        authorities.sort(Comparator.comparing(AuthorityMenuDTO::getPriority));
         return authorities;
 
     }
@@ -452,7 +451,7 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
         authorities.clear();
         authorities.addAll(h);
         //根据优先级从小到大排序
-        authorities.sort(Comparator.comparing(BaseMenuDTO::getPriority));
+        authorities.sort(Comparator.comparing(AuthorityMenuDTO::getPriority));
         return authorities;
     }
 

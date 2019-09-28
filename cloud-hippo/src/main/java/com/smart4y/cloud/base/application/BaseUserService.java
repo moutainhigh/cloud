@@ -3,7 +3,7 @@ package com.smart4y.cloud.base.application;
 import com.smart4y.cloud.base.domain.model.BaseUser;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddAdminUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterAdminThirdPartyCommand;
-import com.smart4y.cloud.core.application.dto.UserAccount;
+import com.smart4y.cloud.core.interfaces.UserAccountVO;
 import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
 
@@ -73,7 +73,7 @@ public interface BaseUserService {
      * @param userId
      * @return
      */
-    UserAccount getUserAccount(long userId);
+    UserAccountVO getUserAccount(long userId);
 
     /**
      * 依据登录名查询系统用户信息
@@ -91,5 +91,5 @@ public interface BaseUserService {
      * @param account 登陆账号
      * @return
      */
-    UserAccount login(String account);
+    UserAccountVO login(String account);
 }

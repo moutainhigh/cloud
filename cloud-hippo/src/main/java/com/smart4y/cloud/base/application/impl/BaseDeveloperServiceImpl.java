@@ -11,14 +11,12 @@ import com.smart4y.cloud.base.domain.repository.BaseDeveloperMapper;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddDeveloperUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterDeveloperThirdPartyCommand;
 import com.smart4y.cloud.core.application.annotation.ApplicationService;
-import com.smart4y.cloud.core.application.dto.UserAccount;
-import com.smart4y.cloud.core.domain.IPage;
-import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
 import com.smart4y.cloud.core.infrastructure.toolkit.WebUtils;
+import com.smart4y.cloud.core.interfaces.UserAccountVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +45,7 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
     private BaseAccountService baseAccountService;
 
     @Override
-    public IPage<BaseDeveloper> findListPage(PageParams pageParams) {
+    public PageInfo<BaseDeveloper> findListPage(PageParams pageParams) {
         BaseDeveloper query = pageParams.mapToObject(BaseDeveloper.class);
 
         Weekend<BaseDeveloper> queryWrapper = Weekend.of(BaseDeveloper.class);
@@ -68,11 +66,7 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
 
         PageHelper.startPage(pageParams.getPage(), pageParams.getLimit(), Boolean.TRUE);
         List<BaseDeveloper> list = baseDeveloperMapper.selectByExample(queryWrapper);
-        PageInfo<BaseDeveloper> pageInfo = new PageInfo<>(list);
-        IPage<BaseDeveloper> page = new Page<>();
-        page.setRecords(pageInfo.getList());
-        page.setTotal(pageInfo.getTotal());
-        return page;
+        return new PageInfo<>(list);
     }
 
     @Override
@@ -162,7 +156,7 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
     }
 
     @Override
-    public UserAccount login(String account) {
+    public UserAccountVO login(String account) {
         if (StringUtils.isBlank(account)) {
             return null;
         }
@@ -206,7 +200,7 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
             }
             // 用户权限信息
             // 复制账号信息
-            UserAccount userAccount = new UserAccount();
+            UserAccountVO userAccount = new UserAccountVO();
             BeanUtils.copyProperties(userAccount, baseAccount);
             return userAccount;
         }

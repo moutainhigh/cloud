@@ -1,7 +1,7 @@
 package com.smart4y.cloud.gateway.infrastructure.feign;
 
-import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
-import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
+import com.smart4y.cloud.core.interfaces.AuthorityMenuDTO;
+import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import org.springframework.cloud.openfeign.FeignClient;

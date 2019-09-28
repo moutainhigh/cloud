@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.smart4y.cloud.base.domain.repository.BaseAuthorityCustomMapper">
-    <select id="selectAllAuthorityResource" resultType="com.smart4y.cloud.core.application.dto.AuthorityResourceDTO">
+    <select id="selectAllAuthorityResource" resultType="com.smart4y.cloud.core.interfaces.AuthorityResourceDTO">
         SELECT
             a.authority_id,
             a.authority,
@@ -51,7 +51,7 @@
             WHERE
                 `action`.`status` = 1
     </select>
-    <select id="selectAuthorityMenu" resultType="com.smart4y.cloud.core.application.dto.AuthorityMenuDTO">
+    <select id="selectAuthorityMenu" resultType="com.smart4y.cloud.core.interfaces.AuthorityMenuDTO">
         SELECT
         a.authority_id,
         a.authority,
@@ -65,7 +65,7 @@
             </if>
         </where>
     </select>
-    <select id="selectAuthorityApi" resultType="com.smart4y.cloud.core.application.dto.AuthorityApiDTO">
+    <select id="selectAuthorityApi" resultType="com.smart4y.cloud.core.interfaces.AuthorityApiDTO">
         SELECT
         a.authority_id,
         a.authority,

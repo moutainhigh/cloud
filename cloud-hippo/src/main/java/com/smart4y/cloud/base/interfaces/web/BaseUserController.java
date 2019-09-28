@@ -6,7 +6,7 @@ import com.smart4y.cloud.base.domain.model.BaseRole;
 import com.smart4y.cloud.base.domain.model.BaseUser;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddAdminUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterAdminThirdPartyCommand;
-import com.smart4y.cloud.core.application.dto.UserAccount;
+import com.smart4y.cloud.core.interfaces.UserAccountVO;
 import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.domain.ResultEntity;
@@ -51,8 +51,8 @@ public class BaseUserController {
             @ApiImplicitParam(name = "username", required = true, value = "登录名", paramType = "path"),
     })
     @PostMapping("/user/login")
-    public ResultEntity<UserAccount> userLogin(@RequestParam(value = "username") String username) {
-        UserAccount account = baseUserService.login(username);
+    public ResultEntity<UserAccountVO> userLogin(@RequestParam(value = "username") String username) {
+        UserAccountVO account = baseUserService.login(username);
         return ResultEntity.ok(account);
     }
 

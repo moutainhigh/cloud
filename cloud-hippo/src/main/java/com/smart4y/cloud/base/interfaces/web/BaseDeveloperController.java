@@ -1,13 +1,16 @@
 package com.smart4y.cloud.base.interfaces.web;
 
+import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.BaseDeveloperService;
 import com.smart4y.cloud.base.domain.model.BaseDeveloper;
+import com.smart4y.cloud.base.interfaces.converter.BaseDeveloperConverter;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddDeveloperUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterDeveloperThirdPartyCommand;
-import com.smart4y.cloud.core.application.dto.UserAccount;
-import com.smart4y.cloud.core.domain.IPage;
+import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseDeveloperVO;
+import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.core.interfaces.UserAccountVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -32,60 +35,47 @@ import java.util.Map;
 public class BaseDeveloperController {
 
     @Autowired
+    private BaseDeveloperConverter baseDeveloperConverter;
+    @Autowired
     private BaseDeveloperService baseDeveloperService;
 
     /**
      * 获取登录账号信息
-     *
-     * @param username 登录名
-     * @return
      */
     @ApiOperation(value = "获取账号登录信息", notes = "仅限系统内部调用")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", required = true, value = "登录名", paramType = "path"),
     })
     @PostMapping("/developer/login")
-    public ResultEntity<UserAccount> developerLogin(@RequestParam(value = "username") String username) {
-        UserAccount account = baseDeveloperService.login(username);
+    public ResultEntity<UserAccountVO> developerLogin(@RequestParam(value = "username") String username) {
+        UserAccountVO account = baseDeveloperService.login(username);
         return ResultEntity.ok(account);
     }
 
     /**
      * 系统分页用户列表
-     *
-     * @return
      */
     @ApiOperation(value = "系统分页用户列表", notes = "系统分页用户列表")
     @GetMapping("/developer")
-    public ResultEntity<IPage<BaseDeveloper>> getUserList(@RequestParam(required = false) Map map) {
-        return ResultEntity.ok(baseDeveloperService.findListPage(new PageParams(map)));
+    public ResultEntity<Page<BaseDeveloperVO>> getUserList(@RequestParam(required = false) Map map) {
+        PageInfo<BaseDeveloper> pageInfo = baseDeveloperService.findListPage(new PageParams(map));
+        Page<BaseDeveloperVO> result = baseDeveloperConverter.convertPage(pageInfo);
+        return ResultEntity.ok(result);
     }
 
     /**
      * 获取所有用户列表
-     *
-     * @return
      */
     @ApiOperation(value = "获取所有用户列表", notes = "获取所有用户列表")
     @GetMapping("/developer/all")
-    public ResultEntity<List<BaseDeveloper>> getUserAllList() {
+    public ResultEntity<List<BaseDeveloperVO>> getUserAllList() {
         List<BaseDeveloper> list = baseDeveloperService.findAllList();
-        return ResultEntity.ok(list);
+        List<BaseDeveloperVO> result = baseDeveloperConverter.convertList(list);
+        return ResultEntity.ok(result);
     }
 
     /**
      * 添加系统用户
-     *
-     * @param userName
-     * @param password
-     * @param nickName
-     * @param status
-     * @param userType
-     * @param email
-     * @param mobile
-     * @param userDesc
-     * @param avatar
-     * @return
      */
     @ApiOperation(value = "添加系统用户", notes = "添加系统用户")
     @PostMapping("/developer/add")
@@ -116,16 +106,6 @@ public class BaseDeveloperController {
 
     /**
      * 更新系统用户
-     *
-     * @param userId
-     * @param nickName
-     * @param status
-     * @param userType
-     * @param email
-     * @param mobile
-     * @param userDesc
-     * @param avatar
-     * @return
      */
     @ApiOperation(value = "更新系统用户", notes = "更新系统用户")
     @PostMapping("/developer/update")
@@ -155,10 +135,6 @@ public class BaseDeveloperController {
 
     /**
      * 修改用户密码
-     *
-     * @param userId
-     * @param password
-     * @return
      */
     @ApiOperation(value = "修改用户密码", notes = "修改用户密码")
     @PostMapping("/developer/update/password")

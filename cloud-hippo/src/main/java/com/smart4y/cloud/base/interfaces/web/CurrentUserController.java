@@ -3,7 +3,7 @@ package com.smart4y.cloud.base.interfaces.web;
 import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.application.BaseUserService;
 import com.smart4y.cloud.base.domain.model.BaseUser;
-import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
+import com.smart4y.cloud.core.interfaces.AuthorityMenuDTO;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.security.OpenHelper;

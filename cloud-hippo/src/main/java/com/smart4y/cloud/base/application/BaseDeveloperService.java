@@ -1,11 +1,11 @@
 package com.smart4y.cloud.base.application;
 
+import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.BaseDeveloper;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddDeveloperUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterDeveloperThirdPartyCommand;
-import com.smart4y.cloud.core.application.dto.UserAccount;
-import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
+import com.smart4y.cloud.core.interfaces.UserAccountVO;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public interface BaseDeveloperService {
      * @param pageParams
      * @return
      */
-    IPage<BaseDeveloper> findListPage(PageParams pageParams);
+    PageInfo<BaseDeveloper> findListPage(PageParams pageParams);
 
     /**
      * 查询列表
@@ -83,5 +83,5 @@ public interface BaseDeveloperService {
      * @param account 登陆账号
      * @return
      */
-    UserAccount login(String account);
+    UserAccountVO login(String account);
 }

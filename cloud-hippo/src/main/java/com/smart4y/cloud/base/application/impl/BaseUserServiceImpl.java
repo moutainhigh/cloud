@@ -16,7 +16,7 @@ import com.smart4y.cloud.base.domain.repository.BaseUserMapper;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddAdminUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterAdminThirdPartyCommand;
 import com.smart4y.cloud.core.application.annotation.ApplicationService;
-import com.smart4y.cloud.core.application.dto.UserAccount;
+import com.smart4y.cloud.core.interfaces.UserAccountVO;
 import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
@@ -166,7 +166,7 @@ public class BaseUserServiceImpl implements BaseUserService {
     }
 
     @Override
-    public UserAccount getUserAccount(long userId) {
+    public UserAccountVO getUserAccount(long userId) {
         // 用户权限列表
         List<OpenAuthority> authorities = Lists.newArrayList();
         // 用户角色列表
@@ -195,7 +195,7 @@ public class BaseUserServiceImpl implements BaseUserService {
         if (userGrantedAuthority != null && userGrantedAuthority.size() > 0) {
             authorities.addAll(userGrantedAuthority);
         }
-        UserAccount userAccount = new UserAccount();
+        UserAccountVO userAccount = new UserAccountVO();
         // 昵称
         userAccount.setNickName(baseUser.getNickName());
         // 头像
@@ -215,7 +215,7 @@ public class BaseUserServiceImpl implements BaseUserService {
     }
 
     @Override
-    public UserAccount login(String account) {
+    public UserAccountVO login(String account) {
         if (StringUtils.isBlank(account)) {
             return null;
         }
@@ -259,7 +259,7 @@ public class BaseUserServiceImpl implements BaseUserService {
                 log.error("添加登录日志失败：{}", e.getLocalizedMessage(), e);
             }
             // 用户权限信息
-            UserAccount userAccount = getUserAccount(baseAccount.getUserId());
+            UserAccountVO userAccount = getUserAccount(baseAccount.getUserId());
             // 复制账号信息
             BeanUtils.copyProperties(baseAccount, userAccount);
             return userAccount;

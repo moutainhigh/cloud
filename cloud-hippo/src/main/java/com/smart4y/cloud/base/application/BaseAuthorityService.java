@@ -2,9 +2,9 @@ package com.smart4y.cloud.base.application;
 
 import com.smart4y.cloud.base.domain.model.BaseAuthority;
 import com.smart4y.cloud.base.domain.model.BaseAuthorityAction;
-import com.smart4y.cloud.core.application.dto.AuthorityApiDTO;
-import com.smart4y.cloud.core.application.dto.AuthorityMenuDTO;
-import com.smart4y.cloud.core.application.dto.AuthorityResourceDTO;
+import com.smart4y.cloud.core.interfaces.AuthorityApiDTO;
+import com.smart4y.cloud.core.interfaces.AuthorityMenuDTO;
+import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
 import com.smart4y.cloud.core.domain.OpenAuthority;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;
 
