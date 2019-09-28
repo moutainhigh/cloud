@@ -1,12 +1,17 @@
 package com.smart4y.cloud.base.interfaces.web;
 
+import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.BaseRoleService;
 import com.smart4y.cloud.base.application.BaseUserService;
 import com.smart4y.cloud.base.domain.model.BaseRole;
 import com.smart4y.cloud.base.domain.model.BaseUser;
+import com.smart4y.cloud.base.interfaces.converter.BaseRoleConverter;
+import com.smart4y.cloud.base.interfaces.converter.BaseUserConverter;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddAdminUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterAdminThirdPartyCommand;
-import com.smart4y.cloud.core.domain.IPage;
+import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseRoleVO;
+import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseUserVO;
+import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.interfaces.UserAccountVO;
@@ -36,15 +41,16 @@ import java.util.stream.Collectors;
 public class BaseUserController {
 
     @Autowired
+    private BaseUserConverter baseUserConverter;
+    @Autowired
+    private BaseRoleConverter baseRoleConverter;
+    @Autowired
     private BaseUserService baseUserService;
     @Autowired
     private BaseRoleService baseRoleService;
 
     /**
      * 获取登录账号信息
-     *
-     * @param username 登录名
-     * @return
      */
     @ApiOperation(value = "获取账号登录信息", notes = "仅限系统内部调用")
     @ApiImplicitParams({
@@ -58,25 +64,24 @@ public class BaseUserController {
 
     /**
      * 系统分页用户列表
-     *
-     * @return
      */
     @ApiOperation(value = "系统分页用户列表", notes = "系统分页用户列表")
     @GetMapping("/user")
-    public ResultEntity<IPage<BaseUser>> getUserList(@RequestParam(required = false) Map map) {
-        return ResultEntity.ok(baseUserService.findListPage(new PageParams(map)));
+    public ResultEntity<Page<BaseUserVO>> getUserList(@RequestParam(required = false) Map map) {
+        PageInfo<BaseUser> pageInfo = baseUserService.findListPage(new PageParams(map));
+        Page<BaseUserVO> result = baseUserConverter.convertPage(pageInfo);
+        return ResultEntity.ok(result);
     }
 
     /**
      * 获取所有用户列表
-     *
-     * @return
      */
     @ApiOperation(value = "获取所有用户列表", notes = "获取所有用户列表")
     @GetMapping("/user/all")
-    public ResultEntity<List<BaseUser>> getUserAllList() {
+    public ResultEntity<List<BaseUserVO>> getUserAllList() {
         List<BaseUser> list = baseUserService.findAllList();
-        return ResultEntity.ok(list);
+        List<BaseUserVO> result = baseUserConverter.convertList(list);
+        return ResultEntity.ok(result);
     }
 
     /**
@@ -136,7 +141,6 @@ public class BaseUserController {
         return ResultEntity.ok();
     }
 
-
     /**
      * 修改用户密码
      */
@@ -167,25 +171,18 @@ public class BaseUserController {
 
     /**
      * 获取用户角色
-     *
-     * @param userId
-     * @return
      */
     @ApiOperation(value = "获取用户已分配角色", notes = "获取用户已分配角色")
     @GetMapping("/user/roles")
-    public ResultEntity<List<BaseRole>> getUserRoles(
+    public ResultEntity<List<BaseRoleVO>> getUserRoles(
             @RequestParam(value = "userId") Long userId) {
-        return ResultEntity.ok(baseRoleService.getUserRoles(userId));
+        List<BaseRole> list = baseRoleService.getUserRoles(userId);
+        List<BaseRoleVO> result = baseRoleConverter.convertList(list);
+        return ResultEntity.ok(result);
     }
-
 
     /**
      * 注册第三方系统登录账号
-     *
-     * @param account
-     * @param password
-     * @param accountType
-     * @return
      */
     @ApiOperation(value = "注册第三方系统登录账号", notes = "仅限系统内部调用")
     @PostMapping("/user/add/thirdParty")

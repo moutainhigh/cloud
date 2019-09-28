@@ -1,11 +1,11 @@
 package com.smart4y.cloud.base.application;
 
+import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.BaseUser;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddAdminUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterAdminThirdPartyCommand;
-import com.smart4y.cloud.core.interfaces.UserAccountVO;
-import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
+import com.smart4y.cloud.core.interfaces.UserAccountVO;
 
 import java.util.List;
 
@@ -45,11 +45,8 @@ public interface BaseUserService {
 
     /**
      * 分页查询
-     *
-     * @param pageParams
-     * @return
      */
-    IPage<BaseUser> findListPage(PageParams pageParams);
+    PageInfo<BaseUser> findListPage(PageParams pageParams);
 
     /**
      * 查询列表

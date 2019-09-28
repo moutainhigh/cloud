@@ -16,17 +16,15 @@ import com.smart4y.cloud.base.domain.repository.BaseUserMapper;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddAdminUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterAdminThirdPartyCommand;
 import com.smart4y.cloud.core.application.annotation.ApplicationService;
-import com.smart4y.cloud.core.interfaces.UserAccountVO;
-import com.smart4y.cloud.core.domain.IPage;
-import com.smart4y.cloud.core.domain.Page;
-import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.domain.OpenAuthority;
+import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
 import com.smart4y.cloud.core.infrastructure.security.OpenSecurityConstants;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
 import com.smart4y.cloud.core.infrastructure.toolkit.WebUtils;
+import com.smart4y.cloud.core.interfaces.UserAccountVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,7 +125,7 @@ public class BaseUserServiceImpl implements BaseUserService {
     }
 
     @Override
-    public IPage<BaseUser> findListPage(PageParams pageParams) {
+    public PageInfo<BaseUser> findListPage(PageParams pageParams) {
         BaseUser query = pageParams.mapToObject(BaseUser.class);
 
         Weekend<BaseUser> queryWrapper = Weekend.of(BaseUser.class);
@@ -148,11 +146,7 @@ public class BaseUserServiceImpl implements BaseUserService {
 
         PageHelper.startPage(pageParams.getPage(), pageParams.getLimit(), Boolean.TRUE);
         List<BaseUser> list = baseUserMapper.selectByExample(queryWrapper);
-        PageInfo<BaseUser> pageInfo = new PageInfo<>(list);
-        IPage<BaseUser> page = new Page<>();
-        page.setRecords(pageInfo.getList());
-        page.setTotal(pageInfo.getTotal());
-        return page;
+        return new PageInfo<>(list);
     }
 
     @Override
