@@ -76,8 +76,6 @@ public class CurrentUserController {
 
     /**
      * 获取登陆用户已分配权限
-     *
-     * @return
      */
     @ApiOperation(value = "获取当前登录用户已分配菜单权限", notes = "获取当前登录用户已分配菜单权限")
     @GetMapping("/current/user/menu")

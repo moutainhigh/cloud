@@ -1,8 +1,8 @@
 package com.smart4y.cloud.base.application;
 
+import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.BaseRole;
 import com.smart4y.cloud.base.domain.model.BaseRoleUser;
-import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
 
 import java.util.List;
@@ -17,11 +17,8 @@ public interface BaseRoleService {
 
     /**
      * 分页查询
-     *
-     * @param pageParams
-     * @return
      */
-    IPage<BaseRole> findListPage(PageParams pageParams);
+    PageInfo<BaseRole> findListPage(PageParams pageParams);
 
     /**
      * 查询列表

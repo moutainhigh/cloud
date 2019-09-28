@@ -6,10 +6,10 @@ import com.smart4y.cloud.base.domain.model.BaseRole;
 import com.smart4y.cloud.base.domain.model.BaseUser;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddAdminUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterAdminThirdPartyCommand;
-import com.smart4y.cloud.core.interfaces.UserAccountVO;
 import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.core.interfaces.UserAccountVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -81,17 +81,6 @@ public class BaseUserController {
 
     /**
      * 添加系统用户
-     *
-     * @param userName
-     * @param password
-     * @param nickName
-     * @param status
-     * @param userType
-     * @param email
-     * @param mobile
-     * @param userDesc
-     * @param avatar
-     * @return
      */
     @ApiOperation(value = "添加系统用户", notes = "添加系统用户")
     @PostMapping("/user/add")
@@ -121,16 +110,6 @@ public class BaseUserController {
 
     /**
      * 更新系统用户
-     *
-     * @param userId
-     * @param nickName
-     * @param status
-     * @param userType
-     * @param email
-     * @param mobile
-     * @param userDesc
-     * @param avatar
-     * @return
      */
     @ApiOperation(value = "更新系统用户", notes = "更新系统用户")
     @PostMapping("/user/update")
@@ -160,10 +139,6 @@ public class BaseUserController {
 
     /**
      * 修改用户密码
-     *
-     * @param userId
-     * @param password
-     * @return
      */
     @ApiOperation(value = "修改用户密码", notes = "修改用户密码")
     @PostMapping("/user/update/password")
@@ -177,10 +152,6 @@ public class BaseUserController {
 
     /**
      * 用户分配角色
-     *
-     * @param userId
-     * @param roleIds
-     * @return
      */
     @ApiOperation(value = "用户分配角色", notes = "用户分配角色")
     @PostMapping("/user/roles/add")

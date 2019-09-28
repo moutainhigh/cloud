@@ -1,9 +1,14 @@
 package com.smart4y.cloud.base.interfaces.web;
 
+import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.BaseRoleService;
 import com.smart4y.cloud.base.domain.model.BaseRole;
 import com.smart4y.cloud.base.domain.model.BaseRoleUser;
-import com.smart4y.cloud.core.domain.IPage;
+import com.smart4y.cloud.base.interfaces.converter.BaseRoleConverter;
+import com.smart4y.cloud.base.interfaces.converter.BaseRoleUserConverter;
+import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseRoleUserVO;
+import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseRoleVO;
+import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import io.swagger.annotations.Api;
@@ -27,43 +32,57 @@ import java.util.stream.Collectors;
 public class BaseRoleController {
 
     @Autowired
+    private BaseRoleUserConverter baseRoleUserConverter;
+    @Autowired
+    private BaseRoleConverter baseRoleConverter;
+    @Autowired
     private BaseRoleService baseRoleService;
 
     /**
      * 获取分页角色列表
-     *
-     * @return
      */
     @ApiOperation(value = "获取分页角色列表", notes = "获取分页角色列表")
     @GetMapping("/role")
-    public ResultEntity<IPage<BaseRole>> getRoleListPage(@RequestParam(required = false) Map map) {
-        return ResultEntity.ok(baseRoleService.findListPage(new PageParams(map)));
+    public ResultEntity<Page<BaseRoleVO>> getRoleListPage(@RequestParam(required = false) Map map) {
+        PageInfo<BaseRole> pageInfo = baseRoleService.findListPage(new PageParams(map));
+        Page<BaseRoleVO> result = baseRoleConverter.convertPage(pageInfo);
+        return ResultEntity.ok(result);
     }
 
     /**
      * 获取所有角色列表
-     *
-     * @return
      */
     @ApiOperation(value = "获取所有角色列表", notes = "获取所有角色列表")
     @GetMapping("/role/all")
-    public ResultEntity<List<BaseRole>> getRoleAllList() {
-        return ResultEntity.ok(baseRoleService.findAllList());
+    public ResultEntity<List<BaseRoleVO>> getRoleAllList() {
+        List<BaseRole> list = baseRoleService.findAllList();
+        List<BaseRoleVO> result = baseRoleConverter.convertList(list);
+        return ResultEntity.ok(result);
+    }
+
+    /**
+     * 查询角色成员
+     */
+    @ApiOperation(value = "查询角色成员", notes = "查询角色成员")
+    @GetMapping("/role/users")
+    public ResultEntity<List<BaseRoleUserVO>> getRoleUsers(
+            @RequestParam(value = "roleId") Long roleId) {
+        List<BaseRoleUser> roleUsers = baseRoleService.findRoleUsers(roleId);
+        List<BaseRoleUserVO> result = baseRoleUserConverter.convertList(roleUsers);
+        return ResultEntity.ok(result);
     }
 
     /**
      * 获取角色详情
-     *
-     * @param roleId
-     * @return
      */
     @ApiOperation(value = "获取角色详情", notes = "获取角色详情")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "roleId", value = "角色ID", defaultValue = "", required = true, paramType = "path")
     })
     @GetMapping("/role/{roleId}/info")
-    public ResultEntity<BaseRole> getRole(@PathVariable(value = "roleId") Long roleId) {
-        BaseRole result = baseRoleService.getRole(roleId);
+    public ResultEntity<BaseRoleVO> getRole(@PathVariable(value = "roleId") Long roleId) {
+        BaseRole role = baseRoleService.getRole(roleId);
+        BaseRoleVO result = baseRoleConverter.convert(role);
         return ResultEntity.ok(result);
     }
 
@@ -74,7 +93,6 @@ public class BaseRoleController {
      * @param roleName 角色显示名称
      * @param roleDesc 描述
      * @param status   启用禁用
-     * @return
      */
     @ApiOperation(value = "添加角色", notes = "添加角色")
     @ApiImplicitParams({
@@ -111,7 +129,6 @@ public class BaseRoleController {
      * @param roleName 角色显示名称
      * @param roleDesc 描述
      * @param status   启用禁用
-     * @return
      */
     @ApiOperation(value = "编辑角色", notes = "编辑角色")
     @ApiImplicitParams({
@@ -142,9 +159,6 @@ public class BaseRoleController {
 
     /**
      * 删除角色
-     *
-     * @param roleId
-     * @return
      */
     @ApiOperation(value = "删除角色", notes = "删除角色")
     @ApiImplicitParams({
@@ -160,10 +174,6 @@ public class BaseRoleController {
 
     /**
      * 角色添加成员
-     *
-     * @param roleId
-     * @param userIds
-     * @return
      */
     @ApiOperation(value = "角色添加成员", notes = "角色添加成员")
     @PostMapping("/role/users/add")
@@ -175,19 +185,5 @@ public class BaseRoleController {
                 .collect(Collectors.toList());
         baseRoleService.saveRoleUsers(roleId, collect);
         return ResultEntity.ok();
-    }
-
-    /**
-     * 查询角色成员
-     *
-     * @param roleId
-     * @return
-     */
-    @ApiOperation(value = "查询角色成员", notes = "查询角色成员")
-    @GetMapping("/role/users")
-    public ResultEntity<List<BaseRoleUser>> getRoleUsers(
-            @RequestParam(value = "roleId") Long roleId) {
-        List<BaseRoleUser> roleUsers = baseRoleService.findRoleUsers(roleId);
-        return ResultEntity.ok(roleUsers);
     }
 }

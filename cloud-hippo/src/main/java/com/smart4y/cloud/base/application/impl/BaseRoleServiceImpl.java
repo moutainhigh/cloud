@@ -11,8 +11,6 @@ import com.smart4y.cloud.base.domain.repository.BaseRoleMapper;
 import com.smart4y.cloud.base.domain.repository.BaseRoleUserCustomMapper;
 import com.smart4y.cloud.base.domain.repository.BaseRoleUserMapper;
 import com.smart4y.cloud.core.application.annotation.ApplicationService;
-import com.smart4y.cloud.core.domain.IPage;
-import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
@@ -44,7 +42,7 @@ public class BaseRoleServiceImpl implements BaseRoleService {
     private BaseUserService baseUserService;
 
     @Override
-    public IPage<BaseRole> findListPage(PageParams pageParams) {
+    public PageInfo<BaseRole> findListPage(PageParams pageParams) {
         BaseRole query = pageParams.mapToObject(BaseRole.class);
 
         Weekend<BaseRole> queryWrapper = Weekend.of(BaseRole.class);
@@ -59,11 +57,7 @@ public class BaseRoleServiceImpl implements BaseRoleService {
 
         PageHelper.startPage(pageParams.getPage(), pageParams.getLimit(), Boolean.TRUE);
         List<BaseRole> list = baseRoleMapper.selectByExample(queryWrapper);
-        PageInfo<BaseRole> pageInfo = new PageInfo<>(list);
-        IPage<BaseRole> page = new Page<>();
-        page.setRecords(pageInfo.getList());
-        page.setTotal(pageInfo.getTotal());
-        return page;
+        return new PageInfo<>(list);
     }
 
     @Override
