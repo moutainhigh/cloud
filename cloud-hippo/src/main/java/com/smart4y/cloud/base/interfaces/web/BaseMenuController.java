@@ -1,10 +1,15 @@
 package com.smart4y.cloud.base.interfaces.web;
 
+import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.BaseActionService;
 import com.smart4y.cloud.base.application.BaseMenuService;
 import com.smart4y.cloud.base.domain.model.BaseAction;
 import com.smart4y.cloud.base.domain.model.BaseMenu;
-import com.smart4y.cloud.core.domain.IPage;
+import com.smart4y.cloud.base.interfaces.converter.BaseActionConverter;
+import com.smart4y.cloud.base.interfaces.converter.BaseMenuConverter;
+import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseActionVO;
+import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseMenuVO;
+import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
@@ -27,56 +32,56 @@ import java.util.Map;
 public class BaseMenuController {
 
     @Autowired
-    private BaseMenuService baseResourceMenuService;
-
+    private BaseMenuConverter baseMenuConverter;
     @Autowired
-    private BaseActionService baseResourceOperationService;
-
+    private BaseActionConverter baseActionConverter;
+    @Autowired
+    private BaseMenuService baseMenuService;
+    @Autowired
+    private BaseActionService baseActionService;
     @Autowired
     private OpenRestTemplate openRestTemplate;
 
     /**
      * 获取分页菜单资源列表
-     *
-     * @return
      */
     @ApiOperation(value = "获取分页菜单资源列表", notes = "获取分页菜单资源列表")
     @GetMapping("/menu")
-    public ResultEntity<IPage<BaseMenu>> getMenuListPage(@RequestParam(required = false) Map map) {
-        return ResultEntity.ok(baseResourceMenuService.findListPage(new PageParams(map)));
+    public ResultEntity<Page<BaseMenuVO>> getMenuListPage(@RequestParam(required = false) Map map) {
+        PageInfo<BaseMenu> pageInfo = baseMenuService.findListPage(new PageParams(map));
+        Page<BaseMenuVO> result = baseMenuConverter.convertPage(pageInfo);
+        return ResultEntity.ok(result);
     }
 
     /**
      * 菜单所有资源列表
-     *
-     * @return
      */
     @ApiOperation(value = "菜单所有资源列表", notes = "菜单所有资源列表")
     @GetMapping("/menu/all")
-    public ResultEntity<List<BaseMenu>> getMenuAllList() {
-        return ResultEntity.ok(baseResourceMenuService.findAllList());
+    public ResultEntity<List<BaseMenuVO>> getMenuAllList() {
+        List<BaseMenu> list = baseMenuService.findAllList();
+        List<BaseMenuVO> result = baseMenuConverter.convertList(list);
+        return ResultEntity.ok(result);
     }
 
 
     /**
      * 获取菜单下所有操作
-     *
-     * @param menuId
-     * @return
      */
     @ApiOperation(value = "获取菜单下所有操作", notes = "获取菜单下所有操作")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "menuId", value = "menuId", paramType = "form"),
     })
     @GetMapping("/menu/action")
-    public ResultEntity<List<BaseAction>> getMenuAction(Long menuId) {
-        return ResultEntity.ok(baseResourceOperationService.findListByMenuId(menuId));
+    public ResultEntity<List<BaseActionVO>> getMenuAction(Long menuId) {
+        List<BaseAction> list = baseActionService.findListByMenuId(menuId);
+        List<BaseActionVO> result = baseActionConverter.convertList(list);
+        return ResultEntity.ok(result);
     }
 
     /**
      * 获取菜单资源详情
      *
-     * @param menuId
      * @return 应用信息
      */
     @ApiOperation(value = "获取菜单资源详情", notes = "获取菜单资源详情")
@@ -84,8 +89,10 @@ public class BaseMenuController {
             @ApiImplicitParam(name = "menuId", required = true, value = "menuId"),
     })
     @GetMapping("/menu/{menuId}/info")
-    public ResultEntity<BaseMenu> getMenu(@PathVariable("menuId") Long menuId) {
-        return ResultEntity.ok(baseResourceMenuService.getMenu(menuId));
+    public ResultEntity<BaseMenuVO> getMenu(@PathVariable("menuId") Long menuId) {
+        BaseMenu menu = baseMenuService.getMenu(menuId);
+        BaseMenuVO result = baseMenuConverter.convert(menu);
+        return ResultEntity.ok(result);
     }
 
     /**
@@ -101,7 +108,6 @@ public class BaseMenuController {
      * @param parentId 父节点ID
      * @param priority 优先级越小越靠前
      * @param menuDesc 描述
-     * @return
      */
     @ApiOperation(value = "添加菜单资源", notes = "添加菜单资源")
     @ApiImplicitParams({
@@ -141,7 +147,7 @@ public class BaseMenuController {
         menu.setPriority(priority);
         menu.setMenuDesc(menuDesc);
         Long menuId = null;
-        BaseMenu result = baseResourceMenuService.addMenu(menu);
+        BaseMenu result = baseMenuService.addMenu(menu);
         if (result != null) {
             menuId = result.getMenuId();
         }
@@ -161,7 +167,6 @@ public class BaseMenuController {
      * @param parentId 父节点ID
      * @param priority 优先级越小越靠前
      * @param menuDesc 描述
-     * @return
      */
     @ApiOperation(value = "编辑菜单资源", notes = "编辑菜单资源")
     @ApiImplicitParams({
@@ -203,16 +208,13 @@ public class BaseMenuController {
         menu.setParentId(parentId);
         menu.setPriority(priority);
         menu.setMenuDesc(menuDesc);
-        baseResourceMenuService.updateMenu(menu);
+        baseMenuService.updateMenu(menu);
         openRestTemplate.refreshGateway();
         return ResultEntity.ok();
     }
 
     /**
      * 移除菜单资源
-     *
-     * @param menuId
-     * @return
      */
     @ApiOperation(value = "移除菜单资源", notes = "移除菜单资源")
     @ApiImplicitParams({
@@ -222,7 +224,7 @@ public class BaseMenuController {
     public ResultEntity<Boolean> removeMenu(
             @RequestParam("menuId") Long menuId
     ) {
-        baseResourceMenuService.removeMenu(menuId);
+        baseMenuService.removeMenu(menuId);
         openRestTemplate.refreshGateway();
         return ResultEntity.ok();
     }

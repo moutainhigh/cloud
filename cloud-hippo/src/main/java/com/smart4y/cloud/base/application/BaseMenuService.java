@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.application;
 
+import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.BaseMenu;
-import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
 
 import java.util.List;
@@ -13,13 +13,11 @@ import java.util.List;
  *         Created by youtao on 2019-09-05.
  */
 public interface BaseMenuService {
+
     /**
      * 分页查询
-     *
-     * @param pageParams
-     * @return
      */
-    IPage<BaseMenu> findListPage(PageParams pageParams);
+    PageInfo<BaseMenu> findListPage(PageParams pageParams);
 
     /**
      * 查询列表

@@ -8,8 +8,6 @@ import com.smart4y.cloud.base.application.BaseMenuService;
 import com.smart4y.cloud.base.domain.model.BaseMenu;
 import com.smart4y.cloud.base.domain.repository.BaseMenuMapper;
 import com.smart4y.cloud.core.application.annotation.ApplicationService;
-import com.smart4y.cloud.core.domain.IPage;
-import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;
@@ -44,7 +42,7 @@ public class BaseMenuServiceImpl implements BaseMenuService {
     private BaseActionService baseActionService;
 
     @Override
-    public IPage<BaseMenu> findListPage(PageParams pageParams) {
+    public PageInfo<BaseMenu> findListPage(PageParams pageParams) {
         BaseMenu query = pageParams.mapToObject(BaseMenu.class);
 
         Weekend<BaseMenu> queryWrapper = Weekend.of(BaseMenu.class);
@@ -58,11 +56,7 @@ public class BaseMenuServiceImpl implements BaseMenuService {
 
         PageHelper.startPage(pageParams.getPage(), pageParams.getLimit(), Boolean.TRUE);
         List<BaseMenu> list = baseMenuMapper.selectByExample(queryWrapper);
-        PageInfo<BaseMenu> pageInfo = new PageInfo<>(list);
-        IPage<BaseMenu> page = new Page<>();
-        page.setRecords(pageInfo.getList());
-        page.setTotal(pageInfo.getTotal());
-        return page;
+        return new PageInfo<>(list);
     }
 
     @Override
