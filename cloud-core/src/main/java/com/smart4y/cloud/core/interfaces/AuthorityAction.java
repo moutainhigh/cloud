@@ -1,7 +1,11 @@
-package com.smart4y.cloud.core.domain;
+package com.smart4y.cloud.core.interfaces;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -13,67 +17,82 @@ import java.util.Objects;
  *         Created by youtao on 2019-09-05.
  */
 @Data
+@NoArgsConstructor
+@Accessors(chain = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel(value = "AuthorityAction", description = "功能权限")
 public class AuthorityAction implements Serializable {
 
     /**
      * 资源ID
      */
+    @ApiModelProperty(value = "资源ID")
     private Long actionId;
 
     /**
      * 资源编码
      */
+    @ApiModelProperty(value = "资源编码")
     private String actionCode;
 
     /**
      * 资源名称
      */
+    @ApiModelProperty(value = "资源名称")
     private String actionName;
 
     /**
      * 资源父节点
      */
+    @ApiModelProperty(value = "资源父节点")
     private Long menuId;
 
     /**
-     * 优先级 越小越靠前
+     * 优先级（越小越靠前）
      */
+    @ApiModelProperty(value = "优先级（越小越靠前）")
     private Integer priority;
 
     /**
      * 资源描述
      */
+    @ApiModelProperty(value = "资源描述")
     private String actionDesc;
 
     /**
-     * 状态:0-无效 1-有效
+     * 状态（0-无效 1-有效）
      */
+    @ApiModelProperty(value = "状态（0-无效 1-有效）")
     private Integer status;
 
     /**
      * 保留数据0-否 1-是 不允许删除
      */
+    @ApiModelProperty(value = "保留数据（0-否 1-是不允许删除）")
     private Integer isPersist;
 
     /**
      * 服务ID
      */
+    @ApiModelProperty(value = "服务ID")
     private String serviceId;
 
     /**
      * 权限ID
      */
+    @ApiModelProperty(value = "权限ID")
     private Long authorityId;
 
     /**
      * 权限标识
      */
+    @ApiModelProperty(value = "权限标识")
     private String authority;
 
     /**
      * 是否需要安全认证
      */
+    @ApiModelProperty(value = "是否需要安全认证（默认true）")
     private Boolean isAuth = true;
 
     @Override

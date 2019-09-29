@@ -1,7 +1,6 @@
 package com.smart4y.cloud.core.interfaces;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.smart4y.cloud.core.domain.AuthorityAction;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

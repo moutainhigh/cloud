@@ -4,14 +4,14 @@
       <Form ref="searchForm"
             :model="pageInfo"
             inline
-            :label-width="80">
-        <FormItem label="请求路径" prop="path">
+            :label-width="50">
+        <FormItem label="路径" prop="path">
           <Input type="text" v-model="pageInfo.path" placeholder="请输入关键字"/>
         </FormItem>
-        <FormItem label="接口名称" prop="apiName">
+        <FormItem label="名称" prop="apiName">
           <Input type="text" v-model="pageInfo.apiName" placeholder="请输入关键字"/>
         </FormItem>
-        <FormItem label="接口编码" prop="apiCode">
+        <FormItem label="编码" prop="apiCode">
           <Input type="text" v-model="pageInfo.apiCode" placeholder="请输入关键字"/>
         </FormItem>
         <FormItem label="服务名" prop="serviceId">
@@ -72,7 +72,7 @@
         </Dropdown>
       </div>
       <Alert show-icon>
-        <span>自动扫描<code>@EnableResourceServer</code>资源服务器接口信息,注:自动添加的接口,都是未公开的. <code>只有公开的接口,才可以通过网关访问。否则将提示:"请求地址,拒绝访问!"</code></span>
+        <span>自动扫描<code>@EnableResourceServer</code>资源服务器接口信息。注：自动添加的接口都是未公开的。<code>只有公开的接口，才可以通过网关访问。否则将提示："请求地址,拒绝访问!"</code></span>
       </Alert>
       <Table @on-selection-change="handleTableSelectChange" border :columns="columns" :data="data" :loading="loading">
         <template slot="apiName" slot-scope="{ row }">
