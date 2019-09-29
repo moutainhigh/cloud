@@ -256,8 +256,7 @@
                     ],
                     email: [
                         {required: false, type: 'email', message: '邮箱格式不正确', trigger: 'blur'}
-                    ]
-                    ,
+                    ],
                     mobile: [
                         {validator: validateMobile, trigger: 'blur'}
                     ]
