@@ -6,8 +6,6 @@ import com.smart4y.cloud.base.application.GatewayAccessLogsService;
 import com.smart4y.cloud.base.domain.model.GatewayAccessLogs;
 import com.smart4y.cloud.base.domain.repository.GatewayAccessLogsMapper;
 import com.smart4y.cloud.core.application.annotation.ApplicationService;
-import com.smart4y.cloud.core.domain.IPage;
-import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +27,7 @@ public class GatewayAccessLogsServiceImpl implements GatewayAccessLogsService {
     private GatewayAccessLogsMapper gatewayAccessLogsMapper;
 
     @Override
-    public IPage<GatewayAccessLogs> findListPage(PageParams pageParams) {
+    public PageInfo<GatewayAccessLogs> findListPage(PageParams pageParams) {
         GatewayAccessLogs query = pageParams.mapToObject(GatewayAccessLogs.class);
 
         Weekend<GatewayAccessLogs> queryWrapper = Weekend.of(GatewayAccessLogs.class);
@@ -47,10 +45,6 @@ public class GatewayAccessLogsServiceImpl implements GatewayAccessLogsService {
 
         PageHelper.startPage(pageParams.getPage(), pageParams.getLimit(), Boolean.TRUE);
         List<GatewayAccessLogs> list = gatewayAccessLogsMapper.selectByExample(queryWrapper);
-        PageInfo<GatewayAccessLogs> pageInfo = new PageInfo<>(list);
-        IPage<GatewayAccessLogs> page = new Page<>();
-        page.setRecords(pageInfo.getList());
-        page.setTotal(pageInfo.getTotal());
-        return page;
+        return new PageInfo<>(list);
     }
 }

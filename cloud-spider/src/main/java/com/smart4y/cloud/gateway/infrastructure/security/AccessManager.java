@@ -2,7 +2,7 @@ package com.smart4y.cloud.gateway.infrastructure.security;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
 import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
-import com.smart4y.cloud.core.application.dto.IpLimitApiDTO;
+import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
 import com.smart4y.cloud.core.domain.OpenAuthority;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;

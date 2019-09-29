@@ -2,7 +2,7 @@ package com.smart4y.cloud.base.application;
 
 import com.smart4y.cloud.base.domain.model.GatewayRateLimit;
 import com.smart4y.cloud.base.domain.model.GatewayRateLimitApi;
-import com.smart4y.cloud.core.application.dto.RateLimitApiDTO;
+import com.smart4y.cloud.core.interfaces.RateLimitApiDTO;
 import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
 

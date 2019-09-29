@@ -1,8 +1,11 @@
 package com.smart4y.cloud.base.interfaces.web;
 
+import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.GatewayAccessLogsService;
 import com.smart4y.cloud.base.domain.model.GatewayAccessLogs;
-import com.smart4y.cloud.core.domain.IPage;
+import com.smart4y.cloud.base.interfaces.converter.GatewayAccessLogsConverter;
+import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayAccessLogsVO;
+import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import io.swagger.annotations.Api;
@@ -25,6 +28,8 @@ import java.util.Map;
 public class GatewayAccessLogsController {
 
     @Autowired
+    private GatewayAccessLogsConverter gatewayAccessLogsConverter;
+    @Autowired
     private GatewayAccessLogsService gatewayAccessLogsService;
 
     /**
@@ -32,8 +37,9 @@ public class GatewayAccessLogsController {
      */
     @ApiOperation(value = "获取分页访问日志列表", notes = "获取分页访问日志列表")
     @GetMapping("/gateway/access/logs")
-    public ResultEntity<IPage<GatewayAccessLogs>> getAccessLogListPage(@RequestParam(required = false) Map map) {
-        IPage<GatewayAccessLogs> listPage = gatewayAccessLogsService.findListPage(new PageParams(map));
-        return ResultEntity.ok(listPage);
+    public ResultEntity<Page<GatewayAccessLogsVO>> getAccessLogListPage(@RequestParam(required = false) Map map) {
+        PageInfo<GatewayAccessLogs> listPage = gatewayAccessLogsService.findListPage(new PageParams(map));
+        Page<GatewayAccessLogsVO> result = gatewayAccessLogsConverter.convertPage(listPage);
+        return ResultEntity.ok(result);
     }
 }

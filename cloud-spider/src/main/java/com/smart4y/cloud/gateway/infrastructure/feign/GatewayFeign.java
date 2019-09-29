@@ -1,9 +1,9 @@
 package com.smart4y.cloud.gateway.infrastructure.feign;
 
 import com.smart4y.cloud.core.domain.ResultEntity;
-import com.smart4y.cloud.core.application.dto.GatewayRouteDTO;
-import com.smart4y.cloud.core.application.dto.IpLimitApiDTO;
-import com.smart4y.cloud.core.application.dto.RateLimitApiDTO;
+import com.smart4y.cloud.gateway.interfaces.GatewayRouteDTO;
+import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
+import com.smart4y.cloud.core.interfaces.RateLimitApiDTO;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;

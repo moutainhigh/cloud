@@ -1,14 +1,15 @@
 package com.smart4y.cloud.base.interfaces.web;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.smart4y.cloud.base.application.GatewayIpLimitService;
 import com.smart4y.cloud.base.application.GatewayRateLimitService;
 import com.smart4y.cloud.base.application.GatewayRouteService;
 import com.smart4y.cloud.base.domain.model.GatewayRoute;
-import com.smart4y.cloud.core.application.dto.IpLimitApiDTO;
-import com.smart4y.cloud.core.application.dto.RateLimitApiDTO;
+import com.smart4y.cloud.base.interfaces.converter.GatewayRouteConverter;
+import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayRouteVO;
+import com.smart4y.cloud.base.interfaces.valueobject.vo.ServiceVO;
 import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
+import com.smart4y.cloud.core.interfaces.RateLimitApiDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 网关接口
@@ -28,6 +29,9 @@ import java.util.Map;
 @RestController
 public class GatewayController {
 
+
+    @Autowired
+    private GatewayRouteConverter gatewayRouteConverter;
     @Autowired
     private GatewayIpLimitService gatewayIpLimitService;
     @Autowired
@@ -35,19 +39,26 @@ public class GatewayController {
     @Autowired
     private GatewayRouteService gatewayRouteService;
 
+    /**
+     * 获取路由列表
+     */
+    @ApiOperation(value = "获取路由列表", notes = "仅限内部调用")
+    @GetMapping("/gateway/api/route")
+    public ResultEntity<List<GatewayRouteVO>> getApiRouteList() {
+        List<GatewayRoute> list = gatewayRouteService.findRouteList();
+        List<GatewayRouteVO> result = gatewayRouteConverter.convertList(list);
+        return ResultEntity.ok(result);
+    }
+
     @ApiOperation(value = "获取服务列表", notes = "获取服务列表")
     @GetMapping("/gateway/service/list")
-    public ResultEntity<List<Map<String, Object>>> getServiceList() {
-        List<Map<String, Object>> services = Lists.newArrayList();
+    public ResultEntity<List<ServiceVO>> getServiceList() {
         List<GatewayRoute> routes = gatewayRouteService.findRouteList();
-        if (routes != null && routes.size() > 0) {
-            routes.forEach(route -> {
-                Map<String, Object> service = Maps.newHashMap();
-                service.put("serviceId", route.getRouteName());
-                service.put("serviceName", route.getRouteDesc());
-                services.add(service);
-            });
-        }
+        List<ServiceVO> services = routes.stream()
+                .map(r -> new ServiceVO()
+                        .setServiceId(r.getRouteName())
+                        .setServiceDesc(r.getRouteDesc()))
+                .collect(Collectors.toList());
         return ResultEntity.ok(services);
     }
 
@@ -57,39 +68,27 @@ public class GatewayController {
     @ApiOperation(value = "获取接口黑名单列表", notes = "仅限内部调用")
     @GetMapping("/gateway/api/blackList")
     public ResultEntity<List<IpLimitApiDTO>> getApiBlackList() {
-        return ResultEntity.ok(gatewayIpLimitService.findBlackList());
+        List<IpLimitApiDTO> result = gatewayIpLimitService.findBlackList();
+        return ResultEntity.ok(result);
     }
 
     /**
      * 获取接口白名单列表
-     *
-     * @return
      */
     @ApiOperation(value = "获取接口白名单列表", notes = "仅限内部调用")
     @GetMapping("/gateway/api/whiteList")
     public ResultEntity<List<IpLimitApiDTO>> getApiWhiteList() {
-        return ResultEntity.ok(gatewayIpLimitService.findWhiteList());
+        List<IpLimitApiDTO> result = gatewayIpLimitService.findWhiteList();
+        return ResultEntity.ok(result);
     }
 
     /**
      * 获取限流列表
-     *
-     * @return
      */
     @ApiOperation(value = "获取限流列表", notes = "仅限内部调用")
     @GetMapping("/gateway/api/rateLimit")
     public ResultEntity<List<RateLimitApiDTO>> getApiRateLimitList() {
-        return ResultEntity.ok(gatewayRateLimitService.findRateLimitApiList());
-    }
-
-    /**
-     * 获取路由列表
-     *
-     * @return
-     */
-    @ApiOperation(value = "获取路由列表", notes = "仅限内部调用")
-    @GetMapping("/gateway/api/route")
-    public ResultEntity<List<GatewayRoute>> getApiRouteList() {
-        return ResultEntity.ok(gatewayRouteService.findRouteList());
+        List<RateLimitApiDTO> result = gatewayRateLimitService.findRateLimitApiList();
+        return ResultEntity.ok(result);
     }
 }

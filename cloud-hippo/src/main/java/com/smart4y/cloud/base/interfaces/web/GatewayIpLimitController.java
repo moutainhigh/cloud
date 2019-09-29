@@ -36,8 +36,6 @@ public class GatewayIpLimitController {
 
     /**
      * 获取分页接口列表
-     *
-     * @return
      */
     @ApiOperation(value = "获取分页接口列表", notes = "获取分页接口列表")
     @GetMapping("/gateway/limit/ip")
@@ -48,9 +46,6 @@ public class GatewayIpLimitController {
 
     /**
      * 查询策略已绑定API列表
-     *
-     * @param policyId
-     * @return
      */
     @ApiOperation(value = "查询策略已绑定API列表", notes = "获取分页接口列表")
     @ApiImplicitParams({
@@ -58,8 +53,7 @@ public class GatewayIpLimitController {
     })
     @GetMapping("/gateway/limit/ip/api/list")
     public ResultEntity<List<GatewayIpLimitApi>> getIpLimitApiList(
-            @RequestParam("policyId") Long policyId
-    ) {
+            @RequestParam("policyId") Long policyId) {
         List<GatewayIpLimitApi> list = gatewayIpLimitService.findIpLimitApiList(policyId);
         return ResultEntity.ok(list);
     }
@@ -69,7 +63,6 @@ public class GatewayIpLimitController {
      *
      * @param policyId 策略ID
      * @param apiIds   API接口ID.多个以,隔开.选填
-     * @return
      */
     @ApiOperation(value = "绑定API", notes = "一个API只能绑定一个策略")
     @ApiImplicitParams({
@@ -79,8 +72,7 @@ public class GatewayIpLimitController {
     @PostMapping("/gateway/limit/ip/api/add")
     public ResultEntity addIpLimitApis(
             @RequestParam("policyId") Long policyId,
-            @RequestParam(value = "apiIds", required = false) String apiIds
-    ) {
+            @RequestParam(value = "apiIds", required = false) String apiIds) {
         List<Long> collect = Arrays.stream(apiIds.split(","))
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
@@ -91,9 +83,6 @@ public class GatewayIpLimitController {
 
     /**
      * 获取IP限制
-     *
-     * @param policyId
-     * @return
      */
     @ApiOperation(value = "获取IP限制", notes = "获取IP限制")
     @ApiImplicitParams({
@@ -111,7 +100,6 @@ public class GatewayIpLimitController {
      * @param policyName 策略名称
      * @param policyType 策略类型:0-拒绝/黑名单 1-允许/白名单
      * @param ipAddress  ip地址/IP段:多个用隔开;最多10个
-     * @return
      */
     @ApiOperation(value = "添加IP限制", notes = "添加IP限制")
     @ApiImplicitParams({
@@ -144,7 +132,6 @@ public class GatewayIpLimitController {
      * @param policyName 策略名称
      * @param policyType 策略类型:0-拒绝/黑名单 1-允许/白名单
      * @param ipAddress  ip地址/IP段:多个用隔开;最多10个
-     * @return
      */
     @ApiOperation(value = "编辑IP限制", notes = "编辑IP限制")
     @ApiImplicitParams({
@@ -158,8 +145,7 @@ public class GatewayIpLimitController {
             @RequestParam("policyId") Long policyId,
             @RequestParam(value = "policyName") String policyName,
             @RequestParam(value = "policyType") Integer policyType,
-            @RequestParam(value = "ipAddress") String ipAddress
-    ) {
+            @RequestParam(value = "ipAddress") String ipAddress) {
         GatewayIpLimit ipLimit = new GatewayIpLimit();
         ipLimit.setPolicyId(policyId);
         ipLimit.setPolicyName(policyName);
@@ -170,12 +156,8 @@ public class GatewayIpLimitController {
         return ResultEntity.ok();
     }
 
-
     /**
      * 移除IP限制
-     *
-     * @param policyId
-     * @return
      */
     @ApiOperation(value = "移除IP限制", notes = "移除IP限制")
     @ApiImplicitParams({

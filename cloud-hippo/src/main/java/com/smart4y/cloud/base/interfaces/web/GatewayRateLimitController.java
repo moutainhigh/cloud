@@ -65,7 +65,7 @@ public class GatewayRateLimitController {
     @ApiOperation(value = "绑定API", notes = "一个API只能绑定一个策略")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "policyId", value = "策略ID", defaultValue = "", required = true, paramType = "form"),
-            @ApiImplicitParam(name = "apiIds", value = "API接口ID.多个以,隔开.选填", defaultValue = "", required = false, paramType = "form")
+            @ApiImplicitParam(name = "apiIds", value = "API接口ID.多个以,隔开.选填", paramType = "form")
     })
     @PostMapping("/gateway/limit/rate/api/add")
     public ResultEntity addRateLimitApis(
@@ -110,9 +110,7 @@ public class GatewayRateLimitController {
             @RequestParam(value = "policyName") String policyName,
             @RequestParam(value = "policyType") String policyType,
             @RequestParam(value = "limitQuota") Long limitQuota,
-            @RequestParam(value = "intervalUnit") String intervalUnit
-
-    ) {
+            @RequestParam(value = "intervalUnit") String intervalUnit) {
         GatewayRateLimit rateLimit = new GatewayRateLimit();
         rateLimit.setPolicyName(policyName);
         rateLimit.setLimitQuota(limitQuota);
@@ -134,7 +132,6 @@ public class GatewayRateLimitController {
      * @param limitQuota   限制数
      * @param intervalUnit 单位时间
      * @param policyType   限流规则类型
-     * @return
      */
     @ApiOperation(value = "编辑流量控制", notes = "编辑流量控制")
     @ApiImplicitParams({
@@ -166,9 +163,6 @@ public class GatewayRateLimitController {
 
     /**
      * 移除流量控制
-     *
-     * @param policyId
-     * @return
      */
     @ApiOperation(value = "移除流量控制", notes = "移除流量控制")
     @ApiImplicitParams({
@@ -176,8 +170,7 @@ public class GatewayRateLimitController {
     })
     @PostMapping("/gateway/limit/rate/remove")
     public ResultEntity removeRateLimit(
-            @RequestParam("policyId") Long policyId
-    ) {
+            @RequestParam("policyId") Long policyId) {
         gatewayRateLimitService.removeRateLimitPolicy(policyId);
         // 刷新网关
         openRestTemplate.refreshGateway();

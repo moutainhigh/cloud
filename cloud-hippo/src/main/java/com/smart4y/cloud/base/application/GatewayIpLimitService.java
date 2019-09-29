@@ -2,7 +2,7 @@ package com.smart4y.cloud.base.application;
 
 import com.smart4y.cloud.base.domain.model.GatewayIpLimit;
 import com.smart4y.cloud.base.domain.model.GatewayIpLimitApi;
-import com.smart4y.cloud.core.application.dto.IpLimitApiDTO;
+import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
 import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
 

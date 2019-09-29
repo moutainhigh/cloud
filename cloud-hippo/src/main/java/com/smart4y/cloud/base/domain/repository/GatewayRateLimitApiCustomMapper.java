@@ -1,6 +1,6 @@
 package com.smart4y.cloud.base.domain.repository;
 
-import com.smart4y.cloud.core.application.dto.RateLimitApiDTO;
+import com.smart4y.cloud.core.interfaces.RateLimitApiDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

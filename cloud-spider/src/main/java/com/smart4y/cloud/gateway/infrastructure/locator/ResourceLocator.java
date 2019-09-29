@@ -2,7 +2,7 @@ package com.smart4y.cloud.gateway.infrastructure.locator;
 
 import com.google.common.collect.Lists;
 import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
-import com.smart4y.cloud.core.application.dto.IpLimitApiDTO;
+import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.domain.event.RemoteRefreshRouteEvent;
 import com.smart4y.cloud.gateway.infrastructure.feign.BaseAuthorityFeign;
