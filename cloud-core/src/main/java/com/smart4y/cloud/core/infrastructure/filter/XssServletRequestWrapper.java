@@ -2,9 +2,13 @@ package com.smart4y.cloud.core.infrastructure.filter;
 
 
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
+import org.apache.commons.io.IOUtils;
 
+import javax.servlet.ReadListener;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import java.io.*;
 
 /**
  * XSS 过滤
@@ -14,11 +18,47 @@ import javax.servlet.http.HttpServletRequestWrapper;
  *         Created by youtao on 2019-09-05.
  */
 public class XssServletRequestWrapper extends HttpServletRequestWrapper {
-    private HttpServletRequest request;
 
-    public XssServletRequestWrapper(HttpServletRequest request) {
+    private HttpServletRequest request;
+    private final byte[] body;
+
+    public XssServletRequestWrapper(HttpServletRequest request) throws IOException {
         super(request);
         this.request = request;
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        IOUtils.copy(request.getInputStream(), baos);
+        this.body = baos.toByteArray();
+    }
+
+    @Override
+    public BufferedReader getReader() {
+        return new BufferedReader(new InputStreamReader(getInputStream()));
+    }
+
+    @Override
+    public ServletInputStream getInputStream() {
+        final ByteArrayInputStream bais = new ByteArrayInputStream(body);
+        return new ServletInputStream() {
+            @Override
+            public int read() {
+                return bais.read();
+            }
+
+            @Override
+            public boolean isFinished() {
+                return false;
+            }
+
+            @Override
+            public boolean isReady() {
+                return false;
+            }
+
+            @Override
+            public void setReadListener(ReadListener readListener) {
+            }
+        };
     }
 
     @Override
