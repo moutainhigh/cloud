@@ -1,8 +1,11 @@
 package com.smart4y.cloud.base.interfaces.web;
 
+import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.GatewayRouteService;
 import com.smart4y.cloud.base.domain.model.GatewayRoute;
-import com.smart4y.cloud.core.domain.IPage;
+import com.smart4y.cloud.base.interfaces.converter.GatewayRouteConverter;
+import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayRouteVO;
+import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
@@ -27,6 +30,8 @@ import java.util.Map;
 public class GatewayRouteController {
 
     @Autowired
+    private GatewayRouteConverter gatewayRouteConverter;
+    @Autowired
     private GatewayRouteService gatewayRouteService;
     @Autowired
     private OpenRestTemplate openRestTemplate;
@@ -36,9 +41,10 @@ public class GatewayRouteController {
      */
     @ApiOperation(value = "获取分页路由列表", notes = "获取分页路由列表")
     @GetMapping("/gateway/route")
-    public ResultEntity<IPage<GatewayRoute>> getRouteListPage(@RequestParam(required = false) Map map) {
-        IPage<GatewayRoute> listPage = gatewayRouteService.findListPage(new PageParams(map));
-        return ResultEntity.ok(listPage);
+    public ResultEntity<Page<GatewayRouteVO>> getRouteListPage(@RequestParam(required = false) Map map) {
+        PageInfo<GatewayRoute> pageInfo = gatewayRouteService.findListPage(new PageParams(map));
+        Page<GatewayRouteVO> result = gatewayRouteConverter.convertPage(pageInfo);
+        return ResultEntity.ok(result);
     }
 
     /**
@@ -49,9 +55,10 @@ public class GatewayRouteController {
             @ApiImplicitParam(name = "routeId", required = true, value = "路由ID", paramType = "path"),
     })
     @GetMapping("/gateway/route/{routeId}/info")
-    public ResultEntity<GatewayRoute> getRoute(@PathVariable("routeId") Long routeId) {
+    public ResultEntity<GatewayRouteVO> getRoute(@PathVariable("routeId") Long routeId) {
         GatewayRoute route = gatewayRouteService.getRoute(routeId);
-        return ResultEntity.ok(route);
+        GatewayRouteVO result = gatewayRouteConverter.convert(route);
+        return ResultEntity.ok(result);
     }
 
     /**
@@ -70,16 +77,16 @@ public class GatewayRouteController {
             @ApiImplicitParam(name = "path", required = true, value = "路径表达式", paramType = "form"),
             @ApiImplicitParam(name = "routeName", required = true, value = "路由标识", paramType = "form"),
             @ApiImplicitParam(name = "routeDesc", required = true, value = "路由名称", paramType = "form"),
-            @ApiImplicitParam(name = "serviceId", required = false, value = "服务名方转发", paramType = "form"),
-            @ApiImplicitParam(name = "url", required = false, value = "地址转发", paramType = "form"),
-            @ApiImplicitParam(name = "stripPrefix", required = false, allowableValues = "0,1", defaultValue = "1", value = "忽略前缀", paramType = "form"),
-            @ApiImplicitParam(name = "retryable", required = false, allowableValues = "0,1", defaultValue = "0", value = "支持重试", paramType = "form"),
-            @ApiImplicitParam(name = "status", required = false, allowableValues = "0,1", defaultValue = "1", value = "是否启用", paramType = "form")
+            @ApiImplicitParam(name = "serviceId", value = "服务名方转发", paramType = "form"),
+            @ApiImplicitParam(name = "url", value = "地址转发", paramType = "form"),
+            @ApiImplicitParam(name = "stripPrefix", allowableValues = "0,1", defaultValue = "1", value = "忽略前缀", paramType = "form"),
+            @ApiImplicitParam(name = "retryable", allowableValues = "0,1", defaultValue = "0", value = "支持重试", paramType = "form"),
+            @ApiImplicitParam(name = "status", allowableValues = "0,1", defaultValue = "1", value = "是否启用", paramType = "form")
     })
     @PostMapping("/gateway/route/add")
     public ResultEntity<Long> addRoute(
-            @RequestParam(value = "routeName", required = true, defaultValue = "") String routeName,
-            @RequestParam(value = "routeDesc", required = true, defaultValue = "") String routeDesc,
+            @RequestParam(value = "routeName", defaultValue = "") String routeName,
+            @RequestParam(value = "routeDesc", defaultValue = "") String routeDesc,
             @RequestParam(value = "path") String path,
             @RequestParam(value = "serviceId", required = false) String serviceId,
             @RequestParam(value = "url", required = false) String url,
@@ -116,7 +123,6 @@ public class GatewayRouteController {
      * @param retryable   支持重试
      * @param status      是否启用
      * @param routeName   描述
-     * @return
      */
     @ApiOperation(value = "编辑路由", notes = "编辑路由")
     @ApiImplicitParams({
@@ -124,11 +130,11 @@ public class GatewayRouteController {
             @ApiImplicitParam(name = "routeName", required = true, value = "路由标识", paramType = "form"),
             @ApiImplicitParam(name = "routeDesc", required = true, value = "路由名称", paramType = "form"),
             @ApiImplicitParam(name = "path", required = true, value = "路径表达式", paramType = "form"),
-            @ApiImplicitParam(name = "serviceId", required = false, value = "服务名方转发", paramType = "form"),
-            @ApiImplicitParam(name = "url", required = false, value = "地址转发", paramType = "form"),
-            @ApiImplicitParam(name = "stripPrefix", required = false, allowableValues = "0,1", defaultValue = "1", value = "忽略前缀", paramType = "form"),
-            @ApiImplicitParam(name = "retryable", required = false, allowableValues = "0,1", defaultValue = "0", value = "支持重试", paramType = "form"),
-            @ApiImplicitParam(name = "status", required = false, allowableValues = "0,1", defaultValue = "1", value = "是否启用", paramType = "form")
+            @ApiImplicitParam(name = "serviceId", value = "服务名方转发", paramType = "form"),
+            @ApiImplicitParam(name = "url", value = "地址转发", paramType = "form"),
+            @ApiImplicitParam(name = "stripPrefix", allowableValues = "0,1", defaultValue = "1", value = "忽略前缀", paramType = "form"),
+            @ApiImplicitParam(name = "retryable", allowableValues = "0,1", defaultValue = "0", value = "支持重试", paramType = "form"),
+            @ApiImplicitParam(name = "status", allowableValues = "0,1", defaultValue = "1", value = "是否启用", paramType = "form")
     })
     @PostMapping("/gateway/route/update")
     public ResultEntity updateRoute(

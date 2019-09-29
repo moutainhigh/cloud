@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.application;
 
+import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.GatewayRoute;
-import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
 
 import java.util.List;
@@ -16,11 +16,8 @@ public interface GatewayRouteService {
 
     /**
      * 分页查询
-     *
-     * @param pageParams
-     * @return
      */
-    IPage<GatewayRoute> findListPage(PageParams pageParams);
+    PageInfo<GatewayRoute> findListPage(PageParams pageParams);
 
     /**
      * 查询可用路由列表

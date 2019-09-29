@@ -24,8 +24,8 @@ import java.util.Map;
  * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
-@Api(tags = "网关流量控制")
 @RestController
+@Api(tags = "网关流量控制")
 public class GatewayRateLimitController {
 
     @Autowired
