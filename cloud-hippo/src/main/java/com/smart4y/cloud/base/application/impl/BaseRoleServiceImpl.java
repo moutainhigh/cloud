@@ -10,7 +10,7 @@ import com.smart4y.cloud.base.domain.model.BaseUser;
 import com.smart4y.cloud.base.domain.repository.BaseRoleMapper;
 import com.smart4y.cloud.base.domain.repository.BaseRoleUserCustomMapper;
 import com.smart4y.cloud.base.domain.repository.BaseRoleUserMapper;
-import com.smart4y.cloud.core.application.annotation.ApplicationService;
+import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;

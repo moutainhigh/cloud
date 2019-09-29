@@ -6,7 +6,6 @@ import com.smart4y.cloud.core.infrastructure.mapper.base.AbstractConverter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 /**
@@ -20,8 +19,8 @@ public class BaseActionConverter extends AbstractConverter<BaseAction, BaseActio
     public BaseActionVO convert(BaseAction source, Map<String, Object> parameters) {
         BaseActionVO target = new BaseActionVO();
         BeanUtils.copyProperties(source, target);
-        target.setCreatedDate(source.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        target.setLastModifiedDate(source.getLastModifiedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        target.setCreatedDate(toLocalDateTime(source.getCreatedDate()));
+        target.setLastModifiedDate(toLocalDateTime(source.getLastModifiedDate()));
         return target;
     }
 }

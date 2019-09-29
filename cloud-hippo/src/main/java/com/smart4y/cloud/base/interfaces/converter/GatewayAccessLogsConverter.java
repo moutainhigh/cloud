@@ -6,7 +6,6 @@ import com.smart4y.cloud.core.infrastructure.mapper.base.AbstractConverter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 /**
@@ -20,8 +19,11 @@ public class GatewayAccessLogsConverter extends AbstractConverter<GatewayAccessL
     public GatewayAccessLogsVO convert(GatewayAccessLogs source, Map<String, Object> parameters) {
         GatewayAccessLogsVO target = new GatewayAccessLogsVO();
         BeanUtils.copyProperties(source, target);
-        target.setCreatedDate(source.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        target.setLastModifiedDate(source.getLastModifiedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        target
+                .setRequestTime(toLocalDateTime(source.getRequestTime()))
+                .setResponseTime(toLocalDateTime(source.getResponseTime()))
+                .setCreatedDate(toLocalDateTime(source.getCreatedDate()))
+                .setLastModifiedDate(toLocalDateTime(source.getLastModifiedDate()));
         return target;
     }
 }

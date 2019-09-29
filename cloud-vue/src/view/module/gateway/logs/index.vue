@@ -98,7 +98,7 @@
                     {
                         title: '请求方式',
                         key: 'method',
-                        width: 100,
+                        width: 120,
                         filters: [
                             {
                                 label: 'POST',

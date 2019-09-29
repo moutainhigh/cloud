@@ -10,7 +10,7 @@ import com.smart4y.cloud.base.domain.model.BaseDeveloper;
 import com.smart4y.cloud.base.domain.repository.BaseDeveloperMapper;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddDeveloperUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterDeveloperThirdPartyCommand;
-import com.smart4y.cloud.core.application.annotation.ApplicationService;
+import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;

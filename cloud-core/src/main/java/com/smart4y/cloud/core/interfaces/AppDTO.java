@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.application.dto;
+package com.smart4y.cloud.core.interfaces;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

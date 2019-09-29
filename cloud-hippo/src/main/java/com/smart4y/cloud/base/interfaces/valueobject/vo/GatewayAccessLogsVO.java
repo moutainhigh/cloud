@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * 网关（访问日志）
@@ -55,13 +54,13 @@ public class GatewayAccessLogsVO implements Serializable {
      * 访问时间
      */
     @ApiModelProperty(value = "访问时间")
-    private LocalDateTime requestTime;
+    private String requestTime;
 
     /**
      * 响应时间
      */
     @ApiModelProperty(value = "响应时间")
-    private LocalDateTime responseTime;
+    private String responseTime;
 
     /**
      * 耗时

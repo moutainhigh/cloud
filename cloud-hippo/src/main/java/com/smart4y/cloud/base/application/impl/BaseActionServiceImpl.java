@@ -6,7 +6,7 @@ import com.smart4y.cloud.base.application.BaseActionService;
 import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.domain.model.BaseAction;
 import com.smart4y.cloud.base.domain.repository.BaseActionMapper;
-import com.smart4y.cloud.core.application.annotation.ApplicationService;
+import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;

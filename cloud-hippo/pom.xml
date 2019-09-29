@@ -7,7 +7,7 @@
     <version>0.2.0</version>
     <packaging>jar</packaging>
     <name>cloud-hippo</name>
-    <description>基础服务（河马，绝对王者。）</description>
+    <description>基础服务</description>
 
     <properties>
         <java.version>1.8</java.version>

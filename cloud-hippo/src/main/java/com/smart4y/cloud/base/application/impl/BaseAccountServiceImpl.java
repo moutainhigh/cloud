@@ -5,7 +5,7 @@ import com.smart4y.cloud.base.domain.model.BaseAccount;
 import com.smart4y.cloud.base.domain.model.BaseAccountLogs;
 import com.smart4y.cloud.base.domain.repository.BaseAccountLogsMapper;
 import com.smart4y.cloud.base.domain.repository.BaseAccountMapper;
-import com.smart4y.cloud.core.application.annotation.ApplicationService;
+import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
 import lombok.extern.slf4j.Slf4j;

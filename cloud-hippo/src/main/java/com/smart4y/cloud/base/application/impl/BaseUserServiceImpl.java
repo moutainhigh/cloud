@@ -15,7 +15,7 @@ import com.smart4y.cloud.base.domain.model.BaseUser;
 import com.smart4y.cloud.base.domain.repository.BaseUserMapper;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddAdminUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterAdminThirdPartyCommand;
-import com.smart4y.cloud.core.application.annotation.ApplicationService;
+import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.domain.OpenAuthority;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;

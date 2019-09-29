@@ -57,7 +57,8 @@
               </FormItem>
               <FormItem label="IP地址/域名" prop="ipAddress">
                 <Input v-model="formItem.ipAddress" type="textarea"
-                       placeholder="192.168.0.1;192.168.0.2;baidu.com;weixin.com"></Input> 同时支持Ip和域名,多个用分号";"隔开。示例：192.168.0.1;baidu.com;weixin.com
+                       placeholder="192.168.0.1;192.168.0.2;baidu.com;weixin.com"></Input>
+                同时支持Ip和域名,多个用分号";"隔开。示例：192.168.0.1;baidu.com;weixin.com
 
               </FormItem>
             </Form>
@@ -89,256 +90,259 @@
 </template>
 
 <script>
-  import {getIpLimits, addIpLimit, updateIpLimit, removeIpLimit, getIpLimitApis, addIpLimitApis} from '@/api/ipLimit'
-  import {getAuthorityApi} from '@/api/authority'
+    import {addIpLimit, addIpLimitApis, getIpLimitApis, getIpLimits, removeIpLimit, updateIpLimit} from '@/api/ipLimit'
+    import {getAuthorityApi} from '@/api/authority'
 
-  export default {
-    name: 'GatewayIpLimit',
-    data () {
-      return {
-        loading: false,
-        saving: false,
-        modalVisible: false,
-        modalTitle: '',
-        pageInfo: {
-          total: 0,
-          page: 1,
-          limit: 10,
-          policyName: ''
-        },
-        current: 'form1',
-        forms: [
-          'form1',
-          'form2'
-        ],
-        selectApis: [],
-        formItemRules: {
-          policyName: [
-            {required: true, message: '策略名称不能为空', trigger: 'blur'}
-          ],
-          policyType: [
-            {required: true, message: '策略类型不能为空', trigger: 'blur'}
-          ],
-          ipAddress: [
-            {required: true, message: 'Ip地址不能为空', trigger: 'blur'}
-          ]
-        },
-        formItem: {
-          policyId: '',
-          policyName: '',
-          policyType: '0',
-          ipAddress: '',
-          apiIds: [],
-        },
-        columns: [
-          {
-            title: '策略名称',
-            key: 'policyName',
-            width: 200
-          },
-          {
-            title: '策略类型',
-            width: 300,
-            slot: 'policyType',
-            filters: [
-              {
-                label: '拒绝-黑名单',
-                value: 0
-              },
-              {
-                label: '允许-白名单',
-                value: 1
-              }
-            ],
-            filterMultiple: false,
-            filterMethod (value, row) {
-              if (value === 0) {
-                return row.policyType === 0
-              } else if (value === 1) {
-                return row.policyType === 1
-              }
+    export default {
+        name: 'GatewayIpLimit',
+        data() {
+            return {
+                loading: false,
+                saving: false,
+                modalVisible: false,
+                modalTitle: '',
+                pageInfo: {
+                    total: 0,
+                    page: 1,
+                    limit: 10,
+                    policyName: ''
+                },
+                current: 'form1',
+                forms: [
+                    'form1',
+                    'form2'
+                ],
+                selectApis: [],
+                formItemRules: {
+                    policyName: [
+                        {required: true, message: '策略名称不能为空', trigger: 'blur'}
+                    ],
+                    policyType: [
+                        {required: true, message: '策略类型不能为空', trigger: 'blur'}
+                    ],
+                    ipAddress: [
+                        {required: true, message: 'Ip地址不能为空', trigger: 'blur'}
+                    ]
+                },
+                formItem: {
+                    policyId: '',
+                    policyName: '',
+                    policyType: '0',
+                    ipAddress: '',
+                    apiIds: [],
+                },
+                columns: [
+                    {
+                        title: '策略名称',
+                        key: 'policyName',
+                        width: 200
+                    },
+                    {
+                        title: '策略类型',
+                        width: 300,
+                        slot: 'policyType',
+                        filters: [
+                            {
+                                label: '拒绝-黑名单',
+                                value: 0
+                            },
+                            {
+                                label: '允许-白名单',
+                                value: 1
+                            }
+                        ],
+                        filterMultiple: false,
+                        filterMethod(value, row) {
+                            if (value === 0) {
+                                return row.policyType === 0
+                            } else if (value === 1) {
+                                return row.policyType === 1
+                            }
+                        }
+                    },
+                    {
+                        title: 'IP地址/域名',
+                        key: 'ipAddress'
+                    },
+                    {
+                        title: '最后修改时间',
+                        key: 'lastModifiedDate',
+                        width: 180
+                    },
+                    {
+                        title: '操作',
+                        slot: 'action',
+                        fixed: 'right',
+                        width: 150
+                    }
+                ],
+                data: []
             }
-          },
-          {
-            title: '最后修改时间',
-            key: 'updateTime',
-            width: 180
-          },
-          {
-            title: 'IP地址/域名',
-            key: 'ipAddress'
-          },
-          {
-            title: '操作',
-            slot: 'action',
-            fixed: 'right',
-            width: 150
-          }
-        ],
-        data: []
-      }
-    },
-    methods: {
-      handleModal (data) {
-        if (data) {
-          this.formItem = Object.assign({}, this.formItem, data)
-        }
-        if (this.current === this.forms[0]) {
-          this.modalTitle = data ? '编辑来源限制策略 - ' + this.formItem.policyName : '添加来源限制'
-          this.modalVisible = true
-        }
-        if (this.current === this.forms[1]) {
-          this.modalTitle = data ? '绑定接口 - ' + this.formItem.policyName : '绑定接口'
-          this.handleIpLimitApi(this.formItem.policyId)
-        }
-        this.formItem.policyType = this.formItem.policyType + ''
-      },
-      handleResetForm (form) {
-        this.$refs[form].resetFields()
-      },
-      handleTabClick(name){
-        this.current = name
-        this.handleModal();
-      },
-      handleReset () {
-        const newData = {
-          policyId: '',
-          policyName: '',
-          policyType: '0',
-          ipAddress: '',
-          apiIds: []
-        }
-        this.formItem = newData
-        //重置验证
-        this.forms.map(form => {
-          this.handleResetForm(form)
-        })
-        this.current = this.forms[0]
-        this.modalVisible = false
-        this.saving = false
-      },
-      handleSubmit () {
-        if (this.current === this.forms[0]) {
-          this.$refs[this.current].validate((valid) => {
-            if (valid) {
-              this.saving = true
-              if (this.formItem.policyId) {
-                updateIpLimit(this.formItem).then(res => {
-                  this.handleReset()
-                  this.handleSearch()
-                  if (res.code === 0) {
-                    this.$Message.success('保存成功')
-                  }
-                }).finally(() => {
-                  this.saving = false
-                })
-              } else {
-                addIpLimit(this.formItem).then(res => {
-                  this.handleReset()
-                  this.handleSearch()
-                  if (res.code === 0) {
-                    this.$Message.success('保存成功')
-                  }
-                }).finally(() => {
-                  this.saving = false
-                })
-              }
-            }
-          })
-        }
-        if (this.current === this.forms[1]) {
-          this.$refs[this.current].validate((valid) => {
-            if (valid) {
-              this.saving = true
-              addIpLimitApis({policyId: this.formItem.policyId, apiIds: this.formItem.apiIds}).then(res => {
-                this.handleReset()
-                this.handleSearch()
-                if (res.code === 0) {
-                  this.$Message.success('绑定成功')
+        },
+        methods: {
+            handleModal(data) {
+                if (data) {
+                    this.formItem = Object.assign({}, this.formItem, data)
                 }
-              }).finally(() => {
+                if (this.current === this.forms[0]) {
+                    this.modalTitle = data ? '编辑来源限制策略 - ' + this.formItem.policyName : '添加来源限制'
+                    this.modalVisible = true
+                }
+                if (this.current === this.forms[1]) {
+                    this.modalTitle = data ? '绑定接口 - ' + this.formItem.policyName : '绑定接口'
+                    this.handleIpLimitApi(this.formItem.policyId)
+                }
+                this.formItem.policyType = this.formItem.policyType + ''
+            },
+            handleResetForm(form) {
+                this.$refs[form].resetFields()
+            },
+            handleTabClick(name) {
+                this.current = name
+                this.handleModal();
+            },
+            handleReset() {
+                const newData = {
+                    policyId: '',
+                    policyName: '',
+                    policyType: '0',
+                    ipAddress: '',
+                    apiIds: []
+                }
+                this.formItem = newData
+                //重置验证
+                this.forms.map(form => {
+                    this.handleResetForm(form)
+                })
+                this.current = this.forms[0]
+                this.modalVisible = false
                 this.saving = false
-              })
+            },
+            handleSubmit() {
+                if (this.current === this.forms[0]) {
+                    this.$refs[this.current].validate((valid) => {
+                        if (valid) {
+                            this.saving = true
+                            if (this.formItem.policyId) {
+                                updateIpLimit(this.formItem).then(res => {
+                                    this.handleReset()
+                                    this.handleSearch()
+                                    if (res.code === 0) {
+                                        this.$Message.success('保存成功')
+                                    }
+                                }).finally(() => {
+                                    this.saving = false
+                                })
+                            } else {
+                                addIpLimit(this.formItem).then(res => {
+                                    this.handleReset()
+                                    this.handleSearch()
+                                    if (res.code === 0) {
+                                        this.$Message.success('保存成功')
+                                    }
+                                }).finally(() => {
+                                    this.saving = false
+                                })
+                            }
+                        }
+                    })
+                }
+                if (this.current === this.forms[1]) {
+                    this.$refs[this.current].validate((valid) => {
+                        if (valid) {
+                            this.saving = true
+                            addIpLimitApis({
+                                policyId: this.formItem.policyId,
+                                apiIds: this.formItem.apiIds
+                            }).then(res => {
+                                this.handleReset()
+                                this.handleSearch()
+                                if (res.code === 0) {
+                                    this.$Message.success('绑定成功')
+                                }
+                            }).finally(() => {
+                                this.saving = false
+                            })
+                        }
+                    })
+                }
+            },
+            handleSearch(page) {
+                if (page) {
+                    this.pageInfo.page = page
+                }
+                this.loading = true
+                getIpLimits(this.pageInfo).then(res => {
+                    this.data = res.data.records
+                    this.pageInfo.total = parseInt(res.data.total)
+                }).finally(() => {
+                    this.loading = false
+                })
+            },
+            handlePage(current) {
+                this.pageInfo.page = current
+                this.handleSearch()
+            },
+            handlePageSize(size) {
+                this.pageInfo.limit = size
+                this.handleSearch()
+            },
+            handleRemove(data) {
+                this.$Modal.confirm({
+                    title: '确定删除吗？',
+                    onOk: () => {
+                        removeIpLimit(data.policyId).then(res => {
+                            if (res.code === 0) {
+                                this.pageInfo.page = 1
+                                this.$Message.success('删除成功')
+                            }
+                            this.handleSearch()
+                        })
+                    }
+                })
+            },
+            handleIpLimitApi(policyId) {
+                if (!policyId) {
+                    return
+                }
+                const that = this
+                const p1 = getAuthorityApi('')
+                const p2 = getIpLimitApis(policyId)
+                Promise.all([p1, p2]).then(function (values) {
+                    let res1 = values[0]
+                    let res2 = values[1]
+                    if (res1.code === 0) {
+                        res1.data.map(item => {
+                            item.key = item.apiId
+                            item.label = `${item.prefix.replace('/**', '')}${item.path} - ${item.apiName}`
+                        })
+                        that.selectApis = res1.data
+                    }
+                    if (res2.code === 0) {
+                        let apiIds = []
+                        res2.data.map(item => {
+                            if (!apiIds.includes(item.apiId)) {
+                                apiIds.push(item.apiId)
+                            }
+                        })
+                        that.formItem.apiIds = apiIds
+                    }
+                    that.modalVisible = true
+                })
+            },
+            transferRender(item) {
+                return `<span  title="${item.label}">${item.label}</span>`
+            },
+            handleTransferChange(newTargetKeys, direction, moveKeys) {
+                if (newTargetKeys.indexOf('1') != -1) {
+                    this.formItem.apiIds = ['1']
+                } else {
+                    this.formItem.apiIds = newTargetKeys
+                }
             }
-          })
+        },
+        mounted: function () {
+            this.handleSearch()
         }
-      },
-      handleSearch (page) {
-        if (page) {
-          this.pageInfo.page = page
-        }
-        this.loading = true
-        getIpLimits(this.pageInfo).then(res => {
-          this.data = res.data.records
-          this.pageInfo.total = parseInt(res.data.total)
-        }).finally(() => {
-          this.loading = false
-        })
-      },
-      handlePage (current) {
-        this.pageInfo.page = current
-        this.handleSearch()
-      },
-      handlePageSize (size) {
-        this.pageInfo.limit = size
-        this.handleSearch()
-      },
-      handleRemove (data) {
-        this.$Modal.confirm({
-          title: '确定删除吗？',
-          onOk: () => {
-            removeIpLimit(data.policyId).then(res => {
-              if (res.code === 0) {
-                this.pageInfo.page = 1
-                this.$Message.success('删除成功')
-              }
-              this.handleSearch()
-            })
-          }
-        })
-      },
-      handleIpLimitApi (policyId) {
-        if (!policyId) {
-          return
-        }
-        const that = this
-        const p1 = getAuthorityApi('')
-        const p2 = getIpLimitApis(policyId)
-        Promise.all([p1, p2]).then(function (values) {
-          let res1 = values[0]
-          let res2 = values[1]
-          if (res1.code === 0) {
-            res1.data.map(item => {
-              item.key = item.apiId
-              item.label = `${item.prefix.replace('/**', '')}${item.path} - ${item.apiName}`
-            })
-            that.selectApis = res1.data
-          }
-          if (res2.code === 0) {
-            let apiIds = []
-            res2.data.map(item => {
-              if (!apiIds.includes(item.apiId)) {
-                apiIds.push(item.apiId)
-              }
-            })
-            that.formItem.apiIds = apiIds
-          }
-          that.modalVisible = true
-        })
-      },
-      transferRender (item) {
-        return `<span  title="${item.label}">${item.label}</span>`
-      },
-      handleTransferChange (newTargetKeys, direction, moveKeys) {
-        if (newTargetKeys.indexOf('1') != -1) {
-          this.formItem.apiIds = ['1']
-        } else {
-          this.formItem.apiIds = newTargetKeys
-        }
-      }
-    },
-    mounted: function () {
-      this.handleSearch()
     }
-  }
 </script>

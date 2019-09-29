@@ -2,7 +2,10 @@ package com.smart4y.cloud.core.infrastructure.mapper.base;
 
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.core.domain.Page;
+import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -51,5 +54,19 @@ public abstract class AbstractConverter<Source, Target> {
         page.setTotal(total);
         page.setRecords(targets);
         return page;
+    }
+
+    public String toLocalDateTime(LocalDateTime localDateTime) {
+        if (null == localDateTime) {
+            return "";
+        }
+        return localDateTime.format(CommonConstants.DATE_TIME_FORMATTER);
+    }
+
+    public String toLocalDate(LocalDate localDate) {
+        if (null == localDate) {
+            return "";
+        }
+        return localDate.format(CommonConstants.DATE_FORMATTER);
     }
 }

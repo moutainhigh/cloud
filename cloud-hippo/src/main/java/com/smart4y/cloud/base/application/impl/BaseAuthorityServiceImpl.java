@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.smart4y.cloud.base.application.*;
 import com.smart4y.cloud.base.domain.model.*;
 import com.smart4y.cloud.base.domain.repository.*;
-import com.smart4y.cloud.core.application.annotation.ApplicationService;
+import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.domain.OpenAuthority;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;

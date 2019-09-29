@@ -56,113 +56,113 @@
 </template>
 
 <script>
-  import {getNotifyHttpLogs} from '@/api/msg'
+    import {getNotifyHttpLogs} from '@/api/msg'
 
-  export default {
-    name: 'MsgHttpLogs',
-    data () {
-      return {
-        drawer: false,
-        currentRow: {},
-        loading: false,
-        pageInfo: {
-          total: 0,
-          page: 1,
-          limit: 10,
-          url: '',
-          type: '',
-          result: ''
+    export default {
+        name: 'MsgHttpLogs',
+        data() {
+            return {
+                drawer: false,
+                currentRow: {},
+                loading: false,
+                pageInfo: {
+                    total: 0,
+                    page: 1,
+                    limit: 10,
+                    url: '',
+                    type: '',
+                    result: ''
+                },
+                columns: [
+                    {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
+                    {
+                        title: '通知标识',
+                        key: 'msgId',
+                        width: 200
+                    },
+                    {
+                        title: '通知地址',
+                        key: 'url',
+                        width: 350
+                    },
+                    {
+                        title: '业务类型',
+                        key: 'type',
+                        width: 150
+                    },
+                    {
+                        title: '通知结果',
+                        key: 'result',
+                        slot: 'status',
+                        width: 100
+                    },
+                    {
+                        title: '重试次数',
+                        key: 'retryNums',
+                        width: 100
+                    },
+                    {
+                        title: '通知次数',
+                        key: 'totalNums',
+                        width: 100
+                    },
+                    {
+                        title: '当前重试时间',
+                        key: 'delay',
+                        render: (h, params) => {
+                            return h('div', (params.row.delay ? params.row.delay / 1000 : 0) + ' s')
+                        },
+                        width: 200
+                    },
+                    {
+                        title: '最后修改时间',
+                        key: 'lastModifiedDate'
+                    },
+                    {
+                        title: '详情',
+                        slot: 'detail',
+                        fixed: 'right',
+                        width: 150
+                    }
+                ],
+                data: []
+            }
         },
-        columns: [
-          {
-            type: 'selection',
-            width: 60,
-            align: 'center'
-          },
-          {
-            title: '通知标识',
-            key: 'msgId',
-            width: 200
-          },
-          {
-            title: '通知地址',
-            key: 'url',
-            width: 350
-          },
-          {
-            title: '业务类型',
-            key: 'type',
-            width: 150
-          },
-          {
-            title: '通知结果',
-            key: 'result',
-            slot: 'status',
-            width: 100
-          },
-          {
-            title: '重试次数',
-            key: 'retryNums',
-            width: 100
-          },
-          {
-            title: '通知次数',
-            key: 'totalNums',
-            width: 100
-          },
-          {
-            title: '当前重试时间',
-            key: 'delay',
-            render: (h, params) => {
-              return h('div', (params.row.delay ? params.row.delay / 1000 : 0) + ' s')
+        methods: {
+            openDrawer(data) {
+                this.currentRow = data
+                this.drawer = true
             },
-            width: 200
-          },
-          {
-            title: '最后修改时间',
-            key: 'updateTime'
-          },
-          {
-            title: '详情',
-            slot: 'detail',
-            fixed: 'right',
-            width: 150
-          }
-        ],
-        data: []
-      }
-    },
-    methods: {
-      openDrawer (data) {
-        this.currentRow = data
-        this.drawer = true
-      },
-      handleSearch (page) {
-        if (page) {
-          this.pageInfo.page = page
+            handleSearch(page) {
+                if (page) {
+                    this.pageInfo.page = page
+                }
+                this.loading = true
+                getNotifyHttpLogs(this.pageInfo).then(res => {
+                    this.data = res.data.records
+                    this.pageInfo.total = parseInt(res.data.total)
+                }).finally(() => {
+                    this.loading = false
+                })
+            },
+            handleResetForm(form) {
+                this.$refs[form].resetFields()
+            },
+            handlePage(current) {
+                this.pageInfo.page = current
+                this.handleSearch()
+            },
+            handlePageSize(size) {
+                this.pageInfo.limit = size
+                this.handleSearch()
+            }
+        },
+        mounted: function () {
+            this.handleSearch()
         }
-        this.loading = true
-        getNotifyHttpLogs(this.pageInfo).then(res => {
-          this.data = res.data.records
-          this.pageInfo.total = parseInt(res.data.total)
-        }).finally(() => {
-          this.loading = false
-        })
-      },
-      handleResetForm (form) {
-        this.$refs[form].resetFields()
-      },
-      handlePage (current) {
-        this.pageInfo.page = current
-        this.handleSearch()
-      },
-      handlePageSize (size) {
-        this.pageInfo.limit = size
-        this.handleSearch()
-      }
-    },
-    mounted: function () {
-      this.handleSearch()
     }
-  }
 </script>

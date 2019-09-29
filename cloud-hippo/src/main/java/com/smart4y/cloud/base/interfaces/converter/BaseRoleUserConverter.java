@@ -20,8 +20,8 @@ public class BaseRoleUserConverter extends AbstractConverter<BaseRoleUser, BaseR
     public BaseRoleUserVO convert(BaseRoleUser source, Map<String, Object> parameters) {
         BaseRoleUserVO target = new BaseRoleUserVO();
         BeanUtils.copyProperties(source, target);
-        target.setCreatedDate(source.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        target.setLastModifiedDate(source.getLastModifiedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        target.setCreatedDate(toLocalDateTime(source.getCreatedDate()));
+        target.setLastModifiedDate(toLocalDateTime(source.getLastModifiedDate()));
         return target;
     }
 }

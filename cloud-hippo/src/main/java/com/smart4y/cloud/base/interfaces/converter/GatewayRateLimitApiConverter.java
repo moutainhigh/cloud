@@ -20,8 +20,8 @@ public class GatewayRateLimitApiConverter extends AbstractConverter<GatewayRateL
     public GatewayRateLimitApiVO convert(GatewayRateLimitApi source, Map<String, Object> parameters) {
         GatewayRateLimitApiVO target = new GatewayRateLimitApiVO();
         BeanUtils.copyProperties(source, target);
-        target.setCreatedDate(source.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        target.setLastModifiedDate(source.getLastModifiedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        target.setCreatedDate(toLocalDateTime(source.getCreatedDate()));
+        target.setLastModifiedDate(toLocalDateTime(source.getLastModifiedDate()));
         return target;
     }
 }

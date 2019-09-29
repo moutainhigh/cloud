@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.application.dto;
+package com.smart4y.cloud.core.interfaces;
 
 import com.smart4y.cloud.core.domain.OpenAuthority;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,7 +22,6 @@ import java.util.*;
 @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_DEFAULT)
 @com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true)
 public class OpenClientDetailsDTO implements ClientDetails, Serializable {
-
 
     @org.codehaus.jackson.annotate.JsonProperty("client_id")
     @com.fasterxml.jackson.annotation.JsonProperty("client_id")

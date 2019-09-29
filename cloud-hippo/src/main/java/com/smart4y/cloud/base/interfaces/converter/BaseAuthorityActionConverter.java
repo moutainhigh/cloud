@@ -20,8 +20,8 @@ public class BaseAuthorityActionConverter extends AbstractConverter<BaseAuthorit
     public BaseAuthorityActionVO convert(BaseAuthorityAction source, Map<String, Object> parameters) {
         BaseAuthorityActionVO target = new BaseAuthorityActionVO();
         BeanUtils.copyProperties(source, target);
-        target.setCreatedDate(source.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        target.setLastModifiedDate(source.getLastModifiedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        target.setCreatedDate(toLocalDateTime(source.getCreatedDate()));
+        target.setLastModifiedDate(toLocalDateTime(source.getLastModifiedDate()));
         return target;
     }
 }

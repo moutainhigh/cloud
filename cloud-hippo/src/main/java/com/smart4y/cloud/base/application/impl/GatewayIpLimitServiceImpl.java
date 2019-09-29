@@ -8,7 +8,7 @@ import com.smart4y.cloud.base.domain.model.GatewayIpLimitApi;
 import com.smart4y.cloud.base.domain.repository.GatewayIpLimitApiCustomMapper;
 import com.smart4y.cloud.base.domain.repository.GatewayIpLimitApiMapper;
 import com.smart4y.cloud.base.domain.repository.GatewayIpLimitMapper;
-import com.smart4y.cloud.core.application.annotation.ApplicationService;
+import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
 import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;

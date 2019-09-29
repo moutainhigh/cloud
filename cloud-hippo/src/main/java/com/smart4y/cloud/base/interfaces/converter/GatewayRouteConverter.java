@@ -6,7 +6,6 @@ import com.smart4y.cloud.core.infrastructure.mapper.base.AbstractConverter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 /**
@@ -20,8 +19,8 @@ public class GatewayRouteConverter extends AbstractConverter<GatewayRoute, Gatew
     public GatewayRouteVO convert(GatewayRoute source, Map<String, Object> parameters) {
         GatewayRouteVO target = new GatewayRouteVO();
         BeanUtils.copyProperties(source, target);
-        target.setCreatedDate(source.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        target.setLastModifiedDate(source.getLastModifiedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        target.setCreatedDate(toLocalDateTime(source.getCreatedDate()));
+        target.setLastModifiedDate(toLocalDateTime(source.getLastModifiedDate()));
         return target;
     }
 }

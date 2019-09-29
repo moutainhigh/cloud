@@ -7,7 +7,7 @@
     <version>0.2.0</version>
     <packaging>jar</packaging>
     <name>cloud-owl</name>
-    <description>认证服务（猫头鹰，智慧的象征。）</description>
+    <description>认证服务</description>
 
     <properties>
         <java.version>1.8</java.version>

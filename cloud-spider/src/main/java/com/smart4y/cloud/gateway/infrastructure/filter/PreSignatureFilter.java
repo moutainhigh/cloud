@@ -2,7 +2,7 @@ package com.smart4y.cloud.gateway.infrastructure.filter;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
 import com.google.common.collect.Maps;
-import com.smart4y.cloud.core.application.dto.AppDTO;
+import com.smart4y.cloud.core.interfaces.AppDTO;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenSignatureException;

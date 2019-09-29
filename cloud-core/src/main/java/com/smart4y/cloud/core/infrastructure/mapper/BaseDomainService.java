@@ -2,7 +2,6 @@ package com.smart4y.cloud.core.infrastructure.mapper;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.OpenThreadContext;
 import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.infrastructure.spring.SpringContextHolder;
@@ -392,9 +391,9 @@ public class BaseDomainService<T extends BaseEntity> {
         return pageInfo;
     }
 
-    public IPage<T> findPage(Weekend<T> weekend) {
+    public Page<T> findPage(Weekend<T> weekend) {
         PageInfo<T> pageInfo = this.page(weekend);
-        IPage<T> page = new Page<>();
+        Page<T> page = new Page<>();
         page.setRecords(pageInfo.getList());
         page.setTotal(pageInfo.getTotal());
         return page;

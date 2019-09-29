@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.application.annotation;
+package com.smart4y.cloud.core.application;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.domain.annotation;
+package com.smart4y.cloud.core.domain;
 
 import org.springframework.stereotype.Component;
 
