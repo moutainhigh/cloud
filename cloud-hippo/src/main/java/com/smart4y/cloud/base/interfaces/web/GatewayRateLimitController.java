@@ -1,9 +1,14 @@
 package com.smart4y.cloud.base.interfaces.web;
 
+import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.GatewayRateLimitService;
 import com.smart4y.cloud.base.domain.model.GatewayRateLimit;
 import com.smart4y.cloud.base.domain.model.GatewayRateLimitApi;
-import com.smart4y.cloud.core.domain.IPage;
+import com.smart4y.cloud.base.interfaces.converter.GatewayRateLimitApiConverter;
+import com.smart4y.cloud.base.interfaces.converter.GatewayRateLimitConverter;
+import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayRateLimitApiVO;
+import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayRateLimitVO;
+import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
@@ -29,6 +34,10 @@ import java.util.Map;
 public class GatewayRateLimitController {
 
     @Autowired
+    private GatewayRateLimitConverter gatewayRateLimitConverter;
+    @Autowired
+    private GatewayRateLimitApiConverter gatewayRateLimitApiConverter;
+    @Autowired
     private GatewayRateLimitService gatewayRateLimitService;
     @Autowired
     private OpenRestTemplate openRestTemplate;
@@ -38,9 +47,24 @@ public class GatewayRateLimitController {
      */
     @ApiOperation(value = "获取分页接口列表", notes = "获取分页接口列表")
     @GetMapping("/gateway/limit/rate")
-    public ResultEntity<IPage<GatewayRateLimit>> getRateLimitListPage(@RequestParam(required = false) Map map) {
-        IPage<GatewayRateLimit> listPage = gatewayRateLimitService.findListPage(new PageParams(map));
-        return ResultEntity.ok(listPage);
+    public ResultEntity<Page<GatewayRateLimitVO>> getRateLimitListPage(@RequestParam(required = false) Map map) {
+        PageInfo<GatewayRateLimit> listPage = gatewayRateLimitService.findListPage(new PageParams(map));
+        Page<GatewayRateLimitVO> result = gatewayRateLimitConverter.convertPage(listPage);
+        return ResultEntity.ok(result);
+    }
+
+    /**
+     * 获取流量控制
+     */
+    @ApiOperation(value = "获取流量控制", notes = "获取流量控制")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "policyId", required = true, value = "策略ID", paramType = "path"),
+    })
+    @GetMapping("/gateway/limit/rate/{policyId}/info")
+    public ResultEntity<GatewayRateLimitVO> getRateLimit(@PathVariable("policyId") Long policyId) {
+        GatewayRateLimit policy = gatewayRateLimitService.getRateLimitPolicy(policyId);
+        GatewayRateLimitVO result = gatewayRateLimitConverter.convert(policy);
+        return ResultEntity.ok(result);
     }
 
     /**
@@ -51,9 +75,10 @@ public class GatewayRateLimitController {
             @ApiImplicitParam(name = "policyId", value = "策略ID", paramType = "form"),
     })
     @GetMapping("/gateway/limit/rate/api/list")
-    public ResultEntity<List<GatewayRateLimitApi>> getRateLimitApiList(@RequestParam("policyId") Long policyId) {
+    public ResultEntity<List<GatewayRateLimitApiVO>> getRateLimitApiList(@RequestParam("policyId") Long policyId) {
         List<GatewayRateLimitApi> list = gatewayRateLimitService.findRateLimitApiList(policyId);
-        return ResultEntity.ok(list);
+        List<GatewayRateLimitApiVO> result = gatewayRateLimitApiConverter.convertList(list);
+        return ResultEntity.ok(result);
     }
 
     /**
@@ -75,19 +100,6 @@ public class GatewayRateLimitController {
         gatewayRateLimitService.addRateLimitApis(policyId, StringUtils.isNotBlank(apiIds) ? apiIds.split(",") : new String[]{});
         openRestTemplate.refreshGateway();
         return ResultEntity.ok();
-    }
-
-    /**
-     * 获取流量控制
-     */
-    @ApiOperation(value = "获取流量控制", notes = "获取流量控制")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "policyId", required = true, value = "策略ID", paramType = "path"),
-    })
-    @GetMapping("/gateway/limit/rate/{policyId}/info")
-    public ResultEntity<GatewayRateLimit> getRateLimit(@PathVariable("policyId") Long policyId) {
-        GatewayRateLimit policy = gatewayRateLimitService.getRateLimitPolicy(policyId);
-        return ResultEntity.ok(policy);
     }
 
     /**

@@ -1,10 +1,10 @@
 package com.smart4y.cloud.base.application;
 
+import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.GatewayIpLimit;
 import com.smart4y.cloud.base.domain.model.GatewayIpLimitApi;
-import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
-import com.smart4y.cloud.core.domain.IPage;
 import com.smart4y.cloud.core.domain.PageParams;
+import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
 
 import java.util.List;
 
@@ -18,11 +18,8 @@ public interface GatewayIpLimitService {
 
     /**
      * 分页查询
-     *
-     * @param pageParams
-     * @return
      */
-    IPage<GatewayIpLimit> findListPage(PageParams pageParams);
+    PageInfo<GatewayIpLimit> findListPage(PageParams pageParams);
 
     /**
      * 查询白名单

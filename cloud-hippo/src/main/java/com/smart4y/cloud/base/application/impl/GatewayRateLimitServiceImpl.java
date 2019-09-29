@@ -9,11 +9,9 @@ import com.smart4y.cloud.base.domain.repository.GatewayRateLimitApiCustomMapper;
 import com.smart4y.cloud.base.domain.repository.GatewayRateLimitApiMapper;
 import com.smart4y.cloud.base.domain.repository.GatewayRateLimitMapper;
 import com.smart4y.cloud.core.application.annotation.ApplicationService;
-import com.smart4y.cloud.core.interfaces.RateLimitApiDTO;
-import com.smart4y.cloud.core.domain.IPage;
-import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
+import com.smart4y.cloud.core.interfaces.RateLimitApiDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.weekend.Weekend;
@@ -38,7 +36,7 @@ public class GatewayRateLimitServiceImpl implements GatewayRateLimitService {
     private GatewayRateLimitApiCustomMapper gatewayRateLimitApiCustomMapper;
 
     @Override
-    public IPage<GatewayRateLimit> findListPage(PageParams pageParams) {
+    public PageInfo<GatewayRateLimit> findListPage(PageParams pageParams) {
         GatewayRateLimit query = pageParams.mapToObject(GatewayRateLimit.class);
 
         Weekend<GatewayRateLimit> queryWrapper = Weekend.of(GatewayRateLimit.class);
@@ -53,11 +51,7 @@ public class GatewayRateLimitServiceImpl implements GatewayRateLimitService {
 
         PageHelper.startPage(pageParams.getPage(), pageParams.getLimit(), Boolean.TRUE);
         List<GatewayRateLimit> list = gatewayRateLimitMapper.selectByExample(queryWrapper);
-        PageInfo<GatewayRateLimit> pageInfo = new PageInfo<>(list);
-        IPage<GatewayRateLimit> page = new Page<>();
-        page.setRecords(pageInfo.getList());
-        page.setTotal(pageInfo.getTotal());
-        return page;
+        return new PageInfo<>(list);
     }
 
     @Override
