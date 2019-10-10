@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration debug="false" scan="false">
+<!--
+    trace < debug < info < warn < error < fatal
+scan：当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true。
+scanPeriod：设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒当scan为true时，此属性生效。默认的时间间隔为1分钟。
+debug：当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。
+-->
+<configuration scan="false" debug="false">
     <springProperty scop="context" name="spring.application.name" source="spring.application.name" defaultValue="logs"/>
     <property name="log.path" value="logs/${spring.application.name}"/>
     <property name="APPENDER_ENCODER_PATTERN"
@@ -39,12 +45,12 @@
     </appender>
 
     <!-- 开发环境 -->
-    <springProfile name="dev">
-        <logger name="com.smart4y.cloud" level="info"/>
-        <logger name="org.springframework.amqp" level="off"/>
-        <logger name="com.alibaba.nacos.client.naming" level="off"/>
-        <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="off"/>
-        <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="off"/>
+    <springProfile name="dev,test">
+        <logger name="com.smart4y.cloud" level="debug"/>
+        <logger name="org.springframework.amqp" level="info"/>
+        <logger name="com.alibaba.nacos.client.naming" level="warn"/>
+        <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="info"/>
+        <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="info"/>
 
         <root level="info">
             <appender-ref ref="console"/>
@@ -55,12 +61,12 @@
     <!-- 生产环境 -->
     <springProfile name="online">
         <logger name="com.smart4y.cloud" level="info"/>
-        <logger name="org.springframework.amqp" level="error"/>
-        <logger name="com.alibaba.nacos.client.naming" level="error"/>
-        <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="error"/>
-        <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="error"/>
+        <logger name="org.springframework.amqp" level="warn"/>
+        <logger name="com.alibaba.nacos.client.naming" level="warn"/>
+        <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="warn"/>
+        <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="warn"/>
 
-        <root level="error">
+        <root level="info">
             <appender-ref ref="console"/>
             <appender-ref ref="debug"/>
             <appender-ref ref="error"/>

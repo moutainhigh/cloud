@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * SpringCloud Gateway 记录缓存请求Body和Form表单
+ * SpringCloud Gateway 记录缓存请求 Body 和 Form 表单
  * GatewayContext gatewayContext = exchange.getAttribute(GatewayContext.CACHE_GATEWAY_CONTEXT);
  * https://github.com/chenggangpro/spring-cloud-gateway-plugin
  *
@@ -58,17 +58,19 @@ public class GatewayContextFilter implements WebFilter, Ordered {
         gatewayContext.setRequestHeaders(headers);
         gatewayContext.getAllRequestData().addAll(request.getQueryParams());
         // save gateway context into exchange
-        exchange.getAttributes().put(GatewayContext.CACHE_GATEWAY_CONTEXT, gatewayContext);
+        exchange.getAttributes()
+                .put(GatewayContext.CACHE_GATEWAY_CONTEXT, gatewayContext);
+
         MediaType contentType = headers.getContentType();
         if (headers.getContentLength() > 0) {
-            if (MediaType.APPLICATION_JSON.equals(contentType) || MediaType.APPLICATION_JSON_UTF8.equals(contentType)) {
+            if (MediaType.APPLICATION_JSON.equals(contentType)
+                    || MediaType.APPLICATION_JSON_UTF8.equals(contentType)) {
                 return readBody(exchange, chain, gatewayContext);
-            }
-            if (MediaType.APPLICATION_FORM_URLENCODED.equals(contentType)) {
+            } else if (MediaType.APPLICATION_FORM_URLENCODED.equals(contentType)) {
                 return readFormData(exchange, chain, gatewayContext);
             }
         }
-        log.debug("[GatewayContext]ContentType:{},Gateway context is set with {}", contentType, gatewayContext);
+        log.debug("[GatewayContext] ContentType: {}, GatewayContext: {}", contentType, gatewayContext);
         return chain.filter(exchange);
     }
 
@@ -77,22 +79,22 @@ public class GatewayContextFilter implements WebFilter, Ordered {
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * ReadFormData
+     */
     private Mono<Void> readFormData(ServerWebExchange exchange, WebFilterChain chain, GatewayContext gatewayContext) {
         HttpHeaders headers = exchange.getRequest().getHeaders();
         return exchange.getFormData()
                 .doOnNext(multiValueMap -> {
                     gatewayContext.setFormData(multiValueMap);
                     gatewayContext.getAllRequestData().addAll(multiValueMap);
-                    log.debug("[GatewayContext]Read FormData Success");
                 })
                 .then(Mono.defer(() -> {
                     Charset charset = headers.getContentType().getCharset();
                     charset = charset == null ? StandardCharsets.UTF_8 : charset;
                     String charsetName = charset.name();
                     MultiValueMap<String, String> formData = gatewayContext.getFormData();
-                    /*
-                     * formData is empty just return
-                     */
+                    // formData is empty just return
                     if (null == formData || formData.isEmpty()) {
                         return chain.filter(exchange);
                     }
@@ -100,9 +102,7 @@ public class GatewayContextFilter implements WebFilter, Ordered {
                     String entryKey;
                     List<String> entryValue;
                     try {
-                        /*
-                         * repackage form data
-                         */
+                        // repackage form data
                         for (Map.Entry<String, List<String>> entry : formData.entrySet()) {
                             entryKey = entry.getKey();
                             entryValue = entry.getValue();
@@ -116,31 +116,23 @@ public class GatewayContextFilter implements WebFilter, Ordered {
                         }
                     } catch (UnsupportedEncodingException e) {
                     }
-                    /*
-                     * substring with the last char '&'
-                     */
+                    // substring with the last char '&'
                     String formDataBodyString = "";
                     if (formDataBodyBuilder.length() > 0) {
                         formDataBodyString = formDataBodyBuilder.substring(0, formDataBodyBuilder.length() - 1);
                     }
-                    /*
-                     * get data bytes
-                     */
+                    // get data bytes
                     byte[] bodyBytes = formDataBodyString.getBytes(charset);
                     int contentLength = bodyBytes.length;
                     HttpHeaders httpHeaders = new HttpHeaders();
                     httpHeaders.putAll(exchange.getRequest().getHeaders());
                     httpHeaders.remove(HttpHeaders.CONTENT_LENGTH);
-                    /*
-                     * in case of content-length not matched
-                     */
+                    // in case of content-length not matched
                     httpHeaders.setContentLength(contentLength);
-                    /*
-                     * use BodyInserter to InsertFormData Body
-                     */
+                    // use BodyInserter to InsertFormData Body
                     BodyInserter<String, ReactiveHttpOutputMessage> bodyInserter = BodyInserters.fromObject(formDataBodyString);
                     CachedBodyOutputMessage cachedBodyOutputMessage = new CachedBodyOutputMessage(exchange, httpHeaders);
-                    log.debug("[GatewayContext]Rewrite Form Data :{}", formDataBodyString);
+                    log.debug("[GatewayContext]Rewrite Form Data: {}", formDataBodyString);
                     return bodyInserter.insert(cachedBodyOutputMessage, new BodyInserterContext())
                             .then(Mono.defer(() -> {
                                 ServerHttpRequestDecorator decorator = new ServerHttpRequestDecorator(
@@ -166,11 +158,9 @@ public class GatewayContextFilter implements WebFilter, Ordered {
     private Mono<Void> readBody(ServerWebExchange exchange, WebFilterChain chain, GatewayContext gatewayContext) {
         return DataBufferUtils.join(exchange.getRequest().getBody())
                 .flatMap(dataBuffer -> {
-                    /*
-                     * read the body Flux<DataBuffer>, and release the buffer
-                     *  when SpringCloudGateway Version Release To G.SR2,this can be update with the new version's feature
-                     * see PR https://github.com/spring-cloud/spring-cloud-gateway/pull/1095
-                     */
+                    // read the body Flux<DataBuffer>, and release the buffer
+                    // when SpringCloudGateway Version Release To G.SR2,this can be update with the new version's feature
+                    // see PR https://github.com/spring-cloud/spring-cloud-gateway/pull/1095
                     byte[] bytes = new byte[dataBuffer.readableByteCount()];
                     dataBuffer.read(bytes);
                     DataBufferUtils.release(dataBuffer);
@@ -179,9 +169,7 @@ public class GatewayContextFilter implements WebFilter, Ordered {
                         DataBufferUtils.retain(buffer);
                         return Mono.just(buffer);
                     });
-                    /*
-                     * repackage ServerHttpRequest
-                     */
+                    // repackage ServerHttpRequest
                     ServerHttpRequest mutatedRequest = new ServerHttpRequestDecorator(exchange.getRequest()) {
                         @Override
                         public Flux<DataBuffer> getBody() {
@@ -194,11 +182,11 @@ public class GatewayContextFilter implements WebFilter, Ordered {
                             .doOnNext(objectValue -> {
                                 gatewayContext.setRequestBody(objectValue);
                                 try {
-                                    gatewayContext.getAllRequestData().setAll(JSONObject.parseObject(objectValue, Map.class));
+                                    Map<String, String> map = JSONObject.parseObject(objectValue, Map.class);
+                                    gatewayContext.getAllRequestData().setAll(map);
                                 } catch (Exception e) {
-                                    log.error("[GatewayContext]Read JsonBody error:{}", e.getLocalizedMessage(), e);
+                                    log.error("[GatewayContext]Read JsonBody error: {}", e.getLocalizedMessage(), e);
                                 }
-                                log.debug("[GatewayContext]Read JsonBody Success");
                             }).then(chain.filter(mutatedExchange));
                 });
     }

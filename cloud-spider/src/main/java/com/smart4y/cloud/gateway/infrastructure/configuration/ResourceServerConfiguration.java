@@ -119,9 +119,7 @@ public class ResourceServerConfiguration {
                 .httpBasic().disable()
                 .csrf().disable()
                 .authorizeExchange()
-                .pathMatchers(
-                        "/v2/api-docs",// TODO 这里要去掉
-                        "/")
+                .pathMatchers("/")
                 .permitAll()
                 // 动态权限验证
                 .anyExchange().access(accessManager)
