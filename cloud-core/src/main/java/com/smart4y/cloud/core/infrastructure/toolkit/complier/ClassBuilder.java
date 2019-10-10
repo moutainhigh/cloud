@@ -63,7 +63,7 @@ public class ClassBuilder {
         try {
             clazz = classLoader.loadClass(className);
         } catch (ClassNotFoundException e) {
-            log.error("{}", e);
+            log.error("{}", e.getLocalizedMessage(), e);
             e.printStackTrace();
         }
         return clazz;

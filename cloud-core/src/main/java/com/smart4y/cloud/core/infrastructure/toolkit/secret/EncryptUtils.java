@@ -71,7 +71,7 @@ public class EncryptUtils extends DigestUtils {
             byte[] byteContent = plainText.getBytes("utf-8");
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
             byte[] byteRresult = cipher.doFinal(byteContent);
-            String sb = new String("");
+            String sb = "";
 
             for (int i = 0; i < byteRresult.length; i++) {
                 String hex = Integer.toHexString(byteRresult[i] & 0xFF);

@@ -42,15 +42,13 @@ public class ReflectionUtils {
      */
     public static Object invokeMethod(Object object, String methodName, Class<?>[] parameterTypes,
                                       Object[] parameters) {
-        //根据 对象、方法名和对应的方法参数 通过反射 调用上面的方法获取 Method 对象
+        // 根据 对象、方法名和对应的方法参数 通过反射 调用上面的方法获取 Method 对象
         Method method = getDeclaredMethod(object, methodName, parameterTypes);
-
-        //抑制Java对方法进行检查,主要是针对私有方法而言
-        method.setAccessible(true);
-
         try {
             if (null != method) {
-                //调用object 的 method 所代表的方法，其方法的参数是 parameters
+                // 抑制 Java 对方法进行检查，主要是针对私有方法而言
+                method.setAccessible(true);
+                // 调用 object 的 method 所代表的方法，其方法的参数是 parameters
                 return method.invoke(object, parameters);
             }
         } catch (IllegalArgumentException e) {

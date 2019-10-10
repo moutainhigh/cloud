@@ -42,8 +42,8 @@ public class GiteeAuthServiceImpl implements OpenOAuth2Service {
 
     @Override
     public String getAuthorizationUrl() {
-        String url = String.format(AUTHORIZATION_URL, getClientDetails().getUserAuthorizationUri(), getClientDetails().getClientId(), getClientDetails().getRedirectUri(), getClientDetails().getScope(), System.currentTimeMillis());
-        return url;
+        String authUrl = String.format(AUTHORIZATION_URL, getClientDetails().getUserAuthorizationUri(), getClientDetails().getClientId(), getClientDetails().getRedirectUri(), getClientDetails().getScope());
+        return String.format(authUrl, System.currentTimeMillis());
     }
 
     @Override

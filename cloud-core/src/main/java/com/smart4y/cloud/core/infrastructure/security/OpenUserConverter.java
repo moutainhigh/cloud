@@ -31,18 +31,21 @@ public class OpenUserConverter extends DefaultUserAuthenticationConverter {
      * 转换为自定义信息
      */
     private Object converter(Map<String, ?> map) {
-        Map<String, Object> params = new HashMap<String, Object>();
-        for (String key : map.keySet()) {
+        Map<String, Object> params = new HashMap<>();
+        for (Map.Entry<String, ?> entry : map.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
             if (USERNAME.equals(key)) {
-                if (map.get(key) instanceof Map) {
-                    params.putAll((Map) map.get(key));
+                if (value instanceof Map) {
+                    Map map1 = (Map) value;
+                    params.putAll(map1);
                 } else if (map.get(key) instanceof OpenUserDetails) {
                     return map.get(key);
                 } else {
                     params.put(key, map.get(key));
                 }
             } else {
-                params.put(key, map.get(key));
+                params.put(key, value);
             }
         }
         OpenUserDetails auth = BeanConvertUtils.mapToObject(params, OpenUserDetails.class);

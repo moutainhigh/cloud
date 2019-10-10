@@ -441,13 +441,4 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         }
         return "";
     }
-
-    //public static void main(String[] args) {
-    //    System.out.println(formatDate(getBeforeDay(new Date()), "yyyy-MM-dd"));
-    //    System.out.println(formatDate(getBeforeWeek(new Date()), "yyyy-MM-dd"));
-    //    System.out.println(formatDate(getBeforeYear(new Date()), "yyyy-MM-dd"));
-    //    System.out.println(formatDate(getAfterDay(new Date()), "yyyy-MM-dd"));
-    //    System.out.println(formatDate(getAfterWeek(new Date()), "yyyy-MM-dd"));
-    //    System.out.println(formatDate(getAfterYear(new Date()), "yyyy-MM-dd"));
-    //}
 }
