@@ -22,6 +22,7 @@ import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -246,21 +247,6 @@ public class WebUtils {
     }
 
     /**
-     * 设置让浏览器弹出下载对话框的Header.
-     *
-     * @param fileName 下载后的文件名.
-     */
-    public static void setFileDownloadHeader(HttpServletResponse response, String fileName) {
-        try {
-            // 中文文件名支持
-            String encodedfileName = new String(fileName.getBytes(), "ISO8859-1");
-            response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedfileName + "\"");
-        } catch (UnsupportedEncodingException e) {
-            e.getMessage();
-        }
-    }
-
-    /**
      * 取得带相同前缀的Request Parameters, copy from spring WebUtils.
      * <p>
      * 返回的结果的Parameter名已去除前缀.
@@ -444,7 +430,7 @@ public class WebUtils {
      */
     public static String encodeHttpBasic(String userName, String password) {
         String encode = userName + ":" + password;
-        return "Basic " + EncodeUtils.encodeBase64(encode.getBytes());
+        return "Basic " + EncodeUtils.encodeBase64(encode.getBytes(StandardCharsets.UTF_8));
     }
 
     /**

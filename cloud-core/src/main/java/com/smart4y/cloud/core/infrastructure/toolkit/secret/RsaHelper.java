@@ -4,6 +4,7 @@ import com.smart4y.cloud.core.infrastructure.toolkit.Kit;
 import lombok.extern.apachecommons.CommonsLog;
 
 import javax.crypto.Cipher;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
@@ -71,7 +72,7 @@ public enum RsaHelper {
 
         String userPubKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCgPwBwWCXjIKdxo+xrt3eWwrXEDWNZofZ19AtSce0MLjLUW0u0mXMU54VlkUCTBfLQAIPNS2shP12djgqnVAJ9XfuBxjqfCm2BDzGBJmMn8YeC/YYzGs2k8x15Qpu5yWtHvHgmDT9UljKiMkGY1K4um6HNJRoYTaxIcjjRPmYSzQIDAQAB";
         PublicKey publicKey = helper.getPublicKey(userPubKey);
-        System.out.println(new String(publicKey.getEncoded()));
+        System.out.println(new String(publicKey.getEncoded(), StandardCharsets.UTF_8));
     }
 
     /**
@@ -85,7 +86,7 @@ public enum RsaHelper {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ALGORITHM);
             SecureRandom secureRandom = new SecureRandom();
             // 初始化随机产生器
-            secureRandom.setSeed(rsaSecret.getBytes());
+            secureRandom.setSeed(rsaSecret.getBytes(StandardCharsets.UTF_8));
             // 初始化密钥生成器
             keyPairGenerator.initialize(KEY_SIZE, secureRandom);
             KeyPair keyPair = keyPairGenerator.genKeyPair();
@@ -111,7 +112,7 @@ public enum RsaHelper {
             KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
             Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-            byte[] enSign = cipher.doFinal(content.getBytes());
+            byte[] enSign = cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
             return toHexString(enSign);
         } catch (Exception e) {
             log.error("公钥加密错误" + e.getLocalizedMessage(), e);
@@ -150,7 +151,7 @@ public enum RsaHelper {
             PrivateKey privateKey = getPrivateKey(priKey);
             Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
             cipher.init(Cipher.ENCRYPT_MODE, privateKey);
-            byte[] enSign = cipher.doFinal(content.getBytes());
+            byte[] enSign = cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
             return toHexString(enSign);
         } catch (Exception e) {
             log.error("私钥加密错误" + e.getLocalizedMessage(), e);
@@ -192,7 +193,7 @@ public enum RsaHelper {
             Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
             cipher.init(Cipher.DECRYPT_MODE, publicKey);
             byte[] design = cipher.doFinal(toBytes(base64));
-            return new String(design);
+            return new String(design, StandardCharsets.UTF_8);
         } catch (Exception e) {
             log.error("公钥解密错误" + e.getLocalizedMessage(), e);
             throw new IllegalArgumentException("公钥解密错误");
@@ -215,7 +216,7 @@ public enum RsaHelper {
             Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
             byte[] design = cipher.doFinal(toBytes(base64));
-            return new String(design);
+            return new String(design, StandardCharsets.UTF_8);
         } catch (Exception e) {
             log.error("私钥解密错误" + e.getLocalizedMessage(), e);
             throw new IllegalArgumentException("私钥解密错误");
@@ -242,7 +243,7 @@ public enum RsaHelper {
             // 初始化Signature
             signature.initSign(privateKey);
             // 更新
-            signature.update(content.getBytes());
+            signature.update(content.getBytes(StandardCharsets.UTF_8));
             return toHexString(signature.sign());
         } catch (Exception e) {
             log.error("RSA签名错误" + e.getLocalizedMessage(), e);
@@ -272,7 +273,7 @@ public enum RsaHelper {
             // 初始化Signature
             signature.initVerify(publicKey);
             // 更新
-            signature.update(content.getBytes());
+            signature.update(content.getBytes(StandardCharsets.UTF_8));
             // 验证
             return signature.verify(toBytes(sign));
         } catch (Exception e) {

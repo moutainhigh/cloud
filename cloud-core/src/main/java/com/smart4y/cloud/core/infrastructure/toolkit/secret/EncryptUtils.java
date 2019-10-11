@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -36,17 +37,17 @@ public class EncryptUtils extends DigestUtils {
     private static char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e',
             'f'};
 
-    public static void main(String[] args) {
-        String en = encryptDES("hahahaha", "yaer");
-        String de = decryptDES("kzWPLLyAsDeBr84lL2COsA==", "yaer");
-        System.out.println(de);
-        System.out.println(en);
-
-        en = encryptAES("hahahaha", "yaer");
-        de = decryptAES("FBC82B89BAA1FBBDF3AE086A09D57E7C", "yaer");
-        System.out.println(de);
-        System.out.println(en);
-    }
+    //public static void main(String[] args) {
+    //    String en = encryptDES("hahahaha", "yaer");
+    //    String de = decryptDES("kzWPLLyAsDeBr84lL2COsA==", "yaer");
+    //    System.out.println(de);
+    //    System.out.println(en);
+    //
+    //    en = encryptAES("hahahaha", "yaer");
+    //    de = decryptAES("FBC82B89BAA1FBBDF3AE086A09D57E7C", "yaer");
+    //    System.out.println(de);
+    //    System.out.println(en);
+    //}
 
     /**
      * AES加密(可逆)
@@ -61,7 +62,7 @@ public class EncryptUtils extends DigestUtils {
             KeyGenerator kgen = KeyGenerator.getInstance("AES");
 
             SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
-            random.setSeed(privateKey.getBytes());
+            random.setSeed(privateKey.getBytes(StandardCharsets.UTF_8));
             kgen.init(128, random);
 
             SecretKey secretKey = kgen.generateKey();
@@ -107,7 +108,7 @@ public class EncryptUtils extends DigestUtils {
             }
             KeyGenerator kgen = KeyGenerator.getInstance("AES");
             SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
-            random.setSeed(privateKey.getBytes());
+            random.setSeed(privateKey.getBytes(StandardCharsets.UTF_8));
             kgen.init(128, random);
             SecretKey secretKey = kgen.generateKey();
             byte[] enCodeFormat = secretKey.getEncoded();
@@ -115,7 +116,7 @@ public class EncryptUtils extends DigestUtils {
             Cipher cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
             byte[] result = cipher.doFinal(byteRresult);
-            return new String(result);
+            return new String(result, StandardCharsets.UTF_8);
         } catch (Exception e) {
             return null;
         }
@@ -132,7 +133,7 @@ public class EncryptUtils extends DigestUtils {
         try {
             KeyGenerator keygen = KeyGenerator.getInstance("DES");
             SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
-            secureRandom.setSeed(privateKey.getBytes());
+            secureRandom.setSeed(privateKey.getBytes(StandardCharsets.UTF_8));
 
             keygen.init(56, secureRandom);
             SecretKey secretKey = keygen.generateKey();
@@ -160,7 +161,7 @@ public class EncryptUtils extends DigestUtils {
         try {
             KeyGenerator keygen = KeyGenerator.getInstance("DES");
             SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
-            secureRandom.setSeed(privateKey.getBytes());
+            secureRandom.setSeed(privateKey.getBytes(StandardCharsets.UTF_8));
 
             keygen.init(56, secureRandom);
             SecretKey secretKey = keygen.generateKey();

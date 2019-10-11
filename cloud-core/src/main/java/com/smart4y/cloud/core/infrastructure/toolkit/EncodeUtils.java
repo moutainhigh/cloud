@@ -7,6 +7,7 @@ import org.apache.commons.codec.binary.Hex;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 封装各种格式的编码解码工具类.
@@ -45,7 +46,7 @@ public class EncodeUtils {
      * Base64编码.
      */
     public static String encodeBase64(byte[] input) {
-        return new String(Base64.encodeBase64(input));
+        return new String(Base64.encodeBase64(input), StandardCharsets.UTF_8);
     }
 
     /**
@@ -53,7 +54,7 @@ public class EncodeUtils {
      */
     public static String encodeBase64(String input) {
         try {
-            return new String(Base64.encodeBase64(input.getBytes(ENCODING)));
+            return new String(Base64.encodeBase64(input.getBytes(ENCODING)), StandardCharsets.UTF_8);
         } catch (UnsupportedEncodingException e) {
             return null;
         }
@@ -63,7 +64,7 @@ public class EncodeUtils {
      * Base64解码.
      */
     public static byte[] decodeBase64(String input) {
-        return Base64.decodeBase64(input.getBytes());
+        return Base64.decodeBase64(input.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
@@ -71,7 +72,7 @@ public class EncodeUtils {
      */
     public static String decodeBase64String(String input) {
         try {
-            return new String(Base64.decodeBase64(input.getBytes()), ENCODING);
+            return new String(Base64.decodeBase64(input.getBytes(StandardCharsets.UTF_8)), ENCODING);
         } catch (UnsupportedEncodingException e) {
             return null;
         }

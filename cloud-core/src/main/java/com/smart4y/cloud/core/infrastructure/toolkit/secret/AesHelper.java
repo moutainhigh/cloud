@@ -60,7 +60,7 @@ public enum AesHelper {
             // 2.根据 DEFAULT_SALT 规则初始化密钥生成器
             // 生成一个128位的随机源,根据传入的字节数组
             SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
-            random.setSeed(salt.getBytes());
+            random.setSeed(salt.getBytes(StandardCharsets.UTF_8));
             keygen.init(128, random);
             // 3.产生原始对称密钥
             SecretKey original_key = keygen.generateKey();
@@ -116,7 +116,7 @@ public enum AesHelper {
             // 2.根据 DEFAULT_SALT 规则初始化密钥生成器
             //生成一个128位的随机源,根据传入的字节数组
             SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
-            random.setSeed(salt.getBytes());
+            random.setSeed(salt.getBytes(StandardCharsets.UTF_8));
             keygen.init(128, random);
             // 3.产生原始对称密钥
             SecretKey original_key = keygen.generateKey();

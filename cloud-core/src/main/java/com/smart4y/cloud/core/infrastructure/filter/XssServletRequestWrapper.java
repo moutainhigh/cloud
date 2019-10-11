@@ -1,6 +1,5 @@
 package com.smart4y.cloud.core.infrastructure.filter;
 
-
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
 import org.apache.commons.io.IOUtils;
 
@@ -9,6 +8,7 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 /**
  * XSS 过滤
@@ -33,7 +33,7 @@ public class XssServletRequestWrapper extends HttpServletRequestWrapper {
 
     @Override
     public BufferedReader getReader() {
-        return new BufferedReader(new InputStreamReader(getInputStream()));
+        return new BufferedReader(new InputStreamReader(getInputStream(), StandardCharsets.UTF_8));
     }
 
     @Override
