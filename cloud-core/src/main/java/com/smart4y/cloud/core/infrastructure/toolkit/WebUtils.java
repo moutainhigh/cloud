@@ -38,16 +38,11 @@ public class WebUtils {
     /**
      * 静态文件后缀
      */
-    private final static String[] staticFiles = StringUtils.split(staticSuffix, ",");
-
+    public final static String[] staticFiles = StringUtils.split(staticSuffix, ",");
     /**
      * 动态映射URL后缀
      */
     private final static String urlSuffix = ".html";
-
-    public static String[] getStaticFiles() {
-        return staticFiles;
-    }
 
     /**
      * 设置 Cookie（生成时间为1天）

@@ -234,8 +234,9 @@ public class IdentityNumberParser extends IdentityCard {
      * @return 校验位
      */
     private static String getCheckCodeBySum(int sum17) {
-        String checkCode = null;
-        switch (sum17 % 11) {
+        String checkCode;
+        int i = sum17 % 11;
+        switch (i) {
             case 10:
                 checkCode = "2";
                 break;
@@ -268,6 +269,9 @@ public class IdentityNumberParser extends IdentityCard {
                 break;
             case 0:
                 checkCode = "1";
+                break;
+            default:
+                checkCode = null;
                 break;
         }
         return checkCode;

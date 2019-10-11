@@ -21,7 +21,7 @@ public enum JacksonHelper implements JsonHelper {
 
     INSTANCE;
 
-    public ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     JacksonHelper() {
         objectMapper = new ObjectMapper();
