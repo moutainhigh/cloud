@@ -41,7 +41,7 @@ public class FeignRequestInterceptor implements RequestInterceptor {
                 String sid = String.valueOf(UUID.randomUUID());
                 template.header(X_REQUEST_ID, sid);
             }
-            log.debug("FeignRequestInterceptor: {}", template.toString());
+            log.debug("{}", template.toString());
         }
     }
 
