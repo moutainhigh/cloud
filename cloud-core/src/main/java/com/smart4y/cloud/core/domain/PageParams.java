@@ -3,7 +3,7 @@ package com.smart4y.cloud.core.domain;
 import com.google.common.collect.Maps;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.toolkit.BeanConvertUtils;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -94,11 +94,11 @@ public class PageParams extends Page implements Serializable {
     }
 
     public String getOrderBy() {
-        if (StringUtils.isBlank(order)) {
+        if (StringUtil.isBlank(order)) {
             order = "asc";
         }
-        if (StringUtils.isNotBlank(sort)) {
-            this.setOrderBy(String.format("%s %s", StringUtils.camelToUnderline(sort), order));
+        if (StringUtil.isNotBlank(sort)) {
+            this.setOrderBy(String.format("%s %s", StringUtil.camelToUnderline(sort), order));
         }
         return orderBy;
     }

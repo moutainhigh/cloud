@@ -87,19 +87,19 @@ public class DbMetaHelper {
 
             if (log.isInfoEnabled()) {
                 String message = String.format(
-                        "\n>>>>>>>>>>>>>>> 数据库信息 >>>>>>>>>>>>>>>\n" +
-                                "数据库已知的用户：\t%s\n" +
-                                "数据库的系统函数的逗号分隔列表：\t%s\n" +
-                                "数据库的时间和日期函数的逗号分隔列表：\t%s\n" +
-                                "数据库的字符串函数的逗号分隔列表：\t%s\n" +
-                                "数据库供应商用于Schema的首选术语：\t%s\n" +
-                                "数据库URL：\t%s\n" +
-                                "是否允许只读：\t%s\n" +
-                                "数据库的产品名称：\t%s\n" +
-                                "数据库的版本：\t%s\n" +
-                                "驱动程序的名称：\t%s\n" +
-                                "驱动程序的版本：\t%s\n" +
-                                "数据库中使用的表类型：\t%s\n",
+                        "%n>>>>>>>>>>>>>>> 数据库信息 >>>>>>>>>>>>>>>%n" +
+                                "数据库已知的用户：\t%s%n" +
+                                "数据库的系统函数的逗号分隔列表：\t%s%n" +
+                                "数据库的时间和日期函数的逗号分隔列表：\t%s%n" +
+                                "数据库的字符串函数的逗号分隔列表：\t%s%n" +
+                                "数据库供应商用于Schema的首选术语：\t%s%n" +
+                                "数据库URL：\t%s%n" +
+                                "是否允许只读：\t%s%n" +
+                                "数据库的产品名称：\t%s%n" +
+                                "数据库的版本：\t%s%n" +
+                                "驱动程序的名称：\t%s%n" +
+                                "驱动程序的版本：\t%s%n" +
+                                "数据库中使用的表类型：\t%s%n",
                         databaseMetaData.getUserName(),
                         databaseMetaData.getSystemFunctions(),
                         databaseMetaData.getTimeDateFunctions(),
@@ -154,8 +154,8 @@ public class DbMetaHelper {
             }
             if (log.isInfoEnabled()) {
                 String message = String.format(
-                        "\n>>>>>>>>>>>>>>> 表信息[catalog=%s, schema=%s, tableName=%s] >>>>>>>>>>>>>>>\n" +
-                                "表名|表备注\n",
+                        "%n>>>>>>>>>>>>>>> 表信息[catalog=%s, schema=%s, tableName=%s] >>>>>>>>>>>>>>>%n" +
+                                "表名|表备注%n",
                         schema, schema, tableNamePattern);
                 log.info(message + result);
             }
@@ -195,8 +195,8 @@ public class DbMetaHelper {
             }
             if (log.isInfoEnabled()) {
                 String message = String.format(
-                        "\n>>>>>>>>>>>>>>> 表主键信息[catalog=%s, schema=%s, tableName=%s] >>>>>>>>>>>>>>>\n" +
-                                "列名|序列号|主键名称\n",
+                        "%n>>>>>>>>>>>>>>> 表主键信息[catalog=%s, schema=%s, tableName=%s] >>>>>>>>>>>>>>>%n" +
+                                "列名|序列号|主键名称%n",
                         schema, schema, tableName);
                 log.info(message + result);
             }
@@ -243,8 +243,8 @@ public class DbMetaHelper {
             }
             if (log.isInfoEnabled()) {
                 String message = String.format(
-                        "\n>>>>>>>>>>>>>>> 表索引信息[catalog=%s, schema=%s, tableName=%s] >>>>>>>>>>>>>>>\n" +
-                                "索引名|索引值是否可以不唯一|索引类型|在索引列顺序号|列名|列排序顺序\n",
+                        "%n>>>>>>>>>>>>>>> 表索引信息[catalog=%s, schema=%s, tableName=%s] >>>>>>>>>>>>>>>%n" +
+                                "索引名|索引值是否可以不唯一|索引类型|在索引列顺序号|列名|列排序顺序%n",
                         schema, schema, tableNamePattern);
                 log.info(message + result);
             }
@@ -293,8 +293,8 @@ public class DbMetaHelper {
             }
             if (log.isInfoEnabled()) {
                 String message = String.format(
-                        "\n>>>>>>>>>>>>>>> 表列值信息[catalog=%s, schema=%s, tableName=%s] >>>>>>>>>>>>>>>\n" +
-                                "列名|列类型|列大小|小数位数|是否允许为NULL|默认值|列描述|列最大字节数|列的顺序\n",
+                        "%n>>>>>>>>>>>>>>> 表列值信息[catalog=%s, schema=%s, tableName=%s] >>>>>>>>>>>>>>>%n" +
+                                "列名|列类型|列大小|小数位数|是否允许为NULL|默认值|列描述|列最大字节数|列的顺序%n",
                         schema, schema, tableName);
                 log.info(message + result);
             }

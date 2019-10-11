@@ -2,8 +2,8 @@ package com.smart4y.cloud.core.infrastructure.toolkit.secret;
 
 import com.alibaba.fastjson.JSONObject;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
-import com.smart4y.cloud.core.infrastructure.toolkit.DateUtils;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.DateUtil;
+import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
 import com.smart4y.cloud.core.infrastructure.toolkit.random.RandomValueUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
@@ -32,7 +32,7 @@ public class SignatureUtils {
         HashMap<String, String> signMap = new HashMap<String, String>();
         signMap.put("APP_ID", "1552274783265");
         signMap.put("SIGN_TYPE", SignType.SHA256.name());
-        signMap.put("TIMESTAMP", DateUtils.getCurrentTimestampStr());
+        signMap.put("TIMESTAMP", DateUtil.getCurrentTimestampStr());
         signMap.put("NONCE", RandomValueUtils.randomAlphanumeric(16));
         String sign = SignatureUtils.getSign(signMap, clientSecret);
         System.out.println("签名结果:" + sign);
@@ -57,14 +57,14 @@ public class SignatureUtils {
             throw new IllegalArgumentException(String.format("签名验证失败:SIGN_TYPE必须为:%s,%s", SignatureUtils.SignType.MD5, SignatureUtils.SignType.SHA256));
         }
         try {
-            DateUtils.parseDate(paramsMap.get(CommonConstants.SIGN_TIMESTAMP_KEY), "yyyyMMddHHmmss");
+            DateUtil.parseDate(paramsMap.get(CommonConstants.SIGN_TIMESTAMP_KEY), "yyyyMMddHHmmss");
         } catch (ParseException e) {
             throw new IllegalArgumentException("签名验证失败:TIMESTAMP格式必须为:yyyyMMddHHmmss");
         }
         String timestamp = paramsMap.get(CommonConstants.SIGN_TIMESTAMP_KEY);
         Long clientTimestamp = Long.parseLong(timestamp);
         //判断时间戳 timestamp=201808091113
-        if ((DateUtils.getCurrentTimestamp() - clientTimestamp) > MAX_EXPIRE) {
+        if ((DateUtil.getCurrentTimestamp() - clientTimestamp) > MAX_EXPIRE) {
             throw new IllegalArgumentException("签名验证失败:TIMESTAMP已过期");
         }
     }
@@ -114,7 +114,7 @@ public class SignatureUtils {
         StringBuilder sb = new StringBuilder();
         String signType = paramMap.get(CommonConstants.SIGN_SIGN_TYPE_KEY);
         SignType type = null;
-        if (StringUtils.isNotBlank(signType)) {
+        if (StringUtil.isNotBlank(signType)) {
             type = SignType.valueOf(signType);
         }
         if (type == null) {

@@ -10,7 +10,7 @@ import com.smart4y.cloud.base.domain.repository.GatewayIpLimitApiMapper;
 import com.smart4y.cloud.base.domain.repository.GatewayIpLimitMapper;
 import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.domain.PageParams;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
 import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class GatewayIpLimitServiceImpl implements GatewayIpLimitService {
 
         Weekend<GatewayIpLimit> queryWrapper = Weekend.of(GatewayIpLimit.class);
         WeekendCriteria<GatewayIpLimit, Object> criteria = queryWrapper.weekendCriteria();
-        if (StringUtils.isNotBlank(query.getPolicyName())) {
+        if (StringUtil.isNotBlank(query.getPolicyName())) {
             criteria.andLike(GatewayIpLimit::getPolicyName, query.getPolicyName() + "%");
         }
         if (null != query.getPolicyType()) {

@@ -37,7 +37,7 @@ public class AutoConfiguration {
      * body缓存
      */
     @Bean
-    public FilterRegistrationBean XssFilter() {
+    public FilterRegistrationBean xssFilter() {
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean<>(new XssFilter());
         log.info("XssFilter [{}]", filterRegistrationBean);
         return filterRegistrationBean;

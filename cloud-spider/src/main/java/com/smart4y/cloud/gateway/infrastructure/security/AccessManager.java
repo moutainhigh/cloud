@@ -6,7 +6,7 @@ import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
 import com.smart4y.cloud.core.domain.OpenAuthority;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
 import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
 import com.smart4y.cloud.gateway.infrastructure.toolkit.ReactiveIpAddressMatcher;
@@ -97,7 +97,7 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
         }
         // 动态权限列表
         Flux<AuthorityResourceDTO> resources = resourceLocator.getAuthorityResources();
-        resources.filter(res -> StringUtils.isNotBlank(res.getPath()))
+        resources.filter(res -> StringUtil.isNotBlank(res.getPath()))
                 .subscribe(res -> {
                     boolean isAuth = res.getIsAuth() != null && res.getIsAuth().intValue() == 1;
                     // 无需认证,返回true
@@ -115,7 +115,7 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
         final AuthorityResourceDTO[] result = {null};
         // 动态权限列表
         Flux<AuthorityResourceDTO> resources = resourceLocator.getAuthorityResources();
-        resources.filter(r -> !"/**".equals(r.getPath()) && !permitAll(requestPath) && StringUtils.isNotBlank(r.getPath()) && pathMatch.match(r.getPath(), requestPath))
+        resources.filter(r -> !"/**".equals(r.getPath()) && !permitAll(requestPath) && StringUtil.isNotBlank(r.getPath()) && pathMatch.match(r.getPath(), requestPath))
                 .subscribe(r -> result[0] = r);
         return result[0];
     }
@@ -236,13 +236,13 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
     public boolean matchIpOrOrigin(Set<String> values, String ipAddress, String origin) {
         ReactiveIpAddressMatcher ipAddressMatcher;
         for (String value : values) {
-            if (StringUtils.matchIp(value)) {
+            if (StringUtil.matchIp(value)) {
                 ipAddressMatcher = new ReactiveIpAddressMatcher(value);
                 if (ipAddressMatcher.matches(ipAddress)) {
                     return true;
                 }
             } else {
-                if (StringUtils.matchDomain(value) && StringUtils.isNotBlank(origin) && origin.contains(value)) {
+                if (StringUtil.matchDomain(value) && StringUtil.isNotBlank(origin) && origin.contains(value)) {
                     return true;
                 }
             }

@@ -49,6 +49,11 @@ public final class OpenAuthority implements GrantedAuthority {
     @ApiModelProperty(value = "权限所有者")
     private String owner;
 
+    @JsonProperty("isExpired")
+    public Boolean getIsExpired() {
+        return this.expireTime != null && System.currentTimeMillis() > this.expireTime.getTime();
+    }
+
     public OpenAuthority(String authority) {
         Assert.hasText(authority, "A granted authority textual representation is required");
         this.authority = authority;
@@ -65,11 +70,6 @@ public final class OpenAuthority implements GrantedAuthority {
         this.authority = authority;
         this.expireTime = expireTime;
         this.owner = owner;
-    }
-
-    @JsonProperty("isExpired")
-    public Boolean getIsExpired() {
-        return expireTime != null && System.currentTimeMillis() > expireTime.getTime();
     }
 
     @Override

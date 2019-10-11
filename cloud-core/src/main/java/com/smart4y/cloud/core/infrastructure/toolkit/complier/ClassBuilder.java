@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.tools.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
@@ -16,9 +19,9 @@ import java.util.regex.Pattern;
 @Slf4j
 public class ClassBuilder {
 
-    public static Map<String, JavaFileObject> fileObjects = new ConcurrentHashMap<>();
+    static Map<String, JavaFileObject> fileObjects = new ConcurrentHashMap<>();
     private static Pattern CLASS_PATTERN = Pattern.compile("class\\s+([$_a-zA-Z][$_a-zA-Z0-9]*)\\s*");
-    private static Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
+    private static Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private static List<String> compilerOptions = Arrays.asList("-target", "1.8");
 
     /**
@@ -58,7 +61,10 @@ public class ClassBuilder {
      * @return Class
      */
     public static Class<?> loadClass(String className) {
-        ClassLoader classLoader = new DcClassLoader();
+        // 我特此请求使用我的权限完成此方法，即使我是由没有它们的方法调用的
+        ClassLoader classLoader = AccessController
+                .doPrivileged((PrivilegedAction<ClassLoader>) DcClassLoader::new);
+
         Class<?> clazz = null;
         try {
             clazz = classLoader.loadClass(className);

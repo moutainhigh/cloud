@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.smart4y.cloud.core.domain.event.ResourceScannedEvent;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.QueueConstants;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
 import com.smart4y.cloud.core.infrastructure.toolkit.reflection.ReflectionUtils;
 import com.smart4y.cloud.core.infrastructure.toolkit.secret.EncryptUtils;
 import io.swagger.annotations.ApiOperation;
@@ -150,7 +150,7 @@ public class ResourceAnnotationScan implements ApplicationListener<ApplicationRe
                 name = apiOperation.value();
                 desc = apiOperation.notes();
             }
-            name = StringUtils.isBlank(name) ? methodName : name;
+            name = StringUtil.isBlank(name) ? methodName : name;
 
             ResourceScannedEvent.Mapping mappings = new ResourceScannedEvent.Mapping()
                     .setApiName(name)

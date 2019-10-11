@@ -9,7 +9,7 @@ import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -103,7 +103,7 @@ public class GatewayRouteController {
         route.setStatus(status);
         route.setRouteName(routeName);
         route.setRouteDesc(routeDesc);
-        if (route.getUrl() != null && StringUtils.isNotEmpty(route.getUrl())) {
+        if (route.getUrl() != null && StringUtil.isNotEmpty(route.getUrl())) {
             route.setServiceId(null);
         }
         long routeId = gatewayRouteService.addRoute(route);
@@ -158,7 +158,7 @@ public class GatewayRouteController {
         route.setStatus(status);
         route.setRouteName(routeName);
         route.setRouteDesc(routeDesc);
-        if (route.getUrl() != null && StringUtils.isNotEmpty(route.getUrl())) {
+        if (route.getUrl() != null && StringUtil.isNotEmpty(route.getUrl())) {
             route.setServiceId(null);
         }
         gatewayRouteService.updateRoute(route);

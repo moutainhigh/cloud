@@ -71,7 +71,7 @@ public class OpenClientDetails implements ClientDetails, Serializable {
 
     @org.codehaus.jackson.annotate.JsonProperty("additional_information")
     @com.fasterxml.jackson.annotation.JsonProperty("additional_information")
-    private Map<String, Object> additionalInformation = new LinkedHashMap<String, Object>();
+    private Map<String, Object> additionalInformation = new LinkedHashMap<>();
 
     public OpenClientDetails() {
     }
@@ -120,7 +120,7 @@ public class OpenClientDetails implements ClientDetails, Serializable {
             this.authorizedGrantTypes = StringUtils
                     .commaDelimitedListToSet(grantTypes);
         } else {
-            this.authorizedGrantTypes = new HashSet<String>(Arrays.asList(
+            this.authorizedGrantTypes = new HashSet<>(Arrays.asList(
                     "authorization_code", "refresh_token"));
         }
 
@@ -166,7 +166,7 @@ public class OpenClientDetails implements ClientDetails, Serializable {
     }
 
     public void setAutoApproveScopes(Collection<String> autoApproveScopes) {
-        this.autoApproveScopes = new HashSet<String>(autoApproveScopes);
+        this.autoApproveScopes = new HashSet<>(autoApproveScopes);
     }
 
     @Override
@@ -200,8 +200,8 @@ public class OpenClientDetails implements ClientDetails, Serializable {
     }
 
     public void setScope(Collection<String> scope) {
-        this.scope = scope == null ? Collections.<String>emptySet()
-                : new LinkedHashSet<String>(scope);
+        this.scope = scope == null ? Collections.emptySet()
+                : new LinkedHashSet<>(scope);
     }
 
     @Override
@@ -213,7 +213,7 @@ public class OpenClientDetails implements ClientDetails, Serializable {
 
     public void setResourceIds(Collection<String> resourceIds) {
         this.resourceIds = resourceIds == null ? Collections
-                .<String>emptySet() : new LinkedHashSet<String>(resourceIds);
+                .emptySet() : new LinkedHashSet<>(resourceIds);
     }
 
     @Override
@@ -224,7 +224,7 @@ public class OpenClientDetails implements ClientDetails, Serializable {
     }
 
     public void setAuthorizedGrantTypes(Collection<String> authorizedGrantTypes) {
-        this.authorizedGrantTypes = new LinkedHashSet<String>(
+        this.authorizedGrantTypes = new LinkedHashSet<>(
                 authorizedGrantTypes);
     }
 
@@ -237,7 +237,7 @@ public class OpenClientDetails implements ClientDetails, Serializable {
 
     public void setRegisteredRedirectUri(Set<String> registeredRedirectUris) {
         this.registeredRedirectUris = registeredRedirectUris == null ? null
-                : new LinkedHashSet<String>(registeredRedirectUris);
+                : new LinkedHashSet<>(registeredRedirectUris);
     }
 
     @org.codehaus.jackson.annotate.JsonProperty("authorities")
@@ -245,7 +245,7 @@ public class OpenClientDetails implements ClientDetails, Serializable {
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
         if (authorities == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         return this.authorities;
     }
@@ -254,13 +254,13 @@ public class OpenClientDetails implements ClientDetails, Serializable {
     @com.fasterxml.jackson.annotation.JsonIgnore
     public void setAuthorities(
             Collection<? extends GrantedAuthority> authorities) {
-        this.authorities = new ArrayList<GrantedAuthority>(authorities);
+        this.authorities = new ArrayList<>(authorities);
     }
 
     @org.codehaus.jackson.annotate.JsonProperty("authorities")
     @com.fasterxml.jackson.annotation.JsonProperty("authorities")
     public void setAuthoritiesExt(Collection<OpenAuthority> authorities) {
-        this.authorities = new ArrayList<GrantedAuthority>(authorities);
+        this.authorities = new ArrayList<>(authorities);
     }
 
     @Override

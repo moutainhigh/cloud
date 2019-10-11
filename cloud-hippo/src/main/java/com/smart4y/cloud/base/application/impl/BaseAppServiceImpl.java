@@ -12,7 +12,7 @@ import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
 import com.smart4y.cloud.core.infrastructure.security.OpenClientDetails;
 import com.smart4y.cloud.core.infrastructure.toolkit.BeanConvertUtils;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
 import com.smart4y.cloud.core.infrastructure.toolkit.random.RandomValueUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -63,17 +63,17 @@ public class BaseAppServiceImpl implements BaseAppService {
         if (null != query.getDeveloperId()) {
             criteria.andEqualTo(BaseApp::getDeveloperId, query.getDeveloperId());
         }
-        if (StringUtils.isNotBlank(query.getAppType())) {
+        if (StringUtil.isNotBlank(query.getAppType())) {
             criteria.andEqualTo(BaseApp::getAppType, query.getAppType());
         }
         Object aid = pageParams.getRequestMap().get("aid");
         if (null != aid) {
             criteria.andEqualTo(BaseApp::getAppId, aid.toString());
         }
-        if (StringUtils.isNotBlank(query.getAppName())) {
+        if (StringUtil.isNotBlank(query.getAppName())) {
             criteria.andLike(BaseApp::getAppName, query.getAppName() + "%");
         }
-        if (StringUtils.isNotBlank(query.getAppNameEn())) {
+        if (StringUtil.isNotBlank(query.getAppNameEn())) {
             criteria.andLike(BaseApp::getAppNameEn, query.getAppNameEn() + "%");
         }
         wrapper.orderBy("createdDate").desc();

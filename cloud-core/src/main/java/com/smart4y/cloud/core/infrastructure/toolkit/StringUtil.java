@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
-public class StringUtils extends org.apache.commons.lang3.StringUtils {
+public class StringUtil extends org.apache.commons.lang3.StringUtils {
 
     private static final char SEPARATOR = '_';
     private static final String CHARSET = "UTF-8";
@@ -507,7 +507,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     }
 
     public static String stripXss(String value) {
-        if (StringUtils.isNotBlank(value)) {
+        if (StringUtil.isNotBlank(value)) {
             Matcher matcher = null;
             for (Pattern pattern : getPatterns()) {
                 matcher = pattern.matcher(value);

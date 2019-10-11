@@ -22,7 +22,7 @@ import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
 import com.smart4y.cloud.core.infrastructure.security.OpenSecurityConstants;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
 import com.smart4y.cloud.core.infrastructure.toolkit.WebUtils;
 import com.smart4y.cloud.core.interfaces.UserAccountVO;
 import lombok.extern.slf4j.Slf4j;
@@ -78,11 +78,11 @@ public class BaseUserServiceImpl implements BaseUserService {
 
         // 默认注册用户名账户
         baseAccountService.register(userId, command.getUserName(), command.getPassword(), BaseConstants.ACCOUNT_TYPE_USERNAME, command.getStatus(), ACCOUNT_DOMAIN, null);
-        if (StringUtils.matchEmail(command.getEmail())) {
+        if (StringUtil.matchEmail(command.getEmail())) {
             // 注册email账号登陆
             baseAccountService.register(userId, command.getEmail(), command.getPassword(), BaseConstants.ACCOUNT_TYPE_EMAIL, command.getStatus(), ACCOUNT_DOMAIN, null);
         }
-        if (StringUtils.matchMobile(command.getMobile())) {
+        if (StringUtil.matchMobile(command.getMobile())) {
             // 注册手机号账号登陆
             baseAccountService.register(userId, command.getMobile(), command.getPassword(), BaseConstants.ACCOUNT_TYPE_MOBILE, command.getStatus(), ACCOUNT_DOMAIN, null);
         }
@@ -133,13 +133,13 @@ public class BaseUserServiceImpl implements BaseUserService {
         if (null != query.getUserId()) {
             criteria.andEqualTo(BaseUser::getUserId, query.getUserId());
         }
-        if (StringUtils.isNotBlank(query.getUserType())) {
+        if (StringUtil.isNotBlank(query.getUserType())) {
             criteria.andEqualTo(BaseUser::getUserType, query.getUserType());
         }
-        if (StringUtils.isNotBlank(query.getUserName())) {
+        if (StringUtil.isNotBlank(query.getUserName())) {
             criteria.andEqualTo(BaseUser::getUserName, query.getUserName());
         }
-        if (StringUtils.isNotBlank(query.getMobile())) {
+        if (StringUtil.isNotBlank(query.getMobile())) {
             criteria.andEqualTo(BaseUser::getMobile, query.getMobile());
         }
         queryWrapper.orderBy("createdDate").desc();
@@ -210,14 +210,14 @@ public class BaseUserServiceImpl implements BaseUserService {
 
     @Override
     public UserAccountVO login(String account) {
-        if (StringUtils.isBlank(account)) {
+        if (StringUtil.isBlank(account)) {
             return null;
         }
         Map<String, String> parameterMap = WebUtils.getParameterMap(WebUtils.getHttpServletRequest());
         // 第三方登录标识
         String loginType = parameterMap.get("login_type");
         BaseAccount baseAccount;
-        if (StringUtils.isNotBlank(loginType)) {
+        if (StringUtil.isNotBlank(loginType)) {
             baseAccount = baseAccountService.getAccount(account, loginType, ACCOUNT_DOMAIN);
         } else {
             // 非第三方登录
@@ -226,11 +226,11 @@ public class BaseUserServiceImpl implements BaseUserService {
             baseAccount = baseAccountService.getAccount(account, BaseConstants.ACCOUNT_TYPE_USERNAME, ACCOUNT_DOMAIN);
 
             // 手机号登陆
-            if (StringUtils.matchMobile(account)) {
+            if (StringUtil.matchMobile(account)) {
                 baseAccount = baseAccountService.getAccount(account, BaseConstants.ACCOUNT_TYPE_MOBILE, ACCOUNT_DOMAIN);
             }
             // 邮箱登陆
-            if (StringUtils.matchEmail(account)) {
+            if (StringUtil.matchEmail(account)) {
                 baseAccount = baseAccountService.getAccount(account, BaseConstants.ACCOUNT_TYPE_EMAIL, ACCOUNT_DOMAIN);
             }
         }

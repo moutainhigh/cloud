@@ -12,7 +12,7 @@ import com.smart4y.cloud.core.domain.Page;
 import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -97,7 +97,7 @@ public class GatewayRateLimitController {
             @RequestParam("policyId") Long policyId,
             @RequestParam(value = "apiIds", required = false) String apiIds
     ) {
-        gatewayRateLimitService.addRateLimitApis(policyId, StringUtils.isNotBlank(apiIds) ? apiIds.split(",") : new String[]{});
+        gatewayRateLimitService.addRateLimitApis(policyId, StringUtil.isNotBlank(apiIds) ? apiIds.split(",") : new String[]{});
         openRestTemplate.refreshGateway();
         return ResultEntity.ok();
     }

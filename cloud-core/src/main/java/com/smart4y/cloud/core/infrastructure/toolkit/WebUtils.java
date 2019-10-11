@@ -38,7 +38,7 @@ public class WebUtils {
     /**
      * 静态文件后缀
      */
-    public final static String[] staticFiles = StringUtils.split(staticSuffix, ",");
+    private final static String[] staticFiles = StringUtil.split(staticSuffix, ",");
     /**
      * 动态映射URL后缀
      */
@@ -280,7 +280,7 @@ public class WebUtils {
                 String unprefixed = paramName.substring(pre.length());
                 String[] values = request.getParameterValues(paramName);
                 if (values == null || values.length == 0) {
-                    values = new String[]{};
+                    // values = new String[]{};
                     // Do nothing, no values found at all.
                 } else if (values.length > 1) {
                     params.put(unprefixed, values);
@@ -373,7 +373,7 @@ public class WebUtils {
         } else if (MediaType.APPLICATION_JSON_VALUE.equals(contentType) || MediaType.APPLICATION_JSON_UTF8_VALUE.equals(contentType)) {
             // json表单
             String body = getBodyString(request);
-            if (StringUtils.isNotBlank(body)) {
+            if (StringUtil.isNotBlank(body)) {
                 try {
                     returnMap = JSONObject.parseObject(body, Map.class);
                 } catch (Exception e) {
@@ -403,9 +403,9 @@ public class WebUtils {
                 value = "";
             } else if (valueObj instanceof String[]) {
                 String[] values = (String[]) valueObj;
-                if (values != null && values.length > 0) {
-                    for (int i = 0; i < values.length; i++) {
-                        value = values[i] + ",";
+                if (values.length > 0) {
+                    for (String s : values) {
+                        value = s + ",";
                     }
                     value = value.substring(0, value.length() - 1);
                 }
@@ -500,8 +500,8 @@ public class WebUtils {
      * @throws Exception
      */
     public static boolean isStaticFile(String uri) {
-        return StringUtils.endsWithAny(uri, staticFiles) && !StringUtils.endsWithAny(uri, new String[]{urlSuffix})
-                && !StringUtils.endsWithAny(uri, new String[]{".jsp"}) && !StringUtils.endsWithAny(uri, new String[]{".java"});
+        return StringUtil.endsWithAny(uri, staticFiles) && !StringUtil.endsWithAny(uri, new String[]{urlSuffix})
+                && !StringUtil.endsWithAny(uri, new String[]{".jsp"}) && !StringUtil.endsWithAny(uri, new String[]{".java"});
     }
 
     /**

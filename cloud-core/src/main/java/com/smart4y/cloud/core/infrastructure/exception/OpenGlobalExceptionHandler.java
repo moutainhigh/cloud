@@ -89,7 +89,7 @@ public class OpenGlobalExceptionHandler {
         ErrorCode code = ErrorCode.ERROR;
         int httpStatus = HttpStatus.INTERNAL_SERVER_ERROR.value();
         String message = ex.getMessage();
-        String superClassName = ex.getClass().getSuperclass().getName();
+        //String superClassName = ex.getClass().getSuperclass().getName();
         String className = ex.getClass().getName();
         if (className.contains("UsernameNotFoundException")) {
             httpStatus = HttpStatus.UNAUTHORIZED.value();

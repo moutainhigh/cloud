@@ -206,8 +206,8 @@ public class DbSearcher {
 
         int l = 0, h = headerLength, sptr = 0, eptr = 0;
         while (l <= h) {
-            int m = (l + h) >> 1;
-
+            long i = (l + h) >> 1;
+            int m = Integer.parseInt(String.valueOf(i));
             //perfetc matched, just return it
             if (ip == HeaderSip[m]) {
                 if (m > 0) {

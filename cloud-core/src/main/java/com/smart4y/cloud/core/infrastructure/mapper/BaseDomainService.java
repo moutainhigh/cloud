@@ -246,9 +246,9 @@ public class BaseDomainService<T extends BaseEntity> {
      *
      * @param entity 实体对象
      */
-    public void saveOrUpdate(T entity) {
+    public int saveOrUpdate(T entity) {
         setSaveOrUpdateInfo(entity);
-        int index = mapper.saveOrUpdate(entity);
+        return mapper.saveOrUpdate(entity);
     }
 
     /**

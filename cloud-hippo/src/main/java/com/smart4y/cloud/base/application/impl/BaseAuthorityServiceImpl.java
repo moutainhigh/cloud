@@ -13,7 +13,7 @@ import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
 import com.smart4y.cloud.core.infrastructure.exception.OpenException;
 import com.smart4y.cloud.core.infrastructure.security.OpenHelper;
 import com.smart4y.cloud.core.infrastructure.security.OpenSecurityConstants;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
 import com.smart4y.cloud.core.interfaces.AuthorityApiDTO;
 import com.smart4y.cloud.core.interfaces.AuthorityMenuDTO;
 import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
@@ -470,7 +470,7 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
 
     @Override
     public void clearInvalidApi(String serviceId, Collection<String> codes) {
-        if (StringUtils.isBlank(serviceId)) {
+        if (StringUtil.isBlank(serviceId)) {
             return;
         }
         Weekend<BaseApi> apiWeekend = Weekend.of(BaseApi.class);

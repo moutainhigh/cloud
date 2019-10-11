@@ -16,7 +16,7 @@ import java.util.Locale;
  * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
-public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
+public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
 
     private static final long ONE_MILLIS = 1000;
     private static final long ONE_MINUTE = 60;
@@ -326,69 +326,12 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     public static double getDays(Date before, Date after) {
         long beforeTime = before.getTime();
         long afterTime = after.getTime();
-        return (afterTime - beforeTime) / (ONE_MILLIS * ONE_DAY);
+        long l = (afterTime - beforeTime) / (ONE_MILLIS * ONE_DAY);
+        return Double.parseDouble(String.valueOf(l));
     }
-
-
-    /**
-     * 距离今天多久
-     *
-     * @param createAt
-     * @return
-     */
-    public static String formatTextFromtoday(Date createAt) {
-        // 定义最终返回的结果字符串。
-        String interval = null;
-        if (createAt == null) {
-            return "";
-        }
-        long millisecond = System.currentTimeMillis() - createAt.getTime();
-
-        long second = millisecond / ONE_MILLIS;
-
-        if (second <= 0) {
-            second = 0;
-        }
-        //*--------------微博体（标准）
-        if (second == 0) {
-            interval = "刚刚";
-        } else if (second < ONE_MINUTE / 2) {
-            interval = second + "秒以前";
-        } else if (second >= ONE_MINUTE / 2 && second < ONE_MINUTE) {
-            interval = "半分钟前";
-        } else if (second >= ONE_MINUTE && second < ONE_MINUTE * ONE_MINUTE) {
-            //大于1分钟 小于1小时
-            long minute = second / ONE_MINUTE;
-            interval = minute + "分钟前";
-        } else if (second >= ONE_HOUR && second < ONE_DAY) {
-            //大于1小时 小于24小时
-            long hour = (second / ONE_MINUTE) / ONE_MINUTE;
-            interval = hour + "小时前";
-        } else if (second >= ONE_DAY && second <= ONE_DAY * 2) {
-            //大于1D 小于2D
-            interval = "昨天" + formatDate(createAt, "HH:mm");
-        } else if (second >= ONE_DAY * 2 && second <= ONE_DAY * 7) {
-            //大于2D小时 小于 7天
-            long day = ((second / ONE_MINUTE) / ONE_MINUTE) / 24;
-            interval = day + "天前";
-        } else if (second <= ONE_DAY * 365 && second >= ONE_DAY * 7) {
-            //大于7天小于365天
-            interval = formatDate(createAt, "MM-dd HH:mm");
-        } else if (second >= ONE_DAY * 365) {
-            //大于365天
-            interval = formatDate(createAt, "yyyy-MM-dd HH:mm");
-        } else {
-            interval = "0";
-        }
-        return interval;
-    }
-
 
     /**
      * 距离截止日期还有多长时间
-     *
-     * @param date
-     * @return
      */
     public static String formatTextFromDeadline(Date date) {
         long deadline = date.getTime() / ONE_MILLIS;
@@ -417,7 +360,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      * @return 返回结果 如："2016-09-05 16:06:42";
      */
     public static String unixTimeStamp2Date(String timestampString, String pattern) {
-        if (StringUtils.isBlank(pattern)) {
+        if (StringUtil.isBlank(pattern)) {
             pattern = "yyyy-MM-dd HH:mm:ss";
         }
         Long timestamp = Long.parseLong(timestampString) * ONE_MINUTE;

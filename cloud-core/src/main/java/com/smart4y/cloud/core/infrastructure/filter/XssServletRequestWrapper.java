@@ -1,7 +1,7 @@
 package com.smart4y.cloud.core.infrastructure.filter;
 
 
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
 import org.apache.commons.io.IOUtils;
 
 import javax.servlet.ReadListener;
@@ -63,34 +63,34 @@ public class XssServletRequestWrapper extends HttpServletRequestWrapper {
 
     @Override
     public String getParameter(String name) {
-        name = StringUtils.stripXss(name);
+        name = StringUtil.stripXss(name);
         String value = request.getParameter(name);
-        if (!StringUtils.isEmpty(value)) {
-            value = StringUtils.stripXss(value).trim();
+        if (!StringUtil.isEmpty(value)) {
+            value = StringUtil.stripXss(value).trim();
         }
         return value;
     }
 
     @Override
     public String getHeader(String name) {
-        name = StringUtils.stripXss(name);
+        name = StringUtil.stripXss(name);
         String value = super.getHeader(name);
-        if (StringUtils.isNotBlank(value)) {
-            value = StringUtils.stripXss(value);
+        if (StringUtil.isNotBlank(value)) {
+            value = StringUtil.stripXss(value);
         }
         return value;
     }
 
     @Override
     public String[] getParameterValues(String name) {
-        name = StringUtils.stripXss(name);
+        name = StringUtil.stripXss(name);
         String[] parameterValues = super.getParameterValues(name);
         if (parameterValues == null) {
             return null;
         }
         for (int i = 0; i < parameterValues.length; i++) {
             String value = parameterValues[i];
-            parameterValues[i] = StringUtils.stripXss(value).trim();
+            parameterValues[i] = StringUtil.stripXss(value).trim();
         }
         return parameterValues;
     }
