@@ -85,16 +85,8 @@
                     serviceId: ''
                 },
                 columns: [
-                    {
-                        type: 'selection',
-                        width: 60,
-                        align: 'center'
-                    },
-                    {
-                        title: '请求地址',
-                        key: 'path',
-                        width: 220
-                    },
+                    {type: 'selection', width: 60, align: 'center'},
+                    {title: '请求地址', key: 'path', width: 220},
                     {
                         title: '请求方式',
                         key: 'method',
@@ -136,16 +128,8 @@
                             }
                         }
                     },
-                    {
-                        title: 'IP',
-                        key: 'ip',
-                        width: 150
-                    },
-                    {
-                        title: '区域',
-                        key: 'region',
-                        width: 200
-                    },
+                    {title: 'IP', key: 'ip', width: 150},
+                    {title: '区域', key: 'region', width: 200},
                     {
                         title: '终端',
                         width: 100,
@@ -160,17 +144,8 @@
                             return h('div', readUserAgent(params.row.userAgent).browser)
                         }
                     },
-                    {
-                        title: '服务名',
-                        key: 'serviceId',
-                        width: 200
-                    },
-                    {
-                        title: '响应状态',
-                        key: 'httpStatus',
-                        slot: 'httpStatus',
-                        width: 100
-                    },
+                    {title: '服务名', key: 'serviceId', width: 200},
+                    {title: '响应状态', key: 'httpStatus', slot: 'httpStatus', width: 100},
                     {
                         title: '耗时',
                         key: 'useTime',
@@ -179,17 +154,8 @@
                         },
                         width: 100
                     },
-                    {
-                        title: '请求时间',
-                        key: 'requestTime',
-                        width: 200
-                    },
-                    {
-                        title: '详情',
-                        slot: 'detail',
-                        fixed: 'right',
-                        width: 120
-                    }
+                    {title: '请求时间', key: 'requestTime', width: 200},
+                    {title: '详情', slot: 'detail', fixed: 'right', width: 120}
                 ],
                 data: []
             }

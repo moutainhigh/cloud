@@ -23,7 +23,7 @@ module.exports = {
    */
   publicPath: {
     //  本地环境发布目录
-    dev: '/',
+    dev: '/admin',
     //  生产环境发布目录
     pro: '/admin'
   },
@@ -32,7 +32,7 @@ module.exports = {
    */
   apiUrl: {
     //  本地环境接口请求地址
-    dev: 'http://localhost:8888',
+    dev: 'https://api.smart4y.com',
     //  生产环境接口请求地址
     pro: 'https://api.smart4y.com'
   },

@@ -132,14 +132,9 @@
                     apiIds: [],
                 },
                 columns: [
-                    {
-                        title: '策略名称',
-                        key: 'policyName',
-                        width: 200
-                    },
+                    {title: '策略名称', key: 'policyName', width: 200},
                     {
                         title: '策略类型',
-                        width: 300,
                         slot: 'policyType',
                         filters: [
                             {
@@ -158,23 +153,12 @@
                             } else if (value === 1) {
                                 return row.policyType === 1
                             }
-                        }
+                        },
+                        width: 300
                     },
-                    {
-                        title: 'IP地址/域名',
-                        key: 'ipAddress'
-                    },
-                    {
-                        title: '最后修改时间',
-                        key: 'lastModifiedDate',
-                        width: 180
-                    },
-                    {
-                        title: '操作',
-                        slot: 'action',
-                        fixed: 'right',
-                        width: 150
-                    }
+                    {title: 'IP地址/域名', key: 'ipAddress'},
+                    {title: '最后修改时间', key: 'lastModifiedDate', width: 180},
+                    {title: '操作', slot: 'action', fixed: 'right', width: 150}
                 ],
                 data: []
             }
