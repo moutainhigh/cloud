@@ -3,7 +3,8 @@ package com.smart4y.cloud.core.infrastructure.toolkit.ip;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
-import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * IP 信息
@@ -14,8 +15,7 @@ import lombok.experimental.Accessors;
 @Getter
 @ToString
 @AllArgsConstructor
-@Accessors(fluent = true)
-public class IpInfo {
+public class IpInfo implements Serializable {
 
     /**
      * 国家名称
@@ -24,13 +24,7 @@ public class IpInfo {
      * </p>
      */
     private final String country;
-    /**
-     * 区域名称
-     * <p>
-     * 例如：华东、华南、华北
-     * </p>
-     */
-    private final String region;
+
     /**
      * 省份名称
      * <p>
@@ -38,13 +32,15 @@ public class IpInfo {
      * </p>
      */
     private final String province;
+
     /**
-     * 区域名称
+     * 城市名称
      * <p>
      * 例如：杭州市、上饶市、洛杉矶
      * </p>
      */
     private final String city;
+
     /**
      * ISP 名称
      * <p>

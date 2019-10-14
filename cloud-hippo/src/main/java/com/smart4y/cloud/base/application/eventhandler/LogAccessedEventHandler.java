@@ -51,9 +51,10 @@ public class LogAccessedEventHandler {
                     .setUserAgent(event.getUserAgent());
             String ip = record.getIp();
             if (StringUtils.isNotBlank(ip)) {
-                IpInfo ipInfo = ipHelper.of(ip);
-                if (null != ipInfo) {
-                    String region = ipInfo.region();
+                IpInfo info = ipHelper.of(ip);
+                if (null != info) {
+                    String region = String.format("%s|%s|%s|%s",
+                            info.getCountry(), info.getProvince(), info.getCity(), info.getIsp());
                     record.setRegion(region);
                 }
             }

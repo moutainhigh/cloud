@@ -5,7 +5,7 @@
 
     <groupId>com.smart4y</groupId>
     <artifactId>cloud</artifactId>
-    <version>0.4.1</version>
+    <version>0.5.0</version>
     <packaging>pom</packaging>
     <name>cloud</name>
     <description>Cloud project for Spring Boot</description>

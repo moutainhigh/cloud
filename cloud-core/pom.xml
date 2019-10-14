@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>cloud-core</artifactId>
-    <version>0.4.1</version>
+    <version>0.5.0</version>
     <packaging>jar</packaging>
     <name>cloud-core</name>
     <description>公共模块</description>
@@ -20,6 +20,7 @@
         <libphonenumber-carrier.version>1.110</libphonenumber-carrier.version>
         <libphonenumber-geocoder.version>2.120</libphonenumber-geocoder.version>
         <hutool.version>4.1.19</hutool.version>
+        <ip2region.version>1.7.2</ip2region.version>
         <swagger2.version>2.9.2</swagger2.version>
 
         <mapper.version>4.1.5</mapper.version>
@@ -30,7 +31,7 @@
     <parent>
         <groupId>com.smart4y</groupId>
         <artifactId>cloud</artifactId>
-        <version>0.4.1</version>
+        <version>0.5.0</version>
     </parent>
 
     <dependencies>
@@ -218,6 +219,12 @@
             <groupId>com.googlecode.libphonenumber</groupId>
             <artifactId>geocoder</artifactId>
             <version>${libphonenumber-geocoder.version}</version>
+        </dependency>
+        <!-- Ip2Region -->
+        <dependency>
+            <groupId>org.lionsoul</groupId>
+            <artifactId>ip2region</artifactId>
+            <version>${ip2region.version}</version>
         </dependency>
     </dependencies>
 

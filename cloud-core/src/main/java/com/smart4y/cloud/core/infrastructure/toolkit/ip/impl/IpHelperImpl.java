@@ -2,16 +2,18 @@ package com.smart4y.cloud.core.infrastructure.toolkit.ip.impl;
 
 import com.smart4y.cloud.core.infrastructure.toolkit.ip.IpHelper;
 import com.smart4y.cloud.core.infrastructure.toolkit.ip.IpInfo;
-import com.smart4y.cloud.core.infrastructure.toolkit.ip.core.DataBlock;
-import com.smart4y.cloud.core.infrastructure.toolkit.ip.core.DbConfig;
-import com.smart4y.cloud.core.infrastructure.toolkit.ip.core.DbSearcher;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
+import org.lionsoul.ip2region.DataBlock;
+import org.lionsoul.ip2region.DbConfig;
+import org.lionsoul.ip2region.DbMakerConfigException;
+import org.lionsoul.ip2region.DbSearcher;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.*;
 
 /**
  * @author Youtao
@@ -26,23 +28,56 @@ public enum IpHelperImpl implements IpHelper {
 
     private static DbSearcher getSearcher() {
         if (null == searcher) {
-            searcher = new DbSearcher(new DbConfig());
+            try {
+                String dbPath = getDbFilePath();
+                searcher = new DbSearcher(new DbConfig(), dbPath);
+            } catch (DbMakerConfigException | IOException e) {
+                log.error("初始化IP地址转换器错误：{}", e.getLocalizedMessage(), e);
+            }
         }
         return searcher;
+    }
+
+    private static String getDbFilePath() throws IOException {
+        String dbPath = null;
+
+        String resourcePath = "ip/ip2region.db";
+        URL resource = IpInfo.class.getResource("/" + resourcePath);
+        if (null != resource) {
+            dbPath = resource.getPath();
+            File file = new File(dbPath);
+            if (!file.exists()) {
+                InputStream asStream = IpInfo.class.getClassLoader()
+                        .getResourceAsStream(resourcePath);
+                if (null != asStream) {
+                    String tmpDir = System.getProperties().getProperty("java.io.tmpdir");
+                    dbPath = tmpDir + "ip2region.db";
+                    file = new File(dbPath);
+                    FileUtils.copyInputStreamToFile(asStream, file);
+                }
+            }
+        }
+        return dbPath;
     }
 
     @Override
     public IpInfo of(String ip) {
         try {
-            DataBlock dataBlock = getSearcher().memorySearch(ip);
-            if (null != dataBlock) {
-                return new IpInfo(dataBlock.country(), dataBlock.region(), dataBlock.province(), dataBlock.city(), dataBlock.isp());
+            DbSearcher searcher = getSearcher();
+            if (null != searcher) {
+                DataBlock dataBlock = searcher.memorySearch(ip);
+                if (null != dataBlock) {
+                    // 中国|0|浙江省|杭州市|阿里云
+                    String region = dataBlock.getRegion();
+                    String[] split = region.split("\\|");
+                    return new IpInfo(split[0], split[2], split[3], split[4]);
+                }
             }
         } catch (Exception e) {
             log.warn("获取IP地址所在区域异常：{}", e.getLocalizedMessage(), e);
         }
         String unknown = "未知";
-        return new IpInfo(unknown, unknown, unknown, unknown, unknown);
+        return new IpInfo(unknown, unknown, unknown, unknown);
     }
 
     @Override
