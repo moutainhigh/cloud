@@ -45,6 +45,7 @@ public enum IpHelperImpl implements IpHelper {
         URL resource = IpInfo.class.getResource("/" + resourcePath);
         if (null != resource) {
             dbPath = resource.getPath();
+            log.info(">>>>>>>>>>ip2region.db File Path: {}", dbPath);
             File file = new File(dbPath);
             if (!file.exists()) {
                 InputStream asStream = IpInfo.class.getClassLoader()
@@ -52,6 +53,7 @@ public enum IpHelperImpl implements IpHelper {
                 if (null != asStream) {
                     String tmpDir = System.getProperties().getProperty("java.io.tmpdir");
                     dbPath = tmpDir + "ip2region.db";
+                    log.info(">>>>>>>>>>ip2region.db File Path: {}", dbPath);
                     file = new File(dbPath);
                     FileUtils.copyInputStreamToFile(asStream, file);
                 }
