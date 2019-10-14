@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * ip db searcher class (Not thread safe)
@@ -133,7 +134,7 @@ public class DbSearcher {
         int dataLen = (int) ((dataptr >> 24) & 0xFF);
         int dataPtr = (int) ((dataptr & 0x00FFFFFF));
         int city_id = (int) Util.getIntLong(dbBinStr, dataPtr);
-        String region = new String(dbBinStr, dataPtr + 4, dataLen - 4, Charset.forName("utf-8"));
+        String region = new String(dbBinStr, dataPtr + 4, dataLen - 4, StandardCharsets.UTF_8);
 
         return DataBlock.of(city_id, region, dataPtr);
     }

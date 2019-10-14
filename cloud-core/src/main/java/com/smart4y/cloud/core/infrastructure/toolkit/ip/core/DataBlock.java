@@ -1,6 +1,6 @@
 package com.smart4y.cloud.core.infrastructure.toolkit.ip.core;
 
-import com.smart4y.cloud.core.infrastructure.toolkit.ip.impl.IpInfo;
+import com.smart4y.cloud.core.infrastructure.toolkit.ip.IpInfo;
 import org.apache.commons.lang3.StringUtils;
 
 /**

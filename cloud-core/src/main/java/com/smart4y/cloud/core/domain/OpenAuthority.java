@@ -26,6 +26,11 @@ import java.util.Date;
 public final class OpenAuthority implements GrantedAuthority {
 
     /**
+     * 此处禁止删除
+     */
+    private static final long serialVersionUID = -4682269495406460314L;
+
+    /**
      * 权限Id
      */
     @ApiModelProperty(value = "权限Id")

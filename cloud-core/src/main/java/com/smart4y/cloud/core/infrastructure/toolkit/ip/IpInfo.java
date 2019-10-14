@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.infrastructure.toolkit.ip.impl;
+package com.smart4y.cloud.core.infrastructure.toolkit.ip;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,7 +1,5 @@
 package com.smart4y.cloud.core.infrastructure.toolkit.ip;
 
-import com.smart4y.cloud.core.infrastructure.toolkit.ip.impl.IpInfo;
-
 import javax.servlet.http.HttpServletRequest;
 
 /**

@@ -19,12 +19,11 @@ public class Util {
      * get a int from a byte array start from the specifiled offset
      */
     public static long getIntLong(byte[] b, int offset) {
-        return (
-                ((b[offset++] & 0x000000FFL)) |
-                        ((b[offset++] << 8) & 0x0000FF00L) |
-                        ((b[offset++] << 16) & 0x00FF0000L) |
-                        ((b[offset] << 24) & 0xFF000000L)
-        );
+        long xx = ((b[offset++] & 0x000000FFL)) |
+                ((b[offset++] << 8) & 0x0000FF00L) |
+                ((b[offset++] << 16) & 0x00FF0000L) |
+                ((b[offset] << 24) & 0xFF000000L);
+        return xx;
     }
 
     /**
@@ -40,8 +39,9 @@ public class Util {
         int p1 = ((Integer.parseInt(p[0]) << 24) & 0xFF000000);
         int p2 = ((Integer.parseInt(p[1]) << 16) & 0x00FF0000);
         int p3 = ((Integer.parseInt(p[2]) << 8) & 0x0000FF00);
-        int p4 = ((Integer.parseInt(p[3]) << 0) & 0x000000FF);
+        int p4 = ((Integer.parseInt(p[3])) & 0x000000FF);
+        long index = (p1 | p2 | p3 | p4) & 0xFFFFFFFFL;
 
-        return ((p1 | p2 | p3 | p4) & 0xFFFFFFFFL);
+        return index;
     }
 }

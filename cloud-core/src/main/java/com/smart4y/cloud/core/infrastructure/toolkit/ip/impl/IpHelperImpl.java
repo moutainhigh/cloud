@@ -1,6 +1,7 @@
 package com.smart4y.cloud.core.infrastructure.toolkit.ip.impl;
 
 import com.smart4y.cloud.core.infrastructure.toolkit.ip.IpHelper;
+import com.smart4y.cloud.core.infrastructure.toolkit.ip.IpInfo;
 import com.smart4y.cloud.core.infrastructure.toolkit.ip.core.DataBlock;
 import com.smart4y.cloud.core.infrastructure.toolkit.ip.core.DbConfig;
 import com.smart4y.cloud.core.infrastructure.toolkit.ip.core.DbSearcher;
@@ -37,7 +38,8 @@ public enum IpHelperImpl implements IpHelper {
             if (null != dataBlock) {
                 return new IpInfo(dataBlock.country(), dataBlock.region(), dataBlock.province(), dataBlock.city(), dataBlock.isp());
             }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            log.warn("获取IP地址所在区域异常：{}", e.getLocalizedMessage(), e);
         }
         String unknown = "未知";
         return new IpInfo(unknown, unknown, unknown, unknown, unknown);

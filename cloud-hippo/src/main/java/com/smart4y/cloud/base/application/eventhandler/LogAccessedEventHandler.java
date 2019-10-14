@@ -6,7 +6,7 @@ import com.smart4y.cloud.core.domain.event.LogAccessedEvent;
 import com.smart4y.cloud.core.infrastructure.constants.QueueConstants;
 import com.smart4y.cloud.core.infrastructure.toolkit.Kit;
 import com.smart4y.cloud.core.infrastructure.toolkit.ip.IpHelper;
-import com.smart4y.cloud.core.infrastructure.toolkit.ip.impl.IpInfo;
+import com.smart4y.cloud.core.infrastructure.toolkit.ip.IpInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
