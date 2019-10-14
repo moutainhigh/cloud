@@ -2,11 +2,9 @@ package com.smart4y.cloud.base.application.eventhandler;
 
 import com.smart4y.cloud.base.domain.model.GatewayAccessLogs;
 import com.smart4y.cloud.base.domain.repository.GatewayAccessLogsMapper;
+import com.smart4y.cloud.base.domain.service.IpHelper;
 import com.smart4y.cloud.core.domain.event.LogAccessedEvent;
 import com.smart4y.cloud.core.infrastructure.constants.QueueConstants;
-import com.smart4y.cloud.core.infrastructure.toolkit.Kit;
-import com.smart4y.cloud.core.infrastructure.toolkit.ip.IpHelper;
-import com.smart4y.cloud.core.infrastructure.toolkit.ip.IpInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -29,7 +27,8 @@ public class LogAccessedEventHandler {
 
     @Autowired
     private GatewayAccessLogsMapper gatewayAccessLogsMapper;
-    private IpHelper ipHelper = Kit.help().ip();
+    @Autowired
+    private IpHelper ipHelper;
 
     @RabbitListener(queues = QueueConstants.QUEUE_ACCESS_LOGS)
     public void handle(@Payload LogAccessedEvent event) {
@@ -51,7 +50,7 @@ public class LogAccessedEventHandler {
                     .setUserAgent(event.getUserAgent());
             String ip = record.getIp();
             if (StringUtils.isNotBlank(ip)) {
-                IpInfo info = ipHelper.of(ip);
+                IpHelper.IpInfo info = ipHelper.of(ip);
                 if (null != info) {
                     String region = String.format("%s|%s|%s|%s",
                             info.getCountry(), info.getProvince(), info.getCity(), info.getIsp());

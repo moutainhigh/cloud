@@ -4,8 +4,6 @@ import com.smart4y.cloud.core.infrastructure.toolkit.complier.CompilerHelper;
 import com.smart4y.cloud.core.infrastructure.toolkit.complier.CompilerHelperImpl;
 import com.smart4y.cloud.core.infrastructure.toolkit.idcard.IdCardHelper;
 import com.smart4y.cloud.core.infrastructure.toolkit.idcard.IdCardHelperImpl;
-import com.smart4y.cloud.core.infrastructure.toolkit.ip.IpHelper;
-import com.smart4y.cloud.core.infrastructure.toolkit.ip.impl.IpHelperImpl;
 import com.smart4y.cloud.core.infrastructure.toolkit.json.JsonHelper;
 import com.smart4y.cloud.core.infrastructure.toolkit.json.core.JacksonHelper;
 import com.smart4y.cloud.core.infrastructure.toolkit.random.RandomHelper;
@@ -53,15 +51,6 @@ public enum Kit {
      */
     public RandomHelper random() {
         return RandomHelper.INSTANCE;
-    }
-
-    /**
-     * IP 信息
-     *
-     * @return {@link IpHelper}
-     */
-    public IpHelper ip() {
-        return IpHelperImpl.INSTANCE;
     }
 
     /**
