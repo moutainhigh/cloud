@@ -15,7 +15,7 @@ import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
+import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.weekend.Weekend;
@@ -45,10 +45,10 @@ public class BaseRoleServiceImpl implements BaseRoleService {
     public PageInfo<BaseRole> findListPage(BaseRoleQuery query) {
         Weekend<BaseRole> queryWrapper = Weekend.of(BaseRole.class);
         WeekendCriteria<BaseRole, Object> criteria = queryWrapper.weekendCriteria();
-        if (StringUtil.isNotBlank(query.getRoleCode())) {
+        if (StringHelper.isNotBlank(query.getRoleCode())) {
             criteria.andLike(BaseRole::getRoleCode, query.getRoleCode() + "%");
         }
-        if (StringUtil.isNotBlank(query.getRoleName())) {
+        if (StringHelper.isNotBlank(query.getRoleName())) {
             criteria.andLike(BaseRole::getRoleName, query.getRoleName() + "%");
         }
         queryWrapper.orderBy("createdDate").desc();
@@ -117,7 +117,7 @@ public class BaseRoleServiceImpl implements BaseRoleService {
 
     @Override
     public Boolean isExist(String roleCode) {
-        if (StringUtil.isBlank(roleCode)) {
+        if (StringHelper.isBlank(roleCode)) {
             throw new OpenAlertException("roleCode不能为空!");
         }
         Weekend<BaseRole> queryWrapper = Weekend.of(BaseRole.class);

@@ -3,7 +3,7 @@ package com.smart4y.cloud.core.infrastructure.filter;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
+import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 
 import java.io.IOException;
 
@@ -21,7 +21,7 @@ public class XssStringJsonSerializer extends JsonSerializer<String> {
     @Override
     public void serialize(String value, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         if (value != null) {
-            String encodedValue = StringUtil.stripXss(value).trim();
+            String encodedValue = StringHelper.stripXss(value).trim();
             jsonGenerator.writeString(encodedValue);
         }
     }

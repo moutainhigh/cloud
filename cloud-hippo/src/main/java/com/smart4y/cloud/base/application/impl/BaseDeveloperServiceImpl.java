@@ -14,8 +14,8 @@ import com.smart4y.cloud.base.interfaces.valueobject.query.BaseDeveloperQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
-import com.smart4y.cloud.core.infrastructure.toolkit.WebUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.web.WebUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import com.smart4y.cloud.core.interfaces.UserAccountVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -51,13 +51,13 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
         if (null != query.getUserId()) {
             criteria.andEqualTo(BaseDeveloper::getUserId, query.getUserId());
         }
-        if (StringUtil.isNotBlank(query.getUserType())) {
+        if (StringHelper.isNotBlank(query.getUserType())) {
             criteria.andEqualTo(BaseDeveloper::getUserType, query.getUserType());
         }
-        if (StringUtil.isNotBlank(query.getUserName())) {
+        if (StringHelper.isNotBlank(query.getUserName())) {
             criteria.andEqualTo(BaseDeveloper::getUserName, query.getUserName());
         }
-        if (StringUtil.isNotBlank(query.getMobile())) {
+        if (StringHelper.isNotBlank(query.getMobile())) {
             criteria.andEqualTo(BaseDeveloper::getMobile, query.getMobile());
         }
         queryWrapper.orderBy("createdDate").desc();
@@ -89,11 +89,11 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
 
         // 默认注册用户名账户
         baseAccountService.register(userId, command.getUserName(), command.getPassword(), BaseConstants.ACCOUNT_TYPE_USERNAME, command.getStatus(), ACCOUNT_DOMAIN, null);
-        if (StringUtil.matchEmail(command.getEmail())) {
+        if (StringHelper.matchEmail(command.getEmail())) {
             // 注册email账号登陆
             baseAccountService.register(userId, command.getEmail(), command.getPassword(), BaseConstants.ACCOUNT_TYPE_EMAIL, command.getStatus(), ACCOUNT_DOMAIN, null);
         }
-        if (StringUtil.matchMobile(command.getMobile())) {
+        if (StringHelper.matchMobile(command.getMobile())) {
             // 注册手机号账号登陆
             baseAccountService.register(userId, command.getMobile(), command.getPassword(), BaseConstants.ACCOUNT_TYPE_MOBILE, command.getStatus(), ACCOUNT_DOMAIN, null);
         }
@@ -155,14 +155,14 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
 
     @Override
     public UserAccountVO login(String account) {
-        if (StringUtil.isBlank(account)) {
+        if (StringHelper.isBlank(account)) {
             return null;
         }
         Map<String, String> parameterMap = WebUtils.getParameterMap(WebUtils.getHttpServletRequest());
         // 第三方登录标识
         String loginType = parameterMap.get("login_type");
         BaseAccount baseAccount;
-        if (StringUtil.isNotBlank(loginType)) {
+        if (StringHelper.isNotBlank(loginType)) {
             baseAccount = baseAccountService.getAccount(account, loginType, ACCOUNT_DOMAIN);
         } else {
             // 非第三方登录
@@ -171,11 +171,11 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
             baseAccount = baseAccountService.getAccount(account, BaseConstants.ACCOUNT_TYPE_USERNAME, ACCOUNT_DOMAIN);
 
             // 手机号登陆
-            if (StringUtil.matchMobile(account)) {
+            if (StringHelper.matchMobile(account)) {
                 baseAccount = baseAccountService.getAccount(account, BaseConstants.ACCOUNT_TYPE_MOBILE, ACCOUNT_DOMAIN);
             }
             // 邮箱登陆
-            if (StringUtil.matchEmail(account)) {
+            if (StringHelper.matchEmail(account)) {
                 baseAccount = baseAccountService.getAccount(account, BaseConstants.ACCOUNT_TYPE_EMAIL, ACCOUNT_DOMAIN);
             }
         }

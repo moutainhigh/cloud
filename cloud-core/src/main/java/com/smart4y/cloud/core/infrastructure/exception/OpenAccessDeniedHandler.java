@@ -1,7 +1,7 @@
 package com.smart4y.cloud.core.infrastructure.exception;
 
 import com.smart4y.cloud.core.domain.ResultEntity;
-import com.smart4y.cloud.core.infrastructure.toolkit.WebUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.web.WebUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;

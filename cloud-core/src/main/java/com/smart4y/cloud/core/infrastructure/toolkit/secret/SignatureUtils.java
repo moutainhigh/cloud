@@ -2,8 +2,8 @@ package com.smart4y.cloud.core.infrastructure.toolkit.secret;
 
 import com.alibaba.fastjson.JSONObject;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
-import com.smart4y.cloud.core.infrastructure.toolkit.DateUtil;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
+import com.smart4y.cloud.core.infrastructure.toolkit.base.DateHelper;
+import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import com.smart4y.cloud.core.infrastructure.toolkit.random.RandomValueUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
@@ -26,13 +26,13 @@ public class SignatureUtils {
      */
     private final static long MAX_EXPIRE = 5 * 60;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         String clientSecret = "0osTIhce7uPvDKHz6aa67bhCukaKoYl4";
         //参数签名算法测试例子
-        HashMap<String, String> signMap = new HashMap<String, String>();
+        HashMap<String, String> signMap = new HashMap<>();
         signMap.put("APP_ID", "1552274783265");
         signMap.put("SIGN_TYPE", SignType.SHA256.name());
-        signMap.put("TIMESTAMP", DateUtil.getCurrentTimestampStr());
+        signMap.put("TIMESTAMP", DateHelper.getCurrentTimestampStr());
         signMap.put("NONCE", RandomValueUtils.randomAlphanumeric(16));
         String sign = SignatureUtils.getSign(signMap, clientSecret);
         System.out.println("签名结果:" + sign);
@@ -43,9 +43,6 @@ public class SignatureUtils {
 
     /**
      * 验证参数
-     *
-     * @param paramsMap
-     * @throws Exception
      */
     public static void validateParams(Map<String, String> paramsMap) throws Exception {
         Assert.hasText(paramsMap.get(CommonConstants.SIGN_APP_ID_KEY), "签名验证失败:APP_ID不能为空");
@@ -57,22 +54,20 @@ public class SignatureUtils {
             throw new IllegalArgumentException(String.format("签名验证失败:SIGN_TYPE必须为:%s,%s", SignatureUtils.SignType.MD5, SignatureUtils.SignType.SHA256));
         }
         try {
-            DateUtil.parseDate(paramsMap.get(CommonConstants.SIGN_TIMESTAMP_KEY), "yyyyMMddHHmmss");
+            DateHelper.parseDate(paramsMap.get(CommonConstants.SIGN_TIMESTAMP_KEY), "yyyyMMddHHmmss");
         } catch (ParseException e) {
             throw new IllegalArgumentException("签名验证失败:TIMESTAMP格式必须为:yyyyMMddHHmmss");
         }
         String timestamp = paramsMap.get(CommonConstants.SIGN_TIMESTAMP_KEY);
-        Long clientTimestamp = Long.parseLong(timestamp);
+        long clientTimestamp = Long.parseLong(timestamp);
         //判断时间戳 timestamp=201808091113
-        if ((DateUtil.getCurrentTimestamp() - clientTimestamp) > MAX_EXPIRE) {
+        if ((DateHelper.getCurrentTimestamp() - clientTimestamp) > MAX_EXPIRE) {
             throw new IllegalArgumentException("签名验证失败:TIMESTAMP已过期");
         }
     }
 
     /**
-     * @param paramsMap    必须包含
-     * @param clientSecret
-     * @return
+     * @param paramsMap 必须包含
      */
     public static boolean validateSign(Map<String, String> paramsMap, String clientSecret) {
         try {
@@ -114,7 +109,7 @@ public class SignatureUtils {
         StringBuilder sb = new StringBuilder();
         String signType = paramMap.get(CommonConstants.SIGN_SIGN_TYPE_KEY);
         SignType type = null;
-        if (StringUtil.isNotBlank(signType)) {
+        if (StringHelper.isNotBlank(signType)) {
             type = SignType.valueOf(signType);
         }
         if (type == null) {

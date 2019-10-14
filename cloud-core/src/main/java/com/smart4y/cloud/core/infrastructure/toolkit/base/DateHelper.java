@@ -16,8 +16,7 @@ import java.time.temporal.WeekFields;
  */
 @CommonsLog
 @SuppressWarnings("unused")
-public enum DateHelper {
-    INSTANCE;
+public class DateHelper extends org.apache.commons.lang3.time.DateUtils {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -28,7 +27,7 @@ public enum DateHelper {
      * @param milliseconds 时间毫秒数（13位毫秒值）
      * @return 日期
      */
-    public LocalDate milliseconds2Date(long milliseconds) {
+    public static LocalDate milliseconds2Date(long milliseconds) {
         return LocalDateTime
                 .ofInstant(Instant.ofEpochMilli(milliseconds), ZoneId.systemDefault())
                 .toLocalDate();
@@ -40,7 +39,7 @@ public enum DateHelper {
      * @param date 日期
      * @return 月份的第一天
      */
-    public LocalDate firstDayOfMonth(LocalDate date) {
+    public static LocalDate firstDayOfMonth(LocalDate date) {
         return LocalDate.of(date.getYear(), date.getMonth(), 1);
     }
 
@@ -50,7 +49,7 @@ public enum DateHelper {
      * @param date 日期
      * @return 月份的最后一天
      */
-    public LocalDate lastDayOfMonth(LocalDate date) {
+    public static LocalDate lastDayOfMonth(LocalDate date) {
         return date.with(TemporalAdjusters.lastDayOfMonth());
     }
 
@@ -63,7 +62,7 @@ public enum DateHelper {
      * @param date 日期
      * @return 周的第一天
      */
-    public LocalDate firstDayOfWeek(LocalDate date) {
+    public static LocalDate firstDayOfWeek(LocalDate date) {
         TemporalField temporalField = WeekFields.of(DayOfWeek.MONDAY, 1).dayOfWeek();
         return date.with(temporalField, 1);
     }
@@ -77,7 +76,7 @@ public enum DateHelper {
      * @param date 日期
      * @return 周的最后一天
      */
-    public LocalDate lastDayOfWeek(LocalDate date) {
+    public static LocalDate lastDayOfWeek(LocalDate date) {
         TemporalField temporalField = WeekFields.of(DayOfWeek.MONDAY, 1).dayOfWeek();
         return date.with(temporalField, 7);
     }
@@ -87,16 +86,14 @@ public enum DateHelper {
      *
      * @return 时间戳（格式：yyyyMMddHHmmss）
      */
-    public long getTimestamp() {
-        return Long.parseLong(this.getTimestampStr());
+    public static long getCurrentTimestamp() {
+        return Long.parseLong(getCurrentTimestampStr());
     }
 
     /**
-     * 获取 时间戳
-     *
-     * @return 时间戳（格式：yyyyMMddHHmmss）
+     * 获取当前时间戳（yyyyMMddHHmmss）
      */
-    public String getTimestampStr() {
+    public static String getCurrentTimestampStr() {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
     }
 }

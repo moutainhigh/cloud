@@ -1,6 +1,6 @@
 package com.smart4y.cloud.core.infrastructure.security;
 
-import com.smart4y.cloud.core.infrastructure.toolkit.BeanConvertUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.base.BeanConvertUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

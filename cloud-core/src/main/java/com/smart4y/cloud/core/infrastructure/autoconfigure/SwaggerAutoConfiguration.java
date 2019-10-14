@@ -2,7 +2,7 @@ package com.smart4y.cloud.core.infrastructure.autoconfigure;
 
 import com.google.common.collect.Lists;
 import com.smart4y.cloud.core.infrastructure.properties.OpenSwaggerProperties;
-import com.smart4y.cloud.core.infrastructure.toolkit.DateUtil;
+import com.smart4y.cloud.core.infrastructure.toolkit.base.DateHelper;
 import com.smart4y.cloud.core.infrastructure.toolkit.random.RandomValueUtils;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -136,7 +136,7 @@ public class SwaggerAutoConfiguration {
                 .required(false);
         pars.add(builder.build());
         builder.name("timestamp").description("公共参数:请求的时间,格式:yyyyMMddHHmmss")
-                .defaultValue(DateUtil.getCurrentTimestampStr())
+                .defaultValue(DateHelper.getCurrentTimestampStr())
                 .modelRef(new ModelRef("string")).parameterType("form")
                 .required(false);
         pars.add(builder.build());

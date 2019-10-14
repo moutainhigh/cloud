@@ -1,7 +1,7 @@
 package com.smart4y.cloud.core.interfaces;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
+import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -152,7 +152,7 @@ public class IpLimitApiDTO implements Serializable {
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
-        if (StringUtil.isNotBlank(ipAddress)) {
+        if (StringHelper.isNotBlank(ipAddress)) {
             ipAddressSet = new HashSet<>(Arrays.asList(ipAddress.split(";")));
         }
     }

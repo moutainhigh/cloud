@@ -9,10 +9,10 @@ import com.smart4y.cloud.base.interfaces.converter.GatewayRateLimitConverter;
 import com.smart4y.cloud.base.interfaces.valueobject.query.RateLimitQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayRateLimitApiVO;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayRateLimitVO;
-import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
+import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -96,7 +96,7 @@ public class GatewayRateLimitController {
             @RequestParam("policyId") Long policyId,
             @RequestParam(value = "apiIds", required = false) String apiIds
     ) {
-        gatewayRateLimitService.addRateLimitApis(policyId, StringUtil.isNotBlank(apiIds) ? apiIds.split(",") : new String[]{});
+        gatewayRateLimitService.addRateLimitApis(policyId, StringHelper.isNotBlank(apiIds) ? apiIds.split(",") : new String[]{});
         openRestTemplate.refreshGateway();
         return ResultEntity.ok();
     }

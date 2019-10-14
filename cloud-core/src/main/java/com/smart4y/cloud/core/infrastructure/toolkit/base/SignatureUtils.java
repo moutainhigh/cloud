@@ -1,7 +1,6 @@
 package com.smart4y.cloud.core.infrastructure.toolkit.base;
 
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
-import com.smart4y.cloud.core.infrastructure.toolkit.Kit;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -67,7 +66,7 @@ public class SignatureUtils {
             String timestamp = paramMap.get(CommonConstants.SIGN_TIMESTAMP_KEY);
             long clientTimestamp = Long.parseLong(timestamp);
             // 判断时间戳 timestamp=201808091113
-            if ((Kit.help().date().getTimestamp() - clientTimestamp) > MAX_EXPIRE) {
+            if ((DateHelper.getCurrentTimestamp() - clientTimestamp) > MAX_EXPIRE) {
                 log.debug("validateSign fail timestamp expire");
                 return false;
             }
@@ -83,7 +82,6 @@ public class SignatureUtils {
         }
         return false;
     }
-
 
     /**
      * 得到签名

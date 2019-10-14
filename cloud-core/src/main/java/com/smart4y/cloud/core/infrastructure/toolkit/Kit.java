@@ -1,6 +1,5 @@
 package com.smart4y.cloud.core.infrastructure.toolkit;
 
-import com.smart4y.cloud.core.infrastructure.toolkit.base.DateHelper;
 import com.smart4y.cloud.core.infrastructure.toolkit.complier.CompilerHelper;
 import com.smart4y.cloud.core.infrastructure.toolkit.complier.CompilerHelperImpl;
 import com.smart4y.cloud.core.infrastructure.toolkit.idcard.IdCardHelper;
@@ -54,15 +53,6 @@ public enum Kit {
      */
     public RandomHelper random() {
         return RandomHelper.INSTANCE;
-    }
-
-    /**
-     * 日期时间
-     *
-     * @return {@link DateHelper}
-     */
-    public DateHelper date() {
-        return DateHelper.INSTANCE;
     }
 
     /**

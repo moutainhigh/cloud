@@ -1,10 +1,12 @@
-package com.smart4y.cloud.core.infrastructure.toolkit;
+package com.smart4y.cloud.core.infrastructure.toolkit.web;
 
 import com.alibaba.fastjson.JSONObject;
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
 import com.smart4y.cloud.core.infrastructure.spring.SpringContextHolder;
+import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
@@ -21,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Map.Entry;
@@ -39,7 +40,7 @@ public class WebUtils {
     /**
      * 静态文件后缀
      */
-    private final static String[] staticFiles = StringUtil.split(staticSuffix, ",");
+    private final static String[] staticFiles = StringHelper.split(staticSuffix, ",");
     /**
      * 动态映射URL后缀
      */
@@ -98,9 +99,6 @@ public class WebUtils {
 
     /**
      * 移除cookie
-     *
-     * @param response
-     * @param name
      */
     public static void removeCookie(HttpServletResponse response, String name) {
         Cookie cookie = new Cookie(name, null);
@@ -280,9 +278,6 @@ public class WebUtils {
 
     /**
      * 获取请求Body
-     *
-     * @param request
-     * @return
      */
     public static String getBodyString(final ServletRequest request) {
         StringBuilder sb = new StringBuilder();
@@ -290,7 +285,7 @@ public class WebUtils {
         BufferedReader reader = null;
         try {
             inputStream = cloneInputStream(request.getInputStream());
-            reader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
+            reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             String line = "";
             while ((line = reader.readLine()) != null) {
                 sb.append(line);
@@ -318,9 +313,6 @@ public class WebUtils {
 
     /**
      * 复制输入流
-     *
-     * @param inputStream
-     * @return</br>
      */
     public static InputStream cloneInputStream(ServletInputStream inputStream) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -344,13 +336,10 @@ public class WebUtils {
      * application/json
      * application/json;charset=UTF-8
      * multipart/form-data
-     *
-     * @param request
-     * @return
      */
     public static Map<String, String> getParameterMap(HttpServletRequest request) {
         String contentType = request.getHeader(org.springframework.http.HttpHeaders.CONTENT_TYPE);
-        Map<String, String> returnMap = new HashMap();
+        Map<String, String> returnMap = new HashMap<>();
         if (contentType != null && contentType.contains(MediaType.MULTIPART_FORM_DATA_VALUE)) {
             // form-data表单
             MultipartResolver multipartResolver = SpringContextHolder.getBean(MultipartResolver.class);
@@ -359,7 +348,7 @@ public class WebUtils {
         } else if (MediaType.APPLICATION_JSON_VALUE.equals(contentType) || MediaType.APPLICATION_JSON_UTF8_VALUE.equals(contentType)) {
             // json表单
             String body = getBodyString(request);
-            if (StringUtil.isNotBlank(body)) {
+            if (StringHelper.isNotBlank(body)) {
                 try {
                     returnMap = JSONObject.parseObject(body, Map.class);
                 } catch (Exception e) {
@@ -430,13 +419,11 @@ public class WebUtils {
      */
     public static String encodeHttpBasic(String userName, String password) {
         String encode = userName + ":" + password;
-        return "Basic " + EncodeUtils.encodeBase64(encode.getBytes(StandardCharsets.UTF_8));
+        return "Basic " + new String(Base64.encodeBase64(encode.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
     }
 
     /**
      * 是否是Ajax异步请求
-     *
-     * @param request
      */
     public static boolean isAjaxRequest(HttpServletRequest request) {
         return (request.getHeader("X-Requested-With") != null && "XMLHttpRequest".equals(request.getHeader("X-Requested-With").toString())) || (request.getHeader("Content-Type") != null && request.getHeader("Content-Type").startsWith("application/json"));
@@ -444,9 +431,6 @@ public class WebUtils {
 
     /**
      * 获取IP地址
-     *
-     * @param request
-     * @return
      */
     public static String getRemoteAddress(HttpServletRequest request) {
         String unknown = "unknown";
@@ -479,23 +463,16 @@ public class WebUtils {
         return ip;
     }
 
-
     /**
      * 判断访问URI是否是静态文件请求
-     *
-     * @throws Exception
      */
     public static boolean isStaticFile(String uri) {
-        return StringUtil.endsWithAny(uri, staticFiles) && !StringUtil.endsWithAny(uri, new String[]{urlSuffix})
-                && !StringUtil.endsWithAny(uri, new String[]{".jsp"}) && !StringUtil.endsWithAny(uri, new String[]{".java"});
+        return StringHelper.endsWithAny(uri, staticFiles) && !StringHelper.endsWithAny(uri, new String[]{urlSuffix})
+                && !StringHelper.endsWithAny(uri, new String[]{".jsp"}) && !StringHelper.endsWithAny(uri, new String[]{".java"});
     }
 
     /**
      * 客户端返回JSON字符串
-     *
-     * @param response
-     * @param object
-     * @return
      */
     public static void writeJson(HttpServletResponse response, Object object) {
         writeJson(response, JSONObject.toJSONString(object), MediaType.APPLICATION_JSON_UTF8_VALUE);
@@ -503,10 +480,6 @@ public class WebUtils {
 
     /**
      * 客户端返回字符串
-     *
-     * @param response
-     * @param string
-     * @return
      */
     public static void writeJson(HttpServletResponse response, String string, String type) {
         try {
@@ -515,14 +488,13 @@ public class WebUtils {
             response.getWriter().print(string);
             response.getWriter().flush();
             response.getWriter().close();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
     }
 
     public static String getServerUrl(HttpServletRequest request) {
-        String url = request.getScheme() + "://" + request.getServerName()
+        return request.getScheme() + "://" + request.getServerName()
                 + ":" + request.getServerPort() + request.getContextPath();
-        return url;
     }
 
 

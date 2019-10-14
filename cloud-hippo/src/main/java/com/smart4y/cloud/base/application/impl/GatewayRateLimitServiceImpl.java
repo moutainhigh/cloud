@@ -10,7 +10,7 @@ import com.smart4y.cloud.base.domain.repository.GatewayRateLimitApiMapper;
 import com.smart4y.cloud.base.domain.repository.GatewayRateLimitMapper;
 import com.smart4y.cloud.base.interfaces.valueobject.query.RateLimitQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
+import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import com.smart4y.cloud.core.interfaces.RateLimitApiDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class GatewayRateLimitServiceImpl implements GatewayRateLimitService {
     public PageInfo<GatewayRateLimit> findListPage(RateLimitQuery query) {
         Weekend<GatewayRateLimit> queryWrapper = Weekend.of(GatewayRateLimit.class);
         WeekendCriteria<GatewayRateLimit, Object> criteria = queryWrapper.weekendCriteria();
-        if (StringUtil.isNotBlank(query.getPolicyName())) {
+        if (StringHelper.isNotBlank(query.getPolicyName())) {
             criteria.andLike(GatewayRateLimit::getPolicyName, query.getPolicyName() + "%");
         }
         if (null != query.getPolicyType()) {

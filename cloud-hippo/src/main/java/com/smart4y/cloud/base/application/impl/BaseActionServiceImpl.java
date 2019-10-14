@@ -11,7 +11,7 @@ import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
+import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,10 +42,10 @@ public class BaseActionServiceImpl implements BaseActionService {
     public PageInfo<BaseAction> findListPage(BaseActionQuery query) {
         Weekend<BaseAction> queryWrapper = Weekend.of(BaseAction.class);
         WeekendCriteria<BaseAction, Object> criteria = queryWrapper.weekendCriteria();
-        if (StringUtil.isNotBlank(query.getActionCode())) {
+        if (StringHelper.isNotBlank(query.getActionCode())) {
             criteria.andLike(BaseAction::getActionCode, query.getActionCode() + "%");
         }
-        if (StringUtil.isNotBlank(query.getActionName())) {
+        if (StringHelper.isNotBlank(query.getActionName())) {
             criteria.andLike(BaseAction::getActionName, query.getActionName() + "%");
         }
         queryWrapper.orderBy("createdDate").desc();

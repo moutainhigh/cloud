@@ -9,7 +9,7 @@ import com.smart4y.cloud.base.interfaces.valueobject.query.GatewayRouteQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
+import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.weekend.Weekend;
@@ -49,7 +49,7 @@ public class GatewayRouteServiceImpl implements GatewayRouteService {
 
     @Override
     public long addRoute(GatewayRoute route) {
-        if (StringUtil.isBlank(route.getPath())) {
+        if (StringHelper.isBlank(route.getPath())) {
             throw new OpenAlertException("path不能为空！");
         }
         if (isExist(route.getRouteName())) {
@@ -62,7 +62,7 @@ public class GatewayRouteServiceImpl implements GatewayRouteService {
 
     @Override
     public void updateRoute(GatewayRoute route) {
-        if (StringUtil.isBlank(route.getPath())) {
+        if (StringHelper.isBlank(route.getPath())) {
             throw new OpenAlertException("path不能为空！");
         }
         GatewayRoute saved = getRoute(route.getRouteId());

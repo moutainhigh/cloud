@@ -12,7 +12,7 @@ import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
+import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,10 +45,10 @@ public class BaseMenuServiceImpl implements BaseMenuService {
     public PageInfo<BaseMenu> findListPage(BaseMenuQuery query) {
         Weekend<BaseMenu> queryWrapper = Weekend.of(BaseMenu.class);
         WeekendCriteria<BaseMenu, Object> criteria = queryWrapper.weekendCriteria();
-        if (StringUtil.isNotBlank(query.getMenuCode())) {
+        if (StringHelper.isNotBlank(query.getMenuCode())) {
             criteria.andLike(BaseMenu::getMenuCode, query.getMenuCode() + "%");
         }
-        if (StringUtil.isNotBlank(query.getMenuName())) {
+        if (StringHelper.isNotBlank(query.getMenuName())) {
             criteria.andLike(BaseMenu::getMenuName, query.getMenuName() + "%");
         }
 

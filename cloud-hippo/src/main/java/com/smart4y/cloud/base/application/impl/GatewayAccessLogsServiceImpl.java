@@ -7,7 +7,7 @@ import com.smart4y.cloud.base.domain.model.GatewayAccessLogs;
 import com.smart4y.cloud.base.domain.repository.GatewayAccessLogsMapper;
 import com.smart4y.cloud.base.interfaces.valueobject.query.GatewayAccessLogsQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
+import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.weekend.Weekend;
@@ -30,13 +30,13 @@ public class GatewayAccessLogsServiceImpl implements GatewayAccessLogsService {
     public PageInfo<GatewayAccessLogs> findListPage(GatewayAccessLogsQuery query) {
         Weekend<GatewayAccessLogs> queryWrapper = Weekend.of(GatewayAccessLogs.class);
         WeekendCriteria<GatewayAccessLogs, Object> criteria = queryWrapper.weekendCriteria();
-        if (StringUtil.isNotBlank(query.getPath())) {
+        if (StringHelper.isNotBlank(query.getPath())) {
             criteria.andLike(GatewayAccessLogs::getPath, query.getPath() + "%");
         }
-        if (StringUtil.isNotBlank(query.getIp())) {
+        if (StringHelper.isNotBlank(query.getIp())) {
             criteria.andEqualTo(GatewayAccessLogs::getIp, query.getIp());
         }
-        if (StringUtil.isNotBlank(query.getServiceId())) {
+        if (StringHelper.isNotBlank(query.getServiceId())) {
             criteria.andEqualTo(GatewayAccessLogs::getServiceId, query.getServiceId());
         }
         queryWrapper.orderBy("requestTime").desc();

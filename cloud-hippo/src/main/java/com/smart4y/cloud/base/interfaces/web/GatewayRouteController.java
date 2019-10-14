@@ -6,10 +6,10 @@ import com.smart4y.cloud.base.domain.model.GatewayRoute;
 import com.smart4y.cloud.base.interfaces.converter.GatewayRouteConverter;
 import com.smart4y.cloud.base.interfaces.valueobject.query.GatewayRouteQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayRouteVO;
-import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
-import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
+import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -101,7 +101,7 @@ public class GatewayRouteController {
         route.setStatus(status);
         route.setRouteName(routeName);
         route.setRouteDesc(routeDesc);
-        if (route.getUrl() != null && StringUtil.isNotEmpty(route.getUrl())) {
+        if (route.getUrl() != null && StringHelper.isNotEmpty(route.getUrl())) {
             route.setServiceId(null);
         }
         long routeId = gatewayRouteService.addRoute(route);
@@ -156,7 +156,7 @@ public class GatewayRouteController {
         route.setStatus(status);
         route.setRouteName(routeName);
         route.setRouteDesc(routeDesc);
-        if (route.getUrl() != null && StringUtil.isNotEmpty(route.getUrl())) {
+        if (route.getUrl() != null && StringHelper.isNotEmpty(route.getUrl())) {
             route.setServiceId(null);
         }
         gatewayRouteService.updateRoute(route);

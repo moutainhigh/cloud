@@ -1,7 +1,7 @@
 package com.smart4y.cloud.core.infrastructure.security;
 
 import com.smart4y.cloud.core.infrastructure.properties.OpenCommonProperties;
-import com.smart4y.cloud.core.infrastructure.toolkit.BeanConvertUtils;
+import com.smart4y.cloud.core.infrastructure.toolkit.base.BeanConvertUtils;
 import com.smart4y.cloud.core.infrastructure.toolkit.reflection.ReflectionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
