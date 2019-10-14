@@ -87,7 +87,7 @@ public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, Appli
      * id: opencloud-admin-provider
      * uri: lb://opencloud-admin-provider
      * predicates:
-     * - Path=/admin/**
+     * - Path=/uaa/**
      * - Name=平台后台管理服务
      * filters:
      * #转发去掉前缀,总要否则swagger无法加载

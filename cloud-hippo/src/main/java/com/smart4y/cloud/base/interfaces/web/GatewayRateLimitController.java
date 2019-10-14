@@ -6,10 +6,10 @@ import com.smart4y.cloud.base.domain.model.GatewayRateLimit;
 import com.smart4y.cloud.base.domain.model.GatewayRateLimitApi;
 import com.smart4y.cloud.base.interfaces.converter.GatewayRateLimitApiConverter;
 import com.smart4y.cloud.base.interfaces.converter.GatewayRateLimitConverter;
+import com.smart4y.cloud.base.interfaces.valueobject.query.RateLimitQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayRateLimitApiVO;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayRateLimitVO;
 import com.smart4y.cloud.core.domain.Page;
-import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 网关流量控制
@@ -47,8 +46,8 @@ public class GatewayRateLimitController {
      */
     @ApiOperation(value = "获取分页接口列表", notes = "获取分页接口列表")
     @GetMapping("/gateway/limit/rate")
-    public ResultEntity<Page<GatewayRateLimitVO>> getRateLimitListPage(@RequestParam(required = false) Map map) {
-        PageInfo<GatewayRateLimit> listPage = gatewayRateLimitService.findListPage(new PageParams(map));
+    public ResultEntity<Page<GatewayRateLimitVO>> getRateLimitListPage(RateLimitQuery query) {
+        PageInfo<GatewayRateLimit> listPage = gatewayRateLimitService.findListPage(query);
         Page<GatewayRateLimitVO> result = gatewayRateLimitConverter.convertPage(listPage);
         return ResultEntity.ok(result);
     }

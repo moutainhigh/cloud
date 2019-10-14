@@ -3,7 +3,7 @@ package com.smart4y.cloud.base.application;
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.GatewayRateLimit;
 import com.smart4y.cloud.base.domain.model.GatewayRateLimitApi;
-import com.smart4y.cloud.core.domain.PageParams;
+import com.smart4y.cloud.base.interfaces.valueobject.query.RateLimitQuery;
 import com.smart4y.cloud.core.interfaces.RateLimitApiDTO;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public interface GatewayRateLimitService {
     /**
      * 分页查询
      */
-    PageInfo<GatewayRateLimit> findListPage(PageParams pageParams);
+    PageInfo<GatewayRateLimit> findListPage(RateLimitQuery query);
 
     /**
      * 查询接口流量限制

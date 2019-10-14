@@ -1,7 +1,7 @@
 module.exports = {
-  appId:'1552274783265',
-  appKey:'7gBZcbsC7kLIWCdELIl8nxcs',
-  appSecret:'0osTIhce7uPvDKHz6aa67bhCukaKoYl4',
+  appId: '1552274783265',
+  appKey: '7gBZcbsC7kLIWCdELIl8nxcs',
+  appSecret: '0osTIhce7uPvDKHz6aa67bhCukaKoYl4',
   /**
    * token在Cookie中存储的天数，默认1天
    */
@@ -23,7 +23,7 @@ module.exports = {
    */
   publicPath: {
     //  本地环境发布目录
-    dev: '/admin',
+    dev: '/',
     //  生产环境发布目录
     pro: '/admin'
   },
@@ -32,7 +32,7 @@ module.exports = {
    */
   apiUrl: {
     //  本地环境接口请求地址
-    dev: 'https://api.smart4y.com',
+    dev: 'http://127.0.0.1:8888',
     //  生产环境接口请求地址
     pro: 'https://api.smart4y.com'
   },
@@ -49,4 +49,4 @@ module.exports = {
       developmentOff: false // 设为true后在开发环境不会收集错误信息，方便开发中排查错误
     }
   }
-}
+};

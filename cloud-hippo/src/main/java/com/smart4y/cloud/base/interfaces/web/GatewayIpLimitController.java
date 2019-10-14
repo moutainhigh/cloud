@@ -6,6 +6,7 @@ import com.smart4y.cloud.base.domain.model.GatewayIpLimit;
 import com.smart4y.cloud.base.domain.model.GatewayIpLimitApi;
 import com.smart4y.cloud.base.interfaces.converter.GatewayIpLimitApiConverter;
 import com.smart4y.cloud.base.interfaces.converter.GatewayIpLimitConverter;
+import com.smart4y.cloud.base.interfaces.valueobject.query.IpLimitQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayIpLimitApiVO;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayIpLimitVO;
 import com.smart4y.cloud.core.domain.Page;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -48,8 +48,8 @@ public class GatewayIpLimitController {
      */
     @ApiOperation(value = "获取分页接口列表", notes = "获取分页接口列表")
     @GetMapping("/gateway/limit/ip")
-    public ResultEntity<Page<GatewayIpLimitVO>> getIpLimitListPage(@RequestParam(required = false) Map map) {
-        PageInfo<GatewayIpLimit> listPage = gatewayIpLimitService.findListPage(new PageParams(map));
+    public ResultEntity<Page<GatewayIpLimitVO>> getIpLimitListPage(IpLimitQuery query) {
+        PageInfo<GatewayIpLimit> listPage = gatewayIpLimitService.findListPage(query);
         Page<GatewayIpLimitVO> result = gatewayIpLimitConverter.convertPage(listPage);
         return ResultEntity.ok(result);
     }

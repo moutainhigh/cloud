@@ -4,23 +4,24 @@ import request from '@/libs/request'
  * 获取分页接口列表
  * @param page
  * @param limit
+ * @param policyName
  */
-export const getRateLimits = ({ page, limit }) => {
-  const params = { page: page, limit: limit }
+export const getRateLimits = ({page, limit, policyName}) => {
+  const params = {page: page, limit: limit, policyName: policyName};
   return request({
     url: 'base/gateway/limit/rate',
     params,
     method: 'get'
   })
-}
+};
 
-export const addRateLimit = ({ policyName, policyType, limitQuota, intervalUnit }) => {
+export const addRateLimit = ({policyName, policyType, limitQuota, intervalUnit}) => {
   const data = {
     policyName: policyName,
     policyType: policyType,
     limitQuota: limitQuota,
     intervalUnit: intervalUnit
-  }
+  };
   return request({
     url: 'base/gateway/limit/rate/add',
     data,
@@ -34,7 +35,7 @@ export const addRateLimit = ({ policyName, policyType, limitQuota, intervalUnit 
  * @param policyType
  * @param ipAddress
  */
-export const updateRateLimit = ({ policyId, policyName, policyType, limitQuota, intervalUnit }) => {
+export const updateRateLimit = ({policyId, policyName, policyType, limitQuota, intervalUnit}) => {
   const data = {
     policyId: policyId,
     policyName: policyName,
@@ -84,7 +85,7 @@ export const getRateLimitApis = (policyId) => {
  * @param policyId
  * @param apiIds
  */
-export const addRateLimitApis = ({ policyId, apiIds }) => {
+export const addRateLimitApis = ({policyId, apiIds}) => {
   const data = {
     policyId: policyId,
     apiIds: apiIds.join(',')

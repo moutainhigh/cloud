@@ -255,16 +255,16 @@
                 if (page) {
                     this.pageInfo.page = page
                 }
-                this.loading = true
+                this.loading = true;
                 getIpLimits(this.pageInfo).then(res => {
-                    this.data = res.data.records
+                    this.data = res.data.records;
                     this.pageInfo.total = parseInt(res.data.total)
                 }).finally(() => {
                     this.loading = false
                 })
             },
             handlePage(current) {
-                this.pageInfo.page = current
+                this.pageInfo.page = current;
                 this.handleSearch()
             },
             handlePageSize(size) {

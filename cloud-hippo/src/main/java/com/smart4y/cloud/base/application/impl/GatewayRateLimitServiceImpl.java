@@ -8,8 +8,8 @@ import com.smart4y.cloud.base.domain.model.GatewayRateLimitApi;
 import com.smart4y.cloud.base.domain.repository.GatewayRateLimitApiCustomMapper;
 import com.smart4y.cloud.base.domain.repository.GatewayRateLimitApiMapper;
 import com.smart4y.cloud.base.domain.repository.GatewayRateLimitMapper;
+import com.smart4y.cloud.base.interfaces.valueobject.query.RateLimitQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
-import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
 import com.smart4y.cloud.core.interfaces.RateLimitApiDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -36,9 +36,7 @@ public class GatewayRateLimitServiceImpl implements GatewayRateLimitService {
     private GatewayRateLimitApiCustomMapper gatewayRateLimitApiCustomMapper;
 
     @Override
-    public PageInfo<GatewayRateLimit> findListPage(PageParams pageParams) {
-        GatewayRateLimit query = pageParams.mapToObject(GatewayRateLimit.class);
-
+    public PageInfo<GatewayRateLimit> findListPage(RateLimitQuery query) {
         Weekend<GatewayRateLimit> queryWrapper = Weekend.of(GatewayRateLimit.class);
         WeekendCriteria<GatewayRateLimit, Object> criteria = queryWrapper.weekendCriteria();
         if (StringUtil.isNotBlank(query.getPolicyName())) {
@@ -49,7 +47,7 @@ public class GatewayRateLimitServiceImpl implements GatewayRateLimitService {
         }
         queryWrapper.orderBy("createdDate").desc();
 
-        PageHelper.startPage(pageParams.getPage(), pageParams.getLimit(), Boolean.TRUE);
+        PageHelper.startPage(query.getPage(), query.getLimit(), Boolean.TRUE);
         List<GatewayRateLimit> list = gatewayRateLimitMapper.selectByExample(queryWrapper);
         return new PageInfo<>(list);
     }

@@ -4,17 +4,18 @@ import request from '@/libs/request'
  * 获取分页接口列表
  * @param page
  * @param limit
+ * @param policyName
  */
-export const getIpLimits = ({ page, limit, policyName }) => {
-  const params = { page: page, limit: limit, policyName: policyName }
+export const getIpLimits = ({page, limit, policyName}) => {
+  const params = {page: page, limit: limit, policyName: policyName};
   return request({
     url: 'base/gateway/limit/ip',
     params,
     method: 'get'
   })
-}
+};
 
-export const addIpLimit = ({ policyName, policyType, ipAddress }) => {
+export const addIpLimit = ({policyName, policyType, ipAddress}) => {
   const data = {
     policyName: policyName,
     policyType: policyType,
@@ -33,19 +34,19 @@ export const addIpLimit = ({ policyName, policyType, ipAddress }) => {
  * @param policyType
  * @param ipAddress
  */
-export const updateIpLimit = ({ policyId, policyName, policyType, ipAddress }) => {
+export const updateIpLimit = ({policyId, policyName, policyType, ipAddress}) => {
   const data = {
     policyId: policyId,
     policyName: policyName,
     policyType: policyType,
     ipAddress: ipAddress
-  }
+  };
   return request({
     url: 'base/gateway/limit/ip/update',
     data,
     method: 'post'
   })
-}
+};
 
 /**
  * 删除IP限制
@@ -82,7 +83,7 @@ export const getIpLimitApis = (policyId) => {
  * @param policyId
  * @param apiIds
  */
-export const addIpLimitApis = ({ policyId, apiIds }) => {
+export const addIpLimitApis = ({policyId, apiIds}) => {
   const data = {
     policyId: policyId,
     apiIds: apiIds.join(',')

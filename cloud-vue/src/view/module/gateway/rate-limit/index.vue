@@ -1,6 +1,18 @@
 <template>
   <div>
     <Card shadow>
+      <Form ref="searchForm"
+            :model="pageInfo"
+            inline
+            :label-width="80">
+        <FormItem label="策略名称" prop="policyName">
+          <Input type="text" v-model="pageInfo.policyName" placeholder="请输入关键字"/>
+        </FormItem>
+        <FormItem>
+          <Button type="primary" @click="handleSearch(1)">查询</Button>&nbsp;
+          <Button @click="handleResetForm('searchForm')">重置</Button>
+        </FormItem>
+      </Form>
       <div class="search-con search-con-top">
         <ButtonGroup>
           <Button class="search-btn" type="primary" @click="handleModal()">
@@ -104,7 +116,8 @@
                 pageInfo: {
                     total: 0,
                     page: 1,
-                    limit: 10
+                    limit: 10,
+                    policyName: ''
                 },
                 current: 'form1',
                 forms: [
@@ -153,6 +166,9 @@
                 }
                 this.formItem.policyType = this.formItem.policyType + ''
             },
+            handleResetForm(form) {
+                this.$refs[form].resetFields()
+            },
             handleTabClick(name) {
                 this.current = name
                 this.handleModal();
@@ -165,8 +181,8 @@
                     intervalUnit: 'second',
                     limitQuota: 10,
                     apiIds: [],
-                }
-                this.formItem = newData
+                };
+                this.formItem = newData;
                 //重置验证
                 this.forms.map(form => {
                     this.$refs[form].resetFields()
@@ -228,20 +244,20 @@
                 if (page) {
                     this.pageInfo.page = page
                 }
-                this.loading = true
-                getRateLimits({page: this.pageInfo.page, limit: this.pageInfo.limit}).then(res => {
-                    this.data = res.data.records
+                this.loading = true;
+                getRateLimits(this.pageInfo).then(res => {
+                    this.data = res.data.records;
                     this.pageInfo.total = parseInt(res.data.total)
                 }).finally(() => {
                     this.loading = false
                 })
             },
             handlePage(current) {
-                this.pageInfo.page = current
+                this.pageInfo.page = current;
                 this.handleSearch()
             },
             handlePageSize(size) {
-                this.pageInfo.limit = size
+                this.pageInfo.limit = size;
                 this.handleSearch()
             },
             handleRemove(data) {

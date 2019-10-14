@@ -12,7 +12,7 @@ export const login = ({username, password}) => {
     password
   };
   return request({
-    url: 'admin/login/token',
+    url: 'uaa/login/token',
     data,
     method: 'post'
   })
@@ -23,21 +23,21 @@ export const login = ({username, password}) => {
  */
 export const logout = () => {
   return request({
-    url: 'admin/logout/token',
+    url: 'uaa/logout/token',
     data: {token: getToken()},
     method: 'post'
   })
-}
+};
 
 /**
  * 获取用户信息
  */
 export const getUserInfo = () => {
   return request({
-    url: 'admin/current/user',
+    url: 'uaa/current/user',
     method: 'get'
   })
-}
+};
 
 /**
  * 获取登录用户菜单权限
@@ -47,7 +47,7 @@ export const getCurrentUserMenu = () => {
     url: 'base/current/user/menu',
     method: 'get'
   })
-}
+};
 
 export const updateCurrentUserInfo = ({nickName, userDesc, avatar}) => {
   const data = {
@@ -60,12 +60,11 @@ export const updateCurrentUserInfo = ({nickName, userDesc, avatar}) => {
     data,
     method: 'post'
   })
-}
+};
 
 /**
  * 获取用户列表
- * @param page
- * @param limit
+ * @param params
  */
 export const getUsers = (params) => {
   return request({
@@ -73,7 +72,7 @@ export const getUsers = (params) => {
     params,
     method: 'get'
   })
-}
+};
 
 /**
  * 获取所有用户列表
@@ -83,7 +82,7 @@ export const getAllUsers = () => {
     url: 'base/user/all',
     method: 'get'
   })
-}
+};
 
 /**
  * 添加用户信息
@@ -108,13 +107,13 @@ export const addUser = ({userName, password, nickName, status, userType, email, 
     mobile: mobile,
     userDesc: userDesc,
     avatar: avatar
-  }
+  };
   return request({
     url: 'base/user/add',
     data,
     method: 'post'
   })
-}
+};
 
 /**
  * 更新用户信息
@@ -137,13 +136,13 @@ export const updateUser = ({userId, nickName, status, userType, email, mobile, u
     mobile: mobile,
     userDesc: userDesc,
     avatar: avatar
-  }
+  };
   return request({
     url: 'base/user/update',
     data,
     method: 'post'
   })
-}
+};
 
 /**
  * 分配用户角色
@@ -156,7 +155,7 @@ export const addUserRoles = ({userId, grantRoles}) => {
     data,
     method: 'post'
   })
-}
+};
 
 /**
  * 获取用户角色
@@ -165,28 +164,27 @@ export const addUserRoles = ({userId, grantRoles}) => {
 export const getUserRoles = (userId) => {
   const params = {
     userId: userId
-  }
+  };
   return request({
     url: 'base/user/roles',
     params,
     method: 'get'
   })
-}
+};
 
 /**
  * 修改密码
  * @param userId
- * @param oldPassword
- * @param newPassword
+ * @param password
  */
 export const updatePassword = ({userId, password}) => {
   const data = {
     userId: userId,
     password: password
-  }
+  };
   return request({
     url: 'base/user/update/password',
     data,
     method: 'post'
   })
-}
+};
