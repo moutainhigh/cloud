@@ -54,6 +54,19 @@ public final class OpenAuthority implements GrantedAuthority {
         return this.expireTime != null && System.currentTimeMillis() > this.expireTime.getTime();
     }
 
+    public Date getExpireTime() {
+        if (null != this.expireTime) {
+            return (Date) expireTime.clone();
+        }
+        return null;
+    }
+
+    public void setExpireTime(Date expireTime) {
+        if (null != expireTime) {
+            this.expireTime = (Date) expireTime.clone();
+        }
+    }
+
     public OpenAuthority(String authority) {
         Assert.hasText(authority, "A granted authority textual representation is required");
         this.authority = authority;
@@ -62,13 +75,17 @@ public final class OpenAuthority implements GrantedAuthority {
     public OpenAuthority(String authority, Date expireTime) {
         Assert.hasText(authority, "A granted authority textual representation is required");
         this.authority = authority;
-        this.expireTime = expireTime;
+        if (null != expireTime) {
+            this.expireTime = (Date) expireTime.clone();
+        }
     }
 
     public OpenAuthority(String authorityId, String authority, Date expireTime, String owner) {
         this.authorityId = authorityId;
         this.authority = authority;
-        this.expireTime = expireTime;
+        if (null != expireTime) {
+            this.expireTime = (Date) expireTime.clone();
+        }
         this.owner = owner;
     }
 
