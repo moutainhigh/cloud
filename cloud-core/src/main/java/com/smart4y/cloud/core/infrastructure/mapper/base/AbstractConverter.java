@@ -1,7 +1,7 @@
 package com.smart4y.cloud.core.infrastructure.mapper.base;
 
 import com.github.pagehelper.PageInfo;
-import com.smart4y.cloud.core.domain.Page;
+import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 
 import java.time.LocalDate;

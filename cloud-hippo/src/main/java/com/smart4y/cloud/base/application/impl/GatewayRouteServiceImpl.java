@@ -5,8 +5,8 @@ import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.GatewayRouteService;
 import com.smart4y.cloud.base.domain.model.GatewayRoute;
 import com.smart4y.cloud.base.domain.repository.GatewayRouteMapper;
+import com.smart4y.cloud.base.interfaces.valueobject.query.GatewayRouteQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
-import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
@@ -28,8 +28,8 @@ public class GatewayRouteServiceImpl implements GatewayRouteService {
     private GatewayRouteMapper gatewayRouteMapper;
 
     @Override
-    public PageInfo<GatewayRoute> findListPage(PageParams pageParams) {
-        PageHelper.startPage(pageParams.getPage(), pageParams.getLimit(), Boolean.TRUE);
+    public PageInfo<GatewayRoute> findListPage(GatewayRouteQuery query) {
+        PageHelper.startPage(query.getPage(), query.getLimit(), Boolean.TRUE);
         List<GatewayRoute> list = gatewayRouteMapper.selectAll();
         return new PageInfo<>(list);
     }

@@ -6,10 +6,10 @@ import com.smart4y.cloud.base.domain.model.BaseRole;
 import com.smart4y.cloud.base.domain.model.BaseRoleUser;
 import com.smart4y.cloud.base.interfaces.converter.BaseRoleConverter;
 import com.smart4y.cloud.base.interfaces.converter.BaseRoleUserConverter;
+import com.smart4y.cloud.base.interfaces.valueobject.query.BaseRoleQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseRoleUserVO;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseRoleVO;
-import com.smart4y.cloud.core.domain.Page;
-import com.smart4y.cloud.core.domain.PageParams;
+import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -43,8 +42,8 @@ public class BaseRoleController {
      */
     @ApiOperation(value = "获取分页角色列表", notes = "获取分页角色列表")
     @GetMapping("/role")
-    public ResultEntity<Page<BaseRoleVO>> getRoleListPage(@RequestParam(required = false) Map map) {
-        PageInfo<BaseRole> pageInfo = baseRoleService.findListPage(new PageParams(map));
+    public ResultEntity<Page<BaseRoleVO>> getRoleListPage(BaseRoleQuery query) {
+        PageInfo<BaseRole> pageInfo = baseRoleService.findListPage(query);
         Page<BaseRoleVO> result = baseRoleConverter.convertPage(pageInfo);
         return ResultEntity.ok(result);
     }

@@ -6,8 +6,8 @@ import com.smart4y.cloud.base.application.BaseAppService;
 import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.domain.model.BaseApp;
 import com.smart4y.cloud.base.domain.repository.BaseAppMapper;
+import com.smart4y.cloud.base.interfaces.valueobject.query.BaseAppQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
-import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
 import com.smart4y.cloud.core.infrastructure.security.OpenClientDetails;
@@ -56,8 +56,7 @@ public class BaseAppServiceImpl implements BaseAppService {
     private JdbcClientDetailsService jdbcClientDetailsService;
 
     @Override
-    public PageInfo<BaseApp> findListPage(PageParams pageParams) {
-        BaseApp query = pageParams.mapToObject(BaseApp.class);
+    public PageInfo<BaseApp> findListPage(BaseAppQuery query) {
         Weekend<BaseApp> wrapper = Weekend.of(BaseApp.class);
         WeekendCriteria<BaseApp, Object> criteria = wrapper.weekendCriteria();
         if (null != query.getDeveloperId()) {
@@ -66,9 +65,8 @@ public class BaseAppServiceImpl implements BaseAppService {
         if (StringUtil.isNotBlank(query.getAppType())) {
             criteria.andEqualTo(BaseApp::getAppType, query.getAppType());
         }
-        Object aid = pageParams.getRequestMap().get("aid");
-        if (null != aid) {
-            criteria.andEqualTo(BaseApp::getAppId, aid.toString());
+        if (StringUtil.isNotBlank(query.getAid())) {
+            criteria.andEqualTo(BaseApp::getAppId, query.getAid());
         }
         if (StringUtil.isNotBlank(query.getAppName())) {
             criteria.andLike(BaseApp::getAppName, query.getAppName() + "%");
@@ -78,10 +76,9 @@ public class BaseAppServiceImpl implements BaseAppService {
         }
         wrapper.orderBy("createdDate").desc();
 
-        PageHelper.startPage(pageParams.getPage(), pageParams.getLimit(), Boolean.TRUE);
+        PageHelper.startPage(query.getPage(), query.getLimit(), Boolean.TRUE);
         List<BaseApp> list = baseAppMapper.selectByExample(wrapper);
-        PageInfo<BaseApp> pageInfo = new PageInfo<>(list);
-        return pageInfo;
+        return new PageInfo<>(list);
     }
 
     @Cacheable(value = "apps", key = "#appId")

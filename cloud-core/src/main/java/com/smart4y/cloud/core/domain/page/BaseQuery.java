@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.domain;
+package com.smart4y.cloud.core.domain.page;
 
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import io.swagger.annotations.ApiModel;

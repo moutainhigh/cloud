@@ -1,6 +1,6 @@
 package com.smart4y.cloud.base.interfaces.valueobject.query;
 
-import com.smart4y.cloud.core.domain.BaseQuery;
+import com.smart4y.cloud.core.domain.page.BaseQuery;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

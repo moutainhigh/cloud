@@ -2,11 +2,11 @@ package com.smart4y.cloud.base.interfaces.web;
 
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.BaseActionService;
-import com.smart4y.cloud.base.interfaces.converter.BaseActionConverter;
 import com.smart4y.cloud.base.domain.model.BaseAction;
+import com.smart4y.cloud.base.interfaces.converter.BaseActionConverter;
+import com.smart4y.cloud.base.interfaces.valueobject.query.BaseActionQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseActionVO;
-import com.smart4y.cloud.core.domain.Page;
-import com.smart4y.cloud.core.domain.PageParams;
+import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import io.swagger.annotations.Api;
@@ -15,8 +15,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 /**
  * @author Youtao
@@ -38,9 +36,8 @@ public class BaseActionController {
      */
     @GetMapping("/action")
     @ApiOperation(value = "获取分页功能按钮列表", notes = "获取分页功能按钮列表")
-    public ResultEntity<Page<BaseActionVO>> findActionListPage(
-            @RequestParam(required = false) Map map) {
-        PageInfo<BaseAction> listPage = baseActionService.findListPage(new PageParams(map));
+    public ResultEntity<Page<BaseActionVO>> findActionListPage(BaseActionQuery query) {
+        PageInfo<BaseAction> listPage = baseActionService.findListPage(query);
         Page<BaseActionVO> page = baseActionConverter.convertPage(listPage);
         return ResultEntity.ok(page);
     }

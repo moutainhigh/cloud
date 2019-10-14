@@ -4,9 +4,9 @@ import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.GatewayRouteService;
 import com.smart4y.cloud.base.domain.model.GatewayRoute;
 import com.smart4y.cloud.base.interfaces.converter.GatewayRouteConverter;
+import com.smart4y.cloud.base.interfaces.valueobject.query.GatewayRouteQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayRouteVO;
-import com.smart4y.cloud.core.domain.Page;
-import com.smart4y.cloud.core.domain.PageParams;
+import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
@@ -16,8 +16,6 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 /**
  * 网关智能路由
@@ -41,8 +39,8 @@ public class GatewayRouteController {
      */
     @ApiOperation(value = "获取分页路由列表", notes = "获取分页路由列表")
     @GetMapping("/gateway/route")
-    public ResultEntity<Page<GatewayRouteVO>> getRouteListPage(@RequestParam(required = false) Map map) {
-        PageInfo<GatewayRoute> pageInfo = gatewayRouteService.findListPage(new PageParams(map));
+    public ResultEntity<Page<GatewayRouteVO>> getRouteListPage(GatewayRouteQuery query) {
+        PageInfo<GatewayRoute> pageInfo = gatewayRouteService.findListPage(query);
         Page<GatewayRouteVO> result = gatewayRouteConverter.convertPage(pageInfo);
         return ResultEntity.ok(result);
     }

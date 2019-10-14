@@ -10,8 +10,8 @@ import com.smart4y.cloud.base.domain.model.BaseUser;
 import com.smart4y.cloud.base.domain.repository.BaseRoleMapper;
 import com.smart4y.cloud.base.domain.repository.BaseRoleUserCustomMapper;
 import com.smart4y.cloud.base.domain.repository.BaseRoleUserMapper;
+import com.smart4y.cloud.base.interfaces.valueobject.query.BaseRoleQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
-import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
@@ -42,9 +42,7 @@ public class BaseRoleServiceImpl implements BaseRoleService {
     private BaseUserService baseUserService;
 
     @Override
-    public PageInfo<BaseRole> findListPage(PageParams pageParams) {
-        BaseRole query = pageParams.mapToObject(BaseRole.class);
-
+    public PageInfo<BaseRole> findListPage(BaseRoleQuery query) {
         Weekend<BaseRole> queryWrapper = Weekend.of(BaseRole.class);
         WeekendCriteria<BaseRole, Object> criteria = queryWrapper.weekendCriteria();
         if (StringUtil.isNotBlank(query.getRoleCode())) {
@@ -55,7 +53,7 @@ public class BaseRoleServiceImpl implements BaseRoleService {
         }
         queryWrapper.orderBy("createdDate").desc();
 
-        PageHelper.startPage(pageParams.getPage(), pageParams.getLimit(), Boolean.TRUE);
+        PageHelper.startPage(query.getPage(), query.getLimit(), Boolean.TRUE);
         List<BaseRole> list = baseRoleMapper.selectByExample(queryWrapper);
         return new PageInfo<>(list);
     }

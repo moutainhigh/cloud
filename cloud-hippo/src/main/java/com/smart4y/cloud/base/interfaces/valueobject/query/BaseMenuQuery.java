@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * 网关IP访问控制分页查询
+ * 菜单资源分页查询
  *
  * @author Youtao
  *         Created by youtao on 2019/10/14.
@@ -18,12 +18,12 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value = "IpLimitQuery", description = "网关IP访问控制分页查询")
-public class IpLimitQuery extends BaseQuery {
+@ApiModel(value = "BaseMenuQuery", description = "菜单资源分页查询")
+public class BaseMenuQuery extends BaseQuery {
 
-    @ApiModelProperty(value = "策略名称")
-    private String policyName;
+    @ApiModelProperty(value = "菜单编码")
+    private String menuCode;
 
-    @ApiModelProperty(value = "策略类型:0-拒绝/黑名单 1-允许/白名单")
-    private Integer policyType;
+    @ApiModelProperty(value = "菜单名称")
+    private String menuName;
 }

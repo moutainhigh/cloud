@@ -9,10 +9,10 @@ import com.smart4y.cloud.base.interfaces.converter.BaseRoleConverter;
 import com.smart4y.cloud.base.interfaces.converter.BaseUserConverter;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddAdminUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterAdminThirdPartyCommand;
+import com.smart4y.cloud.base.interfaces.valueobject.query.BaseUserQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseRoleVO;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseUserVO;
-import com.smart4y.cloud.core.domain.Page;
-import com.smart4y.cloud.core.domain.PageParams;
+import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.interfaces.UserAccountVO;
 import io.swagger.annotations.Api;
@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -67,8 +66,8 @@ public class BaseUserController {
      */
     @ApiOperation(value = "系统分页用户列表", notes = "系统分页用户列表")
     @GetMapping("/user")
-    public ResultEntity<Page<BaseUserVO>> getUserList(@RequestParam(required = false) Map map) {
-        PageInfo<BaseUser> pageInfo = baseUserService.findListPage(new PageParams(map));
+    public ResultEntity<Page<BaseUserVO>> getUserList(BaseUserQuery query) {
+        PageInfo<BaseUser> pageInfo = baseUserService.findListPage(query);
         Page<BaseUserVO> result = baseUserConverter.convertPage(pageInfo);
         return ResultEntity.ok(result);
     }

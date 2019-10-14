@@ -4,9 +4,9 @@ import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.BaseApiService;
 import com.smart4y.cloud.base.domain.model.BaseApi;
 import com.smart4y.cloud.base.interfaces.converter.BaseApiConverter;
+import com.smart4y.cloud.base.interfaces.valueobject.query.BaseApiQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseApiVO;
-import com.smart4y.cloud.core.domain.Page;
-import com.smart4y.cloud.core.domain.PageParams;
+import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import io.swagger.annotations.Api;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -41,8 +40,8 @@ public class BaseApiController {
      */
     @ApiOperation(value = "获取分页接口列表", notes = "获取分页接口列表")
     @GetMapping(value = "/api")
-    public ResultEntity<Page<BaseApiVO>> getApiList(@RequestParam(required = false) Map map) {
-        PageInfo<BaseApi> listPage = apiService.findListPage(new PageParams(map));
+    public ResultEntity<Page<BaseApiVO>> getApiList(BaseApiQuery query) {
+        PageInfo<BaseApi> listPage = apiService.findListPage(query);
         Page<BaseApiVO> result = baseApiConverter.convertPage(listPage);
         return ResultEntity.ok(result);
     }

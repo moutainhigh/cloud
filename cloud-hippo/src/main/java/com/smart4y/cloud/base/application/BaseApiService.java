@@ -2,7 +2,7 @@ package com.smart4y.cloud.base.application;
 
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.BaseApi;
-import com.smart4y.cloud.core.domain.PageParams;
+import com.smart4y.cloud.base.interfaces.valueobject.query.BaseApiQuery;
 
 import java.util.List;
 
@@ -16,27 +16,18 @@ public interface BaseApiService {
 
     /**
      * 分页查询
-     *
-     * @param pageParams
-     * @return
      */
-    PageInfo<BaseApi> findListPage(PageParams pageParams);
+    PageInfo<BaseApi> findListPage(BaseApiQuery query);
 
     /**
      * 查询列表
-     *
-     * @return
      */
     List<BaseApi> findAllList(String serviceId);
 
     /**
      * 根据主键获取接口
-     *
-     * @param apiId
-     * @return
      */
     BaseApi getApi(long apiId);
-
 
     /**
      * 检查接口编码是否存在

@@ -7,10 +7,10 @@ import com.smart4y.cloud.base.domain.model.BaseAction;
 import com.smart4y.cloud.base.domain.model.BaseMenu;
 import com.smart4y.cloud.base.interfaces.converter.BaseActionConverter;
 import com.smart4y.cloud.base.interfaces.converter.BaseMenuConverter;
+import com.smart4y.cloud.base.interfaces.valueobject.query.BaseMenuQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseActionVO;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseMenuVO;
-import com.smart4y.cloud.core.domain.Page;
-import com.smart4y.cloud.core.domain.PageParams;
+import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import io.swagger.annotations.Api;
@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Youtao
@@ -47,8 +46,8 @@ public class BaseMenuController {
      */
     @ApiOperation(value = "获取分页菜单资源列表", notes = "获取分页菜单资源列表")
     @GetMapping("/menu")
-    public ResultEntity<Page<BaseMenuVO>> getMenuListPage(@RequestParam(required = false) Map map) {
-        PageInfo<BaseMenu> pageInfo = baseMenuService.findListPage(new PageParams(map));
+    public ResultEntity<Page<BaseMenuVO>> getMenuListPage(BaseMenuQuery query) {
+        PageInfo<BaseMenu> pageInfo = baseMenuService.findListPage(query);
         Page<BaseMenuVO> result = baseMenuConverter.convertPage(pageInfo);
         return ResultEntity.ok(result);
     }

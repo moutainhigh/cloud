@@ -3,7 +3,7 @@ package com.smart4y.cloud.core.infrastructure.mapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.core.domain.OpenThreadContext;
-import com.smart4y.cloud.core.domain.Page;
+import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.infrastructure.spring.SpringContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.ExecutorType;

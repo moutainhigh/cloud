@@ -15,9 +15,9 @@ import com.smart4y.cloud.base.domain.model.BaseUser;
 import com.smart4y.cloud.base.domain.repository.BaseUserMapper;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddAdminUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterAdminThirdPartyCommand;
+import com.smart4y.cloud.base.interfaces.valueobject.query.BaseUserQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.domain.OpenAuthority;
-import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
@@ -125,9 +125,7 @@ public class BaseUserServiceImpl implements BaseUserService {
     }
 
     @Override
-    public PageInfo<BaseUser> findListPage(PageParams pageParams) {
-        BaseUser query = pageParams.mapToObject(BaseUser.class);
-
+    public PageInfo<BaseUser> findListPage(BaseUserQuery query) {
         Weekend<BaseUser> queryWrapper = Weekend.of(BaseUser.class);
         WeekendCriteria<BaseUser, Object> criteria = queryWrapper.weekendCriteria();
         if (null != query.getUserId()) {
@@ -144,7 +142,7 @@ public class BaseUserServiceImpl implements BaseUserService {
         }
         queryWrapper.orderBy("createdDate").desc();
 
-        PageHelper.startPage(pageParams.getPage(), pageParams.getLimit(), Boolean.TRUE);
+        PageHelper.startPage(query.getPage(), query.getLimit(), Boolean.TRUE);
         List<BaseUser> list = baseUserMapper.selectByExample(queryWrapper);
         return new PageInfo<>(list);
     }

@@ -10,8 +10,8 @@ import com.smart4y.cloud.base.domain.model.BaseDeveloper;
 import com.smart4y.cloud.base.domain.repository.BaseDeveloperMapper;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddDeveloperUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterDeveloperThirdPartyCommand;
+import com.smart4y.cloud.base.interfaces.valueobject.query.BaseDeveloperQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
-import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;
@@ -45,9 +45,7 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
     private BaseAccountService baseAccountService;
 
     @Override
-    public PageInfo<BaseDeveloper> findListPage(PageParams pageParams) {
-        BaseDeveloper query = pageParams.mapToObject(BaseDeveloper.class);
-
+    public PageInfo<BaseDeveloper> findListPage(BaseDeveloperQuery query) {
         Weekend<BaseDeveloper> queryWrapper = Weekend.of(BaseDeveloper.class);
         WeekendCriteria<BaseDeveloper, Object> criteria = queryWrapper.weekendCriteria();
         if (null != query.getUserId()) {
@@ -64,7 +62,7 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
         }
         queryWrapper.orderBy("createdDate").desc();
 
-        PageHelper.startPage(pageParams.getPage(), pageParams.getLimit(), Boolean.TRUE);
+        PageHelper.startPage(query.getPage(), query.getLimit(), Boolean.TRUE);
         List<BaseDeveloper> list = baseDeveloperMapper.selectByExample(queryWrapper);
         return new PageInfo<>(list);
     }

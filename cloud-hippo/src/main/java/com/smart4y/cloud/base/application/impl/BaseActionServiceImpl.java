@@ -6,8 +6,8 @@ import com.smart4y.cloud.base.application.BaseActionService;
 import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.domain.model.BaseAction;
 import com.smart4y.cloud.base.domain.repository.BaseActionMapper;
+import com.smart4y.cloud.base.interfaces.valueobject.query.BaseActionQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
-import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
@@ -39,9 +39,7 @@ public class BaseActionServiceImpl implements BaseActionService {
     private BaseAuthorityService baseAuthorityService;
 
     @Override
-    public PageInfo<BaseAction> findListPage(PageParams pageParams) {
-        BaseAction query = pageParams.mapToObject(BaseAction.class);
-
+    public PageInfo<BaseAction> findListPage(BaseActionQuery query) {
         Weekend<BaseAction> queryWrapper = Weekend.of(BaseAction.class);
         WeekendCriteria<BaseAction, Object> criteria = queryWrapper.weekendCriteria();
         if (StringUtil.isNotBlank(query.getActionCode())) {
@@ -52,7 +50,7 @@ public class BaseActionServiceImpl implements BaseActionService {
         }
         queryWrapper.orderBy("createdDate").desc();
 
-        PageHelper.startPage(pageParams.getPage(), pageParams.getLimit(), Boolean.TRUE);
+        PageHelper.startPage(query.getPage(), query.getLimit(), Boolean.TRUE);
         List<BaseAction> list = baseActionMapper.selectByExample(queryWrapper);
         return new PageInfo<>(list);
     }

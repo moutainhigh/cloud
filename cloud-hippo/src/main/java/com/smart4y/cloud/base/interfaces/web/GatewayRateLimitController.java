@@ -9,7 +9,7 @@ import com.smart4y.cloud.base.interfaces.converter.GatewayRateLimitConverter;
 import com.smart4y.cloud.base.interfaces.valueobject.query.RateLimitQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayRateLimitApiVO;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayRateLimitVO;
-import com.smart4y.cloud.core.domain.Page;
+import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import com.smart4y.cloud.core.infrastructure.toolkit.StringUtil;

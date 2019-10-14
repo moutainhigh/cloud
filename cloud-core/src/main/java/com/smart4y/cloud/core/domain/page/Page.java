@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.domain;
+package com.smart4y.cloud.core.domain.page;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

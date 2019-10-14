@@ -7,8 +7,8 @@ import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.application.BaseMenuService;
 import com.smart4y.cloud.base.domain.model.BaseMenu;
 import com.smart4y.cloud.base.domain.repository.BaseMenuMapper;
+import com.smart4y.cloud.base.interfaces.valueobject.query.BaseMenuQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
-import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
@@ -42,9 +42,7 @@ public class BaseMenuServiceImpl implements BaseMenuService {
     private BaseActionService baseActionService;
 
     @Override
-    public PageInfo<BaseMenu> findListPage(PageParams pageParams) {
-        BaseMenu query = pageParams.mapToObject(BaseMenu.class);
-
+    public PageInfo<BaseMenu> findListPage(BaseMenuQuery query) {
         Weekend<BaseMenu> queryWrapper = Weekend.of(BaseMenu.class);
         WeekendCriteria<BaseMenu, Object> criteria = queryWrapper.weekendCriteria();
         if (StringUtil.isNotBlank(query.getMenuCode())) {
@@ -54,7 +52,7 @@ public class BaseMenuServiceImpl implements BaseMenuService {
             criteria.andLike(BaseMenu::getMenuName, query.getMenuName() + "%");
         }
 
-        PageHelper.startPage(pageParams.getPage(), pageParams.getLimit(), Boolean.TRUE);
+        PageHelper.startPage(query.getPage(), query.getLimit(), Boolean.TRUE);
         List<BaseMenu> list = baseMenuMapper.selectByExample(queryWrapper);
         return new PageInfo<>(list);
     }

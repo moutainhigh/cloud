@@ -6,8 +6,8 @@ import com.smart4y.cloud.base.application.BaseApiService;
 import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.domain.model.BaseApi;
 import com.smart4y.cloud.base.domain.repository.BaseApiMapper;
+import com.smart4y.cloud.base.interfaces.valueobject.query.BaseApiQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
-import com.smart4y.cloud.core.domain.PageParams;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
@@ -34,8 +34,7 @@ public class BaseApiServiceImpl implements BaseApiService {
     private BaseAuthorityService baseAuthorityService;
 
     @Override
-    public PageInfo<BaseApi> findListPage(PageParams pageParams) {
-        BaseApi query = pageParams.mapToObject(BaseApi.class);
+    public PageInfo<BaseApi> findListPage(BaseApiQuery query) {
         Weekend<BaseApi> queryWrapper = Weekend.of(BaseApi.class);
         WeekendCriteria<BaseApi, Object> criteria = queryWrapper.weekendCriteria();
         if (StringUtil.isNotBlank(query.getPath())) {
@@ -58,7 +57,7 @@ public class BaseApiServiceImpl implements BaseApiService {
         }
         queryWrapper.orderBy("createdDate").desc();
 
-        PageHelper.startPage(pageParams.getPage(), pageParams.getLimit(), Boolean.TRUE);
+        PageHelper.startPage(query.getPage(), query.getLimit(), Boolean.TRUE);
         List<BaseApi> list = baseApiMapper.selectByExample(queryWrapper);
         return new PageInfo<>(list);
     }

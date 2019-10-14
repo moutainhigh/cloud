@@ -6,9 +6,9 @@ import com.smart4y.cloud.base.domain.model.BaseDeveloper;
 import com.smart4y.cloud.base.interfaces.converter.BaseDeveloperConverter;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddDeveloperUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterDeveloperThirdPartyCommand;
+import com.smart4y.cloud.base.interfaces.valueobject.query.BaseDeveloperQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseDeveloperVO;
-import com.smart4y.cloud.core.domain.Page;
-import com.smart4y.cloud.core.domain.PageParams;
+import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.interfaces.UserAccountVO;
 import io.swagger.annotations.Api;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 系统用户信息
@@ -57,8 +56,8 @@ public class BaseDeveloperController {
      */
     @ApiOperation(value = "系统分页用户列表", notes = "系统分页用户列表")
     @GetMapping("/developer")
-    public ResultEntity<Page<BaseDeveloperVO>> getUserList(@RequestParam(required = false) Map map) {
-        PageInfo<BaseDeveloper> pageInfo = baseDeveloperService.findListPage(new PageParams(map));
+    public ResultEntity<Page<BaseDeveloperVO>> getUserList(BaseDeveloperQuery query) {
+        PageInfo<BaseDeveloper> pageInfo = baseDeveloperService.findListPage(query);
         Page<BaseDeveloperVO> result = baseDeveloperConverter.convertPage(pageInfo);
         return ResultEntity.ok(result);
     }

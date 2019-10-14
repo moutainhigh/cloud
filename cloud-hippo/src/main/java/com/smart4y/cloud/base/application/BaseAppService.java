@@ -2,7 +2,7 @@ package com.smart4y.cloud.base.application;
 
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.BaseApp;
-import com.smart4y.cloud.core.domain.PageParams;
+import com.smart4y.cloud.base.interfaces.valueobject.query.BaseAppQuery;
 import com.smart4y.cloud.core.infrastructure.security.OpenClientDetails;
 
 /**
@@ -15,33 +15,22 @@ public interface BaseAppService {
 
     /**
      * 查询应用列表
-     *
-     * @param pageParams
-     * @return
      */
-    PageInfo<BaseApp> findListPage(PageParams pageParams);
+    PageInfo<BaseApp> findListPage(BaseAppQuery query);
 
     /**
      * 获取app信息
-     *
-     * @param appId
-     * @return
      */
     BaseApp getAppInfo(String appId);
 
     /**
      * 获取app和应用信息
-     *
-     * @param clientId
-     * @return
      */
     OpenClientDetails getAppClientInfo(String clientId);
 
 
     /**
      * 更新应用开发信息
-     *
-     * @param client
      */
     void updateAppClientInfo(OpenClientDetails client);
 

@@ -4,7 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.BaseUser;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddAdminUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterAdminThirdPartyCommand;
-import com.smart4y.cloud.core.domain.PageParams;
+import com.smart4y.cloud.base.interfaces.valueobject.query.BaseUserQuery;
 import com.smart4y.cloud.core.interfaces.UserAccountVO;
 
 import java.util.List;
@@ -37,21 +37,16 @@ public interface BaseUserService {
 
     /**
      * 更新密码
-     *
-     * @param userId
-     * @param password
      */
     void updatePassword(long userId, String password);
 
     /**
      * 分页查询
      */
-    PageInfo<BaseUser> findListPage(PageParams pageParams);
+    PageInfo<BaseUser> findListPage(BaseUserQuery query);
 
     /**
      * 查询列表
-     *
-     * @return
      */
     List<BaseUser> findAllList();
 

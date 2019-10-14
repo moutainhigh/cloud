@@ -4,9 +4,9 @@ import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.BaseAppService;
 import com.smart4y.cloud.base.domain.model.BaseApp;
 import com.smart4y.cloud.base.interfaces.converter.BaseAppConverter;
+import com.smart4y.cloud.base.interfaces.valueobject.query.BaseAppQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseAppVO;
-import com.smart4y.cloud.core.domain.Page;
-import com.smart4y.cloud.core.domain.PageParams;
+import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.security.OpenClientDetails;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
@@ -45,8 +45,8 @@ public class BaseAppController {
      */
     @ApiOperation(value = "获取分页应用列表", notes = "获取分页应用列表")
     @GetMapping("/app")
-    public ResultEntity<Page<BaseAppVO>> getAppListPage(@RequestParam(required = false) Map map) {
-        PageInfo<BaseApp> pageInfo = baseAppService.findListPage(new PageParams(map));
+    public ResultEntity<Page<BaseAppVO>> getAppListPage(BaseAppQuery query) {
+        PageInfo<BaseApp> pageInfo = baseAppService.findListPage(query);
         Page<BaseAppVO> result = baseAppConverter.convertPage(pageInfo);
         return ResultEntity.ok(result);
     }
