@@ -52,7 +52,7 @@ public enum IpHelperImpl implements IpHelper {
                         .getResourceAsStream(resourcePath);
                 if (null != asStream) {
                     String tmpDir = System.getProperties().getProperty("java.io.tmpdir");
-                    dbPath = tmpDir + "ip2region.db";
+                    dbPath = tmpDir + "/ip2region.db";
                     log.info(">>>>>>>>>>ip2region.db File Path: {}", dbPath);
                     file = new File(dbPath);
                     FileUtils.copyInputStreamToFile(asStream, file);
