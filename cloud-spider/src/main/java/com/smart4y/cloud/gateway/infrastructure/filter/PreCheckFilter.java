@@ -1,7 +1,7 @@
 package com.smart4y.cloud.gateway.infrastructure.filter;
 
-import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
+import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonAccessDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.security.AccessManager;
 import com.smart4y.cloud.gateway.infrastructure.toolkit.ReactiveWebUtils;
@@ -65,7 +65,7 @@ public class PreCheckFilter implements WebFilter {
         if (hasWhiteList) {
             // 接口存在白名单限制
             if (!allow) {
-                // IP白名单检测通过,拒绝
+                // IP白名单检测通过，拒绝
                 return accessDeniedHandler.handle(exchange, new AccessDeniedException(ErrorCode.ACCESS_DENIED_WHITE_LIMITED.getMessage()));
             }
         }
