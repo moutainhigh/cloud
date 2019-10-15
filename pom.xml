@@ -116,16 +116,16 @@
                             <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
                         </buildArgs>
                     </configuration>
-                    <!--<executions>
-              <execution>
-                  <id>default</id>
-                  <goals>
-                      &lt;!&ndash; 如果package时不想用docker打包就注释掉这个goal &ndash;&gt;
-                      <goal>build</goal>
-                      <goal>push</goal>
-                  </goals>
-              </execution>
-          </executions>-->
+                    <executions>
+                        <execution>
+                            <id>build-image</id>
+                            <!-- 将插件绑定在package这个phase上（也就是说，用户只需执行mvn package ，就会自动执行mvn docker:build） -->
+                            <phase>package</phase>
+                            <goals>
+                                <goal>build</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
