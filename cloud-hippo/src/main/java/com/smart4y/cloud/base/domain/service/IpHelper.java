@@ -43,11 +43,11 @@ public class IpHelper {
                 InputStream resourceAsStream = IpHelper.class.getClassLoader().getResourceAsStream(resourcePath);
                 if (null != resourceAsStream) {
                     FileUtils.copyInputStreamToFile(resourceAsStream, file);
-                    DbConfig config = new DbConfig();
-                    searcher = new DbSearcher(config, dbPath);
-                    log.info("Bean IpHelper DbConfig[{}] DbSearch[{}]", config, searcher);
                 }
             }
+            DbConfig config = new DbConfig();
+            searcher = new DbSearcher(config, dbPath);
+            log.info("Bean IpHelper DbConfig[{}] DbSearch[{}]", config, searcher);
         } catch (Exception e) {
             log.error("初始化IP地址转换器错误：{}", e.getLocalizedMessage(), e);
         }
