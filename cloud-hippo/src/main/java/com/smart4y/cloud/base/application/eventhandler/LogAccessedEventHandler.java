@@ -52,9 +52,7 @@ public class LogAccessedEventHandler {
             if (StringUtils.isNotBlank(ip)) {
                 IpHelper.IpInfo info = ipHelper.of(ip);
                 if (null != info) {
-                    String region = String.format("%s|%s|%s|%s",
-                            info.getCountry(), info.getProvince(), info.getCity(), info.getIsp());
-                    record.setRegion(region);
+                    record.setRegion(info.getDetail());
                 }
             }
             LocalDateTime responseTime = record.getResponseTime();

@@ -35,21 +35,18 @@ public class IpHelper {
         try {
             // 因为无法读取jar包中的文件，所以复制创建临时文件
             String tmpDir = System.getProperties().getProperty("java.io.tmpdir");
-            //String tmpDir = System.getProperties().getProperty("user.dir");
             String dbPath = tmpDir + File.separator + "ip2region.db";
             log.info("Init ip region db path [{}]", dbPath);
             File file = new File(dbPath);
-            if (file.exists()) {
-                boolean del = file.delete();
-                log.info("File exist[{}] delete flag: {}", dbPath, del);
-            }
-            String resourcePath = "ip/ip2region.db";
-            InputStream resourceAsStream = IpHelper.class.getClassLoader().getResourceAsStream(resourcePath);
-            if (null != resourceAsStream) {
-                FileUtils.copyInputStreamToFile(resourceAsStream, file);
-                DbConfig config = new DbConfig();
-                searcher = new DbSearcher(config, dbPath);
-                log.info("Bean IpHelper DbConfig[{}] DbSearch[{}]", config, searcher);
+            if (!file.exists()) {
+                String resourcePath = "ip/ip2region.db";
+                InputStream resourceAsStream = IpHelper.class.getClassLoader().getResourceAsStream(resourcePath);
+                if (null != resourceAsStream) {
+                    FileUtils.copyInputStreamToFile(resourceAsStream, file);
+                    DbConfig config = new DbConfig();
+                    searcher = new DbSearcher(config, dbPath);
+                    log.info("Bean IpHelper DbConfig[{}] DbSearch[{}]", config, searcher);
+                }
             }
         } catch (Exception e) {
             log.error("初始化IP地址转换器错误：{}", e.getLocalizedMessage(), e);
@@ -63,13 +60,15 @@ public class IpHelper {
                 // 中国|0|浙江省|杭州市|阿里云
                 String region = dataBlock.getRegion();
                 String[] split = region.split("\\|");
-                return new IpInfo(split[0], split[2], split[3], split[4]);
+                String country = split[0], province = split[2], city = split[3], isp = split[4];
+                String detail = String.format("%s|%s|%s|%s", country, province, city, isp);
+                return new IpInfo(country, province, city, isp, detail);
             }
         } catch (Exception e) {
             log.warn("获取IP地址所在区域异常：{}", e.getLocalizedMessage(), e);
         }
         String unknown = "未知";
-        return new IpInfo(unknown, unknown, unknown, unknown);
+        return new IpInfo(unknown, unknown, unknown, unknown, unknown);
     }
 
     public String localIp() {
@@ -147,7 +146,7 @@ public class IpHelper {
     @Getter
     @ToString
     @AllArgsConstructor
-    public class IpInfo implements Serializable {
+    public static class IpInfo implements Serializable {
 
         /**
          * 国家名称
@@ -176,9 +175,17 @@ public class IpHelper {
         /**
          * ISP 名称
          * <p>
-         * 例如：联通、电信、移动、阿里云
+         * 例如：联通、电信、移动、阿里云、华数
          * </p>
          */
         private final String isp;
+
+        /**
+         * 详细信息
+         * <p>
+         * 例如：中国|浙江省|杭州市|阿里云
+         * </p>
+         */
+        private final String detail;
     }
 }
