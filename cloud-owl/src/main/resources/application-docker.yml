@@ -13,7 +13,7 @@ spring:
       id: ${spring.application.name}:${server.port}
     nacos:
       discovery:
-        server-addr: ${DOCKER_NACOS_ADDR}:8848
+        server-addr: ${NACOS_HOST}:8848
   thymeleaf:
     cache: false
     encoding: UTF-8
@@ -23,7 +23,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   datasource:
-    url: jdbc:mysql://${DOCKER_MYSQL_HOST}:3306/cloud?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://${DB_HOST}:3306/${DB_SCHEMA}?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -35,14 +35,15 @@ spring:
       maximum-pool-size: 15
       connection-test-query: SELECT 1
   rabbitmq:
-    host: ${DOCKER_RABBITMQ_HOST}
+    host: ${RABBITMQ_HOST}
     port: 5672
     username: guest
     password: guest
     virtual-host: /
     publisher-confirms: true
   redis:
-    host: ${DOCKER_REDIS_HOST}
+    host: ${REDIS_HOST}
+    database: ${REDIS_DB}
     port: 6379
     password: 123456
     lettuce:

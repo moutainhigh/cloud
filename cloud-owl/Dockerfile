@@ -15,7 +15,9 @@ VOLUME /tmp
 ARG JAR_FILE
 COPY ${JAR_FILE} app.jar
 #RUN bash -c 'touch /app.jar'
-ENV TZ=Asia/Shanghai
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-#EXPOSE 8223
-ENTRYPOINT ["java", "${JAVA_OPTS}", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar", "--spring.profiles.active=docker"]
+RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' > /etc/timezone
+EXPOSE 7211
+ENV JAVA_OPTS="--spring.profiles.active=docker -Xms128m -Xmx256m"
+#ENTRYPOINT ["java","-Xms128m","-Xmx256m", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar", "--spring.profiles.active=docker"]
+
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar"]

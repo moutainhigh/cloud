@@ -1,0 +1,115 @@
+version: '3'
+services:
+  nacos:
+    image: nacos/nacos-server:latest
+    ports:
+      - "8848:8848"
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+    command: nacos/nacos-server
+    labels:
+      NAME: "nacos"
+  redis:
+    image: redis:3.2
+    ports:
+      - "6379:6379"
+    volumes:
+      - ${DOCKER_VOL_DIR}/redis/conf:/usr/local/etc/redis
+      - ${DOCKER_VOL_DIR}/redis/data:/data
+    command: redis-server --requirepass 123456
+    labels:
+      NAME: "redis"
+  rabbitmq:
+    image: "rabbitmq:3.7-management"
+    ports:
+      - "15672"
+      - "5672"
+    hostname: "rabbitmq"
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    volumes:
+      - ${DOCKER_VOL_DIR}/rabbitmq/lib:/var/rabbitmq/lib
+    labels:
+      NAME: "rabbitmq"
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ${DOCKER_VOL_DIR}/mysqlx:/docker-entrypoint-initdb.d
+      - ${DOCKER_VOL_DIR}/mysqlx/conf:/etc/mysql/conf.d
+      - ${DOCKER_VOL_DIR}/mysqlx/data:/var/lib/mysql
+      - ${DOCKER_VOL_DIR}/mysqlx/logs:/logs
+    labels:
+      NAME: "mysql"
+  hippo:
+    image: cloud/cloud-hippo:0.7.0-SNAPSHOT
+    ports:
+      - "8223:8223"
+    environment:
+      - NACOS_HOST=nacos
+      - DB_HOST=mysql
+      - DB_SCHEMA=cloud
+      - REDIS_HOST=redis
+      - REDIS_DB=0
+      - RABBITMQ_HOST=rabbitmq
+    depends_on:
+      - nacos
+      - mysql
+      - redis
+      - rabbitmq
+    links:
+      - nacos
+      - mysql
+      - redis
+      - rabbitmq
+#  owl:
+#    image: cloud/cloud-owl:0.7.0-SNAPSHOT
+#    ports:
+#      - "7211"
+#    environment:
+#      - NACOS_HOST=nacos
+#      - DB_HOST=mysql
+#      - DB_SCHEMA=cloud
+#      - REDIS_HOST=redis
+#      - REDIS_DB=0
+#      - RABBITMQ_HOST=rabbitmq
+#    depends_on:
+#      - nacos
+#      - mysql
+#      - redis
+#      - rabbitmq
+#    links:
+#      - nacos
+#      - mysql
+#      - redis
+#      - rabbitmq
+#  spider:
+#    image: cloud/cloud-spider:0.7.0-SNAPSHOT
+#    ports:
+#      - "8888"
+#    environment:
+#      - NACOS_HOST=nacos
+#      - DB_HOST=mysql
+#      - DB_SCHEMA=cloud
+#      - REDIS_HOST=redis
+#      - REDIS_DB=0
+#      - RABBITMQ_HOST=rabbitmq
+#    depends_on:
+#      - nacos
+#      - mysql
+#      - redis
+#      - rabbitmq
+#    links:
+#      - nacos
+#      - mysql
+#      - redis
+#      - rabbitmq
