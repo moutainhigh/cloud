@@ -5,7 +5,7 @@
 
     <groupId>com.smart4y</groupId>
     <artifactId>cloud</artifactId>
-    <version>0.6.0-SNAPSHOT</version>
+    <version>0.7.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>cloud</name>
     <description>Cloud project for Spring Boot</description>
@@ -131,7 +131,7 @@
         </pluginManagement>
     </build>
 
-    <profiles>
+    <!--<profiles>
         <profile>
             <id>dev</id>
             <activation>
@@ -139,25 +139,25 @@
             </activation>
             <properties>
                 <profile.name>dev</profile.name>
-                <!-- Nacos配置中心命名空间，用于支持多环境。这里必须使用ID，不能使用名称，默认为空 -->
+                &lt;!&ndash; Nacos配置中心命名空间，用于支持多环境。这里必须使用ID，不能使用名称，默认为空 &ndash;&gt;
                 <config.namespace/>
                 <config.server-addr>127.0.0.1:8848</config.server-addr>
                 <discovery.server-addr>127.0.0.1:8848</discovery.server-addr>
-                <!-- Docker私有镜像仓库 -->
+                &lt;!&ndash; Docker私有镜像仓库 &ndash;&gt;
                 <docker.registry>10.0.3.80:2375</docker.registry>
             </properties>
         </profile>
         <profile>
-            <id>online</id>
+            <id>docker</id>
             <properties>
-                <profile.name>online</profile.name>
-                <!-- Nacos配置中心命名空间，用于支持多环境。这里必须使用ID，不能使用名称，默认为空 -->
+                <profile.name>docker</profile.name>
+                &lt;!&ndash; Nacos配置中心命名空间，用于支持多环境。这里必须使用ID，不能使用名称，默认为空 &ndash;&gt;
                 <config.namespace/>
                 <config.server-addr>127.0.0.1:8848</config.server-addr>
                 <discovery.server-addr>127.0.0.1:8848</discovery.server-addr>
-                <!-- Docker私有镜像仓库 -->
+                &lt;!&ndash; Docker私有镜像仓库 &ndash;&gt;
                 <docker.registry>10.0.3.80:2375</docker.registry>
             </properties>
         </profile>
-    </profiles>
+    </profiles>-->
 </project>
