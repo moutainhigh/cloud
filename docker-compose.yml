@@ -7,6 +7,7 @@ services:
       - "8848:8848"
     restart: on-failure
     environment:
+      - TZ=Asia/Shanghai
       - PREFER_HOST_MODE=hostname
       - MODE=standalone
     labels:
@@ -22,6 +23,7 @@ services:
       '--collation-server=utf8mb4_unicode_ci'
     ]
     environment:
+      - TZ=Asia/Shanghai
       - MYSQL_ROOT_PASSWORD=123456
       - MYSQL_DATABASE=beego
     volumes:
@@ -39,6 +41,8 @@ services:
       - "${DOCKER_VOL_DIR}/redis/conf:/usr/local/etc/redis"
       - "${DOCKER_VOL_DIR}/redis/data:/data"
     command: redis-server --requirepass 123456
+    environment:
+      - TZ=Asia/Shanghai
     labels:
       NAME: "redis"
   rabbitmq:
@@ -52,9 +56,10 @@ services:
       - "25672:25672"
     hostname: "rabbitmq"
     environment:
-      RABBITMQ_DEFAULT_USER: "guest"
-      RABBITMQ_DEFAULT_PASS: "guest"
-      RABBITMQ_DEFAULT_VHOST: "/"
+      - TZ=Asia/Shanghai
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_DEFAULT_VHOST=/
     volumes:
       - "${DOCKER_VOL_DIR}/rabbitmq/lib:/var/rabbitmq/lib"
     labels:
@@ -131,3 +136,6 @@ services:
       - mysql
       - redis
       - rabbitmq
+
+networks:
+  cloud_default:
