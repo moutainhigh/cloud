@@ -138,4 +138,4 @@ services:
       - rabbitmq
 
 networks:
-  cloud_default:
+  cloud_network:
