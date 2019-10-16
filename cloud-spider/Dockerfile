@@ -18,6 +18,4 @@ COPY ${JAR_FILE} app.jar
 RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' > /etc/timezone
 EXPOSE 8888
 ENV JAVA_OPTS="-Xms128m -Xmx512m"
-#ENTRYPOINT ["java","-Xms128m","-Xmx256m", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
-
-ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar"]
