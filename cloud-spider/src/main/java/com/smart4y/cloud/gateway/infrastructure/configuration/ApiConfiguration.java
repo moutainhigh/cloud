@@ -29,6 +29,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.cloud.bus.BusProperties;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
+import org.springframework.cloud.gateway.route.InMemoryRouteDefinitionRepository;
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -135,8 +136,8 @@ public class ApiConfiguration {
      * 动态路由加载
      */
     @Bean
-    public JdbcRouteDefinitionLocator jdbcRouteDefinitionLocator() {
-        JdbcRouteDefinitionLocator jdbcRouteDefinitionLocator = new JdbcRouteDefinitionLocator();
+    public JdbcRouteDefinitionLocator jdbcRouteDefinitionLocator(InMemoryRouteDefinitionRepository repository) {
+        JdbcRouteDefinitionLocator jdbcRouteDefinitionLocator = new JdbcRouteDefinitionLocator(repository);
         log.info("JdbcRouteDefinitionLocator [{}]", jdbcRouteDefinitionLocator);
         return jdbcRouteDefinitionLocator;
     }

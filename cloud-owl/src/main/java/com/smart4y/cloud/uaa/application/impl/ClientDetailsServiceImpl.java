@@ -26,7 +26,7 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
         ClientDetails details = baseAppFeign.getAppClientInfo(clientId).getData();
-        if (details != null && details.getAdditionalInformation() != null) {
+        if (null != details && null != details.getClientId() && null != details.getAdditionalInformation()) {
             String status = details.getAdditionalInformation().getOrDefault("status", "0").toString();
             if (!"1".equals(status)) {
                 throw new ClientRegistrationException("客户端已被禁用");

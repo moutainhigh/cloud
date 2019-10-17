@@ -44,7 +44,7 @@ public abstract class AbstractApplication {
                             "External: \thttp://{}:{}\n\t" +
                             "Profile(s): {}\n\t" +
                             "Java Opt: \t{}\n\t" +
-                            "Memory: \tmax-{}bytes, total-{}bytes, free-{}bytes" +
+                            "Memory: \tmax: {}M, total: {}M, free: {}M" +
                             "\n----------------------------------------------------------",
                     env.getProperty("spring.application.name"),
                     env.getProperty("server.port"),
@@ -52,7 +52,7 @@ public abstract class AbstractApplication {
                     env.getProperty("server.port"),
                     Arrays.toString(env.getActiveProfiles()),
                     inputArguments,
-                    runtime.maxMemory(), runtime.totalMemory(), runtime.freeMemory()
+                    runtime.maxMemory() / 1048576, runtime.totalMemory() / 1048576, runtime.freeMemory() / 1048576
             );
 
             log.info("Running with Spring profile(s) : {}", Arrays.toString(env.getActiveProfiles()));

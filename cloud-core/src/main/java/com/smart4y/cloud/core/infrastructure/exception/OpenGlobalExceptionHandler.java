@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
 
 /**
  * 统一异常处理器
@@ -67,19 +66,6 @@ public class OpenGlobalExceptionHandler {
         ResultEntity resultBody = resolveException(ex, request.getRequestURI());
         response.setStatus(resultBody.getHttpStatus());
         return resultBody;
-    }
-
-    /**
-     * 静态解析认证异常
-     */
-    public static ResultEntity resolveOauthException(Exception ex, String path) {
-        ErrorCode code = ErrorCode.BAD_CREDENTIALS;
-        int httpStatus = HttpStatus.OK.value();
-        String error = Optional.ofNullable(ex.getMessage()).orElse("");
-        if (error.contains("User is disabled")) {
-            code = ErrorCode.ACCOUNT_DISABLED;
-        }
-        return buildBody(ex, code, path, httpStatus);
     }
 
     /**

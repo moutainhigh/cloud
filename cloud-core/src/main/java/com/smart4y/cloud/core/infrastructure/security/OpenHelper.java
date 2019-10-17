@@ -1,6 +1,7 @@
 package com.smart4y.cloud.core.infrastructure.security;
 
 import com.smart4y.cloud.core.infrastructure.properties.OpenCommonProperties;
+import com.smart4y.cloud.core.infrastructure.spring.SpringContextHolder;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.BeanConvertUtils;
 import com.smart4y.cloud.core.infrastructure.toolkit.reflection.ReflectionUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -11,10 +12,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerEndpointsConfiguration;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.OAuth2Request;
+import org.springframework.security.oauth2.provider.*;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
@@ -186,12 +188,30 @@ public class OpenHelper {
      * 认证服务器原始方式创建AccessToken
      */
     public static OAuth2AccessToken createAccessToken(AuthorizationServerEndpointsConfiguration endpoints, Map<String, String> postParameters) throws Exception {
-        Assert.notNull(postParameters.get("client_id"), "client_id not null");
-        Assert.notNull(postParameters.get("client_secret"), "client_secret not null");
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(postParameters.get("client_id"), postParameters.get("client_secret"), Collections.emptyList());
+        String clientId = postParameters.get("client_id");
+        String clientSecret = postParameters.get("client_secret");
+        Assert.notNull(clientId, "client_id not null");
+        Assert.notNull(clientSecret, "client_secret not null");
+        clientId = clientId.trim();
+
+        // 验证客户端
+        ClientDetailsService clientDetailsService = (ClientDetailsService) ReflectionUtils
+                .getFieldValue(endpoints, "clientDetailsService");
+        PasswordEncoder passwordEncoder = SpringContextHolder.getBean(PasswordEncoder.class);
+        if (null != clientDetailsService) {
+            ClientDetails clientDetails = clientDetailsService.loadClientByClientId(clientId);
+            if (clientDetails == null) {
+                throw new NoSuchClientException("No client with requested id:" + clientId);
+            }
+            if (!passwordEncoder.matches(clientSecret, clientDetails.getClientSecret())) {
+                throw new InvalidClientException("Bad client credentials");
+            }
+        }
+
+        // 生成TOKEN
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(clientId, clientSecret, Collections.emptyList());
         TokenEndpoint endpoint = endpoints.tokenEndpoint();
         ResponseEntity<OAuth2AccessToken> responseEntity = endpoint.postAccessToken(auth, postParameters);
-        log.info("createAccessToken[{}]", responseEntity.getBody());
         return responseEntity.getBody();
     }
 }

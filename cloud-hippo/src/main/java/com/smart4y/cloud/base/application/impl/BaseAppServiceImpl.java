@@ -90,8 +90,10 @@ public class BaseAppServiceImpl implements BaseAppService {
     @Override
     @Cacheable(value = "apps", key = "'client:'+#clientId")
     public OpenClientDetails getAppClientInfo(String clientId) {
-        BaseClientDetails baseClientDetails = (BaseClientDetails) jdbcClientDetailsService.loadClientByClientId(clientId);
-        if (baseClientDetails == null) {
+        BaseClientDetails baseClientDetails;
+        try {
+            baseClientDetails = (BaseClientDetails) jdbcClientDetailsService.loadClientByClientId(clientId);
+        } catch (Exception e) {
             return null;
         }
         String appId = baseClientDetails.getAdditionalInformation().get("appId").toString();
