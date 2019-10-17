@@ -77,6 +77,8 @@ services:
       - REDIS_DB=0
       - RABBITMQ_HOST=rabbitmq
       - spring.profiles.active=docker
+    volumes:
+      - "${DOCKER_VOL_DIR}/cloud-hippo/logs:/logs/cloud-hippo"
     depends_on:
       - nacos
       - mysql
@@ -100,6 +102,8 @@ services:
       - REDIS_DB=0
       - RABBITMQ_HOST=rabbitmq
       - spring.profiles.active=docker
+    volumes:
+      - "${DOCKER_VOL_DIR}/cloud-owl/logs:/logs/cloud-owl"
     depends_on:
       - nacos
       - mysql
@@ -124,6 +128,8 @@ services:
       - REDIS_DB=0
       - RABBITMQ_HOST=rabbitmq
       - spring.profiles.active=docker
+    volumes:
+      - "${DOCKER_VOL_DIR}/cloud-spider/logs:/logs/cloud-spider"
     depends_on:
       - nacos
       - mysql

@@ -6,7 +6,8 @@
     <artifactId>cloud-owl</artifactId>
     <version>0.8.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>cloud-owl</name>
+    <!--    <name>cloud-owl</name>-->
+    <name>#5 平台认证服务</name>
     <description>认证服务</description>
 
     <properties>

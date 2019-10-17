@@ -6,7 +6,8 @@
     <artifactId>cloud-core</artifactId>
     <version>0.8.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>cloud-core</name>
+    <!--    <name>cloud-core</name>-->
+    <name>#2 基础公共模块</name>
     <description>公共模块</description>
 
     <properties>

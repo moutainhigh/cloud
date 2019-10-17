@@ -7,7 +7,8 @@
     <artifactId>cloud</artifactId>
     <version>0.8.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>cloud</name>
+    <!--    <name>cloud</name>-->
+    <name>#0 微服务的平台</name>
     <description>Cloud project for Spring Boot</description>
 
     <modules>

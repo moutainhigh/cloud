@@ -6,7 +6,8 @@
     <artifactId>cloud-hippo</artifactId>
     <version>0.8.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>cloud-hippo</name>
+    <!--    <name>cloud-hippo</name>-->
+    <name>#4 平台基础服务</name>
     <description>基础服务</description>
 
     <properties>

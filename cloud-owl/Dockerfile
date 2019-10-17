@@ -14,7 +14,6 @@ MAINTAINER yt cloud@smart4y.com
 VOLUME /tmp
 ARG JAR_FILE
 COPY ${JAR_FILE} app.jar
-#RUN bash -c 'touch /app.jar'
 RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' > /etc/timezone
 EXPOSE 7211
 ENV JAVA_OPTS="-DXms128m -DXmx512m"
