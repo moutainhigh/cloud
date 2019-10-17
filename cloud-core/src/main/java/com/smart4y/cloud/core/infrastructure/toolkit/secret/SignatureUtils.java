@@ -44,7 +44,7 @@ public class SignatureUtils {
     /**
      * 验证参数
      */
-    public static void validateParams(Map<String, String> paramsMap) throws Exception {
+    public static void validateParams(Map<String, String> paramsMap) {
         Assert.hasText(paramsMap.get(CommonConstants.SIGN_APP_ID_KEY), "签名验证失败:APP_ID不能为空");
         Assert.hasText(paramsMap.get(CommonConstants.SIGN_NONCE_KEY), "签名验证失败:NONCE不能为空");
         Assert.hasText(paramsMap.get(CommonConstants.SIGN_TIMESTAMP_KEY), "签名验证失败:TIMESTAMP不能为空");

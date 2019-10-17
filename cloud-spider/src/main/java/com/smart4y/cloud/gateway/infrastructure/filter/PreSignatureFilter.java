@@ -2,11 +2,11 @@ package com.smart4y.cloud.gateway.infrastructure.filter;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
 import com.google.common.collect.Maps;
-import com.smart4y.cloud.core.interfaces.AppDTO;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenSignatureException;
 import com.smart4y.cloud.core.infrastructure.toolkit.secret.SignatureUtils;
+import com.smart4y.cloud.core.interfaces.AppDTO;
 import com.smart4y.cloud.gateway.domain.GatewayContext;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonSignatureDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.feign.BaseAppFeign;
@@ -72,7 +72,7 @@ public class PreSignatureFilter implements WebFilter {
         String requestPath = request.getURI().getPath();
         if (apiProperties.isCheckSign() && !notSign(requestPath)) {
             try {
-                Map params = Maps.newHashMap();
+                Map<String, String> params = Maps.newHashMap();
                 GatewayContext gatewayContext = exchange.getAttribute(GatewayContext.CACHE_GATEWAY_CONTEXT);
                 // 排除文件上传
                 if (gatewayContext != null) {
@@ -80,9 +80,9 @@ public class PreSignatureFilter implements WebFilter {
                 }
                 // 验证请求参数
                 SignatureUtils.validateParams(params);
-                //开始验证签名
+                // 开始验证签名
                 if (baseAppFeign != null) {
-                    String appId = params.get(CommonConstants.SIGN_APP_ID_KEY).toString();
+                    String appId = params.get(CommonConstants.SIGN_APP_ID_KEY);
                     // 获取客户端信息
                     ResultEntity<AppDTO> result = baseAppFeign.getApp(appId);
                     AppDTO app = result.getData();

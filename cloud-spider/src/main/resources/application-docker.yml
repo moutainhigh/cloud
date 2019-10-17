@@ -148,7 +148,7 @@ opencloud:
   ##开放api
   api:
     # 参数签名验证
-    check-sign: false
+    check-sign: true
     # 访问权限控制
     access-control: true
     # swagger调试（生产环境设为false）
