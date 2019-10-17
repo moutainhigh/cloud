@@ -65,7 +65,7 @@ services:
     labels:
       NAME: "rabbitmq"
   hippo:
-    image: cloud/cloud-hippo:0.9.0-SNAPSHOT
+    image: cloud/cloud-hippo:0.9.0
     container_name: hippo
     ports:
       - "8223:8223"
@@ -90,7 +90,7 @@ services:
       - redis
       - rabbitmq
   owl:
-    image: cloud/cloud-owl:0.9.0-SNAPSHOT
+    image: cloud/cloud-owl:0.9.0
     container_name: owl
     ports:
       - "7211:7211"
@@ -116,7 +116,7 @@ services:
       - redis
       - rabbitmq
   spider:
-    image: cloud/cloud-spider:0.9.0-SNAPSHOT
+    image: cloud/cloud-spider:0.9.0
     container_name: spider
     ports:
       - "8888:8888"
