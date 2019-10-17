@@ -3,6 +3,8 @@ server:
 spring:
   application:
     name: cloud-hippo
+  profiles:
+    active: dev
   cloud:
     #手动配置Bus id,
     bus:

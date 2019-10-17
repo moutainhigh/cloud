@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.lionsoul.ip2region.DataBlock;
 import org.lionsoul.ip2region.DbConfig;
 import org.lionsoul.ip2region.DbSearcher;
@@ -12,13 +11,14 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * @author Youtao
@@ -34,19 +34,18 @@ public class IpHelper {
     public void init() {
         try {
             // 因为无法读取jar包中的文件，所以复制创建临时文件
-            String tmpDir = System.getProperties().getProperty("java.io.tmpdir");
-            String dbPath = tmpDir + File.separator + "ip2region.db";
-            log.info("Init ip region db path [{}]", dbPath);
-            File file = new File(dbPath);
-            if (!file.exists()) {
-                String resourcePath = "ip/ip2region.db";
-                InputStream resourceAsStream = IpHelper.class.getClassLoader().getResourceAsStream(resourcePath);
-                if (null != resourceAsStream) {
-                    FileUtils.copyInputStreamToFile(resourceAsStream, file);
-                }
+            String distFilePath = "/tmp/ip2region.db";
+            Path distPath = Paths.get(distFilePath);
+            log.info(">>>>>> Init ip region db path [{}]", distFilePath);
+            //Files.deleteIfExists(distPath);
+            if (!Files.exists(distPath)) {
+                String property = System.getProperty("user.dir")
+                        + "/cloud-hippo/src/main/resources/ip/ip2region.db";
+                Path sourcePath = Paths.get(property);
+                Files.copy(sourcePath, distPath);
             }
             DbConfig config = new DbConfig();
-            searcher = new DbSearcher(config, dbPath);
+            searcher = new DbSearcher(config, distFilePath);
             log.info("Bean IpHelper DbConfig[{}] DbSearch[{}]", config, searcher);
         } catch (Exception e) {
             log.error("初始化IP地址转换器错误：{}", e.getLocalizedMessage(), e);

@@ -62,8 +62,7 @@ public class BaseAppController {
             @ApiImplicitParam(name = "appId", value = "应用ID", defaultValue = "1", required = true, paramType = "path"),
     })
     @GetMapping("/app/{appId}/info")
-    public ResultEntity<BaseAppVO> getApp(
-            @PathVariable("appId") String appId) {
+    public ResultEntity<BaseAppVO> getApp(@PathVariable("appId") String appId) {
         BaseApp appInfo = baseAppService.getAppInfo(appId);
         BaseAppVO result = baseAppConverter.convert(appInfo);
         return ResultEntity.ok(result);
@@ -71,18 +70,13 @@ public class BaseAppController {
 
     /**
      * 获取应用开发配置信息
-     *
-     * @param clientId
-     * @return
      */
     @ApiOperation(value = "获取应用开发配置信息", notes = "获取应用开发配置信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "clientId", value = "应用ID", defaultValue = "1", required = true, paramType = "path"),
     })
     @GetMapping("/app/client/{clientId}/info")
-    public ResultEntity<OpenClientDetails> getAppClientInfo(
-            @PathVariable("clientId") String clientId
-    ) {
+    public ResultEntity<OpenClientDetails> getAppClientInfo(@PathVariable("clientId") String clientId) {
         OpenClientDetails clientInfo = baseAppService.getAppClientInfo(clientId);
         return ResultEntity.ok(clientInfo);
     }

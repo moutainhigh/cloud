@@ -3,6 +3,8 @@ server:
 spring:
   application:
     name: cloud-spider
+  profiles:
+    active: dev
   cloud:
     #手动配置Bus id,
     bus:

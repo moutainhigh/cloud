@@ -1334,7 +1334,7 @@ CREATE TABLE `gateway_access_logs` (
   `region` varchar(255) DEFAULT NULL COMMENT '区域',
   `authentication` text COMMENT '认证信息',
   `service_id` varchar(100) DEFAULT NULL COMMENT '服务名',
-  `error` varchar(255) DEFAULT NULL COMMENT '错误信息',
+  `error` text COMMENT '错误信息',
   `created_date` datetime DEFAULT NULL COMMENT '创建时间',
   `last_modified_date` datetime DEFAULT NULL COMMENT '最后修改时间',
   PRIMARY KEY (`access_id`)

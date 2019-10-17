@@ -60,7 +60,7 @@ public class SignatureUtils {
         }
         String timestamp = paramsMap.get(CommonConstants.SIGN_TIMESTAMP_KEY);
         long clientTimestamp = Long.parseLong(timestamp);
-        //判断时间戳 timestamp=201808091113
+        // 判断时间戳 timestamp=201910091113
         if ((DateHelper.getCurrentTimestamp() - clientTimestamp) > MAX_EXPIRE) {
             throw new IllegalArgumentException("签名验证失败:TIMESTAMP已过期");
         }

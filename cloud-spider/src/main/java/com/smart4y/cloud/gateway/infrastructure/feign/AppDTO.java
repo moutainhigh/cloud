@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.interfaces;
+package com.smart4y.cloud.gateway.infrastructure.feign;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -69,4 +69,12 @@ public class AppDTO implements Serializable {
      * 保留数据0-否 1-是 不允许删除
      */
     private Integer isPersist;
+    /**
+     * 创建时间（格式：yyyy-MM-dd HH:mm:ss）
+     */
+    private String createdDate;
+    /**
+     * 最后修改时间（格式：yyyy-MM-dd HH:mm:ss）
+     */
+    private String lastModifiedDate;
 }

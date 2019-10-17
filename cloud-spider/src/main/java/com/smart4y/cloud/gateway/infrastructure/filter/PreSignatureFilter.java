@@ -6,7 +6,7 @@ import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenSignatureException;
 import com.smart4y.cloud.core.infrastructure.toolkit.secret.SignatureUtils;
-import com.smart4y.cloud.core.interfaces.AppDTO;
+import com.smart4y.cloud.gateway.infrastructure.feign.AppDTO;
 import com.smart4y.cloud.gateway.domain.GatewayContext;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonSignatureDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.feign.BaseAppFeign;

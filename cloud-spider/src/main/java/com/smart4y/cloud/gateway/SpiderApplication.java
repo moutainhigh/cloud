@@ -23,19 +23,19 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableDiscoveryClient
 @SpringBootApplication
 @RemoteApplicationEventScan(basePackages = "com.smart4y.cloud")
-public class GatewayApplication extends AbstractApplication implements CommandLineRunner {
+public class SpiderApplication extends AbstractApplication implements CommandLineRunner {
 
     private final ResourceLocator resourceLocator;
     private final JdbcRouteDefinitionLocator jdbcRouteDefinitionLocator;
 
     @Autowired
-    public GatewayApplication(ResourceLocator resourceLocator, JdbcRouteDefinitionLocator jdbcRouteDefinitionLocator) {
+    public SpiderApplication(ResourceLocator resourceLocator, JdbcRouteDefinitionLocator jdbcRouteDefinitionLocator) {
         this.resourceLocator = resourceLocator;
         this.jdbcRouteDefinitionLocator = jdbcRouteDefinitionLocator;
     }
 
     public static void main(String[] args) {
-        initial(SpringApplication.run(GatewayApplication.class, args));
+        initial(SpringApplication.run(SpiderApplication.class, args));
     }
 
     @Override
