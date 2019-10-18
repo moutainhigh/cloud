@@ -15,7 +15,7 @@ VOLUME /tmp
 ARG JAR_FILE
 COPY ${JAR_FILE} app.jar
 ARG IP_DB_FILE
-COPY ${JAR_FILE} /tmp/ip2region.db
+COPY ${IP_DB_FILE} /tmp/ip2region.db
 RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' > /etc/timezone
 EXPOSE 8223
 ENV JAVA_OPTS="-DXms128m -DXmx512m"
