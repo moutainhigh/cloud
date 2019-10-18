@@ -5,8 +5,7 @@
 
   <groupId>com.smart4y</groupId>
   <artifactId>cloud-vue</artifactId>
-  <version>0.9.0</version>
+  <version>1.0.0</version>
   <packaging>pom</packaging>
-  <!--  <name>cloud-vue</name>-->
   <name>#7 前端页面模块</name>
 </project>

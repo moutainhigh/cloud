@@ -5,9 +5,8 @@
 
     <groupId>com.smart4y</groupId>
     <artifactId>cloud-dependencies</artifactId>
-    <version>0.9.0</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
-    <!--    <name>cloud-dependencies</name>-->
     <name>#1 模块依赖管理</name>
     <description>依赖管理</description>
 
