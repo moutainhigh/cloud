@@ -79,12 +79,16 @@ public class ResourceAnnotationScannedEventHandler implements ApplicationListene
             for (Map.Entry<String, WebSecurityConfigurerAdapter> stringWebSecurityConfigurerAdapterEntry : securityConfigurerAdapterMap.entrySet()) {
                 WebSecurityConfigurerAdapter configurer = stringWebSecurityConfigurerAdapterEntry.getValue();
                 HttpSecurity httpSecurity = (HttpSecurity) ReflectionUtils.getFieldValue(configurer, "http");
-                FilterSecurityInterceptor filterSecurityInterceptor = httpSecurity.getSharedObject(FilterSecurityInterceptor.class);
-                FilterInvocationSecurityMetadataSource metadataSource = filterSecurityInterceptor.getSecurityMetadataSource();
-                Map<RequestMatcher, Collection<ConfigAttribute>> requestMap = (Map) ReflectionUtils.getFieldValue(metadataSource, "requestMap");
-                for (Map.Entry<RequestMatcher, Collection<ConfigAttribute>> match : requestMap.entrySet()) {
-                    if (match.getValue().toString().contains("permitAll")) {
-                        permitAll.add(match.getKey());
+                if (null != httpSecurity) {
+                    FilterSecurityInterceptor filterSecurityInterceptor = httpSecurity.getSharedObject(FilterSecurityInterceptor.class);
+                    FilterInvocationSecurityMetadataSource metadataSource = filterSecurityInterceptor.getSecurityMetadataSource();
+                    Map<RequestMatcher, Collection<ConfigAttribute>> requestMap = (Map) ReflectionUtils.getFieldValue(metadataSource, "requestMap");
+                    if (null != requestMap) {
+                        for (Map.Entry<RequestMatcher, Collection<ConfigAttribute>> match : requestMap.entrySet()) {
+                            if (match.getValue().toString().contains("permitAll")) {
+                                permitAll.add(match.getKey());
+                            }
+                        }
                     }
                 }
             }

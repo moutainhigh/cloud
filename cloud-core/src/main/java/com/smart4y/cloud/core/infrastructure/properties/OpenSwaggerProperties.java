@@ -13,7 +13,7 @@ import java.util.List;
  *         Created by youtao on 2019-09-05.
  */
 @Data
-@ConfigurationProperties(prefix = "opencloud.swagger2")
+@ConfigurationProperties(prefix = "cloud.swagger2")
 public class OpenSwaggerProperties {
 
     /**

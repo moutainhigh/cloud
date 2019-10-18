@@ -1,7 +1,8 @@
-package com.smart4y.cloud.core.infrastructure.exception;
+package com.smart4y.cloud.core.infrastructure.exception.handler;
 
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
+import com.smart4y.cloud.core.infrastructure.exception.OpenException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;

@@ -100,7 +100,7 @@ mybatis:
     #设置当JDBC类型为空时，插入空值时的处理方式
     jdbc-type-for-null: null
     default-enum-type-handler: com.smart4y.cloud.core.infrastructure.mapper.enumhandler.EnumHandler
-opencloud:
+cloud:
   ##资源服务器公共配置
   common:
     #API网关访问地址
@@ -114,10 +114,10 @@ opencloud:
     client-id: 7gBZcbsC7kLIWCdELIl8nxcs
     client-secret: 0osTIhce7uPvDKHz6aa67bhCukaKoYl4
     scope: userProfile
-    user-authorization-uri: ${opencloud.common.auth-server-addr}/oauth/authorize
-    access-token-uri: ${opencloud.common.api-server-addr}/uaa/oauth/token
-    token-info-uri: ${opencloud.common.api-server-addr}/uaa/oauth/check_token
-    user-info-uri: ${opencloud.common.api-server-addr}/uaa/current/user
+    user-authorization-uri: ${cloud.common.auth-server-addr}/oauth/authorize
+    access-token-uri: ${cloud.common.api-server-addr}/uaa/oauth/token
+    token-info-uri: ${cloud.common.api-server-addr}/uaa/oauth/check_token
+    user-info-uri: ${cloud.common.api-server-addr}/uaa/current/user
     #资源服务器jwt签名秘钥（适用于OpenHelper.buildJwtTokenServices(OpenCommonProperties properties)）
     jwt-signing-key: 2cde1eaa60fe4af1987f94caa13f29a2
   ##Swagger2默认配置
@@ -125,8 +125,8 @@ opencloud:
     enabled: true
     title: 平台基础服务
     description: 平台基础服务
-    client-id: ${opencloud.common.client-id}
-    client-secret: ${opencloud.common.client-secret}
-    scope: ${opencloud.common.scope}
-    access-token-uri: ${opencloud.common.access-token-uri}
-    user-authorization-uri: ${opencloud.common.user-authorization-uri}
+    client-id: ${cloud.common.client-id}
+    client-secret: ${cloud.common.client-secret}
+    scope: ${cloud.common.scope}
+    access-token-uri: ${cloud.common.access-token-uri}
+    user-authorization-uri: ${cloud.common.user-authorization-uri}

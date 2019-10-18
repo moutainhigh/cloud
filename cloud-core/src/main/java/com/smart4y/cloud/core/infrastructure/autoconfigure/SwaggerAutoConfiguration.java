@@ -38,7 +38,7 @@ import java.util.Locale;
  */
 @Slf4j
 @EnableConfigurationProperties({OpenSwaggerProperties.class})
-@ConditionalOnProperty(prefix = "opencloud.swagger2", name = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "cloud.swagger2", name = "enabled", havingValue = "true")
 @Import({Swagger2DocumentationConfiguration.class})
 public class SwaggerAutoConfiguration {
 
@@ -116,7 +116,7 @@ public class SwaggerAutoConfiguration {
     /**
      * 构建全局参数
      * 这里主要针对网关服务外部访问数字验签所需参数
-     * 只在网关服务开启{opencloud.resource-server.enabled-validate-sign=true}时生效.
+     * 只在网关服务开启{cloud.resource-server.enabled-validate-sign=true}时生效.
      * 未开启,可以不填写
      */
     private List<Parameter> parameters() {

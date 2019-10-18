@@ -113,7 +113,7 @@
                     username: 'root',
                     password: 'root',
                     author: 'admin',
-                    parentPackage: 'com.opencloud',
+                    parentPackage: 'com.smart4y.cloud',
                     moduleName: 'base',
                     includeTables: [],
                     tablePrefix: []

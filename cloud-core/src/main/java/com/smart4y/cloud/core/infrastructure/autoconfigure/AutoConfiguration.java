@@ -1,7 +1,7 @@
 package com.smart4y.cloud.core.infrastructure.autoconfigure;
 
 import com.smart4y.cloud.core.application.eventhandler.ResourceAnnotationScannedEventHandler;
-import com.smart4y.cloud.core.infrastructure.exception.OpenGlobalExceptionHandler;
+import com.smart4y.cloud.core.infrastructure.exception.handler.OpenGlobalExceptionHandler;
 import com.smart4y.cloud.core.infrastructure.exception.OpenRestResponseErrorHandler;
 import com.smart4y.cloud.core.infrastructure.filter.XssFilter;
 import com.smart4y.cloud.core.infrastructure.health.DbHealthIndicator;

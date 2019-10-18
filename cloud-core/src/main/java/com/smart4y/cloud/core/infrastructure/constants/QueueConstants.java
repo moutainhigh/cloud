@@ -6,6 +6,6 @@ package com.smart4y.cloud.core.infrastructure.constants;
  */
 public class QueueConstants {
 
-    public static final String QUEUE_SCAN_API_RESOURCE = "opencloud.scan.api.resource";
-    public static final String QUEUE_ACCESS_LOGS = "opencloud.access.logs";
+    public static final String QUEUE_SCAN_API_RESOURCE = "cloud.scan.api.resource";
+    public static final String QUEUE_ACCESS_LOGS = "cloud.access.logs";
 }

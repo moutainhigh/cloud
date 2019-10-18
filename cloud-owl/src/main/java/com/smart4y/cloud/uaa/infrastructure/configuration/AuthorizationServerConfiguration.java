@@ -1,6 +1,6 @@
 package com.smart4y.cloud.uaa.infrastructure.configuration;
 
-import com.smart4y.cloud.core.infrastructure.exception.OpenOAuth2WebResponseExceptionTranslator;
+import com.smart4y.cloud.core.infrastructure.exception.handler.OpenOAuth2WebResponseExceptionTranslator;
 import com.smart4y.cloud.core.infrastructure.security.OpenHelper;
 import com.smart4y.cloud.core.infrastructure.security.OpenTokenEnhancer;
 import org.springframework.beans.factory.annotation.Autowired;

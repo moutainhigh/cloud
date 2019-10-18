@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  *         Created by youtao on 2019-09-05.
  */
 @Data
-@ConfigurationProperties(prefix = "opencloud.id")
+@ConfigurationProperties(prefix = "cloud.id")
 public class OpenIdGenProperties {
 
     /**

@@ -12,7 +12,7 @@ import java.util.Set;
  *         Created by youtao on 2019-09-08.
  */
 @Data
-@ConfigurationProperties(prefix = "opencloud.api")
+@ConfigurationProperties(prefix = "cloud.api")
 public class ApiProperties {
 
     /**

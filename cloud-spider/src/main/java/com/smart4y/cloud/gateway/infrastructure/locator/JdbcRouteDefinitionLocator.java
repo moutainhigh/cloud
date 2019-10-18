@@ -93,8 +93,8 @@ public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, Appli
     /**
      * 动态加载路由
      * * 示例
-     * id: opencloud-admin-provider
-     * uri: lb://opencloud-admin-provider
+     * id: cloud-admin-provider
+     * uri: lb://cloud-admin-provider
      * predicates:
      * - Path=/uaa/**
      * - Name=平台后台管理服务

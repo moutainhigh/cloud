@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.infrastructure.exception;
+package com.smart4y.cloud.core.infrastructure.exception.handler;
 
 import com.smart4y.cloud.core.domain.ResultEntity;
 import lombok.extern.slf4j.Slf4j;

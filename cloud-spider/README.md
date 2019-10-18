@@ -7,7 +7,7 @@
 
 #### 修改网关启动参数
 ```
-opencloud:
+cloud:
   # 开放api
   api:
     # 参数签名验证

@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  *         Created by youtao on 2019-09-05.
  */
 @Data
-@ConfigurationProperties(prefix = "opencloud.common")
+@ConfigurationProperties(prefix = "cloud.common")
 public class OpenCommonProperties {
 
     /**

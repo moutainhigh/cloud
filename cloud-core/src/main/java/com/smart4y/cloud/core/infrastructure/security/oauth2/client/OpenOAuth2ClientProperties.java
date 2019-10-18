@@ -10,7 +10,7 @@ import java.util.Map;
  *         Created by youtao on 2019-09-05.
  */
 @Data
-@ConfigurationProperties(prefix = "opencloud.client")
+@ConfigurationProperties(prefix = "cloud.client")
 public class OpenOAuth2ClientProperties {
 
     private Map<String, OpenOAuth2ClientDetails> oauth2;
