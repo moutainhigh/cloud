@@ -1,26 +1,26 @@
 <template>
   <div>
     <Card shadow>
-      <Form ref="searchForm"
+      <Form :label-width="80"
             :model="pageInfo"
             inline
-            :label-width="80">
+            ref="searchForm">
         <FormItem label="策略名称" prop="policyName">
-          <Input type="text" v-model="pageInfo.policyName" placeholder="请输入关键字"/>
+          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.policyName"/>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="handleSearch(1)">查询</Button>&nbsp;
+          <Button @click="handleSearch(1)" type="primary">查询</Button>&nbsp;
           <Button @click="handleResetForm('searchForm')">重置</Button>
         </FormItem>
       </Form>
       <div class="search-con search-con-top">
         <ButtonGroup>
-          <Button class="search-btn" type="primary" @click="handleModal()">
+          <Button @click="handleModal()" class="search-btn" type="primary">
             <span>添加</span>
           </Button>
         </ButtonGroup>
       </div>
-      <Table border :columns="columns" :data="data" :loading="loading">
+      <Table :columns="columns" :data="data" :loading="loading" border>
         <template slot="policyType" slot-scope="{ row }">
           <Tag color="green" v-if="row.policyType===1">允许-白名单</Tag>
           <Tag color="red" v-else="">拒绝-黑名单</Tag>
@@ -33,34 +33,34 @@
           </a>
         </template>
       </Table>
-      <Page :total="pageInfo.total" :current="pageInfo.page" :page-size="pageInfo.limit" show-elevator show-sizer
-            show-total
-            @on-change="handlePage" @on-page-size-change='handlePageSize'></Page>
+      <Page :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total" @on-change="handlePage" @on-page-size-change='handlePageSize'
+            show-elevator
+            show-sizer show-total></Page>
     </Card>
-    <Modal v-model="modalVisible"
-           :title="modalTitle"
-           width="40"
-           @on-cancel="handleReset">
+    <Modal :title="modalTitle"
+           @on-cancel="handleReset"
+           v-model="modalVisible"
+           width="40">
       <div>
         <Tabs :value="current" @on-click="handleTabClick">
           <TabPane label="策略信息" name="form1">
-            <Form ref="form1" v-show="current=='form1'" :model="formItem" :rules="formItemRules" :label-width="100">
+            <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form1" v-show="current=='form1'">
               <FormItem label="策略名称" prop="policyName">
-                <Input v-model="formItem.policyName" placeholder="请输入内容"></Input>
+                <Input placeholder="请输入内容" v-model="formItem.policyName"></Input>
               </FormItem>
               <FormItem label="策略类型" prop="policyType">
                 <Select v-model="formItem.policyType">
-                  <Option value="url" label="接口(url)"></Option>
-                  <Option disabled value="origin" label="来源(origin)"></Option>
-                  <Option disabled value="user" label="用户(user)"></Option>
+                  <Option label="接口(url)" value="url"></Option>
+                  <Option disabled label="来源(origin)" value="origin"></Option>
+                  <Option disabled label="用户(user)" value="user"></Option>
                 </Select>
               </FormItem>
               <FormItem label="单位时间" prop="intervalUnit">
                 <Select v-model="formItem.intervalUnit">
-                  <Option value="seconds" label="秒(seconds)"></Option>
-                  <Option value="minutes" label="分钟(minutes)"></Option>
-                  <Option value="hours" label="小时(hours)"></Option>
-                  <Option value="days" label="天(days)"></Option>
+                  <Option label="秒(seconds)" value="seconds"></Option>
+                  <Option label="分钟(minutes)" value="minutes"></Option>
+                  <Option label="小时(hours)" value="hours"></Option>
+                  <Option label="天(days)" value="days"></Option>
                 </Select>
               </FormItem>
               <FormItem label="限流数" prop="limitQuota">
@@ -69,15 +69,15 @@
             </Form>
           </TabPane>
           <TabPane :disabled="!formItem.policyId" label="绑定接口" name="form2">
-            <Alert type="warning" show-icon>请注意：如果API上原来已经绑定了一个策略，则会被本策略覆盖，请慎重选择！</Alert>
-            <Form ref="form2" v-show="current=='form2'" :model="formItem" :rules="formItemRules">
+            <Alert show-icon type="warning">请注意：如果API上原来已经绑定了一个策略，则会被本策略覆盖，请慎重选择！</Alert>
+            <Form :model="formItem" :rules="formItemRules" ref="form2" v-show="current=='form2'">
               <FormItem prop="authorities">
                 <Transfer
                   :data="selectApis"
                   :list-style="{width: '45%',height: '480px'}"
-                  :titles="['选择接口', '已选择接口']"
                   :render-format="transferRender"
                   :target-keys="formItem.apiIds"
+                  :titles="['选择接口', '已选择接口']"
                   @on-change="handleTransferChange"
                   filterable>
                 </Transfer>
@@ -86,8 +86,8 @@
           </TabPane>
         </Tabs>
         <div class="drawer-footer">
-          <Button type="default" @click="handleReset">取消</Button>&nbsp;
-          <Button type="primary" @click="handleSubmit" :loading="saving">保存</Button>
+          <Button @click="handleReset" type="default">取消</Button>&nbsp;
+          <Button :loading="saving" @click="handleSubmit" type="primary">保存</Button>
         </div>
       </div>
     </Modal>

@@ -1,23 +1,23 @@
 <template>
   <div>
     <Card shadow>
-      <Form ref="searchForm"
+      <Form :label-width="80"
             :model="pageInfo"
             inline
-            :label-width="80">
+            ref="searchForm">
         <FormItem label="任务名称" prop="jobName">
-          <Input type="text" v-model="pageInfo.jobName" placeholder="请输入关键字"/>
+          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.jobName"/>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="handleSearch(1)">查询</Button>&nbsp;
+          <Button @click="handleSearch(1)" type="primary">查询</Button>&nbsp;
           <Button @click="handleResetForm('searchForm')">重置</Button>
         </FormItem>
       </Form>
 
-      <Table border :columns="columns" :data="data" :loading="loading">
+      <Table :columns="columns" :data="data" :loading="loading" border>
         <template slot="status" slot-scope="{ row }">
-          <Badge v-if="row.status===1" status="success" text="成功"/>
-          <Badge v-else="" status="error" text="失败"/>
+          <Badge status="success" text="成功" v-if="row.status===1"/>
+          <Badge status="error" text="失败" v-else=""/>
         </template>
         <template slot="type" slot-scope="{ row }">
           <p v-if="row.cronExpression">cron表达式:{{row.cronExpression}}</p>
@@ -27,15 +27,15 @@
           <a @click="openDrawer(row)">详情</a>
         </template>
       </Table>
-      <Page transfer :total="pageInfo.total" :current="pageInfo.page" :page-size="pageInfo.limit" show-elevator
+      <Page :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total" @on-change="handlePage" @on-page-size-change='handlePageSize'
+            show-elevator
             show-sizer
-            show-total
-            @on-change="handlePage" @on-page-size-change='handlePageSize'></Page>
+            show-total transfer></Page>
     </Card>
-    <Drawer width="50" :closable="false" v-model="drawer">
+    <Drawer :closable="false" v-model="drawer" width="50">
       <div slot="header">
-        <Badge v-if="currentRow.status===1" status="success"/>
-        <Badge v-else="" status="error"/>
+        <Badge status="success" v-if="currentRow.status===1"/>
+        <Badge status="error" v-else=""/>
         {{currentRow.jobName}}
 
       </div>

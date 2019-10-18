@@ -5,13 +5,13 @@ import request from '@/libs/request'
  * @param menuId
  */
 export const getActionsByMenu = (menuId) => {
-  const params = { menuId: menuId }
+  const params = {menuId: menuId};
   return request({
     url: 'base/menu/action',
     params,
     method: 'get'
   })
-}
+};
 
 /**
  * 添加操作
@@ -23,7 +23,7 @@ export const getActionsByMenu = (menuId) => {
  * @param priority
  * @param actionDesc
  */
-export const addAction = ({ actionCode, actionName, menuId, status, priority, actionDesc }) => {
+export const addAction = ({actionCode, actionName, menuId, status, priority, actionDesc}) => {
   const data = {
     actionCode: actionCode,
     actionName: actionName,
@@ -31,13 +31,13 @@ export const addAction = ({ actionCode, actionName, menuId, status, priority, ac
     status: status,
     priority: priority,
     actionDesc: actionDesc
-  }
+  };
   return request({
     url: 'base/action/add',
     data,
     method: 'post'
   })
-}
+};
 
 /**
  * 更新操作
@@ -50,7 +50,7 @@ export const addAction = ({ actionCode, actionName, menuId, status, priority, ac
  * @param priority
  * @param actionDesc
  */
-export const updateAction = ({ actionId, actionCode, actionName, menuId, status, priority, actionDesc }) => {
+export const updateAction = ({actionId, actionCode, actionName, menuId, status, priority, actionDesc}) => {
   const data = {
     actionId: actionId,
     actionCode: actionCode,
@@ -59,13 +59,13 @@ export const updateAction = ({ actionId, actionCode, actionName, menuId, status,
     status: status,
     priority: priority,
     actionDesc: actionDesc
-  }
+  };
   return request({
     url: 'base/action/update',
     data,
     method: 'post'
   })
-}
+};
 
 /**
  * 删除操作
@@ -74,10 +74,10 @@ export const updateAction = ({ actionId, actionCode, actionName, menuId, status,
 export const removeAction = (actionId) => {
   const data = {
     actionId: actionId
-  }
+  };
   return request({
     url: 'base/action/remove',
     data,
     method: 'post'
   })
-}
+};

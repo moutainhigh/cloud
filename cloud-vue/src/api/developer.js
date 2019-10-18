@@ -11,7 +11,7 @@ export const getDevelopers = (params) => {
     params,
     method: 'get'
   })
-}
+};
 
 /**
  * 获取所有开发者列表
@@ -21,7 +21,7 @@ export const getAllDevelopers = () => {
     url: 'base/developer/all',
     method: 'get'
   })
-}
+};
 
 /**
  * 添加开发者信息
@@ -35,7 +35,7 @@ export const getAllDevelopers = () => {
  * @param userDesc
  * @param avatar
  */
-export const addDeveloper = ({ userName, password, nickName, status, userType, email, mobile, userDesc, avatar }) => {
+export const addDeveloper = ({userName, password, nickName, status, userType, email, mobile, userDesc, avatar}) => {
   const data = {
     userName: userName,
     nickName: nickName,
@@ -46,26 +46,24 @@ export const addDeveloper = ({ userName, password, nickName, status, userType, e
     mobile: mobile,
     userDesc: userDesc,
     avatar: avatar
-  }
+  };
   return request({
     url: 'base/developer/add',
     data,
     method: 'post'
   })
-}
+};
 
 /**
  * 更新开发者信息
  * @param developerId
  * @param nickName
  * @param status
- * @param developerType
  * @param email
  * @param mobile
- * @param developerDesc
  * @param avatar
  */
-export const updateDeveloper = ({ userId, nickName, status, userType, email, mobile, userDesc, avatar }) => {
+export const updateDeveloper = ({userId, nickName, status, userType, email, mobile, userDesc, avatar}) => {
   const data = {
     userId: userId,
     nickName: nickName,
@@ -75,28 +73,26 @@ export const updateDeveloper = ({ userId, nickName, status, userType, email, mob
     mobile: mobile,
     userDesc: userDesc,
     avatar: avatar
-  }
+  };
   return request({
     url: 'base/developer/update',
     data,
     method: 'post'
   })
-}
+};
 
 /**
  * 修改密码
  * @param developerId
- * @param oldPassword
- * @param newPassword
  */
-export const updatePassword = ({ userId, password }) => {
+export const updatePassword = ({userId, password}) => {
   const data = {
     userId: userId,
     password: password
-  }
+  };
   return request({
     url: 'base/developer/update/password',
     data,
     method: 'post'
   })
-}
+};

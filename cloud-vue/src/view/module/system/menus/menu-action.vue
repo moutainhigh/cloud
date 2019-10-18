@@ -4,16 +4,16 @@
       <ButtonGroup>
         <Button
           :disabled="value.menuId && value.menuId!=='0' && !value.hasChild && hasAuthority('systemMenuEdit')?false:true"
-          class="search-btn" type="primary" @click="handleModal()">
+          @click="handleModal()" class="search-btn" type="primary">
           <span>添加功能按钮</span>
         </Button>
       </ButtonGroup>
     </div>
-    <Alert type="info" show-icon>请绑定相关接口资源。否则请求网关服务器将提示<code>"权限不足,拒绝访问!"</code></Alert>
-    <Table border :columns="columns" :data="data" :loading="loading">
+    <Alert show-icon type="info">请绑定相关接口资源。否则请求网关服务器将提示<code>"权限不足,拒绝访问!"</code></Alert>
+    <Table :columns="columns" :data="data" :loading="loading" border>
       <template slot="status" slot-scope="{ row }">
-        <Badge v-if="row.status===1" status="success"/>
-        <Badge v-else="" status="error"/>
+        <Badge status="success" v-if="row.status===1"/>
+        <Badge status="error" v-else=""/>
         <span>{{row.actionName}}</span>
       </template>
       <template slot="action" slot-scope="{ row }">
@@ -22,51 +22,51 @@
         <a :disabled="hasAuthority('systemMenuEdit')?false:true" @click="handleRemove(row)">删除</a>
       </template>
     </Table>
-    <Modal v-model="modalVisible"
-           :title="modalTitle"
-           width="40"
-           @on-cancel="handleReset">
+    <Modal :title="modalTitle"
+           @on-cancel="handleReset"
+           v-model="modalVisible"
+           width="40">
       <div>
-        <Form ref="form1" v-show="current=='form1'" :model="formItem" :rules="formItemRules" :label-width="100">
+        <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form1" v-show="current=='form1'">
           <FormItem label="上级菜单">
             <Input disabled v-model="value.menuName"></Input>
           </FormItem>
           <FormItem label="功能标识" prop="actionCode">
-            <Input v-model="formItem.actionCode" placeholder="请输入内容"></Input>
+            <Input placeholder="请输入内容" v-model="formItem.actionCode"></Input>
             <span>菜单标识+自定义标识.默认后缀：View、Edit</span>
           </FormItem>
           <FormItem label="功能名称" prop="actionName">
-            <Input v-model="formItem.actionName" placeholder="请输入内容"></Input>
+            <Input placeholder="请输入内容" v-model="formItem.actionName"></Input>
           </FormItem>
           <FormItem label="优先级">
             <InputNumber v-model="formItem.priority"></InputNumber>
           </FormItem>
           <FormItem label="状态">
-            <RadioGroup v-model="formItem.status" type="button">
+            <RadioGroup type="button" v-model="formItem.status">
               <Radio label="0">禁用</Radio>
               <Radio label="1">启用</Radio>
             </RadioGroup>
           </FormItem>
           <FormItem label="描述">
-            <Input v-model="formItem.actionDesc" type="textarea" placeholder="请输入内容"></Input>
+            <Input placeholder="请输入内容" type="textarea" v-model="formItem.actionDesc"></Input>
           </FormItem>
         </Form>
-        <Form ref="form2" v-show="current=='form2'" :model="formItem" :rules="formItemRules">
+        <Form :model="formItem" :rules="formItemRules" ref="form2" v-show="current=='form2'">
           <FormItem prop="authorities">
             <Transfer
               :data="selectApis"
               :list-style="{width: '45%',height: '480px'}"
-              :titles="['选择接口', '已选择接口']"
               :render-format="transferRender"
               :target-keys="formItem.authorityIds"
+              :titles="['选择接口', '已选择接口']"
               @on-change="handleTransferChange"
               filterable>
             </Transfer>
           </FormItem>
         </Form>
         <div class="drawer-footer">
-          <Button type="default" @click="handleReset">取消</Button>&nbsp;
-          <Button type="primary" @click="handleSubmit" :loading="saving">保存</Button>
+          <Button @click="handleReset" type="default">取消</Button>&nbsp;
+          <Button :loading="saving" @click="handleSubmit" type="primary">保存</Button>
         </div>
       </div>
     </Modal>

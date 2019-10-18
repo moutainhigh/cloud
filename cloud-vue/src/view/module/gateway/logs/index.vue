@@ -1,44 +1,44 @@
 <template>
   <div>
     <Card shadow>
-      <Form ref="searchForm"
+      <Form :label-width="80"
             :model="pageInfo"
             inline
-            :label-width="80">
+            ref="searchForm">
         <FormItem label="请求路径" prop="path">
-          <Input type="text" v-model="pageInfo.path" placeholder="请输入关键字"/>
+          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.path"/>
         </FormItem>
         <FormItem label="IP" prop="ip">
-          <Input type="text" v-model="pageInfo.ip" placeholder="请输入关键字"/>
+          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.ip"/>
         </FormItem>
         <FormItem label="服务名" prop="serviceId">
-          <Input type="text" v-model="pageInfo.serviceId" placeholder="请输入关键字"/>
+          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.serviceId"/>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="handleSearch(1)">查询</Button>&nbsp;
+          <Button @click="handleSearch(1)" type="primary">查询</Button>&nbsp;
           <Button @click="handleResetForm('searchForm')">重置</Button>
         </FormItem>
       </Form>
 
-      <Table border :columns="columns" :data="data" :loading="loading">
+      <Table :columns="columns" :data="data" :loading="loading" border>
         <template slot="httpStatus" slot-scope="{ row }">
-          <Badge v-if="row.httpStatus==='200'" status="success"/>
-          <Badge v-else="" status="error"/>
+          <Badge status="success" v-if="row.httpStatus==='200'"/>
+          <Badge status="error" v-else=""/>
           <span>{{row.httpStatus}}</span>
         </template>
         <template slot="detail" slot-scope="{ row }">
           <a @click="openDrawer(row)">详情</a>
         </template>
       </Table>
-      <Page transfer :total="pageInfo.total" :current="pageInfo.page" :page-size="pageInfo.limit" show-elevator
+      <Page :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total" @on-change="handlePage" @on-page-size-change='handlePageSize'
+            show-elevator
             show-sizer
-            show-total
-            @on-change="handlePage" @on-page-size-change='handlePageSize'></Page>
+            show-total transfer></Page>
     </Card>
-    <Drawer width="30" v-model="drawer">
+    <Drawer v-model="drawer" width="30">
       <div slot="header">
-        <Badge v-if="currentRow.httpStatus==='200'" status="success"/>
-        <Badge v-else="" status="error"/>
+        <Badge status="success" v-if="currentRow.httpStatus==='200'"/>
+        <Badge status="error" v-else=""/>
         {{currentRow.httpStatus}}
         {{currentRow.path}} - {{currentRow.serviceId}}
 

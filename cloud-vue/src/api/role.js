@@ -5,8 +5,8 @@ import request from '@/libs/request'
  * @param page
  * @param limit
  */
-export const getRoles = ({ page, limit, roleCode, roleName }) => {
-  const params = { page: page, limit: limit, roleCode: roleCode, roleName: roleName }
+export const getRoles = ({page, limit, roleCode, roleName}) => {
+  const params = {page: page, limit: limit, roleCode: roleCode, roleName: roleName}
   return request({
     url: 'base/role',
     params,
@@ -31,7 +31,7 @@ export const getAllRoles = () => {
  * @param roleDesc
  * @param status
  */
-export const addRole = ({ roleCode, roleName, roleDesc, status }) => {
+export const addRole = ({roleCode, roleName, roleDesc, status}) => {
   const data = {
     roleCode: roleCode,
     roleName: roleName,
@@ -53,7 +53,7 @@ export const addRole = ({ roleCode, roleName, roleDesc, status }) => {
  * @param roleDesc
  * @param status
  */
-export const updateRole = ({ roleId, roleCode, roleName, roleDesc, status }) => {
+export const updateRole = ({roleId, roleCode, roleName, roleDesc, status}) => {
   const data = {
     roleId: roleId,
     roleCode: roleCode,
@@ -104,7 +104,7 @@ export const getRoleUsers = (roleId) => {
  * @param roleId
  * @param userIds
  */
-export const addRoleUsers = ({ roleId, userIds }) => {
+export const addRoleUsers = ({roleId, userIds}) => {
   const data = {
     roleId: roleId,
     userIds: userIds.join(',')

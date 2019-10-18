@@ -5,60 +5,60 @@
         <Step title="数据库连接"></Step>
         <Step title="生产代码"></Step>
       </Steps>
-      <Form style="margin-top: 20px;" ref="form" :model="formItem" :rules="formItemRules" :label-width="140">
-        <FormItem v-show="current===0" label="数据库类型" prop="type">
+      <Form :label-width="140" :model="formItem" :rules="formItemRules" ref="form" style="margin-top: 20px;">
+        <FormItem label="数据库类型" prop="type" v-show="current===0">
           <Select v-model="formItem.type">
             <Option value="mysql">mysql</Option>
             <Option disabled value="oracle">oracle</Option>
           </Select>
         </FormItem>
-        <FormItem v-show="current===0" label="驱动名称" prop="driverName">
-          <Input v-model="formItem.driverName" placeholder="请输入内容"></Input>
+        <FormItem label="驱动名称" prop="driverName" v-show="current===0">
+          <Input placeholder="请输入内容" v-model="formItem.driverName"></Input>
         </FormItem>
-        <FormItem v-show="current===0" label="连接地址" prop="url">
-          <Input v-model="formItem.url" placeholder="请输入内容"></Input>
+        <FormItem label="连接地址" prop="url" v-show="current===0">
+          <Input placeholder="请输入内容" v-model="formItem.url"></Input>
         </FormItem>
-        <FormItem v-show="current===0" label="用户名" prop="username">
-          <Input v-model="formItem.username" placeholder="请输入内容"></Input>
+        <FormItem label="用户名" prop="username" v-show="current===0">
+          <Input placeholder="请输入内容" v-model="formItem.username"></Input>
         </FormItem>
-        <FormItem v-show="current===0" label="密码" prop="password">
-          <Input v-model="formItem.password" type="password" placeholder="请输入内容"></Input>
+        <FormItem label="密码" prop="password" v-show="current===0">
+          <Input placeholder="请输入内容" type="password" v-model="formItem.password"></Input>
         </FormItem>
         <Row>
           <Col span="10">
-            <FormItem v-show="current===1" label="模块名称" prop="moduleName">
-              <Input v-model="formItem.moduleName" placeholder="请输入内容"></Input>
+            <FormItem label="模块名称" prop="moduleName" v-show="current===1">
+              <Input placeholder="请输入内容" v-model="formItem.moduleName"></Input>
             </FormItem>
-            <FormItem v-show="current===1" label="顶级包名" prop="parentPackage">
-              <Input v-model="formItem.parentPackage" placeholder="请输入内容"></Input>
+            <FormItem label="顶级包名" prop="parentPackage" v-show="current===1">
+              <Input placeholder="请输入内容" v-model="formItem.parentPackage"></Input>
             </FormItem>
-            <FormItem v-show="current===1" label="作者" prop="author">
-              <Input v-model="formItem.author" placeholder="请输入内容"></Input>
+            <FormItem label="作者" prop="author" v-show="current===1">
+              <Input placeholder="请输入内容" v-model="formItem.author"></Input>
             </FormItem>
           </Col>
           <Col span="14">
-            <FormItem v-show="current===1" label="需要生成的表" prop="includeTables">
+            <FormItem label="需要生成的表" prop="includeTables" v-show="current===1">
               <Transfer
                 :data="selectTables"
                 :list-style="{width: '45%',height: '500px'}"
-                :titles="['选择表', '已选择表']"
                 :target-keys="formItem.includeTables"
+                :titles="['选择表', '已选择表']"
                 @on-change="handleTransferChange"
                 filterable>
               </Transfer>
             </FormItem>
-            <FormItem v-show="current===1" label="忽略表前缀" prop="tablePrefix">
-              <Select v-model="formItem.tablePrefix" multiple style="width:260px">
-                <Option v-for="item in formItem.tablePrefix" :value="item" :key="item">{{ item }}</Option>
+            <FormItem label="忽略表前缀" prop="tablePrefix" v-show="current===1">
+              <Select multiple style="width:260px" v-model="formItem.tablePrefix">
+                <Option :key="item" :value="item" v-for="item in formItem.tablePrefix">{{ item }}</Option>
               </Select>
             </FormItem>
           </Col>
         </Row>
       </Form>
       <div style="margin-top: 20px;text-align: center">
-        <Button v-if="current > 0" @click="up">上一步</Button>&nbsp;
-        <Button v-if="current < 1" type="primary" @click="next">下一步</Button>&nbsp;
-        <Button v-if="current===1" type="success" @click="handleSubmit" :loading="saving">确定生成</Button>
+        <Button @click="up" v-if="current > 0">上一步</Button>&nbsp;
+        <Button @click="next" type="primary" v-if="current < 1">下一步</Button>&nbsp;
+        <Button :loading="saving" @click="handleSubmit" type="success" v-if="current===1">确定生成</Button>
       </div>
     </Card>
   </div>

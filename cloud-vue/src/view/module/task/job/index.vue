@@ -3,16 +3,16 @@
     <Card shadow>
       <div class="search-con search-con-top">
         <ButtonGroup>
-          <Button :disabled="hasAuthority('jobEdit')?false:true" class="search-btn" type="primary"
-                  @click="handleModal()">
+          <Button :disabled="hasAuthority('jobEdit')?false:true" @click="handleModal()" class="search-btn"
+                  type="primary">
             <span>添加</span>
           </Button>
         </ButtonGroup>
       </div>
-      <Table border :columns="columns" :data="data" :loading="loading">
+      <Table :columns="columns" :data="data" :loading="loading" border>
         <template slot="status" slot-scope="{ row }">
-          <Badge v-if="row.jobStatus==='NORMAL'" status="success" text="正常"/>
-          <Badge v-else="" status="error" text="暂停"/>
+          <Badge status="success" text="正常" v-if="row.jobStatus==='NORMAL'"/>
+          <Badge status="error" text="暂停" v-else=""/>
         </template>
         <template slot="type" slot-scope="{ row }">
           <p v-if="row.cronExpression">cron表达式:{{row.cronExpression}}</p>
@@ -20,32 +20,32 @@
         </template>
         <template slot="action" slot-scope="{ row }">
           <a :disabled="hasAuthority('jobEdit')?false:true" @click="handleModal(row)">编辑</a>&nbsp;
-          <Dropdown v-show="hasAuthority('jobEdit')" transfer ref="dropdown" @on-click="handleClick($event,row)">
+          <Dropdown @on-click="handleClick($event,row)" ref="dropdown" transfer v-show="hasAuthority('jobEdit')">
             <a href="javascript:void(0)">
               <span>更多</span>
               <Icon type="ios-arrow-down"></Icon>
             </a>
             <DropdownMenu slot="list">
-              <DropdownItem v-if="row.jobStatus ==='NORMAL'?true:false" name="pause">暂停任务</DropdownItem>
-              <DropdownItem v-if="row.jobStatus ==='PAUSED'?true:false" name="resume">恢复任务</DropdownItem>
+              <DropdownItem name="pause" v-if="row.jobStatus ==='NORMAL'?true:false">暂停任务</DropdownItem>
+              <DropdownItem name="resume" v-if="row.jobStatus ==='PAUSED'?true:false">恢复任务</DropdownItem>
               <DropdownItem name="remove">删除任务</DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </template>
       </Table>
-      <Page transfer :total="pageInfo.total" :current="pageInfo.page" :page-size="pageInfo.limit" show-elevator
+      <Page :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total" @on-change="handlePage" @on-page-size-change='handlePageSize'
+            show-elevator
             show-sizer
-            show-total
-            @on-change="handlePage" @on-page-size-change='handlePageSize'></Page>
+            show-total transfer></Page>
     </Card>
-    <Modal v-model="modalVisible"
-           :title="modalTitle"
-           width="40"
-           @on-cancel="handleReset">
+    <Modal :title="modalTitle"
+           @on-cancel="handleReset"
+           v-model="modalVisible"
+           width="40">
       <div>
-        <Form ref="form1" :model="formItem" :rules="formItemRules" :label-width="100">
+        <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form1">
           <FormItem label="任务名称" prop="jobName">
-            <Input :disabled="formItem.newData?false:true" v-model="formItem.jobName" placeholder="请输入内容"></Input>
+            <Input :disabled="formItem.newData?false:true" placeholder="请输入内容" v-model="formItem.jobName"></Input>
           </FormItem>
           <FormItem label="任务类型" prop="jobType">
             <Select v-model="formItem.jobType">
@@ -53,47 +53,47 @@
               <Option value="simple">简单任务(SimpleTrigger)</Option>
             </Select>
           </FormItem>
-          <FormItem v-if="formItem.jobType === 'simple'" label="开始时间" prop="startTime">
-            <DatePicker v-model="formItem.startTime" type="datetime" placeholder="开始时间"
-                        style="width: 100%"></DatePicker>
+          <FormItem label="开始时间" prop="startTime" v-if="formItem.jobType === 'simple'">
+            <DatePicker placeholder="开始时间" style="width: 100%" type="datetime"
+                        v-model="formItem.startTime"></DatePicker>
           </FormItem>
-          <FormItem v-if="formItem.jobType === 'simple'" label="结束时间" prop="endTime">
-            <DatePicker v-model="formItem.endTime" type="datetime" placeholder="结束时间" style="width: 100%"></DatePicker>
+          <FormItem label="结束时间" prop="endTime" v-if="formItem.jobType === 'simple'">
+            <DatePicker placeholder="结束时间" style="width: 100%" type="datetime" v-model="formItem.endTime"></DatePicker>
           </FormItem>
-          <FormItem v-if="formItem.jobType === 'simple'" label="重复执行" prop="repeatCount">
+          <FormItem label="重复执行" prop="repeatCount" v-if="formItem.jobType === 'simple'">
             <InputNumber :min="-1" v-model="formItem.repeatCount"></InputNumber> &nbsp;&nbsp;次
             &nbsp;&nbsp;
 
-            <RadioGroup v-model="formItem.repeatCountType" @on-change="repeatCountTypeChange" type="button">
+            <RadioGroup @on-change="repeatCountTypeChange" type="button" v-model="formItem.repeatCountType">
               <Radio label="0">不重复执行</Radio>
               <Radio label="-1">不限制次数,一直重复执行(直到过期)</Radio>
             </RadioGroup>
           </FormItem>
-          <FormItem v-if="formItem.jobType === 'simple'" label="重复执行间隔" prop="repeatInterval">
+          <FormItem label="重复执行间隔" prop="repeatInterval" v-if="formItem.jobType === 'simple'">
             <InputNumber :min="1000" v-model="formItem.repeatInterval"></InputNumber>
             <span>&nbsp;&nbsp;毫秒</span>
           </FormItem>
-          <FormItem v-if="formItem.jobType === 'cron'" label="cron表达式" prop="cron">
-            <Input v-model="formItem.cron" placeholder="* * * * * ?"></Input>
+          <FormItem label="cron表达式" prop="cron" v-if="formItem.jobType === 'cron'">
+            <Input placeholder="* * * * * ?" v-model="formItem.cron"></Input>
           </FormItem>
           <FormItem label="远程调度接口" prop="path">
-            <Select filterable v-model="formItem.path" @on-change="handleOnSelectChange">
-              <Option v-for="item in selectApis" :value="item.path">{{ item.path
+            <Select @on-change="handleOnSelectChange" filterable v-model="formItem.path">
+              <Option :value="item.path" v-for="item in selectApis">{{ item.path
                 }} - {{ item.apiName}} - {{ item.serviceId}}
 
               </Option>
             </Select>
           </FormItem>
           <FormItem label="任务描述">
-            <Input v-model="formItem.jobDescription" type="textarea" placeholder="请输入内容"></Input>
+            <Input placeholder="请输入内容" type="textarea" v-model="formItem.jobDescription"></Input>
           </FormItem>
           <FormItem label="异常告警邮箱" prop="alarmMail">
-            <Input v-model="formItem.alarmMail" placeholder="请输入内容"></Input>
+            <Input placeholder="请输入内容" v-model="formItem.alarmMail"></Input>
           </FormItem>
         </Form>
         <div class="drawer-footer">
-          <Button type="default" @click="handleReset">取消</Button>&nbsp;
-          <Button type="primary" @click="handleSubmit" :loading="saving">保存</Button>
+          <Button @click="handleReset" type="default">取消</Button>&nbsp;
+          <Button :loading="saving" @click="handleSubmit" type="primary">保存</Button>
         </div>
       </div>
     </Modal>

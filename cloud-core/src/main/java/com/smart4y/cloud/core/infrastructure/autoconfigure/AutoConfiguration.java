@@ -1,6 +1,6 @@
 package com.smart4y.cloud.core.infrastructure.autoconfigure;
 
-import com.smart4y.cloud.core.infrastructure.ResourceAnnotationScan;
+import com.smart4y.cloud.core.application.eventhandler.ResourceAnnotationScannedEventHandler;
 import com.smart4y.cloud.core.infrastructure.exception.OpenGlobalExceptionHandler;
 import com.smart4y.cloud.core.infrastructure.exception.OpenRestResponseErrorHandler;
 import com.smart4y.cloud.core.infrastructure.filter.XssFilter;
@@ -91,9 +91,9 @@ public class AutoConfiguration {
      * 自定义注解扫描 配置
      */
     @Bean
-    @ConditionalOnMissingBean(ResourceAnnotationScan.class)
-    public ResourceAnnotationScan resourceAnnotationScan(AmqpTemplate amqpTemplate) {
-        ResourceAnnotationScan scan = new ResourceAnnotationScan(amqpTemplate);
+    @ConditionalOnMissingBean(ResourceAnnotationScannedEventHandler.class)
+    public ResourceAnnotationScannedEventHandler resourceAnnotationScan(AmqpTemplate amqpTemplate) {
+        ResourceAnnotationScannedEventHandler scan = new ResourceAnnotationScannedEventHandler(amqpTemplate);
         log.info("ResourceAnnotationScan [{}]", scan);
         return scan;
     }

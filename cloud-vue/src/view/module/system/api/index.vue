@@ -1,36 +1,36 @@
 <template xmlns="http://www.w3.org/1999/html">
   <div>
     <Card shadow>
-      <Form ref="searchForm"
+      <Form :label-width="50"
             :model="pageInfo"
             inline
-            :label-width="50">
+            ref="searchForm">
         <FormItem label="路径" prop="path">
-          <Input type="text" v-model="pageInfo.path" placeholder="请输入关键字"/>
+          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.path"/>
         </FormItem>
         <FormItem label="名称" prop="apiName">
-          <Input type="text" v-model="pageInfo.apiName" placeholder="请输入关键字"/>
+          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.apiName"/>
         </FormItem>
         <FormItem label="编码" prop="apiCode">
-          <Input type="text" v-model="pageInfo.apiCode" placeholder="请输入关键字"/>
+          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.apiCode"/>
         </FormItem>
         <FormItem label="服务名" prop="serviceId">
-          <Input type="text" v-model="pageInfo.serviceId" placeholder="请输入关键字"/>
+          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.serviceId"/>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="handleSearch(1)">查询</Button>&nbsp;
+          <Button @click="handleSearch(1)" type="primary">查询</Button>&nbsp;
           <Button @click="handleResetForm('searchForm')">重置</Button>
         </FormItem>
       </Form>
       <div class="search-con search-con-top">
         <ButtonGroup>
-          <Button :disabled="hasAuthority('systemApiEdit')?false:true" class="search-btn" type="primary"
-                  @click="handleModal()">
+          <Button :disabled="hasAuthority('systemApiEdit')?false:true" @click="handleModal()" class="search-btn"
+                  type="primary">
             <span>添加</span>
           </Button>
         </ButtonGroup>
-        <Dropdown v-if="tableSelection.length>0 && hasAuthority('systemApiEdit')" @on-click="handleBatchClick"
-                  style="margin-left: 20px">
+        <Dropdown @on-click="handleBatchClick" style="margin-left: 20px"
+                  v-if="tableSelection.length>0 && hasAuthority('systemApiEdit')">
           <Button>
             <span>批量操作</span>
             <Icon type="ios-arrow-down"></Icon>
@@ -74,7 +74,7 @@
       <Alert show-icon>
         <span>自动扫描<code>@EnableResourceServer</code>资源服务器接口信息。注：自动添加的接口都是未公开的。<code>只有公开的接口，才可以通过网关访问。否则将提示："请求地址,拒绝访问!"</code></span>
       </Alert>
-      <Table @on-selection-change="handleTableSelectChange" border :columns="columns" :data="data" :loading="loading">
+      <Table :columns="columns" :data="data" :loading="loading" @on-selection-change="handleTableSelectChange" border>
         <template slot="apiName" slot-scope="{ row }">
           <span>{{row.apiName}}</span>
         </template>
@@ -83,9 +83,9 @@
           <Tag color="red" v-else-if="row.isOpen!==1">拒绝公开访问</Tag>
           <Tag color="green" v-if="row.isAuth===1">开启身份认证</Tag>
           <Tag color="red" v-else-if="row.isAuth!==1">关闭身份认证</Tag>
-          <Tag v-if="row.status===1" color="green">启用</Tag>
-          <Tag v-else-if="row.status===2" color="orange">维护中</Tag>
-          <Tag v-else="" color="red">禁用</Tag>
+          <Tag color="green" v-if="row.status===1">启用</Tag>
+          <Tag color="orange" v-else-if="row.status===2">维护中</Tag>
+          <Tag color="red" v-else="">禁用</Tag>
         </template>
         <template slot="action" slot-scope="{ row }">
           <a :disabled="hasAuthority('systemApiEdit')?false:true" @click="handleModal(row)">
@@ -94,15 +94,15 @@
             删除</a>
         </template>
       </Table>
-      <Page transfer :total="pageInfo.total" :current="pageInfo.page" :page-size="pageInfo.limit" show-elevator
+      <Page :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total" @on-change="handlePage" @on-page-size-change='handlePageSize'
+            show-elevator
             show-sizer
-            show-total
-            @on-change="handlePage" @on-page-size-change='handlePageSize'></Page>
+            show-total transfer></Page>
     </Card>
-    <Modal v-model="modalVisible"
-           :title="modalTitle"
-           width="40"
-           @on-cancel="handleReset">
+    <Modal :title="modalTitle"
+           @on-cancel="handleReset"
+           v-model="modalVisible"
+           width="40">
       <div>
         <Alert show-icon v-if="formItem.apiId?true:false">
           <span>自动扫描接口swagger注解。</span>
@@ -124,47 +124,47 @@
             </div>
           </Poptip>
         </Alert>
-        <Form ref="form1" :model="formItem" :rules="formItemRules" :label-width="100">
+        <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form1">
           <FormItem label="服务名称" prop="serviceId">
-            <Select :disabled="formItem.apiId && formItem.isPersist === 1?true:false" v-model="formItem.serviceId"
-                    filterable clearable>
-              <Option v-for="item in selectServiceList" :value="item.serviceId">{{ item.serviceName }}</Option>
+            <Select :disabled="formItem.apiId && formItem.isPersist === 1?true:false" clearable
+                    filterable v-model="formItem.serviceId">
+              <Option :value="item.serviceId" v-for="item in selectServiceList">{{ item.serviceName }}</Option>
             </Select>
           </FormItem>
           <FormItem label="接口分类" prop="apiCategory">
-            <Input v-model="formItem.apiCategory" placeholder="请输入内容"></Input>
+            <Input placeholder="请输入内容" v-model="formItem.apiCategory"></Input>
           </FormItem>
           <FormItem label="接口编码" prop="apiCode">
-            <Input :disabled="formItem.apiId && formItem.isPersist === 1?true:false" v-model="formItem.apiCode"
-                   placeholder="请输入内容"></Input>
+            <Input :disabled="formItem.apiId && formItem.isPersist === 1?true:false" placeholder="请输入内容"
+                   v-model="formItem.apiCode"></Input>
           </FormItem>
           <FormItem label="接口名称" prop="apiName">
-            <Input :disabled="formItem.apiId && formItem.isPersist === 1?true:false" v-model="formItem.apiName"
-                   placeholder="请输入内容"></Input>
+            <Input :disabled="formItem.apiId && formItem.isPersist === 1?true:false" placeholder="请输入内容"
+                   v-model="formItem.apiName"></Input>
           </FormItem>
           <FormItem label="请求地址" prop="path">
-            <Input :disabled="formItem.apiId && formItem.isPersist === 1?true:false" v-model="formItem.path"
-                   placeholder="请输入内容"></Input>
+            <Input :disabled="formItem.apiId && formItem.isPersist === 1?true:false" placeholder="请输入内容"
+                   v-model="formItem.path"></Input>
           </FormItem>
           <FormItem label="优先级">
             <InputNumber v-model="formItem.priority"></InputNumber>
           </FormItem>
           <FormItem label="身份认证">
-            <RadioGroup v-model="formItem.isAuth" type="button">
+            <RadioGroup type="button" v-model="formItem.isAuth">
               <Radio :disabled="formItem.apiId && formItem.isPersist === 1?true:false" label="0">关闭</Radio>
               <Radio :disabled="formItem.apiId && formItem.isPersist === 1?true:false" label="1">开启</Radio>
             </RadioGroup>
             <p><code>开启：未认证登录,提示"认证失败,请重新登录!";关闭: 不需要认证登录</code></p>
           </FormItem>
           <FormItem label="公开访问">
-            <RadioGroup v-model="formItem.isOpen" type="button">
+            <RadioGroup type="button" v-model="formItem.isOpen">
               <Radio label="0">拒绝</Radio>
               <Radio label="1">允许</Radio>
             </RadioGroup>
             <p><code>拒绝:提示"请求地址,拒绝访问!"</code></p>
           </FormItem>
           <FormItem label="状态">
-            <RadioGroup v-model="formItem.status" type="button">
+            <RadioGroup type="button" v-model="formItem.status">
               <Radio label="0">禁用</Radio>
               <Radio label="1">启用</Radio>
               <Radio label="2">维护中</Radio>
@@ -172,12 +172,12 @@
             <p><code>禁用：提示"请求地址,禁止访问!";维护中：提示"正在升级维护中,请稍后再试!";</code></p>
           </FormItem>
           <FormItem label="描述">
-            <Input v-model="formItem.apiDesc" type="textarea" placeholder="请输入内容"></Input>
+            <Input placeholder="请输入内容" type="textarea" v-model="formItem.apiDesc"></Input>
           </FormItem>
         </Form>
         <div class="drawer-footer">
-          <Button type="default" @click="handleReset">取消</Button>&nbsp;
-          <Button type="primary" @click="handleSubmit" :loading="saving">保存</Button>
+          <Button @click="handleReset" type="default">取消</Button>&nbsp;
+          <Button :loading="saving" @click="handleSubmit" type="primary">保存</Button>
         </div>
       </div>
     </Modal>

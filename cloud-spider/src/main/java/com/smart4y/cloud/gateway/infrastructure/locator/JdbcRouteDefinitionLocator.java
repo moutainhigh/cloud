@@ -1,7 +1,7 @@
 package com.smart4y.cloud.gateway.infrastructure.locator;
 
 import com.google.common.collect.Lists;
-import com.smart4y.cloud.core.domain.event.RemoteRefreshRouteEvent;
+import com.smart4y.cloud.core.domain.event.RouteRemoteRefreshedEvent;
 import com.smart4y.cloud.gateway.domain.RateLimitApiObj;
 import com.smart4y.cloud.gateway.domain.model.GatewayRoute;
 import com.smart4y.cloud.gateway.domain.service.GatewayRateLimitApiDomainService;
@@ -37,7 +37,7 @@ import java.util.Map;
  *         Created by youtao on 2019-09-05.
  */
 @Slf4j
-public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, ApplicationListener<RemoteRefreshRouteEvent>, ApplicationEventPublisherAware {
+public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, ApplicationListener<RouteRemoteRefreshedEvent>, ApplicationEventPublisherAware {
 
     @Autowired
     private GatewayRouteDomainService gatewayRouteDomainService;
@@ -64,15 +64,15 @@ public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, Appli
      * BUS刷新事件
      */
     @Override
-    public void onApplicationEvent(RemoteRefreshRouteEvent event) {
-        Mono<Void> refresh = refresh();
+    public void onApplicationEvent(RouteRemoteRefreshedEvent event) {
+        refresh();
     }
 
     /**
      * 刷新路由
      */
     public Mono<Void> refresh() {
-        Mono<Void> routes = this.loadRoutes();
+        this.loadRoutes();
         // 触发默认路由刷新事件,刷新缓存路由
         this.publisher.publishEvent(new RefreshRoutesEvent(this));
         return Mono.empty();

@@ -2,7 +2,7 @@
   <Card shadow>
     <div>
       <div class="account-setting-con left-con">
-        <Menu active-name="profile" @on-select="handleSelect">
+        <Menu @on-select="handleSelect" active-name="profile">
           <MenuItem name="profile">
             <span>基本信息</span>
           </MenuItem>
@@ -12,27 +12,27 @@
         </Menu>
       </div>
       <div class="account-setting-con view-con">
-        <Form v-if="currentSelect==='profile'" ref="userForm" :rules="formItemRules" :model="profile">
+        <Form :model="profile" :rules="formItemRules" ref="userForm" v-if="currentSelect==='profile'">
           <h3>
             <span>基本信息</span>
           </h3>
           <Row>
             <Col span="8">
-            <FormItem label="昵称" prop="nickName">
-              <Input v-model="profile.nickName" placeholder="请输入内容"></Input>
-            </FormItem>
-            <FormItem label="描述">
-              <Input v-model="profile.userDesc" type="textarea" placeholder="请输入内容"></Input>
-            </FormItem>
+              <FormItem label="昵称" prop="nickName">
+                <Input placeholder="请输入内容" v-model="profile.nickName"></Input>
+              </FormItem>
+              <FormItem label="描述">
+                <Input placeholder="请输入内容" type="textarea" v-model="profile.userDesc"></Input>
+              </FormItem>
             </Col>
             <Col span="8">
-            <FormItem label="头像" prop="avatar">
-              <Avatar style="height: 128px;width: 128px;border-radius: 50%;"/>
-            </FormItem>
+              <FormItem label="头像" prop="avatar">
+                <Avatar style="height: 128px;width: 128px;border-radius: 50%;"/>
+              </FormItem>
             </Col>
           </Row>
           <FormItem>
-            <Button type="primary" @click="handleSubmit('userForm')">保存</Button>
+            <Button @click="handleSubmit('userForm')" type="primary">保存</Button>
           </FormItem>
         </Form>
 
@@ -67,45 +67,46 @@
 </template>
 
 <script>
-  import {updateCurrentUserInfo} from '@/api/user'
-  export default {
-    name: 'message_page',
-    data () {
-      return {
-        currentSelect: 'profile',
-        formItemRules: {
-          nickName: [
-            {required: true, message: '昵称不能为空', trigger: 'blur'}
-          ]
-        },
-        profile: this.$store.state.user,
-      }
-    },
-    methods: {
-      handleSubmit(form){
-        if (form === 'userForm') {
-          this.$refs['userForm'].validate((valid) => {
-            if (valid) {
-              updateCurrentUserInfo(this.profile).then(res => {
-                if (res.code === 0) {
-                  this.$Message.success('修改成功')
-                  this.$store.commit("setAvatar", this.profile.avatar)
-                  this.$store.commit("setNickName", this.profile.nickName)
-                }
-              }).finally(() => {
-                this.saving = false
-              })
+    import {updateCurrentUserInfo} from '@/api/user'
+
+    export default {
+        name: 'message_page',
+        data() {
+            return {
+                currentSelect: 'profile',
+                formItemRules: {
+                    nickName: [
+                        {required: true, message: '昵称不能为空', trigger: 'blur'}
+                    ]
+                },
+                profile: this.$store.state.user,
             }
-          })
+        },
+        methods: {
+            handleSubmit(form) {
+                if (form === 'userForm') {
+                    this.$refs['userForm'].validate((valid) => {
+                        if (valid) {
+                            updateCurrentUserInfo(this.profile).then(res => {
+                                if (res.code === 0) {
+                                    this.$Message.success('修改成功')
+                                    this.$store.commit("setAvatar", this.profile.avatar)
+                                    this.$store.commit("setNickName", this.profile.nickName)
+                                }
+                            }).finally(() => {
+                                this.saving = false
+                            })
+                        }
+                    })
+                }
+            },
+            handleSelect(name) {
+                this.currentSelect = name
+            }
+        },
+        mounted() {
         }
-      },
-      handleSelect (name) {
-        this.currentSelect = name
-      }
-    },
-    mounted () {
     }
-  }
 </script>
 
 <style lang="less">
@@ -115,9 +116,11 @@
       display: inline-block;
       vertical-align: top;
       position: relative;
+
       &.left-con {
         border-right: 1px solid #e6e6e6;
       }
+
       &.view-con {
         position: absolute;
         left: 264px;

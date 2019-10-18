@@ -1,6 +1,6 @@
 package com.smart4y.cloud.core.infrastructure.security.http;
 
-import com.smart4y.cloud.core.domain.event.RemoteRefreshRouteEvent;
+import com.smart4y.cloud.core.domain.event.RouteRemoteRefreshedEvent;
 import com.smart4y.cloud.core.infrastructure.properties.OpenCommonProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.bus.BusProperties;
@@ -40,7 +40,7 @@ public class OpenRestTemplate extends RestTemplate {
      */
     public void refreshGateway() {
         try {
-            publisher.publishEvent(new RemoteRefreshRouteEvent(this, busProperties.getId(), null));
+            publisher.publishEvent(new RouteRemoteRefreshedEvent(this, busProperties.getId(), null));
             log.info("refreshGateway:success");
         } catch (Exception e) {
             log.error("refreshGateway error:{}", e.getMessage());

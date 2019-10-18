@@ -3,17 +3,17 @@
     <Card shadow>
       <div class="search-con search-con-top">
         <ButtonGroup>
-          <Button :disabled="!hasAuthority('gatewayRouteEdit')" class="search-btn" type="primary"
-                  @click="handleModal()">
+          <Button :disabled="!hasAuthority('gatewayRouteEdit')" @click="handleModal()" class="search-btn"
+                  type="primary">
             <span>添加</span>
           </Button>
         </ButtonGroup>
       </div>
       <Alert show-icon>谨慎添加或修改路由,如果修改不当,将影响正常访问！&nbsp;<a @click="handleRefreshGateway">手动刷新网关</a></Alert>
-      <Table border :columns="columns" :data="data" :loading="loading">
+      <Table :columns="columns" :data="data" :loading="loading" border>
         <template slot="status" slot-scope="{ row }">
-          <Badge v-if="row.status===1" status="success" text="启用"/>
-          <Badge v-else="" status="error" text="禁用"/>
+          <Badge status="success" text="启用" v-if="row.status===1"/>
+          <Badge status="error" text="禁用" v-else=""/>
         </template>
         <template slot="routeType" slot-scope="{ row }">
           <span v-if="row.serviceId"><Tag color="green">负载均衡</Tag>{{row.serviceId}}</span>
@@ -22,8 +22,8 @@
 
         <template slot="action" slot-scope="{ row }">
           <a :disabled="!hasAuthority('gatewayRouteEdit')" @click="handleModal(row)">编辑</a>&nbsp;
-          <Dropdown v-show="hasAuthority('gatewayRouteEdit')" transfer ref="dropdown"
-                    @on-click="handleClick($event,row)">
+          <Dropdown @on-click="handleClick($event,row)" ref="dropdown" transfer
+                    v-show="hasAuthority('gatewayRouteEdit')">
             <a href="javascript:void(0)">
               <span>更多</span>
               <Icon type="ios-arrow-down"></Icon>
@@ -34,61 +34,61 @@
           </Dropdown>&nbsp;
         </template>
       </Table>
-      <Page :total="pageInfo.total" :current="pageInfo.page" :page-size="pageInfo.limit" show-elevator show-sizer
-            show-total
-            @on-change="handlePage" @on-page-size-change='handlePageSize'></Page>
+      <Page :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total" @on-change="handlePage" @on-page-size-change='handlePageSize'
+            show-elevator
+            show-sizer show-total></Page>
     </Card>
-    <Modal v-model="modalVisible"
-           :title="modalTitle"
-           width="40"
-           @on-cancel="handleReset">
+    <Modal :title="modalTitle"
+           @on-cancel="handleReset"
+           v-model="modalVisible"
+           width="40">
       <div>
-        <Form ref="routeForm" :model="formItem" :rules="formItemRules" :label-width="100">
+        <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="routeForm">
           <FormItem label="路由名称" prop="routeDesc">
-            <Input v-model="formItem.routeDesc" placeholder="请输入内容"></Input>
+            <Input placeholder="请输入内容" v-model="formItem.routeDesc"></Input>
           </FormItem>
           <FormItem label="路由标识" prop="routeName">
-            <Input v-model="formItem.routeName" placeholder="默认使用服务名称{application.name}"></Input>
+            <Input placeholder="默认使用服务名称{application.name}" v-model="formItem.routeName"></Input>
           </FormItem>
           <FormItem label="路由前缀" prop="path">
-            <Input v-model="formItem.path" placeholder="/{path}/**"></Input>
+            <Input placeholder="/{path}/**" v-model="formItem.path"></Input>
           </FormItem>
           <FormItem label="路由方式">
             <Select v-model="selectType">
-              <Option value="service" label="负载均衡(serviceId)"></Option>
-              <Option value="url" label="反向代理(url)"></Option>
+              <Option label="负载均衡(serviceId)" value="service"></Option>
+              <Option label="反向代理(url)" value="url"></Option>
             </Select>
           </FormItem>
-          <FormItem v-if="selectType==='service'" label="负载均衡" prop="serviceId"
-                    :rules="{required: true, message: '服务名称不能为空', trigger: 'blur'}">
-            <Input v-model="formItem.serviceId" placeholder="服务名称application.name"></Input>
+          <FormItem :rules="{required: true, message: '服务名称不能为空', trigger: 'blur'}" label="负载均衡" prop="serviceId"
+                    v-if="selectType==='service'">
+            <Input placeholder="服务名称application.name" v-model="formItem.serviceId"></Input>
           </FormItem>
-          <FormItem v-if="selectType==='url'" label="反向代理" prop="url"
-                    :rules="[{required: true, message: '服务地址不能为空', trigger: 'blur'},{type: 'url', message: '请输入有效网址', trigger: 'blur'}]">
-            <Input v-model="formItem.url" placeholder="http://localhost:8080"></Input>
+          <FormItem :rules="[{required: true, message: '服务地址不能为空', trigger: 'blur'},{type: 'url', message: '请输入有效网址', trigger: 'blur'}]" label="反向代理" prop="url"
+                    v-if="selectType==='url'">
+            <Input placeholder="http://localhost:8080" v-model="formItem.url"></Input>
           </FormItem>
           <FormItem label="忽略前缀">
-            <RadioGroup v-model="formItem.stripPrefix" type="button">
+            <RadioGroup type="button" v-model="formItem.stripPrefix">
               <Radio label="0">否</Radio>
               <Radio label="1">是</Radio>
             </RadioGroup>
           </FormItem>
           <FormItem label="失败重试">
-            <RadioGroup v-model="formItem.retryable" type="button">
+            <RadioGroup type="button" v-model="formItem.retryable">
               <Radio label="0">否</Radio>
               <Radio label="1">是</Radio>
             </RadioGroup>
           </FormItem>
           <FormItem label="状态">
-            <RadioGroup v-model="formItem.status" type="button">
+            <RadioGroup type="button" v-model="formItem.status">
               <Radio label="0">禁用</Radio>
               <Radio label="1">启用</Radio>
             </RadioGroup>
           </FormItem>
         </Form>
         <div class="drawer-footer">
-          <Button type="default" @click="handleReset">取消</Button>&nbsp;
-          <Button type="primary" @click="handleSubmit" :loading="saving">保存</Button>
+          <Button @click="handleReset" type="default">取消</Button>&nbsp;
+          <Button :loading="saving" @click="handleSubmit" type="primary">保存</Button>
         </div>
       </div>
     </Modal>

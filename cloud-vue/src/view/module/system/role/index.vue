@@ -1,39 +1,39 @@
 <template>
   <div>
     <Card shadow>
-      <Form ref="searchForm"
+      <Form :label-width="80"
             :model="pageInfo"
             inline
-            :label-width="80">
+            ref="searchForm">
         <FormItem label="角色名称" prop="roleName">
-          <Input type="text" v-model="pageInfo.roleName" placeholder="请输入关键字"/>
+          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.roleName"/>
         </FormItem>
         <FormItem label="角色编码" prop="roleCode">
-          <Input type="text" v-model="pageInfo.roleCode" placeholder="请输入关键字"/>
+          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.roleCode"/>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="handleSearch(1)">查询</Button>&nbsp;
+          <Button @click="handleSearch(1)" type="primary">查询</Button>&nbsp;
           <Button @click="handleResetForm('searchForm')">重置</Button>
         </FormItem>
       </Form>
       <div class="search-con search-con-top">
         <ButtonGroup>
-          <Button :disabled="hasAuthority('systemRoleEdit')?false:true" class="search-btn" type="primary"
-                  @click="handleModal()">
+          <Button :disabled="hasAuthority('systemRoleEdit')?false:true" @click="handleModal()" class="search-btn"
+                  type="primary">
             <span>添加</span>
           </Button>
         </ButtonGroup>
       </div>
-      <Table border :columns="columns" :data="data" :loading="loading">
+      <Table :columns="columns" :data="data" :loading="loading" border>
         <template slot="status" slot-scope="{ row }">
-          <Badge v-if="row.status===1" status="success" text="启用"/>
-          <Badge v-else="" status="error" text="禁用"/>
+          <Badge status="success" text="启用" v-if="row.status===1"/>
+          <Badge status="error" text="禁用" v-else=""/>
         </template>
         <template slot="action" slot-scope="{ row }">
-          <a @click="handleModal(row)"
-             :disabled="row.roleCode != 'all' && hasAuthority('systemRoleEdit')?false:true">编辑</a>&nbsp;
-          <Dropdown v-show="hasAuthority('systemRoleEdit')" transfer ref="dropdown" @on-click="handleClick($event,row)">
-            <a href="javascript:void(0)" :disabled="row.roleCode === 'all' ?true:false">
+          <a :disabled="row.roleCode != 'all' && hasAuthority('systemRoleEdit')?false:true"
+             @click="handleModal(row)">编辑</a>&nbsp;
+          <Dropdown @on-click="handleClick($event,row)" ref="dropdown" transfer v-show="hasAuthority('systemRoleEdit')">
+            <a :disabled="row.roleCode === 'all' ?true:false" href="javascript:void(0)">
               <span>更多</span>
               <Icon type="ios-arrow-down"></Icon>
             </a>
@@ -43,60 +43,60 @@
           </Dropdown>&nbsp;
         </template>
       </Table>
-      <Page transfer :total="pageInfo.total" :current="pageInfo.page" :page-size="pageInfo.limit" show-elevator
+      <Page :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total" @on-change="handlePage" @on-page-size-change='handlePageSize'
+            show-elevator
             show-sizer
-            show-total
-            @on-change="handlePage" @on-page-size-change='handlePageSize'></Page>
+            show-total transfer></Page>
     </Card>
 
-    <Modal v-model="modalVisible"
-           :title="modalTitle"
-           width="40"
-           @on-cancel="handleReset">
+    <Modal :title="modalTitle"
+           @on-cancel="handleReset"
+           v-model="modalVisible"
+           width="40">
       <div>
-        <Tabs @on-click="handleTabClick" :value="current">
+        <Tabs :value="current" @on-click="handleTabClick">
           <TabPane label="角色信息" name="form1">
-            <Form v-show="current == 'form1'" ref="form1" :model="formItem" :rules="formItemRules" :label-width="100">
+            <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form1" v-show="current == 'form1'">
               <FormItem label="角色标识" prop="roleCode">
-                <Input v-model="formItem.roleCode" placeholder="请输入内容"></Input>
+                <Input placeholder="请输入内容" v-model="formItem.roleCode"></Input>
               </FormItem>
               <FormItem label="角色名称" prop="roleName">
-                <Input v-model="formItem.roleName" placeholder="请输入内容"></Input>
+                <Input placeholder="请输入内容" v-model="formItem.roleName"></Input>
               </FormItem>
               <FormItem label="状态">
-                <RadioGroup v-model="formItem.status" type="button">
+                <RadioGroup type="button" v-model="formItem.status">
                   <Radio label="0">禁用</Radio>
                   <Radio label="1">启用</Radio>
                 </RadioGroup>
               </FormItem>
               <FormItem label="描述">
-                <Input v-model="formItem.roleDesc" type="textarea" placeholder="请输入内容"></Input>
+                <Input placeholder="请输入内容" type="textarea" v-model="formItem.roleDesc"></Input>
               </FormItem>
             </Form>
           </TabPane>
           <TabPane :disabled="!formItem.roleId" label="分配权限" name="form2">
-            <Form v-show="current == 'form2'" ref="form2" :model="formItem" :rules="formItemRules" :label-width="100">
+            <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form2" v-show="current == 'form2'">
               <FormItem label="过期时间" prop="expireTime">
-                <Badge v-if="formItem.isExpired" text="授权已过期">
-                  <DatePicker v-model="formItem.expireTime" class="ivu-form-item-error" type="datetime"
-                              placeholder="设置有效期"></DatePicker>
+                <Badge text="授权已过期" v-if="formItem.isExpired">
+                  <DatePicker class="ivu-form-item-error" placeholder="设置有效期" type="datetime"
+                              v-model="formItem.expireTime"></DatePicker>
                 </Badge>
-                <DatePicker v-else="" v-model="formItem.expireTime" type="datetime" placeholder="设置有效期"></DatePicker>
+                <DatePicker placeholder="设置有效期" type="datetime" v-else="" v-model="formItem.expireTime"></DatePicker>
               </FormItem>
               <FormItem label="功能菜单" prop="grantMenus">
                 <tree-table
-                  ref="tree"
-                  style="max-height:480px;overflow: auto"
-                  expand-key="menuName"
+                  :columns="columns2"
+                  :data="selectMenus"
                   :expand-type="false"
                   :is-fold="false"
-                  :tree-type="true"
                   :selectable="true"
-                  :columns="columns2"
-                  :data="selectMenus">
+                  :tree-type="true"
+                  expand-key="menuName"
+                  ref="tree"
+                  style="max-height:480px;overflow: auto">
                   <template slot="operation" slot-scope="scope">
                     <CheckboxGroup v-model="formItem.grantActions">
-                      <Checkbox v-for="item in scope.row.actionList" :label="item.authorityId">
+                      <Checkbox :label="item.authorityId" v-for="item in scope.row.actionList">
                         <span :title="item.actionDesc">{{item.actionName}}</span>
                       </Checkbox>
                     </CheckboxGroup>
@@ -106,14 +106,14 @@
             </Form>
           </TabPane>
           <TabPane :disabled="!formItem.roleId" label="角色成员" name="form3">
-            <Form v-show="current == 'form3'" ref="form3" :model="formItem" :rules="formItemRules">
+            <Form :model="formItem" :rules="formItemRules" ref="form3" v-show="current == 'form3'">
               <FormItem prop="authorities">
                 <Transfer
                   :data="selectUsers"
                   :list-style="{width: '45%',height: '480px'}"
-                  :titles="['选择用户', '已选择用户']"
                   :render-format="transferRender"
                   :target-keys="formItem.userIds"
+                  :titles="['选择用户', '已选择用户']"
                   @on-change="handleTransferChange"
                   filterable>
                 </Transfer>
@@ -122,8 +122,8 @@
           </TabPane>
         </Tabs>
         <div class="drawer-footer">
-          <Button type="default" @click="handleReset">取消</Button>&nbsp;
-          <Button type="primary" @click="handleSubmit" :loading="saving">保存</Button>
+          <Button @click="handleReset" type="default">取消</Button>&nbsp;
+          <Button :loading="saving" @click="handleSubmit" type="primary">保存</Button>
         </div>
       </div>
     </Modal>

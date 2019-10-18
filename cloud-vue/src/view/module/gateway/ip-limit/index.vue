@@ -1,27 +1,27 @@
 <template>
   <div>
     <Card shadow>
-      <Form ref="searchForm"
+      <Form :label-width="80"
             :model="pageInfo"
             inline
-            :label-width="80">
+            ref="searchForm">
         <FormItem label="策略名称" prop="policyName">
-          <Input type="text" v-model="pageInfo.policyName" placeholder="请输入关键字"/>
+          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.policyName"/>
         </FormItem>
         <FormItem>
-          <Button type="primary" @click="handleSearch(1)">查询</Button>&nbsp;
+          <Button @click="handleSearch(1)" type="primary">查询</Button>&nbsp;
           <Button @click="handleResetForm('searchForm')">重置</Button>
         </FormItem>
       </Form>
       <div class="search-con search-con-top">
         <ButtonGroup>
-          <Button :disabled="hasAuthority('gatewayIpLimitEdit')?false:true" class="search-btn" type="primary"
-                  @click="handleModal()">
+          <Button :disabled="hasAuthority('gatewayIpLimitEdit')?false:true" @click="handleModal()" class="search-btn"
+                  type="primary">
             <span>添加</span>
           </Button>
         </ButtonGroup>
       </div>
-      <Table border :columns="columns" :data="data" :loading="loading">
+      <Table :columns="columns" :data="data" :loading="loading" border>
         <template slot="policyType" slot-scope="{ row }">
           <Tag color="green" v-if="row.policyType===1">允许-白名单</Tag>
           <Tag color="red" v-else="">拒绝-黑名单</Tag>
@@ -34,45 +34,45 @@
           </a>
         </template>
       </Table>
-      <Page :total="pageInfo.total" :current="pageInfo.page" :page-size="pageInfo.limit" show-elevator show-sizer
-            show-total
-            @on-change="handlePage" @on-page-size-change='handlePageSize'></Page>
+      <Page :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total" @on-change="handlePage" @on-page-size-change='handlePageSize'
+            show-elevator
+            show-sizer show-total></Page>
     </Card>
-    <Modal v-model="modalVisible"
-           :title="modalTitle"
-           width="40"
-           @on-cancel="handleReset">
+    <Modal :title="modalTitle"
+           @on-cancel="handleReset"
+           v-model="modalVisible"
+           width="40">
       <div>
         <Tabs :value="current" @on-click="handleTabClick">
           <TabPane label="策略信息" name="form1">
-            <Form ref="form1" v-show="current=='form1'" :model="formItem" :rules="formItemRules" :label-width="100">
+            <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form1" v-show="current=='form1'">
               <FormItem label="策略名称" prop="policyName">
-                <Input v-model="formItem.policyName" placeholder="请输入内容"></Input>
+                <Input placeholder="请输入内容" v-model="formItem.policyName"></Input>
               </FormItem>
               <FormItem label="策略类型" prop="policyType">
                 <Select v-model="formItem.policyType">
-                  <Option value="0" label="拒绝-黑名单"></Option>
-                  <Option value="1" label="允许-白名单"></Option>
+                  <Option label="拒绝-黑名单" value="0"></Option>
+                  <Option label="允许-白名单" value="1"></Option>
                 </Select>
               </FormItem>
               <FormItem label="IP地址/域名" prop="ipAddress">
-                <Input v-model="formItem.ipAddress" type="textarea"
-                       placeholder="192.168.0.1;192.168.0.2;baidu.com;weixin.com"></Input>
+                <Input placeholder="192.168.0.1;192.168.0.2;baidu.com;weixin.com" type="textarea"
+                       v-model="formItem.ipAddress"></Input>
                 同时支持Ip和域名,多个用分号";"隔开。示例：192.168.0.1;baidu.com;weixin.com
 
               </FormItem>
             </Form>
           </TabPane>
           <TabPane :disabled="!formItem.policyId" label="绑定接口" name="form2">
-            <Form ref="form2" v-show="current=='form2'" :model="formItem" :rules="formItemRules">
-              <Alert type="warning" show-icon>请注意：如果API上原来已经绑定了一个策略，则会被本策略覆盖，请慎重选择！</Alert>
+            <Form :model="formItem" :rules="formItemRules" ref="form2" v-show="current=='form2'">
+              <Alert show-icon type="warning">请注意：如果API上原来已经绑定了一个策略，则会被本策略覆盖，请慎重选择！</Alert>
               <FormItem prop="authorities">
                 <Transfer
                   :data="selectApis"
                   :list-style="{width: '45%',height: '480px'}"
-                  :titles="['选择接口', '已选择接口']"
                   :render-format="transferRender"
                   :target-keys="formItem.apiIds"
+                  :titles="['选择接口', '已选择接口']"
                   @on-change="handleTransferChange"
                   filterable>
                 </Transfer>
@@ -81,8 +81,8 @@
           </TabPane>
         </Tabs>
         <div class="drawer-footer">
-          <Button type="default" @click="handleReset">取消</Button>&nbsp;
-          <Button type="primary" @click="handleSubmit" :loading="saving">保存</Button>
+          <Button @click="handleReset" type="default">取消</Button>&nbsp;
+          <Button :loading="saving" @click="handleSubmit" type="primary">保存</Button>
         </div>
       </div>
     </Modal>

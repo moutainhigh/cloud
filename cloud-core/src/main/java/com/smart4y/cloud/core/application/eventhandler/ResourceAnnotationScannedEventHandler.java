@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.infrastructure;
+package com.smart4y.cloud.core.application.eventhandler;
 
 import com.google.common.collect.Lists;
 import com.smart4y.cloud.core.domain.event.ResourceScannedEvent;
@@ -39,18 +39,18 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 自定义注解扫描
+ * 自定义 资源注解扫描事件处理器
  *
  * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
 @Slf4j
-public class ResourceAnnotationScan implements ApplicationListener<ApplicationReadyEvent> {
+public class ResourceAnnotationScannedEventHandler implements ApplicationListener<ApplicationReadyEvent> {
 
     private static final AntPathMatcher pathMatch = new AntPathMatcher();
     private AmqpTemplate amqpTemplate;
 
-    public ResourceAnnotationScan(AmqpTemplate amqpTemplate) {
+    public ResourceAnnotationScannedEventHandler(AmqpTemplate amqpTemplate) {
         this.amqpTemplate = amqpTemplate;
     }
 

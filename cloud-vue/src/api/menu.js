@@ -23,7 +23,7 @@ export const getMenus = () => {
  * @param priority
  * @param menuDesc
  */
-export const addMenu = ({ menuCode, menuName, icon, scheme, path, target, status, parentId, priority, menuDesc }) => {
+export const addMenu = ({menuCode, menuName, icon, scheme, path, target, status, parentId, priority, menuDesc}) => {
   const data = {
     menuCode: menuCode,
     menuName: menuName,
@@ -57,7 +57,7 @@ export const addMenu = ({ menuCode, menuName, icon, scheme, path, target, status
  * @param priority
  * @param menuDesc
  */
-export const updateMenu = ({ menuId, menuCode, menuName, icon, scheme, path, target, status, parentId, priority, menuDesc }) => {
+export const updateMenu = ({menuId, menuCode, menuName, icon, scheme, path, target, status, parentId, priority, menuDesc}) => {
   const data = {
     menuId: menuId,
     menuCode: menuCode,

@@ -5,8 +5,8 @@ import request from '@/libs/request'
  * @param page
  * @param limit
  */
-export const getRoutes = ({ page, limit }) => {
-  const params = { page: page, limit: limit }
+export const getRoutes = ({page, limit}) => {
+  const params = {page: page, limit: limit}
   return request({
     url: 'base/gateway/route',
     params,
@@ -27,7 +27,7 @@ export const getRoutes = ({ page, limit }) => {
  * @param isOpen
  * @param isAuth
  */
-export const addRoute = ({ path, serviceId, url, stripPrefix, retryable, status, routeName, routeDesc }) => {
+export const addRoute = ({path, serviceId, url, stripPrefix, retryable, status, routeName, routeDesc}) => {
   const data = {
     path: path,
     serviceId: serviceId,
@@ -59,7 +59,7 @@ export const addRoute = ({ path, serviceId, url, stripPrefix, retryable, status,
  * @param isOpen
  * @param isAuth
  */
-export const updateRoute = ({ routeId, path, serviceId, url, stripPrefix, retryable, status, routeName, routeDesc }) => {
+export const updateRoute = ({routeId, path, serviceId, url, stripPrefix, retryable, status, routeName, routeDesc}) => {
   const data = {
     routeId: routeId,
     path: path,

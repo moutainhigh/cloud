@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
 import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
 import com.smart4y.cloud.core.domain.ResultEntity;
-import com.smart4y.cloud.core.domain.event.RemoteRefreshRouteEvent;
+import com.smart4y.cloud.core.domain.event.RouteRemoteRefreshedEvent;
 import com.smart4y.cloud.gateway.infrastructure.feign.BaseAuthorityFeign;
 import com.smart4y.cloud.gateway.infrastructure.feign.GatewayFeign;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
  *         Created by youtao on 2019-09-05.
  */
 @Slf4j
-public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEvent> {
+public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshedEvent> {
 
     /*
      * 单位时间
@@ -125,7 +125,7 @@ public class ResourceLocator implements ApplicationListener<RemoteRefreshRouteEv
     }
 
     @Override
-    public void onApplicationEvent(RemoteRefreshRouteEvent event) {
+    public void onApplicationEvent(RouteRemoteRefreshedEvent event) {
         refresh();
     }
 
