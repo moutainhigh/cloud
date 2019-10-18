@@ -3,6 +3,8 @@ services:
   nacos:
     image: nacos/nacos-server:latest
     container_name: nacos
+    networks:
+      - infra
     ports:
       - "8848:8848"
     restart: on-failure
@@ -15,6 +17,8 @@ services:
   mysql:
     image: mysql:5.7
     container_name: mysql
+    networks:
+      - infra
     ports:
       - "3306:3306"
     restart: always
@@ -35,6 +39,8 @@ services:
   redis:
     image: redis:3.2
     container_name: redis
+    networks:
+      - infra
     ports:
       - "6379:6379"
     volumes:
@@ -48,6 +54,8 @@ services:
   rabbitmq:
     image: "rabbitmq:3.7-management"
     container_name: rabbitmq
+    networks:
+      - infra
     ports:
       - "5671:5671"
       - "5672:5672"
@@ -65,8 +73,11 @@ services:
     labels:
       NAME: "rabbitmq"
   hippo:
-    image: cloud/cloud-hippo:1.0.0
+    image: cloud/cloud-hippo:1.1.0-SNAPSHOT
     container_name: hippo
+    networks:
+      - infra
+      - cloud
     ports:
       - "8223:8223"
     environment:
@@ -84,14 +95,17 @@ services:
       - mysql
       - redis
       - rabbitmq
-    links:
-      - nacos
-      - mysql
-      - redis
-      - rabbitmq
+  #    links:
+  #      - nacos
+  #      - mysql
+  #      - redis
+  #      - rabbitmq
   owl:
-    image: cloud/cloud-owl:1.0.0
+    image: cloud/cloud-owl:1.1.0-SNAPSHOT
     container_name: owl
+    networks:
+      - infra
+      - cloud
     ports:
       - "7211:7211"
     environment:
@@ -110,14 +124,17 @@ services:
       - redis
       - rabbitmq
       - hippo
-    links:
-      - nacos
-      - mysql
-      - redis
-      - rabbitmq
+  #    links:
+  #      - nacos
+  #      - mysql
+  #      - redis
+  #      - rabbitmq
   spider:
-    image: cloud/cloud-spider:1.0.0
+    image: cloud/cloud-spider:1.1.0-SNAPSHOT
     container_name: spider
+    networks:
+      - infra
+      - cloud
     ports:
       - "8888:8888"
     environment:
@@ -137,11 +154,14 @@ services:
       - rabbitmq
       - hippo
       - owl
-    links:
-      - nacos
-      - mysql
-      - redis
-      - rabbitmq
+#    links:
+#      - nacos
+#      - mysql
+#      - redis
+#      - rabbitmq
 
 networks:
-  cloud_network:
+  #基础设施层网络
+  infra:
+  #平台服务层网络
+  cloud:
