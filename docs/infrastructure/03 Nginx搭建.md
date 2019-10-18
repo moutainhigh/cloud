@@ -26,5 +26,5 @@
 ```
 
 ##nginx配置
-- [配置文件目录](nginx)
-- [阿里云免费证书](nginx/cert)
+- [配置文件目录](nginxconfig)
+- [阿里云免费证书](nginxconfig/cert)
