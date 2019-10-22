@@ -95,7 +95,11 @@ services:
       - mysql
       - redis
       - rabbitmq
-    entrypoint: "/wait-for-it.sh localhost:8848/nacos/actuator/health -- java -Djava.security.egd=file:/dev/./urandom -jar /app.jar"
+    entrypoint: "/wait-for-it.sh -t 0 nacos:8848 --"
+    command:
+      - /bin/sh
+      - -c
+      - java -DXms128m -DXmx512m -Djava.security.egd=file:/dev/./urandom -jar /app.jar
   owl:
     image: cloud/cloud-owl:1.1.0-SNAPSHOT
     container_name: owl
@@ -116,7 +120,11 @@ services:
       - "${DOCKER_VOL_DIR}/cloud-owl/logs:/logs/cloud-owl"
     depends_on:
       - hippo
-    entrypoint: "/wait-for-it.sh localhost:8223/actuator/health -- java -Djava.security.egd=file:/dev/./urandom -jar /app.jar"
+    entrypoint: "/wait-for-it.sh -t 0 hippo:8223 --"
+    command:
+      - /bin/sh
+      - -c
+      - java -DXms128m -DXmx512m -Djava.security.egd=file:/dev/./urandom -jar /app.jar
   spider:
     image: cloud/cloud-spider:1.1.0-SNAPSHOT
     container_name: spider
@@ -137,7 +145,11 @@ services:
       - "${DOCKER_VOL_DIR}/cloud-spider/logs:/logs/cloud-spider"
     depends_on:
       - owl
-    entrypoint: "/wait-for-it.sh localhost:7211/actuator/health -- java -Djava.security.egd=file:/dev/./urandom -jar /app.jar"
+    entrypoint: "/wait-for-it.sh -t 0 owl:7211 --"
+    command:
+      - /bin/sh
+      - -c
+      - java -DXms128m -DXmx512m -Djava.security.egd=file:/dev/./urandom -jar /app.jar
 
 networks:
   #基础设施层网络
