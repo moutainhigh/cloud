@@ -95,11 +95,6 @@ services:
       - mysql
       - redis
       - rabbitmq
-    healthcheck:
-      test: "/bin/netstat -anp | grep 8888 && exit 0 || exit 1"
-      interval: 10s
-      timeout: 5s
-      retries: 30
   owl:
     image: cloud/cloud-owl:1.1.0-SNAPSHOT
     container_name: owl
@@ -108,7 +103,6 @@ services:
       - cloud
     ports:
       - "7211:7211"
-    command: wait-for-it.sh
     environment:
       - NACOS_HOST=nacos
       - DB_HOST=mysql
@@ -121,11 +115,6 @@ services:
       - "${DOCKER_VOL_DIR}/cloud-owl/logs:/logs/cloud-owl"
     depends_on:
       - hippo
-    healthcheck:
-      test: "/bin/netstat -anp | grep 7211 && exit 0 || exit 1"
-      interval: 10s
-      timeout: 5s
-      retries: 5
   spider:
     image: cloud/cloud-spider:1.1.0-SNAPSHOT
     container_name: spider
@@ -146,11 +135,6 @@ services:
       - "${DOCKER_VOL_DIR}/cloud-spider/logs:/logs/cloud-spider"
     depends_on:
       - owl
-    healthcheck:
-      test: "/bin/netstat -anp | grep 8888 && exit 0 || exit 1"
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
 networks:
   #基础设施层网络

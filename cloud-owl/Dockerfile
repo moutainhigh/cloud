@@ -18,5 +18,4 @@ COPY wait-for-it.sh /wait-for-it.sh
 RUN chmod 777 /wait-for-it.sh
 RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' > /etc/timezone
 EXPOSE 7211
-ENV JAVA_OPTS="-DXms128m -DXmx512m"
-ENTRYPOINT ["sh", "-c", "/wait-for-it.sh localhost:8223", "--", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar"]
+ENTRYPOINT ["sh", "/wait-for-it.sh", "hippo:8223/actuator/health", "--", "-c", "java -Djava.security.egd=file:/dev/./urandom -jar /app.jar"]

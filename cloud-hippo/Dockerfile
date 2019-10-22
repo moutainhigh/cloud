@@ -20,5 +20,4 @@ COPY wait-for-it.sh /wait-for-it.sh
 RUN chmod 777 /wait-for-it.sh
 RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' > /etc/timezone
 EXPOSE 8223
-ENV JAVA_OPTS="-DXms128m -DXmx512m"
-ENTRYPOINT ["sh", "-c", "/wait-for-it.sh localhost:8848", "--", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar"]
+ENTRYPOINT ["sh", "/wait-for-it.sh", "nacos:8848/nacos/actuator/health", "--", "-c", "java -Djava.security.egd=file:/dev/./urandom -jar /app.jar"]
