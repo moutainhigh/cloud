@@ -17,5 +17,7 @@ COPY ${JAR_FILE} app.jar
 COPY wait-for-it.sh /wait-for-it.sh
 RUN chmod 777 /wait-for-it.sh
 RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shanghai' > /etc/timezone
+RUN echo "https://mirror.tuna.tsinghua.edu.cn/alpine/v3.4/main/" > /etc/apk/repositories
+RUN apk update && apk upgrade && apk add --no-cache bash bash-doc bash-completion && rm -rf /var/cache/apk/* && /bin/bash
 EXPOSE 8888
-ENTRYPOINT ["sh", "/wait-for-it.sh", "owl:7211/actuator/health", "--", "-c", "java -Djava.security.egd=file:/dev/./urandom -jar /app.jar"]
+ENTRYPOINT ["sh", "-c", "java -Djava.security.egd=file:/dev/./urandom -jar /app.jar"]
