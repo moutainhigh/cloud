@@ -1,10 +1,9 @@
 package com.smart4y.cloud.core.infrastructure.autoconfigure;
 
 import com.smart4y.cloud.core.application.eventhandler.ResourceAnnotationScannedEventHandler;
-import com.smart4y.cloud.core.infrastructure.exception.handler.OpenGlobalExceptionHandler;
 import com.smart4y.cloud.core.infrastructure.exception.OpenRestResponseErrorHandler;
+import com.smart4y.cloud.core.infrastructure.exception.handler.OpenGlobalExceptionHandler;
 import com.smart4y.cloud.core.infrastructure.filter.XssFilter;
-import com.smart4y.cloud.core.infrastructure.health.DbHealthIndicator;
 import com.smart4y.cloud.core.infrastructure.properties.OpenCommonProperties;
 import com.smart4y.cloud.core.infrastructure.properties.OpenIdGenProperties;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
@@ -13,14 +12,21 @@ import com.smart4y.cloud.core.infrastructure.spring.SpringContextHolder;
 import com.smart4y.cloud.core.infrastructure.toolkit.gen.SnowflakeIdWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.boot.actuate.amqp.RabbitHealthIndicator;
+import org.springframework.boot.actuate.jdbc.DataSourceHealthIndicator;
+import org.springframework.boot.actuate.redis.RedisHealthIndicator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.bus.BusProperties;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
+
+import javax.sql.DataSource;
 
 /**
  * 默认配置类
@@ -123,14 +129,27 @@ public class AutoConfiguration {
         return restTemplate;
     }
 
-    /**
-     * 服务健康检查 配置
-     */
     @Bean
-    @ConditionalOnMissingBean(DbHealthIndicator.class)
-    public DbHealthIndicator dbHealthIndicator() {
-        DbHealthIndicator dbHealthIndicator = new DbHealthIndicator();
-        log.info("DbHealthIndicator [{}]", dbHealthIndicator);
-        return dbHealthIndicator;
+    @ConditionalOnMissingBean(DataSourceHealthIndicator.class)
+    public DataSourceHealthIndicator dataSourceHealthIndicator(DataSource dataSource) {
+        DataSourceHealthIndicator indicator = new DataSourceHealthIndicator(dataSource);
+        log.info("DataSourceHealthIndicator [{}]", indicator);
+        return indicator;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(RabbitHealthIndicator.class)
+    public RabbitHealthIndicator rabbitHealthIndicator(RabbitTemplate rabbitTemplate) {
+        RabbitHealthIndicator indicator = new RabbitHealthIndicator(rabbitTemplate);
+        log.info("DataSourceHealthIndicator [{}]", indicator);
+        return indicator;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(RedisHealthIndicator.class)
+    public RedisHealthIndicator redisHealthIndicator(RedisConnectionFactory connectionFactory) {
+        RedisHealthIndicator indicator = new RedisHealthIndicator(connectionFactory);
+        log.info("RedisHealthIndicator [{}]", indicator);
+        return indicator;
     }
 }

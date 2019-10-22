@@ -42,3 +42,9 @@ curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compos
 chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 ```
+
+##常用操作
+```bash
+#删除无tag镜像
+docker rmi $(docker images | grep "none" | awk '{print $3}')
+```
