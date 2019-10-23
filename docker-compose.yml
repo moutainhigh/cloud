@@ -12,6 +12,11 @@ services:
       - TZ=Asia/Shanghai
       - PREFER_HOST_MODE=hostname
       - MODE=standalone
+#    healthcheck:
+#      test: "/bin/netstat -anp | grep 8848 && exit 0 || exit 1"
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
     labels:
       NAME: "nacos"
   mysql:
