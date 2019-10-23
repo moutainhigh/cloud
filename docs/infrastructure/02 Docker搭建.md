@@ -43,8 +43,35 @@ chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 ```
 
-##常用操作
-```bash
-#删除无tag镜像
-docker rmi $(docker images | grep "none" | awk '{print $3}')
+
+##登录阿里云私服
+```shell script
+docker login --username=youtao531@163.com registry.cn-hangzhou.aliyuncs.com
+```
+##镜像推送到阿里云私服
+```shell script
+docker login --username=youtao531@163.com registry.cn-hangzhou.aliyuncs.com
+
+docker tag cloud/cloud-hippo:1.0.0 registry.cn-hangzhou.aliyuncs.com/smart4y/cloud-hippo:1.0.0
+docker push registry.cn-hangzhou.aliyuncs.com/smart4y/cloud-hippo:1.0.0
+
+docker tag cloud/cloud-owl:1.0.0 registry.cn-hangzhou.aliyuncs.com/smart4y/cloud-owl:1.0.0
+docker push registry.cn-hangzhou.aliyuncs.com/smart4y/cloud-owl:1.0.0
+
+docker tag cloud/cloud-spider:1.0.0 registry.cn-hangzhou.aliyuncs.com/smart4y/cloud-spider:1.0.0
+docker push registry.cn-hangzhou.aliyuncs.com/smart4y/cloud-spider:1.0.0
+pwd
+```
+
+##拉取阿里云镜像
+```shell script
+docker pull registry.cn-hangzhou.aliyuncs.com/smart4y/cloud-hippo:1.0.0
+docker pull registry.cn-hangzhou.aliyuncs.com/smart4y/cloud-owl:1.0.0
+docker pull registry.cn-hangzhou.aliyuncs.com/smart4y/cloud-spider:1.0.0
+pwd
+```
+
+##删除无tag镜像
+```shell script
+docker images|grep none|awk '{print $3}'|xargs docker rmi
 ```
