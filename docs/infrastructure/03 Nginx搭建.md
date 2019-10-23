@@ -14,7 +14,7 @@
 ##Docker安装
 ```shell script
     echo '下载镜像安装（配置文件路径/opt/docker/nginx/）'
-    docker run --name nginx -p 80:80 -v /etc/localtime:/etc/localtime:ro -v /opt/docker/nginx/logs:/var/log/nginx -v /opt/docker/nginx/html:/usr/share/nginx/html -v /opt/docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro -v /opt/docker/nginx/conf.d:/etc/nginx/conf.d -d nginx:.1.17.5
+    docker run --name nginx -p 80:80 -p 443:443 -v /etc/localtime:/etc/localtime:ro -v /opt/docker/nginx/conf.d:/etc/nginx/conf.d -v /opt/docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro -v /opt/docker/nginx/cert:/etc/nginx/cert -v /opt/docker/nginx/html:/usr/share/nginx/html -v /opt/docker/nginx/admin:/usr/share/nginx/admin -v /opt/docker/nginx/logs:/var/log/nginx -d nginx:1.17.5
     
     echo '若执行以上命令报错，则依次执行以下命令后重试（重建docker0网络恢复）'
     echo 'pkill docker' 
