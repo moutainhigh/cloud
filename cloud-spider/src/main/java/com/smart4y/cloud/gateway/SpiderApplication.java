@@ -3,13 +3,17 @@ package com.smart4y.cloud.gateway;
 import com.smart4y.cloud.core.infrastructure.AbstractApplication;
 import com.smart4y.cloud.gateway.infrastructure.locator.JdbcRouteDefinitionLocator;
 import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cloud.bus.jackson.RemoteApplicationEventScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.Environment;
 
 /**
  * 网关服务
@@ -19,6 +23,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
+@Slf4j
 @EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication
@@ -42,5 +47,12 @@ public class SpiderApplication extends AbstractApplication implements CommandLin
     public void run(String... args) {
         jdbcRouteDefinitionLocator.refresh();
         resourceLocator.refresh();
+    }
+
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent event) {
+        ConfigurableApplicationContext context = event.getApplicationContext();
+        Environment env = context.getEnvironment();
+        log.info("Application '{}' is Reading!", env.getProperty("spring.application.name"));
     }
 }

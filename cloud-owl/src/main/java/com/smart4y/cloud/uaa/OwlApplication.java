@@ -1,11 +1,14 @@
 package com.smart4y.cloud.uaa;
 
 import com.smart4y.cloud.core.infrastructure.AbstractApplication;
-import org.springframework.boot.CommandLineRunner;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.Environment;
 
 /**
  * <p>
@@ -20,16 +23,20 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
+@Slf4j
 @EnableFeignClients
 @SpringBootApplication
 @EnableDiscoveryClient
-public class OwlApplication extends AbstractApplication implements CommandLineRunner {
+public class OwlApplication extends AbstractApplication {
 
     public static void main(String[] args) {
         initial(SpringApplication.run(OwlApplication.class, args));
     }
 
     @Override
-    public void run(String... args) {
+    public void onApplicationEvent(ApplicationReadyEvent event) {
+        ConfigurableApplicationContext context = event.getApplicationContext();
+        Environment env = context.getEnvironment();
+        log.info("Application '{}' is Reading!", env.getProperty("spring.application.name"));
     }
 }

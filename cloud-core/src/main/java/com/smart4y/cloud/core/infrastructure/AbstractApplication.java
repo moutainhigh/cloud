@@ -1,6 +1,8 @@
 package com.smart4y.cloud.core.infrastructure;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 
@@ -17,7 +19,7 @@ import java.util.List;
  *         Created by youtao on 2018/11/15.
  */
 @Slf4j
-public abstract class AbstractApplication {
+public abstract class AbstractApplication implements ApplicationListener<ApplicationReadyEvent> {
 
     /* ****************************************************************
         public static void main(String[] args) {
@@ -54,8 +56,6 @@ public abstract class AbstractApplication {
                     inputArguments,
                     runtime.maxMemory() / 1048576, runtime.totalMemory() / 1048576, runtime.freeMemory() / 1048576
             );
-
-            log.info("Running with Spring profile(s) : {}", Arrays.toString(env.getActiveProfiles()));
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
