@@ -20,7 +20,7 @@ services:
       - "${DOCKER_VOL_DIR}/nginx/admin:/usr/share/nginx/admin"
       - "${DOCKER_VOL_DIR}/nginx/logs:/var/log/nginx"
     healthcheck:
-      test: "/bin/netstat -anp | grep 80 && exit 0 || exit 1"
+      test: "service nginx status || exit 1"
       interval: 15s
       timeout: 5s
       retries: 128

@@ -14,7 +14,7 @@ services:
     environment:
       - TZ=Asia/Shanghai
     healthcheck:
-      test: "/bin/netstat -anp | grep 6379 && exit 0 || exit 1"
+      test: "redis-cli -h 127.0.0.1 ping && exit 0 || exit 1"
       interval: 15s
       timeout: 5s
       retries: 128
