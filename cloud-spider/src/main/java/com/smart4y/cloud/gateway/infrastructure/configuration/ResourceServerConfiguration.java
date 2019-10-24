@@ -80,13 +80,15 @@ public class ResourceServerConfiguration {
                 HttpMethod requestMethod = requestHeaders.getAccessControlRequestMethod();
 
                 HttpHeaders headers = response.getHeaders();
-                // TODO 设置全部通过
+                // TODO 允许任意域名
                 headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
                 //headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, requestHeaders.getOrigin());
+                // 允许指定头（允许任意头请使用'*'）
                 headers.addAll(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, requestHeaders.getAccessControlRequestHeaders());
                 headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
                 headers.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "*");
                 headers.add(HttpHeaders.ACCESS_CONTROL_MAX_AGE, CORS_MAX_AGE);
+                // 允许指定方法（允许任意方法请使用'*'）
                 if (requestMethod != null) {
                     headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, requestMethod.name());
                 }
