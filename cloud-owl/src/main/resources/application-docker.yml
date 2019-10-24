@@ -23,7 +23,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   datasource:
-    url: jdbc:mysql://${DB_HOST}:13306/${DB_SCHEMA}?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://${DB_HOST}:3306/${DB_SCHEMA}?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -44,7 +44,7 @@ spring:
   redis:
     host: ${REDIS_HOST}
     database: ${REDIS_DB}
-    port: 16379
+    port: 6379
     password: 123456
     lettuce:
       pool:

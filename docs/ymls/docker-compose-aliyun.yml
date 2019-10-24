@@ -25,7 +25,7 @@ services:
     networks:
       - infra
     ports:
-      - "13306:3306"
+      - "3306:3306"
     restart: always
     command: [
       '--character-set-server=utf8mb4',
@@ -103,7 +103,7 @@ services:
     networks:
       - infra
     ports:
-      - "16379:6379"
+      - "6379:6379"
     volumes:
       - "${DOCKER_VOL_DIR}/redis/conf:/usr/local/etc/redis"
       - "${DOCKER_VOL_DIR}/redis/data:/data"
