@@ -6,7 +6,7 @@ services:
     networks:
       - infra
     ports:
-      - "6379:6379"
+      - "16379:6379"
     volumes:
       - "${DOCKER_VOL_DIR}/redis/conf:/usr/local/etc/redis"
       - "${DOCKER_VOL_DIR}/redis/data:/data"

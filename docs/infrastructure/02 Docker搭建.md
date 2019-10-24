@@ -7,7 +7,7 @@ yum install -y yum-utils device-mapper-persistent-data lvm2
 echo '2、添加软件源信息'
 yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 echo '3、更新并安装 Docker-CE'
-yum makecache fast && -y install docker-ce
+yum install -y docker-ce
 echo '4、开启Docker服务'
 systemctl start docker.service
 systemctl enable docker.service
@@ -19,6 +19,8 @@ systemctl enable docker.service
     vim ~/.bash_profile
     #添加以下环境变量
     export DOCKER_VOL_DIR=/opt/docker
+
+    source ~/.bash_profile
 ```
 
 ###Docker 远程访问配置
@@ -32,15 +34,19 @@ systemctl enable docker.service
     #4 重启Docker
     systemctl restart docker
     #5 本地电脑上使用telnet进行测试2375端口是否开启成功
-    telnet host 2375
+    telnet localhost 2375
     #6 阿里云ECS安全组开放2375端口
 ```
 
 ##Docker Compose
 ```bash
-curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+#curl -L https://github.com/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+curl -L https://get.daocloud.io/docker/compose/releases/download/1.24.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+
 chmod +x /usr/local/bin/docker-compose
 docker-compose --version
+
+
 ```
 
 

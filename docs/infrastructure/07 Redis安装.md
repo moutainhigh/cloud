@@ -2,7 +2,7 @@
 
 ##Docker安装
 ```bash
-    docker run --name redis -p 6379:6379 -v /etc/localtime:/etc/localtime:ro -v /opt/docker/redis/data:/data -d redis:3.2 redis-server --appendonly yes --requirepass "123456"
+    docker run --name redis -p 16379:6379 -v /etc/localtime:/etc/localtime:ro -v /opt/docker/redis/data:/data -d redis:3.2 redis-server --appendonly yes --requirepass "123456"
 ```
 
 ##通过源安装

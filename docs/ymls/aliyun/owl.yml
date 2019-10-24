@@ -1,13 +1,13 @@
 version: '3'
 services:
-  spider:
-    image: registry.cn-hangzhou.aliyuncs.com/smart4y/cloud-spider:1.0.0
-    container_name: spider
+  owl:
+    image: registry.cn-hangzhou.aliyuncs.com/smart4y/cloud-owl:1.0.0
+    container_name: owl
     networks:
       - infra
       - cloud
     ports:
-      - "8888:8888"
+      - "7211:7211"
     environment:
       - NACOS_HOST=nacos
       - DB_HOST=mysql
@@ -17,16 +17,14 @@ services:
       - RABBITMQ_HOST=rabbitmq
       - spring.profiles.active=docker
     volumes:
-      - "${DOCKER_VOL_DIR}/cloud-spider/logs:/logs/cloud-spider"
-    depends_on:
-      - owl
-    entrypoint: "/wait-for-it.sh -t 0 owl:7211 --"
+      - "${DOCKER_VOL_DIR}/cloud-owl/logs:/logs/cloud-owl"
+    entrypoint: "/wait-for-it.sh -t 0 hippo:8223 --"
     command:
       - /bin/sh
       - -c
-      - java -DXms256m -DXmx768m -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+      - java -DXms256m -DXmx512m -Djava.security.egd=file:/dev/./urandom -jar /app.jar
     healthcheck:
-      test: "/bin/netstat -anp | grep 8888 && exit 0 || exit 1"
+      test: "/bin/netstat -anp | grep 7211 && exit 0 || exit 1"
       interval: 15s
       timeout: 5s
       retries: 128

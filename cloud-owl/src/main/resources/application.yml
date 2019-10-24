@@ -37,7 +37,7 @@ spring:
     favicon:
       enabled: false
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/cloud?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://127.0.0.1:13306/cloud?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -57,7 +57,7 @@ spring:
     publisher-confirms: true
   redis:
     host: 127.0.0.1
-    port: 6379
+    port: 16379
     password: 123456
     lettuce:
       pool:
