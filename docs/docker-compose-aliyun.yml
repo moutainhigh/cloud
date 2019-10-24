@@ -145,7 +145,7 @@ services:
     command:
       - /bin/sh
       - -c
-      - java -DXms256m -DXmx768m -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+      - java -Djava.security.egd=file:/dev/./urandom -jar /app.jar
     healthcheck:
       test: "/bin/netstat -anp | grep 8223 && exit 0 || exit 1"
       interval: 15s
@@ -175,7 +175,7 @@ services:
     command:
       - /bin/sh
       - -c
-      - java -DXms256m -DXmx512m -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+      - java -Djava.security.egd=file:/dev/./urandom -jar /app.jar
     healthcheck:
       test: "/bin/netstat -anp | grep 7211 && exit 0 || exit 1"
       interval: 15s
@@ -205,7 +205,7 @@ services:
     command:
       - /bin/sh
       - -c
-      - java -DXms256m -DXmx768m -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+      - java -Djava.security.egd=file:/dev/./urandom -jar /app.jar
     healthcheck:
       test: "/bin/netstat -anp | grep 8888 && exit 0 || exit 1"
       interval: 15s
