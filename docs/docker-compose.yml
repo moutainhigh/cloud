@@ -13,7 +13,7 @@ services:
       - PREFER_HOST_MODE=hostname
       - MODE=standalone
     healthcheck:
-      test: "/bin/netstat -anp | grep 8848 && exit 0 || exit 1"
+      test: "curl localhost:8848/nacos/actuator/health && exit 0 || exit 1"
       interval: 15s
       timeout: 5s
       retries: 128
@@ -34,13 +34,12 @@ services:
     environment:
       - TZ=Asia/Shanghai
       - MYSQL_ROOT_PASSWORD=123456
-      - MYSQL_DATABASE=beego
     volumes:
       - "${DOCKER_VOL_DIR}/mysql/data:/var/lib/mysql"
       - "${DOCKER_VOL_DIR}/mysql/conf:/etc/mysql/conf.d"
       - "${DOCKER_VOL_DIR}/mysql/logs:/logs"
     healthcheck:
-      test: "/bin/netstat -anp | grep 3306 && exit 0 || exit 1"
+      test: mysqladmin ping -h localhost -p$$MYSQL_ROOT_PASSWORD && test '0' -eq $$(ps aux | awk '{print $$11}' | grep -c -e '^mysql$$')
       interval: 15s
       timeout: 5s
       retries: 128
@@ -57,13 +56,6 @@ services:
     restart: always
     environment:
       - TZ=Asia/Shanghai
-    healthcheck:
-      test: "/bin/netstat -anp | grep 80 && exit 0 || exit 1"
-      interval: 15s
-      timeout: 5s
-      retries: 128
-    labels:
-      NAME: "nginx"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "${DOCKER_VOL_DIR}/nginx/conf.d:/etc/nginx/conf.d"
@@ -72,6 +64,13 @@ services:
       - "${DOCKER_VOL_DIR}/nginx/html:/usr/share/nginx/html"
       - "${DOCKER_VOL_DIR}/nginx/admin:/usr/share/nginx/admin"
       - "${DOCKER_VOL_DIR}/nginx/logs:/var/log/nginx"
+    healthcheck:
+      test: "/bin/netstat -anp | grep 80 && exit 0 || exit 1"
+      interval: 15s
+      timeout: 5s
+      retries: 128
+    labels:
+      NAME: "nginx"
   rabbitmq:
     image: "rabbitmq:3.7-management"
     container_name: rabbitmq

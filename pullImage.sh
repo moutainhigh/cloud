@@ -11,3 +11,6 @@ docker pull ${ALIYUN_REGISTRY}/smart4y/cloud-spider:${VERSION}
 
 echo "删除无效镜像"
 docker images|grep none|awk '{print $3}'|xargs docker rmi
+
+echo "运行镜像"
+docker-compose -f docs/docker-compose-aliyun.yml up -d

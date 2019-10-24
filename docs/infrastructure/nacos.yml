@@ -1,0 +1,24 @@
+version: '3'
+services:
+  nacos:
+    image: nacos/nacos-server:latest
+    container_name: nacos
+    networks:
+      - infra
+    ports:
+      - "8848:8848"
+    restart: on-failure
+    environment:
+      - TZ=Asia/Shanghai
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+    healthcheck:
+      test: "curl localhost:8848/nacos/actuator/health && exit 0 || exit 1"
+      interval: 15s
+      timeout: 5s
+      retries: 128
+    labels:
+      NAME: "nacos"
+networks:
+  #基础设施层网络
+  infra:
