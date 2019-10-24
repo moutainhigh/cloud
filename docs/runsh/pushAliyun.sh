@@ -6,9 +6,9 @@ TARGET_VERSION=$2
 #阿里云私服地址
 ALIYUN_REGISTRY=registry.cn-hangzhou.aliyuncs.com
 
-echo "#1 开始编译打包并构建服务镜像"
-echo "mvn clean package..."
-mvn clean package
+#echo "#1 开始编译打包并构建服务镜像"
+#echo "mvn clean package..."
+#mvn clean package
 
 echo "#2 推送服务镜像到阿里云私服"
 docker tag cloud/cloud-hippo:${SOURCE_VERSION} ${ALIYUN_REGISTRY}/smart4y/cloud-hippo:${TARGET_VERSION}
