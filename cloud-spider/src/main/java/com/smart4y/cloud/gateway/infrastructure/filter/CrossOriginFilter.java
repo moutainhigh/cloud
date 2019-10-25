@@ -42,8 +42,8 @@ public class CrossOriginFilter implements OrderedWebFilter {
             headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, request.getHeaders().getOrigin());
 
             // TODO 允许指定头（允许任意头请使用'*'）
-            //headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "*");
-            headers.addAll(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, request.getHeaders().getAccessControlRequestHeaders());
+            headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "*");
+            //headers.addAll(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, request.getHeaders().getAccessControlRequestHeaders());
 
             if (request.getMethod() == HttpMethod.OPTIONS) {
                 response.setStatusCode(HttpStatus.OK);
