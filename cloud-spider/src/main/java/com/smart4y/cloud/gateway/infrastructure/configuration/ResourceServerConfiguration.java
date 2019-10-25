@@ -58,7 +58,6 @@ public class ResourceServerConfiguration {
     private final RedisConnectionFactory redisConnectionFactory;
 
     @Autowired
-    @SuppressWarnings("all")
     public ResourceServerConfiguration(MessageQueueAccessLogService messageQueueAccessLogService, ApiProperties apiProperties, ResourceLocator resourceLocator, RedisConnectionFactory redisConnectionFactory, BaseAppFeign baseAppFeign) {
         this.messageQueueAccessLogService = messageQueueAccessLogService;
         this.apiProperties = apiProperties;
