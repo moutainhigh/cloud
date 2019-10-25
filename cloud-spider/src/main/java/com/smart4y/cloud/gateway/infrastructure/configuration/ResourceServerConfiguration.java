@@ -5,10 +5,7 @@ import com.smart4y.cloud.gateway.infrastructure.exception.JsonAccessDeniedHandle
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonAuthenticationDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonSignatureDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.feign.BaseAppFeign;
-import com.smart4y.cloud.gateway.infrastructure.filter.AccessLogFilter;
-import com.smart4y.cloud.gateway.infrastructure.filter.PreCheckFilter;
-import com.smart4y.cloud.gateway.infrastructure.filter.PreRequestFilter;
-import com.smart4y.cloud.gateway.infrastructure.filter.PreSignatureFilter;
+import com.smart4y.cloud.gateway.infrastructure.filter.*;
 import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
 import com.smart4y.cloud.gateway.infrastructure.security.AccessManager;
@@ -18,11 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
@@ -33,10 +25,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.authentication.ServerAuthenticationEntryPointFailureHandler;
 import org.springframework.security.web.server.context.SecurityContextServerWebExchange;
-import org.springframework.web.cors.reactive.CorsUtils;
 import org.springframework.web.server.ServerWebExchange;
-import org.springframework.web.server.WebFilter;
-import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 /**
@@ -48,8 +37,6 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Configuration
 public class ResourceServerConfiguration {
-
-    private static final String CORS_MAX_AGE = "18000L";
 
     private final BaseAppFeign baseAppFeign;
     private final ApiProperties apiProperties;
@@ -64,44 +51,6 @@ public class ResourceServerConfiguration {
         this.resourceLocator = resourceLocator;
         this.redisConnectionFactory = redisConnectionFactory;
         this.baseAppFeign = baseAppFeign;
-    }
-
-    /**
-     * CORS跨域 配置
-     */
-    private WebFilter corsFilter() {
-        return (ServerWebExchange ctx, WebFilterChain chain) -> {
-            ServerHttpRequest request = ctx.getRequest();
-
-            if (CorsUtils.isCorsRequest(request)) {
-                HttpHeaders requestHeaders = request.getHeaders();
-                ServerHttpResponse response = ctx.getResponse();
-                HttpMethod requestMethod = requestHeaders.getAccessControlRequestMethod();
-
-                HttpHeaders headers = response.getHeaders();
-                headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
-                headers.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "*");
-                headers.add(HttpHeaders.ACCESS_CONTROL_MAX_AGE, CORS_MAX_AGE);
-
-                // TODO 允许指定域名（允许任意域名请使用'*'）
-                headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-                //headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, requestHeaders.getOrigin());
-                // TODO 允许指定头（允许任意头请使用'*'）
-                //headers.addAll(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, requestHeaders.getAccessControlRequestHeaders());
-                headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "*");
-                // TODO 允许指定方法（允许任意方法请使用'*'）
-                if (requestMethod != null) {
-                    //headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, requestMethod.name());
-                    headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "*");
-                }
-
-                if (request.getMethod() == HttpMethod.OPTIONS) {
-                    response.setStatusCode(HttpStatus.OK);
-                    return Mono.empty();
-                }
-            }
-            return chain.filter(ctx);
-        };
     }
 
     /**
@@ -139,8 +88,8 @@ public class ResourceServerConfiguration {
                 .authenticationEntryPoint(entryPoint).and()
                 // 日志前置过滤器
                 .addFilterAt(new PreRequestFilter(), SecurityWebFiltersOrder.FIRST)
-                // 跨域过滤器
-                .addFilterAt(corsFilter(), SecurityWebFiltersOrder.CORS)
+                // TODO跨域过滤器
+                .addFilterAt(new CrossOriginFilter(), SecurityWebFiltersOrder.CORS)
                 // 签名验证过滤器
                 .addFilterAt(new PreSignatureFilter(baseAppFeign, apiProperties, new JsonSignatureDeniedHandler(messageQueueAccessLogService)), SecurityWebFiltersOrder.CSRF)
                 // 访问验证前置过滤器
