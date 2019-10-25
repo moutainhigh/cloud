@@ -83,7 +83,7 @@ public class ResourceServerConfiguration {
                 headers.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "*");
                 headers.add(HttpHeaders.ACCESS_CONTROL_MAX_AGE, CORS_MAX_AGE);
 
-                // TODO 允许任意域名
+                // TODO 允许指定域名（允许任意域名请使用'*'）
                 headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
                 //headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, requestHeaders.getOrigin());
                 // TODO 允许指定头（允许任意头请使用'*'）
