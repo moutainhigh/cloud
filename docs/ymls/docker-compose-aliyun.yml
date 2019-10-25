@@ -118,7 +118,7 @@ services:
     labels:
       NAME: "redis"
   hippo:
-    image: registry.cn-hangzhou.aliyuncs.com/smart4y/cloud-hippo:1.0.2
+    image: registry.cn-hangzhou.aliyuncs.com/smart4y/cloud-hippo:1.0.3
     container_name: hippo
     networks:
       - infra
@@ -151,7 +151,7 @@ services:
       timeout: 5s
       retries: 128
   owl:
-    image: registry.cn-hangzhou.aliyuncs.com/smart4y/cloud-owl:1.0.2
+    image: registry.cn-hangzhou.aliyuncs.com/smart4y/cloud-owl:1.0.3
     container_name: owl
     networks:
       - infra
@@ -181,7 +181,7 @@ services:
       timeout: 5s
       retries: 128
   spider:
-    image: registry.cn-hangzhou.aliyuncs.com/smart4y/cloud-spider:1.0.2
+    image: registry.cn-hangzhou.aliyuncs.com/smart4y/cloud-spider:1.0.3
     container_name: spider
     networks:
       - infra

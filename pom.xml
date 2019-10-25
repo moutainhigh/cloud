@@ -5,13 +5,12 @@
 
     <groupId>com.smart4y</groupId>
     <artifactId>cloud</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>pom</packaging>
-    <name>#0 微服务的平台</name>
+    <name>#1 微服务的平台</name>
     <description>Cloud project for Spring Boot</description>
 
     <modules>
-        <module>cloud-dependencies</module>
         <module>cloud-core</module>
         <module>cloud-generator</module>
         <module>cloud-hippo</module>
@@ -22,6 +21,8 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <javax.activation.version>1.1.1</javax.activation.version>
+        <jaxb.version>2.3.1</jaxb.version>
         <!-- Spring Cloud -->
         <spring-cloud.version>Greenwich.SR2</spring-cloud.version>
         <spring-cloud-alibaba.version>0.9.0.RELEASE</spring-cloud-alibaba.version>
@@ -39,6 +40,18 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- 业务模块 -->
+            <dependency>
+                <groupId>com.smart4y</groupId>
+                <artifactId>cloud-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.smart4y</groupId>
+                <artifactId>cloud-generator</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- Spring Cloud -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -53,13 +66,26 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- 内部依赖管理 -->
+            <!-- JDK9+ Jaxb模块引用 -->
             <dependency>
-                <groupId>com.smart4y</groupId>
-                <artifactId>cloud-dependencies</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>${jaxb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-runtime</artifactId>
+                <version>${jaxb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-impl</artifactId>
+                <version>${jaxb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.activation</groupId>
+                <artifactId>activation</artifactId>
+                <version>${javax.activation.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

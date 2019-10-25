@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>cloud-spider</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
     <name>#6 平台网关服务</name>
     <description>服务网关</description>
@@ -17,7 +17,7 @@
     <parent>
         <groupId>com.smart4y</groupId>
         <artifactId>cloud</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
     </parent>
 
     <dependencies>
