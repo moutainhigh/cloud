@@ -45,32 +45,32 @@ services:
       retries: 128
     labels:
       NAME: "mysql"
-#  nginx:
-#    image: "nginx:1.17.5"
-#    container_name: nginx
-#    networks:
-#      - infra
-#    ports:
-#      - "80:80"
-#      - "443:443"
-#    restart: always
-#    environment:
-#      - TZ=Asia/Shanghai
-#    volumes:
-#      - "/etc/localtime:/etc/localtime:ro"
-#      - "${DOCKER_VOL_DIR}/nginx/conf.d:/etc/nginx/conf.d"
-#      - "${DOCKER_VOL_DIR}/nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
-#      - "${DOCKER_VOL_DIR}/nginx/cert:/etc/nginx/cert"
-#      - "${DOCKER_VOL_DIR}/nginx/html:/usr/share/nginx/html"
-#      - "${DOCKER_VOL_DIR}/nginx/admin:/usr/share/nginx/admin"
-#      - "${DOCKER_VOL_DIR}/nginx/logs:/var/log/nginx"
-#    healthcheck:
-#      test: "service nginx status || exit 1"
-#      interval: 15s
-#      timeout: 5s
-#      retries: 128
-#    labels:
-#      NAME: "nginx"
+  nginx:
+    image: "nginx:1.17.5"
+    container_name: nginx
+    networks:
+      - infra
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "${DOCKER_VOL_DIR}/nginx/conf.d:/etc/nginx/conf.d"
+      - "${DOCKER_VOL_DIR}/nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "${DOCKER_VOL_DIR}/nginx/cert:/etc/nginx/cert"
+      - "${DOCKER_VOL_DIR}/nginx/html:/usr/share/nginx/html"
+      - "${DOCKER_VOL_DIR}/nginx/admin:/usr/share/nginx/admin"
+      - "${DOCKER_VOL_DIR}/nginx/logs:/var/log/nginx"
+    healthcheck:
+      test: "service nginx status || exit 1"
+      interval: 15s
+      timeout: 5s
+      retries: 128
+    labels:
+      NAME: "nginx"
   rabbitmq:
     image: "rabbitmq:3.7-management"
     container_name: rabbitmq
@@ -145,7 +145,8 @@ services:
     command:
       - /bin/sh
       - -c
-      - java -DXms256m -DXmx768m -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+      - java -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+        mem_limit: 500m
     healthcheck:
       test: "/bin/netstat -anp | grep 8223 && exit 0 || exit 1"
       interval: 15s
@@ -175,7 +176,8 @@ services:
     command:
       - /bin/sh
       - -c
-      - java -DXms256m -DXmx512m -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+      - java -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+        mem_limit: 400m
     healthcheck:
       test: "/bin/netstat -anp | grep 7211 && exit 0 || exit 1"
       interval: 15s
@@ -205,7 +207,8 @@ services:
     command:
       - /bin/sh
       - -c
-      - java -DXms256m -DXmx768m -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+      - java -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+    mem_limit: 500m
     healthcheck:
       test: "/bin/netstat -anp | grep 8888 && exit 0 || exit 1"
       interval: 15s
