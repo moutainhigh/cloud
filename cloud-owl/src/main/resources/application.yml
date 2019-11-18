@@ -133,6 +133,9 @@ mybatis:
     jdbc-type-for-null: null
     default-enum-type-handler: com.smart4y.cloud.core.infrastructure.mapper.enumhandler.EnumHandler
 cloud:
+  ##开启资源扫描
+  scan:
+    register-request-mapping: true
   ##资源服务器公共配置
   common:
     #API网关访问地址

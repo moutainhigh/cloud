@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  *         Created by youtao on 2019/11/18.
  */
 @Data
-@ConfigurationProperties(prefix = "opencloud.scan")
+@ConfigurationProperties(prefix = "cloud.scan")
 public class OpenScanProperties {
 
     /**
