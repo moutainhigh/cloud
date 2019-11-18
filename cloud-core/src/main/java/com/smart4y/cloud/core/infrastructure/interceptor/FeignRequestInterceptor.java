@@ -36,7 +36,7 @@ public class FeignRequestInterceptor implements RequestInterceptor {
             for (Map.Entry<String, String> entry : headers.entrySet()) {
                 template.header(entry.getKey(), entry.getValue());
             }
-            // 微服务之间传递的唯一标识
+            // 微服务之间传递的唯一标识,区分大小写所以通过httpServletRequest获取
             if (httpServletRequest.getHeader(X_REQUEST_ID) == null) {
                 String sid = String.valueOf(UUID.randomUUID());
                 template.header(X_REQUEST_ID, sid);

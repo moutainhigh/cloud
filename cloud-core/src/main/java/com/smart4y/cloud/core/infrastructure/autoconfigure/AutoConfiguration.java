@@ -1,11 +1,12 @@
 package com.smart4y.cloud.core.infrastructure.autoconfigure;
 
-import com.smart4y.cloud.core.application.eventhandler.ResourceAnnotationScannedEventHandler;
+import com.smart4y.cloud.core.application.eventhandler.RequestMappingScannedEventHandler;
 import com.smart4y.cloud.core.infrastructure.exception.OpenRestResponseErrorHandler;
 import com.smart4y.cloud.core.infrastructure.exception.handler.OpenGlobalExceptionHandler;
-import com.smart4y.cloud.core.infrastructure.filter.XssFilter;
+import com.smart4y.cloud.core.infrastructure.filter.XFilter;
 import com.smart4y.cloud.core.infrastructure.properties.OpenCommonProperties;
 import com.smart4y.cloud.core.infrastructure.properties.OpenIdGenProperties;
+import com.smart4y.cloud.core.infrastructure.properties.OpenScanProperties;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import com.smart4y.cloud.core.infrastructure.security.oauth2.client.OpenOAuth2ClientProperties;
 import com.smart4y.cloud.core.infrastructure.spring.SpringContextHolder;
@@ -35,17 +36,17 @@ import javax.sql.DataSource;
  *         Created by youtao on 2019-09-06.
  */
 @Slf4j
-@EnableConfigurationProperties({OpenCommonProperties.class, OpenIdGenProperties.class, OpenOAuth2ClientProperties.class})
+@EnableConfigurationProperties({OpenCommonProperties.class, OpenIdGenProperties.class, OpenOAuth2ClientProperties.class, OpenScanProperties.class})
 public class AutoConfiguration {
 
     /**
-     * XSS过滤 配置
+     * 参数去除空格过滤
      * body缓存
      */
     @Bean
-    public FilterRegistrationBean xssFilter() {
-        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean<>(new XssFilter());
-        log.info("XssFilter [{}]", filterRegistrationBean);
+    public FilterRegistrationBean xFilter() {
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean<>(new XFilter());
+        log.info("XFilter [{}]", filterRegistrationBean);
         return filterRegistrationBean;
     }
 
@@ -94,13 +95,13 @@ public class AutoConfiguration {
     }
 
     /**
-     * 自定义注解扫描 配置
+     * 自定义请求资源扫描 配置
      */
     @Bean
-    @ConditionalOnMissingBean(ResourceAnnotationScannedEventHandler.class)
-    public ResourceAnnotationScannedEventHandler resourceAnnotationScan(AmqpTemplate amqpTemplate) {
-        ResourceAnnotationScannedEventHandler scan = new ResourceAnnotationScannedEventHandler(amqpTemplate);
-        log.info("ResourceAnnotationScan [{}]", scan);
+    @ConditionalOnMissingBean(RequestMappingScannedEventHandler.class)
+    public RequestMappingScannedEventHandler requestMappingScan(AmqpTemplate amqpTemplate, OpenScanProperties openScanProperties) {
+        RequestMappingScannedEventHandler scan = new RequestMappingScannedEventHandler(amqpTemplate, openScanProperties);
+        log.info("RequestMappingScan [{}]", scan);
         return scan;
     }
 

@@ -5,7 +5,10 @@ import com.smart4y.cloud.gateway.infrastructure.exception.JsonAccessDeniedHandle
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonAuthenticationDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonSignatureDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.feign.BaseAppFeign;
-import com.smart4y.cloud.gateway.infrastructure.filter.*;
+import com.smart4y.cloud.gateway.infrastructure.filter.AccessLogFilter;
+import com.smart4y.cloud.gateway.infrastructure.filter.PreCheckFilter;
+import com.smart4y.cloud.gateway.infrastructure.filter.PreRequestFilter;
+import com.smart4y.cloud.gateway.infrastructure.filter.PreSignatureFilter;
 import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
 import com.smart4y.cloud.gateway.infrastructure.security.AccessManager;
@@ -25,6 +28,9 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.authentication.ServerAuthenticationEntryPointFailureHandler;
 import org.springframework.security.web.server.context.SecurityContextServerWebExchange;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -51,6 +57,22 @@ public class ResourceServerConfiguration {
         this.resourceLocator = resourceLocator;
         this.redisConnectionFactory = redisConnectionFactory;
         this.baseAppFeign = baseAppFeign;
+    }
+
+    @Bean
+    CorsWebFilter corsWebFilter() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(true);
+        //corsConfiguration.addExposedHeader("*");
+        corsConfiguration.setMaxAge(18000L);
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.addAllowedOrigin("*");
+
+        UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        corsConfigurationSource
+                .registerCorsConfiguration("/**", corsConfiguration);
+        return new CorsWebFilter(corsConfigurationSource);
     }
 
     /**
@@ -88,8 +110,8 @@ public class ResourceServerConfiguration {
                 .authenticationEntryPoint(entryPoint).and()
                 // 日志前置过滤器
                 .addFilterAt(new PreRequestFilter(), SecurityWebFiltersOrder.FIRST)
-                // TODO跨域过滤器
-                .addFilterAt(new CrossOriginFilter(), SecurityWebFiltersOrder.CORS)
+                // 跨域过滤器
+                .addFilterAt(corsWebFilter(), SecurityWebFiltersOrder.CORS)
                 // 签名验证过滤器
                 .addFilterAt(new PreSignatureFilter(baseAppFeign, apiProperties, new JsonSignatureDeniedHandler(messageQueueAccessLogService)), SecurityWebFiltersOrder.CSRF)
                 // 访问验证前置过滤器

@@ -15,13 +15,11 @@ import org.springframework.cloud.gateway.filter.FilterDefinition;
 import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
 import org.springframework.cloud.gateway.route.InMemoryRouteDefinitionRepository;
 import org.springframework.cloud.gateway.route.RouteDefinition;
-import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import org.springframework.cloud.gateway.support.NameUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.web.util.UriComponentsBuilder;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
@@ -37,7 +35,7 @@ import java.util.Map;
  *         Created by youtao on 2019-09-05.
  */
 @Slf4j
-public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, ApplicationListener<RouteRemoteRefreshedEvent>, ApplicationEventPublisherAware {
+public class JdbcRouteDefinitionLocator implements ApplicationListener<RouteRemoteRefreshedEvent>, ApplicationEventPublisherAware {
 
     @Autowired
     private GatewayRouteDomainService gatewayRouteDomainService;
@@ -53,11 +51,6 @@ public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, Appli
     @Override
     public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
         this.publisher = applicationEventPublisher;
-    }
-
-    @Override
-    public Flux<RouteDefinition> getRouteDefinitions() {
-        return repository.getRouteDefinitions();
     }
 
     /**

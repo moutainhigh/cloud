@@ -191,7 +191,8 @@ public class OpenGlobalExceptionHandler {
                 .failed(resultCode, exception.getMessage())
                 .path(path)
                 .httpStatus(httpStatus);
-        log.error("==> error:{} exception: {}", resultBody, exception);
+        //log.error("==> error:{} exception: {}", resultBody, exception);
+        log.error("==> error:{} exception: {}", resultBody, exception.getLocalizedMessage());
         return resultBody;
     }
 }

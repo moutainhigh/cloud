@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.smart4y.cloud.core.domain.event.ResourceScannedEvent;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.QueueConstants;
+import com.smart4y.cloud.core.infrastructure.properties.OpenScanProperties;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import com.smart4y.cloud.core.infrastructure.toolkit.reflection.ReflectionUtils;
 import com.smart4y.cloud.core.infrastructure.toolkit.secret.EncryptUtils;
@@ -20,7 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -45,13 +45,15 @@ import java.util.concurrent.CompletableFuture;
  *         Created by youtao on 2019-09-05.
  */
 @Slf4j
-public class ResourceAnnotationScannedEventHandler implements ApplicationListener<ApplicationReadyEvent> {
+public class RequestMappingScannedEventHandler implements ApplicationListener<ApplicationReadyEvent> {
 
     private static final AntPathMatcher pathMatch = new AntPathMatcher();
     private AmqpTemplate amqpTemplate;
+    private OpenScanProperties scanProperties;
 
-    public ResourceAnnotationScannedEventHandler(AmqpTemplate amqpTemplate) {
+    public RequestMappingScannedEventHandler(AmqpTemplate amqpTemplate, OpenScanProperties scanProperties) {
         this.amqpTemplate = amqpTemplate;
+        this.scanProperties = scanProperties;
     }
 
     /**
@@ -60,9 +62,7 @@ public class ResourceAnnotationScannedEventHandler implements ApplicationListene
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         ConfigurableApplicationContext applicationContext = event.getApplicationContext();
-        Map<String, Object> resourceServer = applicationContext.getBeansWithAnnotation(EnableResourceServer.class);
-        if (resourceServer.isEmpty()) {
-            // 只扫描资源服务器
+        if (amqpTemplate == null || scanProperties == null || !scanProperties.isRegisterRequestMapping()) {
             return;
         }
         Environment env = applicationContext.getEnvironment();

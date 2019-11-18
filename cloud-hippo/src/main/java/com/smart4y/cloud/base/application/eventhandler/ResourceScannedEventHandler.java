@@ -46,7 +46,7 @@ public class ResourceScannedEventHandler {
         try {
             String serviceId = event.getApplication();
             String key = RedisConstants.SCAN_API_RESOURCE_KEY_PREFIX + serviceId;
-            String value = redisTemplate.opsForValue().get(key);
+            String value = this.redisTemplate.opsForValue().get(key);
             if (null != value) {
                 // 未失效，不再更新资源
                 return;
@@ -91,7 +91,7 @@ public class ResourceScannedEventHandler {
                 // 清理无效权限数据
                 baseAuthorityService.clearInvalidApi(serviceId, codes);
                 openRestTemplate.refreshGateway();
-                redisTemplate.opsForValue().set(key, String.valueOf(apis.size()), Duration.ofMinutes(3));
+                this.redisTemplate.opsForValue().set(key, String.valueOf(apis.size()), Duration.ofMinutes(3));
             }
         } catch (Exception e) {
             log.error("资源扫描处理异常：{}", e.getLocalizedMessage(), e);

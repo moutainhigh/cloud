@@ -24,7 +24,7 @@ switch (process.env.NODE_ENV) {
 const router = new Router({
   base: BASE_URL,
   routes: routes,
-  mode: 'history'
+  mode: 'hash' // history-请求形式   hash-添加锚点形式
 })
 const LOGIN_PAGE_NAME = 'login'
 
