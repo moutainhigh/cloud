@@ -1,23 +1,23 @@
 package com.smart4y.cloud.gateway.infrastructure.locator;
 
 import com.google.common.collect.Lists;
-import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
-import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
 import com.smart4y.cloud.core.domain.ResultEntity;
 import com.smart4y.cloud.core.domain.event.RouteRemoteRefreshedEvent;
+import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
+import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
 import com.smart4y.cloud.gateway.infrastructure.feign.BaseAuthorityFeign;
 import com.smart4y.cloud.gateway.infrastructure.feign.GatewayFeign;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
-import reactor.cache.CacheFlux;
-import reactor.core.publisher.Flux;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -30,19 +30,16 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshedEvent> {
 
-    /*
-     * 单位时间
-     */
     /**
-     * 1分钟
+     * 单位时间：1分钟
      */
     public static final long SECONDS_IN_MINUTE = 60;
     /**
-     * 一小时
+     * 单位时间：一小时
      */
     public static final long SECONDS_IN_HOUR = 3600;
     /**
-     * 一天
+     * 单位时间：一天
      */
     public static final long SECONDS_IN_DAY = 24 * 3600;
 
@@ -57,25 +54,35 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
     /**
      * 权限资源
      */
-    private Flux<AuthorityResourceDTO> authorityResources;
+    @Getter
+    @Setter
+    private List<AuthorityResourceDTO> authorityResources;
 
     /**
      * ip黑名单
      */
-    private Flux<IpLimitApiDTO> ipBlacks;
+    @Getter
+    @Setter
+    private List<IpLimitApiDTO> ipBlacks;
 
     /**
      * ip白名单
      */
-    private Flux<IpLimitApiDTO> ipWhites;
+    @Getter
+    @Setter
+    private List<IpLimitApiDTO> ipWhites;
 
     /**
      * 权限列表
      */
+    @Getter
+    @Setter
     private Map<String, Collection<ConfigAttribute>> configAttributes = new ConcurrentHashMap<>();
     /**
      * 缓存
      */
+    @Getter
+    @Setter
     private Map<String, Object> cache = new ConcurrentHashMap<>();
 
 
@@ -84,9 +91,9 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
     private GatewayFeign gatewayFeign;
 
     public ResourceLocator() {
-        authorityResources = CacheFlux.lookup(cache, "authorityResources", AuthorityResourceDTO.class).onCacheMissResume(Flux.fromIterable(new ArrayList<>()));
-        ipBlacks = CacheFlux.lookup(cache, "ipBlacks", IpLimitApiDTO.class).onCacheMissResume(Flux.fromIterable(new ArrayList<>()));
-        ipWhites = CacheFlux.lookup(cache, "ipWhites", IpLimitApiDTO.class).onCacheMissResume(Flux.fromIterable(new ArrayList<>()));
+        authorityResources = new CopyOnWriteArrayList<>();
+        ipBlacks = new CopyOnWriteArrayList<>();
+        ipWhites = new CopyOnWriteArrayList<>();
     }
 
     public ResourceLocator(RouteDefinitionLocator routeDefinitionLocator, BaseAuthorityFeign baseAuthorityFeign, GatewayFeign gatewayFeign) {
@@ -151,8 +158,8 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
     /**
      * 加载授权列表
      */
-    public Flux<AuthorityResourceDTO> loadAuthorityResources() {
-        List<AuthorityResourceDTO> resources = null;
+    public List<AuthorityResourceDTO> loadAuthorityResources() {
+        List<AuthorityResourceDTO> resources = Lists.newArrayList();
         try {
             // 查询所有接口
             ResultEntity<List<AuthorityResourceDTO>> authorityResourceResponse = baseAuthorityFeign.findAuthorityResource();
@@ -181,16 +188,14 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
         } catch (Exception e) {
             log.error("加载动态权限错误：{}", e.getLocalizedMessage(), e);
         }
-        if (CollectionUtils.isEmpty(resources)) {
-            return Flux.empty();
-        }
-        return Flux.fromIterable(resources);
+
+        return resources;
     }
 
     /**
      * 加载IP黑名单
      */
-    private Flux<IpLimitApiDTO> loadIpBlackList() {
+    private List<IpLimitApiDTO> loadIpBlackList() {
         List<IpLimitApiDTO> list = Lists.newArrayList();
         try {
             list = gatewayFeign.getApiBlackList().getData();
@@ -203,16 +208,14 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
         } catch (Exception e) {
             log.error("加载IP黑名单错误：{}", e.getLocalizedMessage(), e);
         }
-        if (CollectionUtils.isEmpty(list)) {
-            return Flux.empty();
-        }
-        return Flux.fromIterable(list);
+
+        return list;
     }
 
     /**
      * 加载IP白名单
      */
-    private Flux<IpLimitApiDTO> loadIpWhiteList() {
+    private List<IpLimitApiDTO> loadIpWhiteList() {
         List<IpLimitApiDTO> list = Lists.newArrayList();
         try {
             list = gatewayFeign.getApiWhiteList().getData();
@@ -225,49 +228,7 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
         } catch (Exception e) {
             log.error("加载IP白名单错误：{}", e.getLocalizedMessage(), e);
         }
-        if (CollectionUtils.isEmpty(list)) {
-            return Flux.empty();
-        }
-        return Flux.fromIterable(list);
-    }
 
-    public Flux<AuthorityResourceDTO> getAuthorityResources() {
-        return authorityResources;
-    }
-
-    public void setAuthorityResources(Flux<AuthorityResourceDTO> authorityResources) {
-        this.authorityResources = authorityResources;
-    }
-
-    public Flux<IpLimitApiDTO> getIpBlacks() {
-        return ipBlacks;
-    }
-
-    public void setIpBlacks(Flux<IpLimitApiDTO> ipBlacks) {
-        this.ipBlacks = ipBlacks;
-    }
-
-    public Flux<IpLimitApiDTO> getIpWhites() {
-        return ipWhites;
-    }
-
-    public void setIpWhites(Flux<IpLimitApiDTO> ipWhites) {
-        this.ipWhites = ipWhites;
-    }
-
-    public Map<String, Collection<ConfigAttribute>> getConfigAttributes() {
-        return configAttributes;
-    }
-
-    public void setConfigAttributes(Map<String, Collection<ConfigAttribute>> configAttributes) {
-        this.configAttributes = configAttributes;
-    }
-
-    public Map<String, Object> getCache() {
-        return cache;
-    }
-
-    public void setCache(Map<String, Object> cache) {
-        this.cache = cache;
+        return list;
     }
 }
