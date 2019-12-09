@@ -79,7 +79,7 @@ public class Oauth2Controller extends BaseController {
             String openId = qqAuthService.getOpenId(token);
             if (openId != null) {
                 baseDeveloperFeign.addDeveloperThirdParty(openId, openId, "qq", "", "");
-                token = getToken(openId, openId, "qq").getValue();
+                token = getToken(openId, openId, "qq", headers).getString("access_token");
             }
         }
         return "redirect:" + qqAuthService.getLoginSuccessUrl() + "?token=" + token;
@@ -93,14 +93,14 @@ public class Oauth2Controller extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "code", value = "Code", required = true, paramType = "form"),
     })
-    public String wechat(@RequestParam(value = "code") String code) throws Exception {
+    public String wechat(@RequestParam(value = "code") String code, @RequestHeader HttpHeaders headers) throws Exception {
         String accessToken = wechatAuthService.getAccessToken(code);
         String token = "";
         if (accessToken != null) {
             String openId = wechatAuthService.getOpenId(token);
             if (openId != null) {
                 baseDeveloperFeign.addDeveloperThirdParty(openId, openId, "wechat", "", "");
-                token = getToken(openId, openId, "wechat").getValue();
+                token = getToken(openId, openId, "wechat", headers).getString("access_token");
             }
         }
         return "redirect:" + wechatAuthService.getLoginSuccessUrl() + "?token=" + token;
@@ -114,7 +114,7 @@ public class Oauth2Controller extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "code", value = "Code", required = true, paramType = "form"),
     })
-    public String gitee(@RequestParam(value = "code") String code) throws Exception {
+    public String gitee(@RequestParam(value = "code") String code, @RequestHeader HttpHeaders headers) throws Exception {
         String accessToken = giteeAuthService.getAccessToken(code);
         String token = "";
         if (accessToken != null) {
@@ -124,7 +124,7 @@ public class Oauth2Controller extends BaseController {
             String avatar = userInfo.getString("avatar_url");
             if (openId != null) {
                 baseDeveloperFeign.addDeveloperThirdParty(openId, openId, "gitee", name, avatar);
-                token = getToken(openId, openId, "gitee").getValue();
+                token = getToken(openId, openId, "gitee", headers).getString("access_token");
             }
         }
         return "redirect:" + giteeAuthService.getLoginSuccessUrl() + "?token=" + token;

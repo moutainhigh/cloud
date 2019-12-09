@@ -4,12 +4,12 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
-import iView from 'iview'
+import iView from 'view-design'
 import i18n from '@/locale'
 import config from '@/config'
 import importDirective from '@/directive'
 import installPlugin from '@/plugin'
-import 'iview/dist/styles/iview.css'
+import 'view-design/dist/styles/iview.css'
 import './index.less'
 import '@/assets/icons/iconfont.css'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
@@ -55,7 +55,7 @@ Vue.prototype.hasAuthority = function (authorities) {
     return false
   }
   return authorities.split(',').some(item => {
-    return store.state.user.access.includes("ACTION_"+item)
+    return store.state.user.access.includes("ACTION_" + item)
   })
 }
 

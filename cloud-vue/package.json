@@ -22,7 +22,7 @@
     "echarts": "^4.4.0",
     "highlight.js": "^9.15.10",
     "html2canvas": "^1.0.0-rc.5",
-    "iview": "^3.5.1",
+    "view-design": "^4.0.2",
     "iview-area": "^1.5.17",
     "js-cookie": "^2.2.1",
     "simplemde": "^1.11.2",

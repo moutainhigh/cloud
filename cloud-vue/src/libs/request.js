@@ -2,7 +2,7 @@ import axios from 'axios'
 import qs from 'qs'
 import $config from '@/config'
 import {getToken} from '@/libs/util'
-import {Message} from 'iview'
+import {Message} from 'view-design'
 import {sign} from '@/libs/sign'
 
 let baseUrl = '';

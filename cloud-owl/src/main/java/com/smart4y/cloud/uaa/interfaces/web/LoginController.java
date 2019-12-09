@@ -8,14 +8,12 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
 
 /**
  * @author Youtao
@@ -56,15 +54,19 @@ public class LoginController extends BaseController {
      *
      * @return access_token
      */
-    @PostMapping("/login/token")
     @ApiOperation(value = "获取用户访问令牌", notes = "基于oauth2密码模式登录,无需签名,返回access_token")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "username", value = "登录名", required = true, paramType = "form"),
-            @ApiImplicitParam(name = "password", value = "登录密码", required = true, paramType = "form")
+            @ApiImplicitParam(name = "username", required = true, value = "登录名", paramType = "form"),
+            @ApiImplicitParam(name = "password", required = true, value = "登录密码", paramType = "form")
     })
-    public ResultEntity<OAuth2AccessToken> getLoginToken(@RequestParam String username, @RequestParam String password) throws Exception {
-        OAuth2AccessToken result = getToken(username, password, null);
-        return ResultEntity.ok(result);
+    @PostMapping("/login/token")
+    public Object getLoginToken(@RequestParam String username, @RequestParam String password, @RequestHeader HttpHeaders httpHeaders) throws Exception {
+        Map result = getToken(username, password, null, httpHeaders);
+        if (result.containsKey("access_token")) {
+            return ResultEntity.ok(result);
+        } else {
+            return result;
+        }
     }
 
     /**
