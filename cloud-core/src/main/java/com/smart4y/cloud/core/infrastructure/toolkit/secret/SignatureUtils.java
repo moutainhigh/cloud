@@ -2,6 +2,7 @@ package com.smart4y.cloud.core.infrastructure.toolkit.secret;
 
 import com.alibaba.fastjson.JSONObject;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
+import com.smart4y.cloud.core.infrastructure.toolkit.Kit;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.DateHelper;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import com.smart4y.cloud.core.infrastructure.toolkit.random.RandomValueUtils;
@@ -31,9 +32,9 @@ public class SignatureUtils {
         //参数签名算法测试例子
         HashMap<String, String> signMap = new HashMap<>();
         signMap.put("APP_ID", "1552274783265");
-        signMap.put("SIGN_TYPE", SignType.SHA256.name());
+        signMap.put("SIGN_TYPE", SignType.MD5.name());
         signMap.put("TIMESTAMP", DateHelper.getCurrentTimestampStr());
-        signMap.put("NONCE", RandomValueUtils.randomAlphanumeric(16));
+        signMap.put("NONCE", Kit.help().random().shortUuid().toUpperCase());
         String sign = SignatureUtils.getSign(signMap, clientSecret);
         System.out.println("签名结果:" + sign);
         signMap.put("SIGN", sign);

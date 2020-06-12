@@ -32,6 +32,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * SpringCloud Gateway 记录缓存请求 Body 和 Form 表单
@@ -90,7 +91,7 @@ public class GatewayContextFilter implements WebFilter, Ordered {
                     gatewayContext.getAllRequestData().addAll(multiValueMap);
                 })
                 .then(Mono.defer(() -> {
-                    Charset charset = headers.getContentType().getCharset();
+                    Charset charset = Objects.requireNonNull(headers.getContentType()).getCharset();
                     charset = charset == null ? StandardCharsets.UTF_8 : charset;
                     String charsetName = charset.name();
                     MultiValueMap<String, String> formData = gatewayContext.getFormData();

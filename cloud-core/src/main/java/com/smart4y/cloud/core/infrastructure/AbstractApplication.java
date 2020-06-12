@@ -16,7 +16,7 @@ import java.util.List;
  * 应用启动类 基类
  *
  * @author Youtao
- *         Created by youtao on 2018/11/15.
+ * Created by youtao on 2018/11/15.
  */
 @Slf4j
 public abstract class AbstractApplication implements ApplicationListener<ApplicationReadyEvent> {
@@ -28,6 +28,14 @@ public abstract class AbstractApplication implements ApplicationListener<Applica
             initial(context);
         }
     *******************************************************************/
+
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent event) {
+        this.startedEvent(event);
+    }
+
+    public void startedEvent(ApplicationReadyEvent event) {
+    }
 
     /**
      * 初始化应用信息

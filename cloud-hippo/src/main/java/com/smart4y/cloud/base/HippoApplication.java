@@ -16,7 +16,7 @@ import org.springframework.core.env.Environment;
  * 提供系统用户、权限分配、资源、客户端管理
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @EnableCaching
@@ -27,12 +27,5 @@ public class HippoApplication extends AbstractApplication {
 
     public static void main(String[] args) {
         initial(SpringApplication.run(HippoApplication.class, args));
-    }
-
-    @Override
-    public void onApplicationEvent(ApplicationReadyEvent event) {
-        ConfigurableApplicationContext context = event.getApplicationContext();
-        Environment env = context.getEnvironment();
-        log.info("Application '{}' is Reading!", env.getProperty("spring.application.name"));
     }
 }
