@@ -149,12 +149,6 @@
                 <dependencies>
                     <dependency>
                         <groupId>com.smart4y</groupId>
-                        <artifactId>cloud-generator</artifactId>
-                        <version>${project.version}</version>
-                        <type>jar</type>
-                    </dependency>
-                    <dependency>
-                        <groupId>com.smart4y</groupId>
                         <artifactId>cloud-spider</artifactId>
                         <version>${project.version}</version>
                         <type>jar</type>

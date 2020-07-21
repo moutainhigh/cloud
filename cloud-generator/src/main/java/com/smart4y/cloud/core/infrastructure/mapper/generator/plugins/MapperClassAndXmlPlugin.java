@@ -136,20 +136,20 @@ public class MapperClassAndXmlPlugin extends PluginAdapter {
         String tableName = introspectedTable.getFullyQualifiedTableNameAtRuntime();
         // 如果包含空格，或者需要分隔符，需要完善
         if (StringUtility.stringContainsSpace(tableName)) {
-            tableName = context.getBeginningDelimiter()
+            tableName = this.context.getBeginningDelimiter()
                     + tableName
-                    + context.getEndingDelimiter();
+                    + this.context.getEndingDelimiter();
         }
         // 是否忽略大小写，对于区分大小写的数据库，会有用
-        if (caseSensitive && !topLevelClass.getType().getShortName().equals(tableName)) {
+        if (this.caseSensitive && !topLevelClass.getType().getShortName().equals(tableName)) {
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
         } else if (!topLevelClass.getType().getShortName().equalsIgnoreCase(tableName)) {
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
-        } else if (StringUtility.stringHasValue(schema)
-                || StringUtility.stringHasValue(beginningDelimiter)
-                || StringUtility.stringHasValue(endingDelimiter)) {
+        } else if (StringUtility.stringHasValue(this.schema)
+                || StringUtility.stringHasValue(this.beginningDelimiter)
+                || StringUtility.stringHasValue(this.endingDelimiter)) {
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
-        } else if (forceAnnotation) {
+        } else if (this.forceAnnotation) {
             topLevelClass.addAnnotation("@Table(name = \"" + getDelimiterName(tableName) + "\")");
         }
     }
@@ -159,11 +159,11 @@ public class MapperClassAndXmlPlugin extends PluginAdapter {
         super.setContext(context);
         // 设置默认的注释生成器
         this.useMapperCommentGenerator = !"FALSE".equalsIgnoreCase(context.getProperty("useMapperCommentGenerator"));
-        if (useMapperCommentGenerator) {
-            commentCfg = new CommentGeneratorConfiguration();
+        if (this.useMapperCommentGenerator) {
+            this.commentCfg = new CommentGeneratorConfiguration();
             //commentCfg.setConfigurationType(MapperCommentGenerator.class.getCanonicalName());
-            commentCfg.setConfigurationType(DefaultCommentGenerator.class.getCanonicalName());
-            context.setCommentGeneratorConfiguration(commentCfg);
+            this.commentCfg.setConfigurationType(DefaultCommentGenerator.class.getCanonicalName());
+            context.setCommentGeneratorConfiguration(this.commentCfg);
         }
         // 支持 oracle 获取注释
         context.getJdbcConnectionConfiguration().addProperty("remarksReporting", "true");
@@ -187,8 +187,8 @@ public class MapperClassAndXmlPlugin extends PluginAdapter {
 
         String forceAnnotation = this.properties.getProperty("forceAnnotation");
         if (StringUtility.stringHasValue(forceAnnotation)) {
-            if (useMapperCommentGenerator) {
-                commentCfg.addProperty("forceAnnotation", forceAnnotation);
+            if (this.useMapperCommentGenerator) {
+                this.commentCfg.addProperty("forceAnnotation", forceAnnotation);
             }
             this.forceAnnotation = forceAnnotation.equalsIgnoreCase("TRUE");
         }
@@ -197,21 +197,21 @@ public class MapperClassAndXmlPlugin extends PluginAdapter {
         if (StringUtility.stringHasValue(beginningDelimiter)) {
             this.beginningDelimiter = beginningDelimiter;
         }
-        commentCfg.addProperty("beginningDelimiter", this.beginningDelimiter);
+        this.commentCfg.addProperty("beginningDelimiter", this.beginningDelimiter);
         String endingDelimiter = this.properties.getProperty("endingDelimiter");
         if (StringUtility.stringHasValue(endingDelimiter)) {
             this.endingDelimiter = endingDelimiter;
         }
-        commentCfg.addProperty("endingDelimiter", this.endingDelimiter);
+        this.commentCfg.addProperty("endingDelimiter", this.endingDelimiter);
 
         String schema = this.properties.getProperty("schema");
         if (StringUtility.stringHasValue(schema)) {
             this.schema = schema;
         }
 
-        if (useMapperCommentGenerator) {
-            commentCfg.addProperty("beginningDelimiter", this.beginningDelimiter);
-            commentCfg.addProperty("endingDelimiter", this.endingDelimiter);
+        if (this.useMapperCommentGenerator) {
+            this.commentCfg.addProperty("beginningDelimiter", this.beginningDelimiter);
+            this.commentCfg.addProperty("endingDelimiter", this.endingDelimiter);
         }
         this.generateEntity = !"FALSE".equalsIgnoreCase(this.properties.getProperty("generateEntity"));
 

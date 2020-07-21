@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * 资源扫描 事件处理器
  *
  * @author Youtao
- *         Created by youtao on 2019/9/17.
+ * Created by youtao on 2019/9/17.
  */
 @Slf4j
 @Component
@@ -75,24 +75,25 @@ public class ResourceScannedEventHandler {
                             .setLastModifiedDate(now))
                     .collect(Collectors.toList());
             List<String> codes = Lists.newArrayList();
-            for (BaseApi api : apis) {
-                codes.add(api.getApiCode());
-                BaseApi save = baseApiService.getApi(api.getApiCode());
-                if (save == null) {
-                    api.setIsOpen(0);
-                    api.setIsPersist(1);
-                    baseApiService.addApi(api);
-                } else {
-                    api.setApiId(save.getApiId());
-                    baseApiService.updateApi(api);
-                }
-            }
+//            for (BaseApi api : apis) {
+//                codes.add(api.getApiCode());
+//                BaseApi save = baseApiService.getApi(api.getApiCode());
+//                if (save == null) {
+//                    api.setIsOpen(0);
+//                    api.setIsPersist(1);
+//                    baseApiService.addApi(api);
+//                } else {
+//                    api.setApiId(save.getApiId());
+//                    baseApiService.updateApi(api);
+//                }
+//            }
             if (CollectionUtils.isNotEmpty(apis)) {
                 // 清理无效权限数据
-                baseAuthorityService.clearInvalidApi(serviceId, codes);
+//                baseAuthorityService.clearInvalidApi(serviceId, codes);
                 openRestTemplate.refreshGateway();
                 this.redisTemplate.opsForValue().set(key, String.valueOf(apis.size()), Duration.ofMinutes(3));
             }
+            log.info("资源扫描完成：{}", event);
         } catch (Exception e) {
             log.error("资源扫描处理异常：{}", e.getLocalizedMessage(), e);
         }

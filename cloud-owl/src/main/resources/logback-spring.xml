@@ -1,63 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-    trace < debug < info < warn < error < fatal
-scan：当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true。
-scanPeriod：设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒当scan为true时，此属性生效。默认的时间间隔为1分钟。
-debug：当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。
--->
 <configuration scan="false" debug="false">
-    <springProperty scop="context" name="spring.application.name" source="spring.application.name" defaultValue="logs"/>
-    <property name="log.path" value="logs/${spring.application.name}"/>
-    <property name="APPENDER_ENCODER_PATTERN"
-              value="%yellow(%date{MM-dd HH:mm:ss.SSS}) |%highlight(%-5level) |%blue(%thread) |%blue(%logger{50}:%line) |%cyan(%msg%n)"/>
-    <!-- Console log output -->
-    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <contextName>${APP_NAME}</contextName>
+    <springProperty name="APP_NAME" scope="context" source="spring.application.name"/>
+    <property name="DEFAULT_PATH" value="../logs/${APP_NAME}"/>
+    <springProperty name="LOG_FILE" scope="context" source="logging.file" defaultValue="${DEFAULT_PATH}"/>
+    <springProperty name="LOG_MAX_FILE_SIZE" scope="context" source="logback.filesize" defaultValue="50MB"/>
+    <springProperty name="LOG_FILE_MAX_DAY" scope="context" source="logback.filemaxday" defaultValue="7"/>
+    <springProperty name="ServerIP" scope="context" source="spring.cloud.client.ip-address" defaultValue="0.0.0.0"/>
+    <springProperty name="ServerPort" scope="context" source="server.port" defaultValue="0000"/>
+    <springProperty name="LOG_POINT_FILE" scope="context" source="logging.file" defaultValue="${DEFAULT_PATH}/point"/>
+    <springProperty name="LOG_AUDIT_FILE" scope="context" source="logging.file" defaultValue="${DEFAULT_PATH}/audit"/>
+    <!-- 彩色日志 -->
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+    <!-- 彩色日志格式 -->
+    <property name="APP_INFO" value="${APP_NAME}:${ServerIP}:${ServerPort}|"/>
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%yellow(%date{MM-dd HH:mm:ss.SSS}) |%highlight(%-5level) |%magenta(${PID}) |%cyan(%X{X-Request-Id}%thread) |%blue(%logger{50}:%line) |%cyan(%m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx})"/>
+    <property name="CONSOLE_LOG_PATTERN_NO_COLOR"
+              value="%date{MM-dd HH:mm:ss.SSS} |%-5level |${PID} |%X{X-Request-Id}%thread |%logger{50}:%line |%m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+
+    <!-- 控制台日志 -->
+    <appender name="STDOUT_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>true</withJansi>
         <encoder>
-            <pattern>${APPENDER_ENCODER_PATTERN}</pattern>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
         </encoder>
     </appender>
-    <!-- Log file debug output -->
-    <appender name="debug" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/debug.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/%d{yyyy-MM}/debug.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-            <maxFileSize>50MB</maxFileSize>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
+    <!-- 文件日志（按照每天生成常规日志文件） -->
+    <appender name="FILE_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}/${APP_NAME}.log</file>
         <encoder>
-            <pattern>${APPENDER_ENCODER_PATTERN}</pattern>
+            <pattern>${CONSOLE_LOG_PATTERN_NO_COLOR}</pattern>
+            <charset>UTF-8</charset>
         </encoder>
-    </appender>
-    <!-- Log file error output -->
-    <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/error.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/%d{yyyy-MM}/error.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-            <maxFileSize>50MB</maxFileSize>
-            <maxHistory>30</maxHistory>
+        <!-- 基于时间的分包策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}/${APP_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--保留时间,单位:天-->
+            <maxHistory>${LOG_FILE_MAX_DAY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${LOG_MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
-        <encoder>
-            <pattern>${APPENDER_ENCODER_PATTERN}</pattern>
-        </encoder>
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>ERROR</level>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
         </filter>
+    </appender>
+    <appender name="FILE_LOG_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="FILE_LOG"/>
+    </appender>
+
+    <!-- 埋点日志 -->
+    <appender name="POINT_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_POINT_FILE}/point.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}|${APP_NAME}|%msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- 基于时间的分包策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_POINT_FILE}/point.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--保留时间,单位:天-->
+            <maxHistory>${LOG_FILE_MAX_DAY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${LOG_MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+    <appender name="POINT_LOG_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="POINT_LOG"/>
     </appender>
 
     <!-- 开发环境 -->
     <springProfile name="default,dev,test">
         <logger name="com.smart4y.cloud" level="debug"/>
-        <logger name="com.netflix.config" level="warn"/>
-        <logger name="com.netflix.loadbalancer" level="warn"/>
+        <logger name="org.springframework.amqp" level="info"/>
         <logger name="com.alibaba.nacos.client.naming" level="warn"/>
         <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="info"/>
-        <logger name="org.springframework.amqp" level="info"/>
         <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="info"/>
 
-        <root level="info">
-            <appender-ref ref="console"/>
-            <appender-ref ref="debug"/>
-            <appender-ref ref="error"/>
+        <!--<logger name="com.smart4y.pomelo.common.core.logger.LogHelper" level="debug" addtivity="false">
+            <appender-ref ref="POINT_LOG_ASYNC"/>
+        </logger>-->
+
+        <root level="INFO">
+            <appender-ref ref="STDOUT_APPENDER"/>
+            <appender-ref ref="FILE_LOG_ASYNC"/>
         </root>
     </springProfile>
     <!-- 生产环境 -->
@@ -68,10 +105,9 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
         <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="warn"/>
         <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="warn"/>
 
-        <root level="info">
-            <appender-ref ref="console"/>
-            <appender-ref ref="debug"/>
-            <appender-ref ref="error"/>
+        <root level="INFO">
+            <appender-ref ref="STDOUT_APPENDER"/>
+            <appender-ref ref="FILE_LOG_ASYNC"/>
         </root>
     </springProfile>
 </configuration>

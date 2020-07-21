@@ -9,9 +9,12 @@
         <!-- Mapper.java Mapper.xml 生成插件 -->
         <plugin type="com.smart4y.cloud.core.infrastructure.mapper.generator.plugins.MapperClassAndXmlPlugin">
             <property name="mappers" value="com.smart4y.cloud.core.infrastructure.mapper.CloudMapper"/>
+            <property name="author" value="Youtao"/>
         </plugin>
         <!-- Entity 生成插件 使用`javaModelGenerator`的`targetPackage`参数 -->
-        <plugin type="com.smart4y.cloud.core.infrastructure.mapper.generator.plugins.EntityPlugin"/>
+        <plugin type="com.smart4y.cloud.core.infrastructure.mapper.generator.plugins.EntityPlugin">
+            <property name="author" value="Youtao"/>
+        </plugin>
 
         <commentGenerator>
             <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
@@ -43,15 +46,12 @@
         <!--<table tableName="%" mapperName="{0}Mapper">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>-->
-        <table tableName="gateway_route" domainObjectName="GatewayRoute"/>
+        <!--<table tableName="gateway_route" domainObjectName="GatewayRoute"/>
         <table tableName="gateway_rate_limit" domainObjectName="GatewayRateLimit"/>
         <table tableName="gateway_rate_limit_api" domainObjectName="GatewayRateLimitApi"/>
-        <table tableName="base_api" domainObjectName="BaseApi"/>
-        <!-- 指定数据库表 -->
-        <table tableName="sys_app" domainObjectName="Application">
-            <columnOverride column="app_os" javaType="com.smart4y.pomelo.upms.domain.enums.TenantApplicationOSType"/>
-            <columnOverride column="state" javaType="com.smart4y.pomelo.upms.TenantApplicationState"/>
-            <columnOverride column="app_type" javaType="com.smart4y.pomelo.upms.domain.enums.TenantApplicationType"/>
+        <table tableName="base_api" domainObjectName="BaseApi"/>-->
+        <table tableName="hello" domainObjectName="Hello">
+            <columnOverride column="user_name" javaType="com.smart4y.cloud.base.domain.model.GatewayRoute"/>
         </table>
     </context>
 </generatorConfiguration>
