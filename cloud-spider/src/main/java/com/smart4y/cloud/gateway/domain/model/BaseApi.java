@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Table(name = "base_api")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class BaseApi extends BaseEntity {
+public class BaseApi extends BaseEntity<BaseApi> {
 
     /**
      * 接口ID

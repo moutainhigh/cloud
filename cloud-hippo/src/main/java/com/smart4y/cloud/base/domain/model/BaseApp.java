@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Table(name = "base_app")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class BaseApp extends BaseEntity {
+public class BaseApp extends BaseEntity<BaseApp> {
 
     /**
      * 客户端ID

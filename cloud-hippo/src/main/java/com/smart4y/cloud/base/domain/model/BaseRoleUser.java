@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Table(name = "base_role_user")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class BaseRoleUser extends BaseEntity {
+public class BaseRoleUser extends BaseEntity<BaseRoleUser> {
 
     /**
      * 用户ID

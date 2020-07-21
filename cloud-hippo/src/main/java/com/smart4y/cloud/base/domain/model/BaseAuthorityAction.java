@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Table(name = "base_authority_action")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class BaseAuthorityAction extends BaseEntity {
+public class BaseAuthorityAction extends BaseEntity<BaseAuthorityAction> {
 
     /**
      * 操作ID

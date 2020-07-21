@@ -7,7 +7,7 @@ import com.smart4y.cloud.base.application.BaseDeveloperService;
 import com.smart4y.cloud.base.domain.model.BaseAccount;
 import com.smart4y.cloud.base.domain.model.BaseAccountLogs;
 import com.smart4y.cloud.base.domain.model.BaseDeveloper;
-import com.smart4y.cloud.base.domain.repository.BaseDeveloperMapper;
+import com.smart4y.cloud.base.infrastructure.mapper.BaseDeveloperMapper;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddDeveloperUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterDeveloperThirdPartyCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.query.BaseDeveloperQuery;

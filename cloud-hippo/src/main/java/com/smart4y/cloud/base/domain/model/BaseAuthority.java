@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Table(name = "base_authority")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class BaseAuthority extends BaseEntity {
+public class BaseAuthority extends BaseEntity<BaseAuthority> {
 
     /**
      * 权限ID

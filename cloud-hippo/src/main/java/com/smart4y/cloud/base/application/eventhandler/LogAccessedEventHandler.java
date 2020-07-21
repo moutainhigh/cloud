@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.application.eventhandler;
 
 import com.smart4y.cloud.base.domain.model.GatewayAccessLogs;
-import com.smart4y.cloud.base.domain.repository.GatewayAccessLogsMapper;
+import com.smart4y.cloud.base.infrastructure.mapper.GatewayAccessLogsMapper;
 import com.smart4y.cloud.base.domain.service.IpHelper;
 import com.smart4y.cloud.core.domain.event.LogAccessedEvent;
 import com.smart4y.cloud.core.infrastructure.constants.QueueConstants;

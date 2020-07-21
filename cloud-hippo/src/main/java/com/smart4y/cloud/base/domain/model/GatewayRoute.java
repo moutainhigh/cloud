@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Table(name = "gateway_route")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class GatewayRoute extends BaseEntity {
+public class GatewayRoute extends BaseEntity<GatewayRoute> {
 
     /**
      * 路由ID

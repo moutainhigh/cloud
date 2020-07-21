@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Table(name = "gateway_ip_limit_api")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class GatewayIpLimitApi extends BaseEntity {
+public class GatewayIpLimitApi extends BaseEntity<GatewayIpLimitApi> {
 
     /**
      * 策略ID

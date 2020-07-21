@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Table(name = "base_account_logs")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class BaseAccountLogs extends BaseEntity {
+public class BaseAccountLogs extends BaseEntity<BaseAccountLogs> {
 
     /**
      * 主键

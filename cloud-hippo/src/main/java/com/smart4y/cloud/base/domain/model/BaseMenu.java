@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Table(name = "base_menu")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class BaseMenu extends BaseEntity {
+public class BaseMenu extends BaseEntity<BaseMenu> {
 
     /**
      * 菜单Id

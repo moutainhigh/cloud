@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Table(name = "gateway_rate_limit_api")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class GatewayRateLimitApi extends BaseEntity {
+public class GatewayRateLimitApi extends BaseEntity<GatewayRateLimitApi> {
 
     /**
      * 限制数量

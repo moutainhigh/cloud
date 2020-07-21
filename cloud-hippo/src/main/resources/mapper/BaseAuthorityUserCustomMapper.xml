@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.smart4y.cloud.base.domain.repository.BaseAuthorityUserCustomMapper">
+<mapper namespace="com.smart4y.cloud.base.infrastructure.mapper.BaseAuthorityUserCustomMapper">
     <select id="selectAuthorityMenuByUser" resultType="com.smart4y.cloud.core.interfaces.AuthorityMenuDTO">
         SELECT
             a.authority_id,

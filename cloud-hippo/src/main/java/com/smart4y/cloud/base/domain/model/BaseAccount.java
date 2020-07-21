@@ -16,13 +16,13 @@ import java.time.LocalDateTime;
  * 登录账号
  *
  * @author Youtao
- *         Created by youtao on 2019/09/17.
+ * Created by youtao on 2019/09/17.
  */
 @Data
 @Table(name = "base_account")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class BaseAccount extends BaseEntity {
+public class BaseAccount extends BaseEntity<BaseAccount> {
 
     /**
      * 主键

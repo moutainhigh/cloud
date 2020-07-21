@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Table(name = "gateway_access_logs")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class GatewayAccessLogs extends BaseEntity {
+public class GatewayAccessLogs extends BaseEntity<GatewayAccessLogs> {
 
     /**
      * 访问ID

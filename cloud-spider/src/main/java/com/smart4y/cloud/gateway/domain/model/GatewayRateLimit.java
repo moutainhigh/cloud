@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Table(name = "gateway_rate_limit")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class GatewayRateLimit extends BaseEntity {
+public class GatewayRateLimit extends BaseEntity<GatewayRateLimit> {
 
     /**
      * 策略ID

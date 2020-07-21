@@ -12,7 +12,7 @@ import com.smart4y.cloud.base.domain.model.BaseAccount;
 import com.smart4y.cloud.base.domain.model.BaseAccountLogs;
 import com.smart4y.cloud.base.domain.model.BaseRole;
 import com.smart4y.cloud.base.domain.model.BaseUser;
-import com.smart4y.cloud.base.domain.repository.BaseUserMapper;
+import com.smart4y.cloud.base.infrastructure.mapper.BaseUserMapper;
 import com.smart4y.cloud.base.interfaces.valueobject.command.AddAdminUserCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterAdminThirdPartyCommand;
 import com.smart4y.cloud.base.interfaces.valueobject.query.BaseUserQuery;

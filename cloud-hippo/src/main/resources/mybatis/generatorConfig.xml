@@ -2,57 +2,74 @@
 <!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
-    <context id="Db2Tables" targetRuntime="tk.mybatis.mapper.generator.TkMyBatis3SimpleImpl" defaultModelType="flat">
-        <!--
-            Mapper 生成插件
-         -->
-        <plugin type="com.smart4y.cloud.core.infrastructure.mapper.plugin.CloudPlugin">
+    <!--  自定义插件不支持动态SQL生成  <context id="testTables" targetRuntime="MyBatis3DynamicSql"-->
+    <context id="testTables" targetRuntime="org.mybatis.generator.codegen.mybatis3.IntrospectedTableMyBatis3SimpleImpl"
+             defaultModelType="flat">
+
+        <!-- Mapper.java Mapper.xml 生成插件 -->
+        <plugin type="com.smart4y.cloud.core.infrastructure.mapper.generator.plugins.MapperClassAndXmlPlugin">
             <property name="mappers" value="com.smart4y.cloud.core.infrastructure.mapper.CloudMapper"/>
+            <property name="author" value="Youtao"/>
         </plugin>
-        <!--
-            领域模型 生成插件
-         -->
-        <plugin type="com.smart4y.cloud.core.infrastructure.mapper.plugin.ModelPlugin">
-            <property name="targetPackage" value="com.smart4y.cloud.base.domain.model"/>
-            <property name="author" value="youtao"/>
+        <!-- Entity 生成插件 使用`javaModelGenerator`的`targetPackage`参数 -->
+        <plugin type="com.smart4y.cloud.core.infrastructure.mapper.generator.plugins.EntityPlugin">
+            <property name="author" value="Youtao"/>
         </plugin>
 
-        <!-- 数据库连接 -->
-        <jdbcConnection connectionURL="jdbc:mysql://127.0.0.1:3306/cloud?useSSL=false"
+        <commentGenerator>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!-- 数据库连接信息 -->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/cloud?useSSL=false"
                         userId="root"
-                        password="123456"
-                        driverClass="com.mysql.cj.jdbc.Driver"/>
-        <!-- Java 实体路径 -->
-        <javaModelGenerator targetPackage="com.smart4y.cloud.base.domain.model" targetProject="src/main/java"/>
-        <!-- SQL XML 路径 -->
+                        password="12345678">
+        </jdbcConnection>
+
+        <javaTypeResolver>
+            <!-- true - 把 JDBC DECIMAL 和 NUMERIC 类型解析为 java.math.BigDecimal -->
+            <property name="forceBigDecimals" value="true"/>
+        </javaTypeResolver>
+        <!-- Entity 路径 -->
+        <javaModelGenerator targetPackage="com.smart4y.cloud.base.domain.model"
+                            targetProject="src/main/java"/>
+        <!-- Mapper.xml 路径 -->
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
-        <!-- Java 接口路径 -->
-        <javaClientGenerator targetPackage="com.smart4y.cloud.base.domain.repository" targetProject="src/main/java"
-                             type="XMLMAPPER"/>
+        <!-- Mapper.java 路径 -->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.smart4y.cloud.base.infrastructure.mapper"
+                             targetProject="src/main/java"/>
+
         <!-- 使用"%"匹配所有表或者单独定义表 -->
         <!--<table tableName="%" mapperName="{0}Mapper">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>-->
-        <table catalog="cloud" tableName="base_account" domainObjectName="BaseAccount"/>
-        <table catalog="cloud" tableName="base_account_logs" domainObjectName="BaseAccountLogs"/>
-        <table catalog="cloud" tableName="base_action" domainObjectName="BaseAction"/>
-        <table catalog="cloud" tableName="base_api" domainObjectName="BaseApi"/>
-        <table catalog="cloud" tableName="base_app" domainObjectName="BaseApp"/>
-        <table catalog="cloud" tableName="base_authority" domainObjectName="BaseAuthority"/>
-        <table catalog="cloud" tableName="base_authority_action" domainObjectName="BaseAuthorityAction"/>
-        <table catalog="cloud" tableName="base_authority_app" domainObjectName="BaseAuthorityApp"/>
-        <table catalog="cloud" tableName="base_authority_role" domainObjectName="BaseAuthorityRole"/>
-        <table catalog="cloud" tableName="base_authority_user" domainObjectName="BaseAuthorityUser"/>
-        <table catalog="cloud" tableName="base_developer" domainObjectName="BaseDeveloper"/>
-        <table catalog="cloud" tableName="base_menu" domainObjectName="BaseMenu"/>
-        <table catalog="cloud" tableName="base_role" domainObjectName="BaseRole"/>
-        <table catalog="cloud" tableName="base_role_user" domainObjectName="BaseRoleUser"/>
-        <table catalog="cloud" tableName="base_user" domainObjectName="BaseUser"/>
-        <table catalog="cloud" tableName="gateway_access_logs" domainObjectName="GatewayAccessLogs"/>
-        <table catalog="cloud" tableName="gateway_ip_limit" domainObjectName="GatewayIpLimit"/>
-        <table catalog="cloud" tableName="gateway_ip_limit_api" domainObjectName="GatewayIpLimitApi"/>
-        <table catalog="cloud" tableName="gateway_rate_limit" domainObjectName="GatewayRateLimit"/>
-        <table catalog="cloud" tableName="gateway_rate_limit_api" domainObjectName="GatewayRateLimitApi"/>
-        <table catalog="cloud" tableName="gateway_route" domainObjectName="GatewayRoute"/>
+        <!--<table tableName="base_account" domainObjectName="BaseAccount"/>
+        <table tableName="base_account_logs" domainObjectName="BaseAccountLogs"/>
+        <table tableName="base_action" domainObjectName="BaseAction"/>
+        <table tableName="base_api" domainObjectName="BaseApi"/>
+        <table tableName="base_app" domainObjectName="BaseApp"/>
+        <table tableName="base_authority" domainObjectName="BaseAuthority"/>
+        <table tableName="base_authority_action" domainObjectName="BaseAuthorityAction"/>
+        <table tableName="base_authority_app" domainObjectName="BaseAuthorityApp"/>
+        <table tableName="base_authority_role" domainObjectName="BaseAuthorityRole"/>
+        <table tableName="base_authority_user" domainObjectName="BaseAuthorityUser"/>
+        <table tableName="base_developer" domainObjectName="BaseDeveloper"/>
+        <table tableName="base_menu" domainObjectName="BaseMenu"/>
+        <table tableName="base_role" domainObjectName="BaseRole"/>
+        <table tableName="base_role_user" domainObjectName="BaseRoleUser"/>
+        <table tableName="base_user" domainObjectName="BaseUser"/>
+        <table tableName="gateway_access_logs" domainObjectName="GatewayAccessLogs"/>
+        <table tableName="gateway_ip_limit" domainObjectName="GatewayIpLimit"/>
+        <table tableName="gateway_ip_limit_api" domainObjectName="GatewayIpLimitApi"/>
+        <table tableName="gateway_rate_limit" domainObjectName="GatewayRateLimit"/>
+        <table tableName="gateway_rate_limit_api" domainObjectName="GatewayRateLimitApi"/>
+        <table tableName="gateway_route" domainObjectName="GatewayRoute"/>-->
+        <!-- 指定数据库表 -->
+        <table tableName="hello" domainObjectName="Hello">
+            <columnOverride column="user_name" javaType="com.smart4y.cloud.base.domain.model.GatewayRoute"/>
+        </table>
     </context>
 </generatorConfiguration>

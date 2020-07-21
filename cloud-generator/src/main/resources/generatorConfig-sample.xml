@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<!--配置参考 http://mybatis.org/generator/configreference/xmlconfig.html-->
+<generatorConfiguration>
+    <!--  自定义插件不支持动态SQL生成  <context id="testTables" targetRuntime="MyBatis3DynamicSql"-->
+    <context id="testTables" targetRuntime="org.mybatis.generator.codegen.mybatis3.IntrospectedTableMyBatis3SimpleImpl"
+             defaultModelType="flat">
+
+        <!-- Mapper.java Mapper.xml 生成插件 -->
+        <plugin type="com.smart4y.cloud.core.infrastructure.mapper.generator.plugins.MapperClassAndXmlPlugin">
+            <property name="mappers" value="com.smart4y.cloud.core.infrastructure.mapper.CloudMapper"/>
+        </plugin>
+        <!-- Entity 生成插件 使用`javaModelGenerator`的`targetPackage`参数 -->
+        <plugin type="com.smart4y.cloud.core.infrastructure.mapper.generator.plugins.EntityPlugin"/>
+
+        <commentGenerator>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!-- 数据库连接信息 -->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/lambda"
+                        userId="lambda"
+                        password="123456">
+        </jdbcConnection>
+
+        <javaTypeResolver>
+            <!-- true - 把 JDBC DECIMAL 和 NUMERIC 类型解析为 java.math.BigDecimal -->
+            <property name="forceBigDecimals" value="true"/>
+        </javaTypeResolver>
+        <!-- Entity 路径 -->
+        <javaModelGenerator targetPackage="com.smart4y.pomelo.example.webmvc.domain.model.app"
+                            targetProject="src/main/java"/>
+        <!-- Mapper.xml 路径 -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
+        <!-- Mapper.java 路径 -->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.smart4y.pomelo.example.webmvc.infrastructure.repository.mapper"
+                             targetProject="src/main/java"/>
+
+        <!-- 指定数据库表 -->
+        <table tableName="sys_app" domainObjectName="Application">
+            <columnOverride column="app_os" javaType="com.smart4y.pomelo.upms.domain.enums.TenantApplicationOSType"/>
+            <columnOverride column="state" javaType="com.smart4y.pomelo.upms.TenantApplicationState"/>
+            <columnOverride column="app_type" javaType="com.smart4y.pomelo.upms.domain.enums.TenantApplicationType"/>
+        </table>
+    </context>
+</generatorConfiguration>

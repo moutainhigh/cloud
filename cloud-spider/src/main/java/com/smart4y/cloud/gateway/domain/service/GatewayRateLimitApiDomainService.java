@@ -4,7 +4,7 @@ import com.smart4y.cloud.core.domain.DomainService;
 import com.smart4y.cloud.core.infrastructure.mapper.BaseDomainService;
 import com.smart4y.cloud.gateway.domain.RateLimitApiObj;
 import com.smart4y.cloud.gateway.domain.model.GatewayRateLimitApi;
-import com.smart4y.cloud.gateway.domain.repository.GatewayCustomMapper;
+import com.smart4y.cloud.gateway.infrastructure.mapper.GatewayCustomMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 

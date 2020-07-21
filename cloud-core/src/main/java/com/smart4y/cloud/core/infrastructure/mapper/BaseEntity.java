@@ -1,10 +1,6 @@
 package com.smart4y.cloud.core.infrastructure.mapper;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.MappedSuperclass;
-import java.io.Serializable;
+import com.smart4y.cloud.core.domain.Entity;
 
 /**
  * 实体基类
@@ -20,16 +16,8 @@ import java.io.Serializable;
  * </code>
  *
  * @author Youtao
- *         Created by youtao on 2019-04-30.
+ * Created by youtao on 2019-04-30.
  */
-@Getter
-@Setter
-@MappedSuperclass
-public abstract class BaseEntity implements Serializable {
+public class BaseEntity<T> implements Entity<T> {
 
-    /**
-     * 构造器
-     */
-    protected BaseEntity() {
-    }
 }

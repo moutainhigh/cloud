@@ -31,9 +31,10 @@
         <ip2region.version>1.7.2</ip2region.version>
         <swagger2.version>2.9.2</swagger2.version>
 
+        <mybatis.version>3.5.5</mybatis.version>
         <mapper.version>4.1.5</mapper.version>
         <mapper-spring-boot-starter.version>2.1.5</mapper-spring-boot-starter.version>
-        <pagehelper-spring-boot-starter.version>1.2.10</pagehelper-spring-boot-starter.version>
+        <pagehelper-spring-boot-starter.version>1.2.13</pagehelper-spring-boot-starter.version>
     </properties>
 
     <dependencyManagement>
@@ -159,7 +160,13 @@
             <artifactId>commons-pool2</artifactId>
         </dependency>
         <!-- ########################### 公共配置（以上） ############################ -->
-        <!-- ########################### 持久层依赖（以下） ############################ -->
+
+        <!-- ((((((((((((((((((((((((( 持久层依赖（以下） ))))))))))))))))))))))))) -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis.version}</version>
+        </dependency>
         <dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper</artifactId>
@@ -169,18 +176,34 @@
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-spring-boot-starter</artifactId>
             <version>${mapper-spring-boot-starter.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.mybatis</groupId>
+                    <artifactId>mybatis</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>mybatis-spring</artifactId>
+                    <groupId>org.mybatis</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>${pagehelper-spring-boot-starter.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>mybatis</artifactId>
+                    <groupId>org.mybatis</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <!-- ########################### 持久层依赖（以上） ############################ -->
+
         <!-- 工具类 Hutool -->
         <dependency>
             <groupId>cn.hutool</groupId>
