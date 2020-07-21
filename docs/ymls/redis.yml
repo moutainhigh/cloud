@@ -1,25 +1,27 @@
-version: '3'
+version: '3.2'
 services:
   redis:
     image: redis:3.2
-    container_name: redis
+    container_name: "redis"
+    labels:
+      NAME: "redis"
+    hostname: "redis"
     networks:
-      - infra
+      - sia
     ports:
       - "6379:6379"
-    volumes:
-      - "${DOCKER_VOL_DIR}/redis/conf:/usr/local/etc/redis"
-      - "${DOCKER_VOL_DIR}/redis/data:/data"
-    command: redis-server --requirepass 123456
     environment:
       - TZ=Asia/Shanghai
+    command: redis-server --requirepass 123456
     healthcheck:
       test: "redis-cli -h 127.0.0.1 ping && exit 0 || exit 1"
       interval: 15s
       timeout: 5s
       retries: 128
-    labels:
-      NAME: "redis"
+  #    volumes:
+  #      - ${DOCKER_VOL_DIR}/redis/conf:/usr/local/etc/redis
+  #      - ${DOCKER_VOL_DIR}/redis/data:/data
+
 networks:
-  #基础设施层网络
-  infra:
+  sia:
+    driver: bridge
