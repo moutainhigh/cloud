@@ -412,7 +412,7 @@
                             this.saving = true
                             if (this.formItem.userId) {
                                 updateUser(this.formItem).then(res => {
-                                    if (res.code === 0) {
+                                    if (res.rtnCode === '200') {
                                         this.$Message.success('保存成功')
                                         this.handleReset()
                                     }
@@ -422,7 +422,7 @@
                                 })
                             } else {
                                 addUser(this.formItem).then(res => {
-                                    if (res.code === 0) {
+                                    if (res.rtnCode === '200') {
                                         this.$Message.success('保存成功')
                                         this.handleReset()
                                     }
@@ -440,7 +440,7 @@
                         if (valid) {
                             this.saving = true
                             addUserRoles(this.formItem).then(res => {
-                                if (res.code === 0) {
+                                if (res.rtnCode === '200') {
                                     this.$Message.success('分配角色成功')
                                     this.handleReset()
                                 }
@@ -462,7 +462,7 @@
                                 expireTime: this.formItem.expireTime ? this.formItem.expireTime.pattern('yyyy-MM-dd HH:mm:ss') : '',
                                 authorityIds: authorityIds
                             }).then(res => {
-                                if (res.code === 0) {
+                                if (res.rtnCode === '200') {
                                     this.$Message.success('授权成功')
                                     this.handleReset()
                                 }
@@ -482,7 +482,7 @@
                                 userId: this.formItem.userId,
                                 password: this.formItem.password
                             }).then(res => {
-                                if (res.code === 0) {
+                                if (res.rtnCode === '200') {
                                     this.$Message.success('修改成功')
                                     this.handleReset()
                                 }

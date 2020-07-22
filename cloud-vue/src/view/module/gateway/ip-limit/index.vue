@@ -211,7 +211,7 @@
                                 updateIpLimit(this.formItem).then(res => {
                                     this.handleReset()
                                     this.handleSearch()
-                                    if (res.code === 0) {
+                                    if (res.rtnCode === '200') {
                                         this.$Message.success('保存成功')
                                     }
                                 }).finally(() => {
@@ -221,7 +221,7 @@
                                 addIpLimit(this.formItem).then(res => {
                                     this.handleReset()
                                     this.handleSearch()
-                                    if (res.code === 0) {
+                                    if (res.rtnCode === '200') {
                                         this.$Message.success('保存成功')
                                     }
                                 }).finally(() => {
@@ -241,7 +241,7 @@
                             }).then(res => {
                                 this.handleReset()
                                 this.handleSearch()
-                                if (res.code === 0) {
+                                if (res.rtnCode === '200') {
                                     this.$Message.success('绑定成功')
                                 }
                             }).finally(() => {
@@ -276,7 +276,7 @@
                     title: '确定删除吗？',
                     onOk: () => {
                         removeIpLimit(data.policyId).then(res => {
-                            if (res.code === 0) {
+                            if (res.rtnCode === '200') {
                                 this.pageInfo.page = 1
                                 this.$Message.success('删除成功')
                             }

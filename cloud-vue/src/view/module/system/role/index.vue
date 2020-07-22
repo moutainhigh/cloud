@@ -330,7 +330,7 @@
                             this.saving = true
                             if (this.formItem.roleId) {
                                 updateRole(this.formItem).then(res => {
-                                    if (res.code === 0) {
+                                    if (res.rtnCode === '200') {
                                         this.$Message.success('保存成功')
                                         this.handleReset()
                                     }
@@ -340,7 +340,7 @@
                                 })
                             } else {
                                 addRole(this.formItem).then(res => {
-                                    if (res.code === 0) {
+                                    if (res.rtnCode === '200') {
                                         this.$Message.success('保存成功')
                                         this.handleReset()
                                     }
@@ -363,7 +363,7 @@
                                 expireTime: this.formItem.expireTime ? this.formItem.expireTime.pattern('yyyy-MM-dd HH:mm:ss') : '',
                                 authorityIds: authorityIds
                             }).then(res => {
-                                if (res.code === 0) {
+                                if (res.rtnCode === '200') {
                                     this.$Message.success('授权成功')
                                     this.handleReset()
                                 }
@@ -383,7 +383,7 @@
                                 roleId: this.formItem.roleId,
                                 userIds: this.formItem.userIds
                             }).then(res => {
-                                if (res.code === 0) {
+                                if (res.rtnCode === '200') {
                                     this.$Message.success('保存成功')
                                     this.handleReset()
                                 }
@@ -420,7 +420,7 @@
                     title: '确定删除吗？',
                     onOk: () => {
                         removeRole(data.roleId).then(res => {
-                            if (res.code === 0) {
+                            if (res.rtnCode === '200') {
                                 this.pageInfo.page = 1
                                 this.$Message.success('删除成功')
                             }

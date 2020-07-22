@@ -257,7 +257,7 @@
                         this.saving = true
                         if (!this.formItem.newData) {
                             updateHttpJob(this.formItem).then(res => {
-                                if (res.code === 0) {
+                                if (res.rtnCode === '200') {
                                     this.$Message.success('保存成功')
                                 }
                                 this.handleReset()
@@ -267,7 +267,7 @@
                             })
                         } else {
                             addHttpJob(this.formItem).then(res => {
-                                if (res.code === 0) {
+                                if (res.rtnCode === '200') {
                                     this.$Message.success('保存成功')
                                 }
                                 this.handleReset()
@@ -285,7 +285,7 @@
                     onOk: () => {
                         removeJob(data.jobName).then(res => {
                             this.handleSearch()
-                            if (res.code === 0) {
+                            if (res.rtnCode === '200') {
                                 this.pageInfo.page = 1
                                 this.$Message.success('删除成功')
                             }
@@ -299,7 +299,7 @@
                     onOk: () => {
                         pauseJob(data.jobName).then(res => {
                             this.handleSearch()
-                            if (res.code === 0) {
+                            if (res.rtnCode === '200') {
                                 this.pageInfo.page = 1
                                 this.$Message.success('暂停成功')
                             }
@@ -313,7 +313,7 @@
                     onOk: () => {
                         resumeJob(data.jobName).then(res => {
                             this.handleSearch()
-                            if (res.code === 0) {
+                            if (res.rtnCode === '200') {
                                 this.pageInfo.page = 1
                                 this.$Message.success('恢复成功')
                             }

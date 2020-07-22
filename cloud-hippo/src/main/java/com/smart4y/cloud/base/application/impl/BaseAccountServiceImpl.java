@@ -8,6 +8,7 @@ import com.smart4y.cloud.base.infrastructure.mapper.BaseAccountMapper;
 import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
+import com.smart4y.cloud.core.infrastructure.exception.context.MessageType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -52,7 +53,7 @@ public class BaseAccountServiceImpl implements BaseAccountService {
     public BaseAccount register(Long userId, String account, String password, String accountType, Integer status, String domain, String registerIp) {
         if (isExist(account, accountType, domain)) {
             // 账号已被注册
-            throw new OpenAlertException(String.format("account=[%s],domain=[%s]", account, domain));
+            throw new OpenAlertException(MessageType.BAD_REQUEST, String.format("account=[%s],domain=[%s]", account, domain));
         }
         //加密
         String encodePassword = passwordEncoder.encode(password);

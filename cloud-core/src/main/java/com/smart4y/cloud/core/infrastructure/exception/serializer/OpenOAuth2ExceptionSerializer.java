@@ -1,8 +1,9 @@
-package com.smart4y.cloud.core.infrastructure.exception;
+package com.smart4y.cloud.core.infrastructure.exception.serializer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.smart4y.cloud.core.infrastructure.exception.OpenOAuth2Exception;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;

@@ -11,6 +11,7 @@ import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
+import com.smart4y.cloud.core.infrastructure.exception.context.MessageType;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ import java.util.List;
 
 /**
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @ApplicationService
@@ -83,7 +84,7 @@ public class BaseActionServiceImpl implements BaseActionService {
     @Override
     public BaseAction addAction(BaseAction aciton) {
         if (isExist(aciton.getActionCode())) {
-            throw new OpenAlertException(String.format("%s编码已存在!", aciton.getActionCode()));
+            throw new OpenAlertException(MessageType.BAD_REQUEST, String.format("%s编码已存在!", aciton.getActionCode()));
         }
         if (aciton.getMenuId() == null) {
             aciton.setMenuId(0L);
@@ -110,12 +111,12 @@ public class BaseActionServiceImpl implements BaseActionService {
     public BaseAction updateAction(BaseAction aciton) {
         BaseAction saved = getAction(aciton.getActionId());
         if (saved == null) {
-            throw new OpenAlertException(String.format("%s信息不存在", aciton.getActionId()));
+            throw new OpenAlertException(MessageType.BAD_REQUEST, String.format("%s信息不存在", aciton.getActionId()));
         }
         if (!saved.getActionCode().equals(aciton.getActionCode())) {
             // 和原来不一致重新检查唯一性
             if (isExist(aciton.getActionCode())) {
-                throw new OpenAlertException(String.format("%s编码已存在!", aciton.getActionCode()));
+                throw new OpenAlertException(MessageType.BAD_REQUEST, String.format("%s编码已存在!", aciton.getActionCode()));
             }
         }
         if (aciton.getMenuId() == null) {
@@ -135,7 +136,7 @@ public class BaseActionServiceImpl implements BaseActionService {
     public void removeAction(Long actionId) {
         BaseAction aciton = getAction(actionId);
         if (aciton != null && aciton.getIsPersist().equals(BaseConstants.ENABLED)) {
-            throw new OpenAlertException("保留数据，不允许删除");
+            throw new OpenAlertException(MessageType.BAD_REQUEST, "保留数据，不允许删除");
         }
         baseAuthorityService.removeAuthorityAction(actionId);
         baseAuthorityService.removeAuthority(actionId, ResourceType.action);

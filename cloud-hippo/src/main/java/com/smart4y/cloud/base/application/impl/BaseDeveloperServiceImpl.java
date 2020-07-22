@@ -14,8 +14,9 @@ import com.smart4y.cloud.base.interfaces.valueobject.query.BaseDeveloperQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
-import com.smart4y.cloud.core.infrastructure.toolkit.web.WebUtils;
+import com.smart4y.cloud.core.infrastructure.exception.context.MessageType;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
+import com.smart4y.cloud.core.infrastructure.toolkit.web.WebUtils;
 import com.smart4y.cloud.core.interfaces.UserAccountVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -31,7 +32,7 @@ import java.util.Map;
 
 /**
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @ApplicationService
@@ -70,7 +71,7 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
     @Override
     public long addUser(AddDeveloperUserCommand command) {
         if (getUserByUsername(command.getUserName()) != null) {
-            throw new OpenAlertException("用户名:" + command.getUserName() + "已存在!");
+            throw new OpenAlertException(MessageType.BAD_REQUEST, "用户名:" + command.getUserName() + "已存在!");
         }
         // 保存用户信息
         BaseDeveloper developer = new BaseDeveloper()

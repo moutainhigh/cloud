@@ -378,7 +378,7 @@
                         this.saving = true
                         if (this.formItem.apiId) {
                             updateApi(this.formItem).then(res => {
-                                if (res.code === 0) {
+                                if (res.rtnCode === '200') {
                                     this.$Message.success('保存成功')
                                 }
                                 this.handleReset()
@@ -388,7 +388,7 @@
                             })
                         } else {
                             addApi(this.formItem).then(res => {
-                                if (res.code === 0) {
+                                if (res.rtnCode === '200') {
                                     this.$Message.success('保存成功')
                                 }
                                 this.handleReset()
@@ -406,7 +406,7 @@
                     onOk: () => {
                         removeApi(data.apiId).then(res => {
                             this.handleSearch()
-                            if (res.code === 0) {
+                            if (res.rtnCode === '200') {
                                 this.pageInfo.page = 1
                                 this.$Message.success('删除成功')
                             }
@@ -437,7 +437,7 @@
             },
             handleLoadServiceList() {
                 getServiceList().then(res => {
-                    if (res.code === 0) {
+                    if (res.rtnCode === '200') {
                         this.selectServiceList = res.data
                     }
                 })
@@ -459,7 +459,7 @@
                             switch (name) {
                                 case'remove':
                                     batchRemoveApi(ids).then(res => {
-                                        if (res.code === 0) {
+                                        if (res.rtnCode === '200') {
                                             this.$Message.success('批量操作成功')
                                         }
                                         this.handleSearch()
@@ -467,7 +467,7 @@
                                     break
                                 case'open1':
                                     batchUpdateOpenApi({ids: ids, open: 1}).then(res => {
-                                        if (res.code === 0) {
+                                        if (res.rtnCode === '200') {
                                             this.$Message.success('批量操作成功')
                                         }
                                         this.handleSearch()
@@ -475,7 +475,7 @@
                                     break
                                 case'open2':
                                     batchUpdateOpenApi({ids: ids, open: 2}).then(res => {
-                                        if (res.code === 0) {
+                                        if (res.rtnCode === '200') {
                                             this.$Message.success('批量操作成功')
                                         }
                                         this.handleSearch()
@@ -483,7 +483,7 @@
                                     break
                                 case'status1':
                                     batchUpdateStatusApi({ids: ids, status: 1}).then(res => {
-                                        if (res.code === 0) {
+                                        if (res.rtnCode === '200') {
                                             this.$Message.success('批量操作成功')
                                         }
                                         this.handleSearch()
@@ -491,7 +491,7 @@
                                     break
                                 case'status2':
                                     batchUpdateStatusApi({ids: ids, status: 0}).then(res => {
-                                        if (res.code === 0) {
+                                        if (res.rtnCode === '200') {
                                             this.$Message.success('批量操作成功')
                                         }
                                         this.handleSearch()
@@ -499,7 +499,7 @@
                                     break
                                 case'status3':
                                     batchUpdateStatusApi({ids: ids, status: 2}).then(res => {
-                                        if (res.code === 0) {
+                                        if (res.rtnCode === '200') {
                                             this.$Message.success('批量操作成功')
                                         }
                                         this.handleSearch()
@@ -507,7 +507,7 @@
                                     break
                                 case'auth1':
                                     batchUpdateAuthApi({ids: ids, auth: 1}).then(res => {
-                                        if (res.code === 0) {
+                                        if (res.rtnCode === '200') {
                                             this.$Message.success('批量操作成功')
                                         }
                                         this.handleSearch()
@@ -515,7 +515,7 @@
                                     break
                                 case'auth2':
                                     batchUpdateAuthApi({ids: ids, auth: 0}).then(res => {
-                                        if (res.code === 0) {
+                                        if (res.rtnCode === '200') {
                                             this.$Message.success('批量操作成功')
                                         }
                                         this.handleSearch()

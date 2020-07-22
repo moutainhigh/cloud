@@ -1,25 +1,25 @@
 package com.smart4y.cloud.core.infrastructure.exception;
 
+import com.smart4y.cloud.core.domain.IMessageType;
+import com.smart4y.cloud.core.infrastructure.exception.context.MessageType;
+
 /**
  * 提示消息异常
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 public class OpenAlertException extends OpenException {
 
     public OpenAlertException() {
+        super(MessageType.BAD_REQUEST);
     }
 
-    public OpenAlertException(String msg) {
-        super(msg);
+    public OpenAlertException(String messageText) {
+        super(MessageType.BAD_REQUEST, messageText);
     }
 
-    public OpenAlertException(int code, String msg) {
-        super(code, msg);
-    }
-
-    public OpenAlertException(int code, String msg, Throwable cause) {
-        super(code, msg, cause);
+    public OpenAlertException(IMessageType<String> messageType, Object... arguments) {
+        super(messageType, arguments);
     }
 }

@@ -1,6 +1,7 @@
 package com.smart4y.cloud.core.infrastructure.exception;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.smart4y.cloud.core.infrastructure.exception.serializer.OpenOAuth2ExceptionSerializer;
 
 /**
  * 自定义Oauth2异常提示

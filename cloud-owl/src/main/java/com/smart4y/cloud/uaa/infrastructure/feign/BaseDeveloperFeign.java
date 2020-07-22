@@ -1,7 +1,7 @@
 package com.smart4y.cloud.uaa.infrastructure.feign;
 
 import com.smart4y.cloud.core.interfaces.UserAccountVO;
-import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.core.domain.message.ResultMessage;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -20,13 +20,13 @@ public interface BaseDeveloperFeign {
      * 开发者登录
      */
     @PostMapping("/developer/login")
-    ResultEntity<UserAccountVO> developerLogin(@RequestParam(value = "username") String username);
+    ResultMessage<UserAccountVO> developerLogin(@RequestParam(value = "username") String username);
 
     /**
      * 注册第三方系统登录账号
      */
     @PostMapping("/developer/register/thirdParty")
-    ResultEntity addDeveloperThirdParty(
+    ResultMessage addDeveloperThirdParty(
             @RequestParam(value = "account") String account,
             @RequestParam(value = "password") String password,
             @RequestParam(value = "accountType") String accountType,

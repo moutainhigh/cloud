@@ -7,7 +7,7 @@ import com.smart4y.cloud.base.domain.model.GatewayRoute;
 import com.smart4y.cloud.base.interfaces.converter.GatewayRouteConverter;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayRouteVO;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.ServiceVO;
-import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.core.domain.message.ResultMessage;
 import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
 import com.smart4y.cloud.core.interfaces.RateLimitApiDTO;
 import io.swagger.annotations.Api;
@@ -44,22 +44,22 @@ public class GatewayController {
      */
     @ApiOperation(value = "获取路由列表", notes = "仅限内部调用")
     @GetMapping("/gateway/api/route")
-    public ResultEntity<List<GatewayRouteVO>> getApiRouteList() {
+    public ResultMessage<List<GatewayRouteVO>> getApiRouteList() {
         List<GatewayRoute> list = gatewayRouteService.findRouteList();
         List<GatewayRouteVO> result = gatewayRouteConverter.convertList(list);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     @ApiOperation(value = "获取服务列表", notes = "获取服务列表")
     @GetMapping("/gateway/service/list")
-    public ResultEntity<List<ServiceVO>> getServiceList() {
+    public ResultMessage<List<ServiceVO>> getServiceList() {
         List<GatewayRoute> routes = gatewayRouteService.findRouteList();
         List<ServiceVO> services = routes.stream()
                 .map(r -> new ServiceVO()
                         .setServiceId(r.getRouteName())
                         .setServiceDesc(r.getRouteDesc()))
                 .collect(Collectors.toList());
-        return ResultEntity.ok(services);
+        return ResultMessage.ok(services);
     }
 
     /**
@@ -67,9 +67,9 @@ public class GatewayController {
      */
     @ApiOperation(value = "获取接口黑名单列表", notes = "仅限内部调用")
     @GetMapping("/gateway/api/blackList")
-    public ResultEntity<List<IpLimitApiDTO>> getApiBlackList() {
+    public ResultMessage<List<IpLimitApiDTO>> getApiBlackList() {
         List<IpLimitApiDTO> result = gatewayIpLimitService.findBlackList();
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     /**
@@ -77,9 +77,9 @@ public class GatewayController {
      */
     @ApiOperation(value = "获取接口白名单列表", notes = "仅限内部调用")
     @GetMapping("/gateway/api/whiteList")
-    public ResultEntity<List<IpLimitApiDTO>> getApiWhiteList() {
+    public ResultMessage<List<IpLimitApiDTO>> getApiWhiteList() {
         List<IpLimitApiDTO> result = gatewayIpLimitService.findWhiteList();
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     /**
@@ -87,8 +87,8 @@ public class GatewayController {
      */
     @ApiOperation(value = "获取限流列表", notes = "仅限内部调用")
     @GetMapping("/gateway/api/rateLimit")
-    public ResultEntity<List<RateLimitApiDTO>> getApiRateLimitList() {
+    public ResultMessage<List<RateLimitApiDTO>> getApiRateLimitList() {
         List<RateLimitApiDTO> result = gatewayRateLimitService.findRateLimitApiList();
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 }

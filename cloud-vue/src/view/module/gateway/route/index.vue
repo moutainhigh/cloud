@@ -188,7 +188,7 @@
                         this.saving = true;
                         if (this.formItem.routeId) {
                             updateRoute(this.formItem).then(res => {
-                                if (res.code === 0) {
+                                if (res.rtnCode === '200') {
                                     this.$Message.success('保存成功');
                                     this.handleReset()
                                 }
@@ -200,7 +200,7 @@
                             addRoute(this.formItem).then(res => {
                                 this.handleReset();
                                 this.handleSearch();
-                                if (res.code === 0) {
+                                if (res.rtnCode === '200') {
                                     this.$Message.success('保存成功')
                                 }
                             }).finally(() => {
@@ -235,7 +235,7 @@
                     title: '确定删除吗？',
                     onOk: () => {
                         removeRoute(data.routeId).then(res => {
-                            if (res.code === 0) {
+                            if (res.rtnCode === '200') {
                                 this.pageInfo.page = 1;
                                 this.$Message.success('删除成功')
                             }
@@ -255,7 +255,7 @@
                     content: '将重新加载所有网关实例包括（访问权限、流量限制、IP访问限制、路由缓存），是否继续？',
                     onOk: () => {
                         refreshGateway().then(res => {
-                            if (res.code === 0) {
+                            if (res.rtnCode === '200') {
                                 this.$Message.success('刷新成功')
                             }
                         })

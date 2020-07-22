@@ -6,7 +6,7 @@ import com.smart4y.cloud.base.domain.model.BaseApp;
 import com.smart4y.cloud.base.interfaces.converter.BaseAppConverter;
 import com.smart4y.cloud.base.interfaces.valueobject.query.BaseAppQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseAppVO;
-import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.core.domain.message.ResultMessage;
 import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.infrastructure.security.OpenClientDetails;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
@@ -45,10 +45,10 @@ public class BaseAppController {
      */
     @ApiOperation(value = "获取分页应用列表", notes = "获取分页应用列表")
     @GetMapping("/app")
-    public ResultEntity<Page<BaseAppVO>> getAppListPage(BaseAppQuery query) {
+    public ResultMessage<Page<BaseAppVO>> getAppListPage(BaseAppQuery query) {
         PageInfo<BaseApp> pageInfo = baseAppService.findListPage(query);
         Page<BaseAppVO> result = baseAppConverter.convertPage(pageInfo);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     /**
@@ -62,10 +62,10 @@ public class BaseAppController {
             @ApiImplicitParam(name = "appId", value = "应用ID", defaultValue = "1", required = true, paramType = "path"),
     })
     @GetMapping("/app/{appId}/info")
-    public ResultEntity<BaseAppVO> getApp(@PathVariable("appId") String appId) {
+    public ResultMessage<BaseAppVO> getApp(@PathVariable("appId") String appId) {
         BaseApp appInfo = baseAppService.getAppInfo(appId);
         BaseAppVO result = baseAppConverter.convert(appInfo);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     /**
@@ -76,9 +76,9 @@ public class BaseAppController {
             @ApiImplicitParam(name = "clientId", value = "应用ID", defaultValue = "1", required = true, paramType = "path"),
     })
     @GetMapping("/app/client/{clientId}/info")
-    public ResultEntity<OpenClientDetails> getAppClientInfo(@PathVariable("clientId") String clientId) {
+    public ResultMessage<OpenClientDetails> getAppClientInfo(@PathVariable("clientId") String clientId) {
         OpenClientDetails clientInfo = baseAppService.getAppClientInfo(clientId);
-        return ResultEntity.ok(clientInfo);
+        return ResultMessage.ok(clientInfo);
     }
 
     /**
@@ -106,7 +106,7 @@ public class BaseAppController {
             @ApiImplicitParam(name = "developerId", value = "开发者", required = false, paramType = "form")
     })
     @PostMapping("/app/add")
-    public ResultEntity<String> addApp(
+    public ResultMessage<String> addApp(
             @RequestParam(value = "appName") String appName,
             @RequestParam(value = "appNameEn") String appNameEn,
             @RequestParam(value = "appType") String appType,
@@ -132,7 +132,7 @@ public class BaseAppController {
         if (result != null) {
             appId = result.getAppId();
         }
-        return ResultEntity.ok(appId);
+        return ResultMessage.ok(appId);
     }
 
     /**
@@ -165,7 +165,7 @@ public class BaseAppController {
             @ApiImplicitParam(name = "developerId", value = "开发者", required = false, paramType = "form")
     })
     @PostMapping("/app/update")
-    public ResultEntity updateApp(
+    public ResultMessage updateApp(
             @RequestParam("appId") String appId,
             @RequestParam(value = "appName") String appName,
             @RequestParam(value = "appNameEn") String appNameEn,
@@ -190,7 +190,7 @@ public class BaseAppController {
         app.setDeveloperId(developerId);
         baseAppService.updateInfo(app);
         openRestTemplate.refreshGateway();
-        return ResultEntity.ok();
+        return ResultMessage.ok();
     }
 
 
@@ -217,7 +217,7 @@ public class BaseAppController {
             @ApiImplicitParam(name = "refreshTokenValidity", value = "刷新令牌有效期(秒)", required = true, paramType = "form")
     })
     @PostMapping("/app/client/update")
-    public ResultEntity<String> updateAppClientInfo(
+    public ResultMessage<String> updateAppClientInfo(
             @RequestParam("appId") String appId,
             @RequestParam(value = "grantTypes") String grantTypes,
             @RequestParam(value = "redirectUrls") String redirectUrls,
@@ -234,7 +234,7 @@ public class BaseAppController {
         Map info = BeanConvertUtils.objectToMap(app);
         client.setAdditionalInformation(info);
         baseAppService.updateAppClientInfo(client);
-        return ResultEntity.ok();
+        return ResultMessage.ok();
     }
 
 
@@ -249,11 +249,11 @@ public class BaseAppController {
             @ApiImplicitParam(name = "appId", value = "应用Id", required = true, paramType = "form"),
     })
     @PostMapping("/app/reset")
-    public ResultEntity<String> resetAppSecret(
+    public ResultMessage<String> resetAppSecret(
             @RequestParam("appId") String appId
     ) {
         String result = baseAppService.restSecret(appId);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     /**
@@ -267,11 +267,11 @@ public class BaseAppController {
             @ApiImplicitParam(name = "appId", value = "应用Id", required = true, paramType = "form"),
     })
     @PostMapping("/app/remove")
-    public ResultEntity removeApp(
+    public ResultMessage removeApp(
             @RequestParam("appId") String appId
     ) {
         baseAppService.removeApp(appId);
         openRestTemplate.refreshGateway();
-        return ResultEntity.ok();
+        return ResultMessage.ok();
     }
 }

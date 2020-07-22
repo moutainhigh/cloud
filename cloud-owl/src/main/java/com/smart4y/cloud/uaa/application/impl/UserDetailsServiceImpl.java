@@ -1,7 +1,7 @@
 package com.smart4y.cloud.uaa.application.impl;
 
 import com.smart4y.cloud.core.interfaces.UserAccountVO;
-import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.core.domain.message.ResultMessage;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.security.OpenUserDetails;
 import com.smart4y.cloud.core.infrastructure.security.oauth2.client.OpenOAuth2ClientProperties;
@@ -30,7 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        ResultEntity<UserAccountVO> resp = baseUserFeign.userLogin(username);
+        ResultMessage<UserAccountVO> resp = baseUserFeign.userLogin(username);
         UserAccountVO account = resp.getData();
         if (account == null || account.getAccountId() == null) {
             throw new UsernameNotFoundException("系统用户 " + username + " 不存在!");

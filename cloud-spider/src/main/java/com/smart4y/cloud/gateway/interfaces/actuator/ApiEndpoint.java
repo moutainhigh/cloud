@@ -1,6 +1,6 @@
 package com.smart4y.cloud.gateway.interfaces.actuator;
 
-import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.core.domain.message.ResultMessage;
 import com.smart4y.cloud.core.domain.event.RouteRemoteRefreshedEvent;
 import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEndpoint;
 import org.springframework.cloud.bus.endpoint.AbstractBusEndpoint;
@@ -28,8 +28,8 @@ public class ApiEndpoint extends AbstractBusEndpoint {
      * /actuator/open/refresh?destination = customers：**
      */
     @PostMapping("/refresh")
-    public ResultEntity busRefreshWithDestination(@RequestParam(required = false) String destination) {
+    public ResultMessage busRefreshWithDestination(@RequestParam(required = false) String destination) {
         this.publish(new RouteRemoteRefreshedEvent(this, this.getInstanceId(), destination));
-        return ResultEntity.ok();
+        return ResultMessage.ok();
     }
 }

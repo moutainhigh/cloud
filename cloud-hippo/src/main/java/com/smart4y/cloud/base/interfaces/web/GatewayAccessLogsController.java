@@ -7,7 +7,7 @@ import com.smart4y.cloud.base.interfaces.converter.GatewayAccessLogsConverter;
 import com.smart4y.cloud.base.interfaces.valueobject.query.GatewayAccessLogsQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayAccessLogsVO;
 import com.smart4y.cloud.core.domain.page.Page;
-import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.core.domain.message.ResultMessage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +34,9 @@ public class GatewayAccessLogsController {
      */
     @ApiOperation(value = "获取分页访问日志列表", notes = "获取分页访问日志列表")
     @GetMapping("/gateway/access/logs")
-    public ResultEntity<Page<GatewayAccessLogsVO>> getAccessLogListPage(GatewayAccessLogsQuery query) {
+    public ResultMessage<Page<GatewayAccessLogsVO>> getAccessLogListPage(GatewayAccessLogsQuery query) {
         PageInfo<GatewayAccessLogs> listPage = gatewayAccessLogsService.findListPage(query);
         Page<GatewayAccessLogsVO> result = gatewayAccessLogsConverter.convertPage(listPage);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 }

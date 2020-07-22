@@ -3,7 +3,8 @@ package com.smart4y.cloud.gateway.infrastructure.security;
 import cn.hutool.core.collection.ConcurrentHashSet;
 import com.smart4y.cloud.core.domain.OpenAuthority;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
-import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
+import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
+import com.smart4y.cloud.core.infrastructure.exception.context.AccessDenied403MessageType;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
 import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
@@ -11,7 +12,6 @@ import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
 import com.smart4y.cloud.gateway.infrastructure.toolkit.ReactiveIpAddressMatcher;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * 访问权限控制管理类
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @Component
@@ -175,7 +175,7 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
             log.debug("mathAuthorities result[{}] expires[{}]", result, expires);
             if (expires > 0) {
                 // 授权已过期
-                throw new AccessDeniedException(ErrorCode.ACCESS_DENIED_AUTHORITY_EXPIRED.getMessage());
+                throw new OpenAlertException(AccessDenied403MessageType.ACCESS_DENIED_AUTHORITY_EXPIRED);
             }
             return result > 0;
         }

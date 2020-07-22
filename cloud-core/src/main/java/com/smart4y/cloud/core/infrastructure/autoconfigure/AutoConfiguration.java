@@ -1,8 +1,8 @@
 package com.smart4y.cloud.core.infrastructure.autoconfigure;
 
 import com.smart4y.cloud.core.application.eventhandler.RequestMappingScannedEventHandler;
-import com.smart4y.cloud.core.infrastructure.exception.OpenRestResponseErrorHandler;
-import com.smart4y.cloud.core.infrastructure.exception.handler.OpenGlobalExceptionHandler;
+import com.smart4y.cloud.core.infrastructure.exception.handler.OpenRestResponseErrorHandler;
+import com.smart4y.cloud.core.infrastructure.exception.global.OpenGlobalExceptionHandler;
 import com.smart4y.cloud.core.infrastructure.filter.XFilter;
 import com.smart4y.cloud.core.infrastructure.properties.OpenCommonProperties;
 import com.smart4y.cloud.core.infrastructure.properties.OpenIdGenProperties;

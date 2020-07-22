@@ -10,7 +10,7 @@ import com.smart4y.cloud.base.interfaces.valueobject.query.IpLimitQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayIpLimitApiVO;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayIpLimitVO;
 import com.smart4y.cloud.core.domain.page.Page;
-import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.core.domain.message.ResultMessage;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -47,10 +47,10 @@ public class GatewayIpLimitController {
      */
     @ApiOperation(value = "获取分页接口列表", notes = "获取分页接口列表")
     @GetMapping("/gateway/limit/ip")
-    public ResultEntity<Page<GatewayIpLimitVO>> getIpLimitListPage(IpLimitQuery query) {
+    public ResultMessage<Page<GatewayIpLimitVO>> getIpLimitListPage(IpLimitQuery query) {
         PageInfo<GatewayIpLimit> listPage = gatewayIpLimitService.findListPage(query);
         Page<GatewayIpLimitVO> result = gatewayIpLimitConverter.convertPage(listPage);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     /**
@@ -61,10 +61,10 @@ public class GatewayIpLimitController {
             @ApiImplicitParam(name = "policyId", required = true, value = "策略ID", paramType = "path"),
     })
     @GetMapping("/gateway/limit/ip/{policyId}/info")
-    public ResultEntity<GatewayIpLimitVO> getIpLimit(@PathVariable("policyId") Long policyId) {
+    public ResultMessage<GatewayIpLimitVO> getIpLimit(@PathVariable("policyId") Long policyId) {
         GatewayIpLimit policy = gatewayIpLimitService.getIpLimitPolicy(policyId);
         GatewayIpLimitVO result = gatewayIpLimitConverter.convert(policy);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     /**
@@ -75,11 +75,11 @@ public class GatewayIpLimitController {
             @ApiImplicitParam(name = "policyId", value = "策略ID", paramType = "form"),
     })
     @GetMapping("/gateway/limit/ip/api/list")
-    public ResultEntity<List<GatewayIpLimitApiVO>> getIpLimitApiList(
+    public ResultMessage<List<GatewayIpLimitApiVO>> getIpLimitApiList(
             @RequestParam("policyId") Long policyId) {
         List<GatewayIpLimitApi> list = gatewayIpLimitService.findIpLimitApiList(policyId);
         List<GatewayIpLimitApiVO> result = gatewayIpLimitApiConverter.convertList(list);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     /**
@@ -94,7 +94,7 @@ public class GatewayIpLimitController {
             @ApiImplicitParam(name = "apiIds", value = "API接口ID.多个以,隔开.选填", paramType = "form")
     })
     @PostMapping("/gateway/limit/ip/api/add")
-    public ResultEntity addIpLimitApis(
+    public ResultMessage addIpLimitApis(
             @RequestParam("policyId") Long policyId,
             @RequestParam(value = "apiIds", required = false) String apiIds) {
         List<Long> collect = Arrays.stream(apiIds.split(","))
@@ -102,7 +102,7 @@ public class GatewayIpLimitController {
                 .collect(Collectors.toList());
         gatewayIpLimitService.addIpLimitApis(policyId, collect);
         openRestTemplate.refreshGateway();
-        return ResultEntity.ok();
+        return ResultMessage.ok();
     }
 
     /**
@@ -119,7 +119,7 @@ public class GatewayIpLimitController {
             @ApiImplicitParam(name = "ipAddress", required = true, value = "ip地址/IP段:多个用隔开;最多10个", paramType = "form")
     })
     @PostMapping("/gateway/limit/ip/add")
-    public ResultEntity<Long> addIpLimit(
+    public ResultMessage<Long> addIpLimit(
             @RequestParam(value = "policyName") String policyName,
             @RequestParam(value = "policyType") Integer policyType,
             @RequestParam(value = "ipAddress") String ipAddress
@@ -133,7 +133,7 @@ public class GatewayIpLimitController {
         if (result != null) {
             policyId = result.getPolicyId();
         }
-        return ResultEntity.ok(policyId);
+        return ResultMessage.ok(policyId);
     }
 
     /**
@@ -152,7 +152,7 @@ public class GatewayIpLimitController {
             @ApiImplicitParam(name = "ipAddress", required = true, value = "ip地址/IP段:多个用隔开;最多10个", paramType = "form")
     })
     @PostMapping("/gateway/limit/ip/update")
-    public ResultEntity updateIpLimit(
+    public ResultMessage updateIpLimit(
             @RequestParam("policyId") Long policyId,
             @RequestParam(value = "policyName") String policyName,
             @RequestParam(value = "policyType") Integer policyType,
@@ -164,7 +164,7 @@ public class GatewayIpLimitController {
         ipLimit.setIpAddress(ipAddress);
         gatewayIpLimitService.updateIpLimitPolicy(ipLimit);
         openRestTemplate.refreshGateway();
-        return ResultEntity.ok();
+        return ResultMessage.ok();
     }
 
     /**
@@ -175,11 +175,11 @@ public class GatewayIpLimitController {
             @ApiImplicitParam(name = "policyId", required = true, value = "policyId", paramType = "form"),
     })
     @PostMapping("/gateway/limit/ip/remove")
-    public ResultEntity removeIpLimit(
+    public ResultMessage removeIpLimit(
             @RequestParam("policyId") Long policyId) {
         gatewayIpLimitService.removeIpLimitPolicy(policyId);
         // 刷新网关
         openRestTemplate.refreshGateway();
-        return ResultEntity.ok();
+        return ResultMessage.ok();
     }
 }

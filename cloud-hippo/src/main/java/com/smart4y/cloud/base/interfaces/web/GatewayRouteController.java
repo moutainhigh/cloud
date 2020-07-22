@@ -6,7 +6,7 @@ import com.smart4y.cloud.base.domain.model.GatewayRoute;
 import com.smart4y.cloud.base.interfaces.converter.GatewayRouteConverter;
 import com.smart4y.cloud.base.interfaces.valueobject.query.GatewayRouteQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayRouteVO;
-import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.core.domain.message.ResultMessage;
 import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
@@ -39,10 +39,10 @@ public class GatewayRouteController {
      */
     @ApiOperation(value = "获取分页路由列表", notes = "获取分页路由列表")
     @GetMapping("/gateway/route")
-    public ResultEntity<Page<GatewayRouteVO>> getRouteListPage(GatewayRouteQuery query) {
+    public ResultMessage<Page<GatewayRouteVO>> getRouteListPage(GatewayRouteQuery query) {
         PageInfo<GatewayRoute> pageInfo = gatewayRouteService.findListPage(query);
         Page<GatewayRouteVO> result = gatewayRouteConverter.convertPage(pageInfo);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     /**
@@ -53,10 +53,10 @@ public class GatewayRouteController {
             @ApiImplicitParam(name = "routeId", required = true, value = "路由ID", paramType = "path"),
     })
     @GetMapping("/gateway/route/{routeId}/info")
-    public ResultEntity<GatewayRouteVO> getRoute(@PathVariable("routeId") Long routeId) {
+    public ResultMessage<GatewayRouteVO> getRoute(@PathVariable("routeId") Long routeId) {
         GatewayRoute route = gatewayRouteService.getRoute(routeId);
         GatewayRouteVO result = gatewayRouteConverter.convert(route);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     /**
@@ -82,7 +82,7 @@ public class GatewayRouteController {
             @ApiImplicitParam(name = "status", allowableValues = "0,1", defaultValue = "1", value = "是否启用", paramType = "form")
     })
     @PostMapping("/gateway/route/add")
-    public ResultEntity<Long> addRoute(
+    public ResultMessage<Long> addRoute(
             @RequestParam(value = "routeName", defaultValue = "") String routeName,
             @RequestParam(value = "routeDesc", defaultValue = "") String routeDesc,
             @RequestParam(value = "path") String path,
@@ -107,7 +107,7 @@ public class GatewayRouteController {
         long routeId = gatewayRouteService.addRoute(route);
         // 刷新网关
         openRestTemplate.refreshGateway();
-        return ResultEntity.ok(routeId);
+        return ResultMessage.ok(routeId);
     }
 
     /**
@@ -135,7 +135,7 @@ public class GatewayRouteController {
             @ApiImplicitParam(name = "status", allowableValues = "0,1", defaultValue = "1", value = "是否启用", paramType = "form")
     })
     @PostMapping("/gateway/route/update")
-    public ResultEntity updateRoute(
+    public ResultMessage updateRoute(
             @RequestParam("routeId") Long routeId,
             @RequestParam(value = "routeName", defaultValue = "") String routeName,
             @RequestParam(value = "routeDesc", defaultValue = "") String routeDesc,
@@ -162,7 +162,7 @@ public class GatewayRouteController {
         gatewayRouteService.updateRoute(route);
         // 刷新网关
         openRestTemplate.refreshGateway();
-        return ResultEntity.ok();
+        return ResultMessage.ok();
     }
 
     /**
@@ -173,12 +173,12 @@ public class GatewayRouteController {
             @ApiImplicitParam(name = "routeId", required = true, value = "routeId", paramType = "form"),
     })
     @PostMapping("/gateway/route/remove")
-    public ResultEntity removeRoute(
+    public ResultMessage removeRoute(
             @RequestParam("routeId") Long routeId
     ) {
         gatewayRouteService.removeRoute(routeId);
         // 刷新网关
         openRestTemplate.refreshGateway();
-        return ResultEntity.ok();
+        return ResultMessage.ok();
     }
 }

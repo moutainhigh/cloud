@@ -11,6 +11,7 @@ import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
+import com.smart4y.cloud.core.infrastructure.exception.context.MessageType;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ import java.util.List;
 
 /**
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @ApplicationService
@@ -89,7 +90,7 @@ public class BaseApiServiceImpl implements BaseApiService {
     @Override
     public void addApi(BaseApi api) {
         if (isExist(api.getApiCode())) {
-            throw new OpenAlertException(String.format("%s编码已存在!", api.getApiCode()));
+            throw new OpenAlertException(MessageType.BAD_REQUEST, String.format("%s编码已存在!", api.getApiCode()));
         }
         if (api.getPriority() == null) {
             api.setPriority(0);
@@ -117,12 +118,12 @@ public class BaseApiServiceImpl implements BaseApiService {
     public void updateApi(BaseApi api) {
         BaseApi saved = getApi(api.getApiId());
         if (saved == null) {
-            throw new OpenAlertException("信息不存在!");
+            throw new OpenAlertException(MessageType.NOT_FOUND, "信息不存在!");
         }
         if (!saved.getApiCode().equals(api.getApiCode())) {
             // 和原来不一致重新检查唯一性
             if (isExist(api.getApiCode())) {
-                throw new OpenAlertException(String.format("%s编码已存在!", api.getApiCode()));
+                throw new OpenAlertException(MessageType.BAD_REQUEST, String.format("%s编码已存在!", api.getApiCode()));
             }
         }
         if (api.getPriority() == null) {
@@ -150,7 +151,7 @@ public class BaseApiServiceImpl implements BaseApiService {
     public void removeApi(Long apiId) {
         BaseApi api = getApi(apiId);
         if (api != null && api.getIsPersist().equals(BaseConstants.ENABLED)) {
-            throw new OpenAlertException("保留数据，不允许删除");
+            throw new OpenAlertException(MessageType.BAD_REQUEST, "保留数据，不允许删除");
         }
         baseAuthorityService.removeAuthority(apiId, ResourceType.api);
         baseApiMapper.deleteByPrimaryKey(apiId);

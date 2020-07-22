@@ -191,7 +191,7 @@
                                 updateAction(this.formItem).then(res => {
                                     this.handleReset()
                                     this.handleSearch()
-                                    if (res.code === 0) {
+                                    if (res.rtnCode === '200') {
                                         this.$Message.success('保存成功')
                                     }
                                 }).finally(() => {
@@ -201,7 +201,7 @@
                                 addAction(this.formItem).then(res => {
                                     this.handleReset()
                                     this.handleSearch()
-                                    if (res.code === 0) {
+                                    if (res.rtnCode === '200') {
                                         this.$Message.success('保存成功')
                                     }
                                 }).finally(() => {
@@ -221,7 +221,7 @@
                             }).then(res => {
                                 this.handleReset()
                                 this.handleSearch()
-                                if (res.code === 0) {
+                                if (res.rtnCode === '200') {
                                     this.$Message.success('绑定成功')
                                 }
                             }).finally(() => {
@@ -250,7 +250,7 @@
                     onOk: () => {
                         removeAction(data.actionId).then(res => {
                             this.handleSearch()
-                            if (res.code === 0) {
+                            if (res.rtnCode === '200') {
                                 this.pageInfo.page = 1
                                 this.$Message.success('删除成功')
                             }

@@ -1,7 +1,7 @@
 package com.smart4y.cloud.gateway.infrastructure.locator;
 
 import com.google.common.collect.Lists;
-import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.core.domain.message.ResultMessage;
 import com.smart4y.cloud.core.domain.event.RouteRemoteRefreshedEvent;
 import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
 import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
@@ -162,7 +162,7 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
         List<AuthorityResourceDTO> resources = Lists.newArrayList();
         try {
             // 查询所有接口
-            ResultEntity<List<AuthorityResourceDTO>> authorityResourceResponse = baseAuthorityFeign.findAuthorityResource();
+            ResultMessage<List<AuthorityResourceDTO>> authorityResourceResponse = baseAuthorityFeign.findAuthorityResource();
             resources = authorityResourceResponse.isOk() ? authorityResourceResponse.getData() : Collections.emptyList();
 
             ConfigAttribute cfg;

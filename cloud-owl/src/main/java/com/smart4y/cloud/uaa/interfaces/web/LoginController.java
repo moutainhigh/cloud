@@ -1,6 +1,6 @@
 package com.smart4y.cloud.uaa.interfaces.web;
 
-import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.core.domain.message.ResultMessage;
 import com.smart4y.cloud.core.infrastructure.security.OpenHelper;
 import com.smart4y.cloud.core.infrastructure.security.OpenUserDetails;
 import io.swagger.annotations.Api;
@@ -31,9 +31,9 @@ public class LoginController extends BaseController {
      */
     @GetMapping("/current/user")
     @ApiOperation(value = "获取用户基础信息")
-    public ResultEntity<OpenUserDetails> getUserProfile() {
+    public ResultMessage<OpenUserDetails> getUserProfile() {
         OpenUserDetails user = OpenHelper.getUser();
-        return ResultEntity.ok(user);
+        return ResultMessage.ok(user);
     }
 
     /**
@@ -63,7 +63,7 @@ public class LoginController extends BaseController {
     public Object getLoginToken(@RequestParam String username, @RequestParam String password, @RequestHeader HttpHeaders httpHeaders) throws Exception {
         Map result = getToken(username, password, null, httpHeaders);
         if (result.containsKey("access_token")) {
-            return ResultEntity.ok(result);
+            return ResultMessage.ok(result);
         } else {
             return result;
         }
@@ -77,8 +77,8 @@ public class LoginController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "token", value = "访问令牌", required = true, paramType = "form")
     })
-    public ResultEntity removeToken(@RequestParam String token) {
+    public ResultMessage removeToken(@RequestParam String token) {
         tokenStore.removeAccessToken(tokenStore.readAccessToken(token));
-        return ResultEntity.ok();
+        return ResultMessage.ok();
     }
 }

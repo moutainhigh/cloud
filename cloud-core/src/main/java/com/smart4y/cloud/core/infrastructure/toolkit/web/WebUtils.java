@@ -1,8 +1,8 @@
 package com.smart4y.cloud.core.infrastructure.toolkit.web;
 
 import com.alibaba.fastjson.JSONObject;
-import com.smart4y.cloud.core.infrastructure.constants.ErrorCode;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
+import com.smart4y.cloud.core.infrastructure.exception.context.MessageType;
 import com.smart4y.cloud.core.infrastructure.spring.SpringContextHolder;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ import java.util.Map.Entry;
  * Http与Servlet工具类.
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class WebUtils {
@@ -508,7 +508,7 @@ public class WebUtils {
             return Objects.requireNonNull(requestAttributes).getRequest();
         } catch (Exception e) {
             log.error("获取HttpServletRequest异常：{}", e.getLocalizedMessage(), e);
-            throw new OpenAlertException(ErrorCode.BAD_REQUEST.getCode(), "获取HttpServletRequest异常");
+            throw new OpenAlertException(MessageType.BAD_REQUEST, "获取HttpServletRequest异常");
         }
     }
 

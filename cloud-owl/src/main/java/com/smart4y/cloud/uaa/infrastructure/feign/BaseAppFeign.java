@@ -1,7 +1,7 @@
 package com.smart4y.cloud.uaa.infrastructure.feign;
 
 import com.smart4y.cloud.core.interfaces.OpenClientDetailsDTO;
-import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.core.domain.message.ResultMessage;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -24,5 +24,5 @@ public interface BaseAppFeign {
      * @param clientId 客户端Id
      */
     @GetMapping("/app/client/{clientId}/info")
-    ResultEntity<OpenClientDetailsDTO> getAppClientInfo(@PathVariable("clientId") String clientId);
+    ResultMessage<OpenClientDetailsDTO> getAppClientInfo(@PathVariable("clientId") String clientId);
 }

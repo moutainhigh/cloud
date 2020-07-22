@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.infrastructure.exception;
+package com.smart4y.cloud.core.infrastructure.exception.handler;
 
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;

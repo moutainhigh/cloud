@@ -141,7 +141,7 @@
                         this.saving = true
                         const data = Object.assign({}, this.formItem)
                         Generate.execute(data).then(res => {
-                            if (res.code === 0) {
+                            if (res.rtnCode === '200') {
                                 let result = res.data
                                 let href = Generate.downloadPath + '?filePath=' + result.filePath
                                 this.$Modal.confirm({
@@ -177,7 +177,7 @@
                 let that = this
                 if (val === 1) {
                     Generate.tables(this.formItem).then(res => {
-                        if (res.code === 0) {
+                        if (res.rtnCode === '200') {
                             let items = []
                             res.data.map(item => {
                                 items.push({

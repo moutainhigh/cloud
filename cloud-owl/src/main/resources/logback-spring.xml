@@ -20,7 +20,7 @@
     <!-- 彩色日志格式 -->
     <property name="APP_INFO" value="${APP_NAME}:${ServerIP}:${ServerPort}|"/>
     <property name="CONSOLE_LOG_PATTERN"
-              value="%yellow(%date{MM-dd HH:mm:ss.SSS}) |%highlight(%-5level) |%magenta(${PID}) |%cyan(%X{X-Request-Id}%thread) |%blue(%logger{50}:%line) |%cyan(%m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx})"/>
+              value="%yellow(%date{MM-dd HH:mm:ss.SSS}) |%highlight(%-5level) |%magenta(${PID}) |%cyan(%X{X-Request-Id}) |%cyan(%thread) |%blue(%logger{50}:%line) |%cyan(%m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx})"/>
     <property name="CONSOLE_LOG_PATTERN_NO_COLOR"
               value="%date{MM-dd HH:mm:ss.SSS} |%-5level |${PID} |%X{X-Request-Id}%thread |%logger{50}:%line |%m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
 
@@ -82,7 +82,7 @@
 
     <!-- 开发环境 -->
     <springProfile name="default,dev,test">
-        <logger name="com.smart4y.cloud" level="debug"/>
+        <logger name="com.smart4y.cloud" level="INFO"/>
         <logger name="org.springframework.amqp" level="info"/>
         <logger name="com.alibaba.nacos.client.naming" level="warn"/>
         <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="info"/>

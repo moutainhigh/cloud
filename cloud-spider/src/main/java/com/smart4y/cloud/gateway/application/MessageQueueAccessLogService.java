@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.smart4y.cloud.core.domain.event.LogAccessedEvent;
 import com.smart4y.cloud.core.infrastructure.constants.QueueConstants;
+import com.smart4y.cloud.core.infrastructure.interceptor.FeignRequestInterceptor;
 import com.smart4y.cloud.core.infrastructure.security.OpenUserDetails;
 import com.smart4y.cloud.gateway.domain.GatewayContext;
 import com.smart4y.cloud.gateway.infrastructure.toolkit.ReactiveWebUtils;
@@ -22,8 +23,10 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR;
 
@@ -31,7 +34,7 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.G
  * 网关日志记录 实现类
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @Component
@@ -75,9 +78,7 @@ public class MessageQueueAccessLogService implements AccessLogService {
         Map<String, String> headers = request.getHeaders().toSingleValueMap();
         String userAgent = headers.get(HttpHeaders.USER_AGENT);
         String ip = ReactiveWebUtils.getRemoteAddress(exchange);
-        LocalDateTime requestTime = Objects
-                .requireNonNull((Date) exchange.getAttribute("requestTime"))
-                .toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime requestTime = exchange.getAttribute(FeignRequestInterceptor.X_REQUEST_TIME);
         String serviceId = getServiceId(exchange);
         Map data = getParams(exchange);
         String error = getErrorMessage(ex);

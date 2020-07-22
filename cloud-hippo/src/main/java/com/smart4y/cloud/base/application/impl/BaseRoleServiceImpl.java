@@ -15,6 +15,7 @@ import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
+import com.smart4y.cloud.core.infrastructure.exception.context.MessageType;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ import java.util.List;
 
 /**
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @ApplicationService
@@ -71,7 +72,7 @@ public class BaseRoleServiceImpl implements BaseRoleService {
     @Override
     public BaseRole addRole(BaseRole role) {
         if (isExist(role.getRoleCode())) {
-            throw new OpenAlertException(String.format("%s编码已存在!", role.getRoleCode()));
+            throw new OpenAlertException(MessageType.BAD_REQUEST, String.format("%s编码已存在!", role.getRoleCode()));
         }
         if (role.getStatus() == null) {
             role.setStatus(BaseConstants.ENABLED);
@@ -89,12 +90,12 @@ public class BaseRoleServiceImpl implements BaseRoleService {
     public BaseRole updateRole(BaseRole role) {
         BaseRole saved = getRole(role.getRoleId());
         if (saved == null) {
-            throw new OpenAlertException("信息不存在!");
+            throw new OpenAlertException(MessageType.BAD_REQUEST, "信息不存在!");
         }
         if (!saved.getRoleCode().equals(role.getRoleCode())) {
             // 和原来不一致重新检查唯一性
             if (isExist(role.getRoleCode())) {
-                throw new OpenAlertException(String.format("%s编码已存在!", role.getRoleCode()));
+                throw new OpenAlertException(MessageType.BAD_REQUEST, String.format("%s编码已存在!", role.getRoleCode()));
             }
         }
         role.setLastModifiedDate(LocalDateTime.now());
@@ -106,11 +107,11 @@ public class BaseRoleServiceImpl implements BaseRoleService {
     public void removeRole(long roleId) {
         BaseRole role = getRole(roleId);
         if (role != null && role.getIsPersist().equals(BaseConstants.ENABLED)) {
-            throw new OpenAlertException("保留数据，不允许删除");
+            throw new OpenAlertException(MessageType.BAD_REQUEST, "保留数据，不允许删除");
         }
         int count = getCountByRole(roleId);
         if (count > 0) {
-            throw new OpenAlertException("该角色下存在授权人员,不允许删除!");
+            throw new OpenAlertException(MessageType.BAD_REQUEST, "该角色下存在授权人员,不允许删除!");
         }
         baseRoleMapper.deleteByPrimaryKey(roleId);
     }
@@ -118,7 +119,7 @@ public class BaseRoleServiceImpl implements BaseRoleService {
     @Override
     public Boolean isExist(String roleCode) {
         if (StringHelper.isBlank(roleCode)) {
-            throw new OpenAlertException("roleCode不能为空!");
+            throw new OpenAlertException(MessageType.BAD_REQUEST, "roleCode不能为空!");
         }
         Weekend<BaseRole> queryWrapper = Weekend.of(BaseRole.class);
         queryWrapper.weekendCriteria()
@@ -136,7 +137,7 @@ public class BaseRoleServiceImpl implements BaseRoleService {
             return;
         }
         if (CommonConstants.ROOT.equals(user.getUserName())) {
-            throw new OpenAlertException("默认用户无需分配!");
+            throw new OpenAlertException(MessageType.BAD_REQUEST, "默认用户无需分配!");
         }
         // 先清空,在添加
         removeUserRoles(userId);

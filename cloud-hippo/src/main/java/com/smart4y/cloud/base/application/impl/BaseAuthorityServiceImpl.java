@@ -10,7 +10,7 @@ import com.smart4y.cloud.core.domain.OpenAuthority;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
-import com.smart4y.cloud.core.infrastructure.exception.OpenException;
+import com.smart4y.cloud.core.infrastructure.exception.context.MessageType;
 import com.smart4y.cloud.core.infrastructure.security.OpenHelper;
 import com.smart4y.cloud.core.infrastructure.security.OpenSecurityConstants;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  * 对菜单、操作、API等进行权限分配操作
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @ApplicationService
@@ -162,7 +162,7 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
     @Override
     public void removeAuthority(Long resourceId, ResourceType resourceType) {
         if (isGranted(resourceId, resourceType)) {
-            throw new OpenAlertException("资源已被授权，不允许删除！取消授权后，再次尝试！");
+            throw new OpenAlertException(MessageType.BAD_REQUEST, "资源已被授权，不允许删除！取消授权后，再次尝试！");
         }
         Weekend<BaseAuthority> queryWrapper = buildQueryWrapper(resourceId, resourceType);
         baseAuthorityMapper.deleteByExample(queryWrapper);
@@ -267,7 +267,7 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
             return;
         }
         if (CommonConstants.ROOT.equals(user.getUserName())) {
-            throw new OpenAlertException("默认用户无需授权!");
+            throw new OpenAlertException(MessageType.BAD_REQUEST, "默认用户无需授权!");
         }
         // 获取用户角色列表
         List<Long> roleIds = baseRoleService.getUserRoleIds(userId);
@@ -458,7 +458,7 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
     @Override
     public boolean isGrantedByRoleIds(Long authorityId, List<Long> roleIds) {
         if (CollectionUtils.isEmpty(roleIds)) {
-            throw new OpenException("roleIds is empty");
+            throw new OpenAlertException(MessageType.BAD_REQUEST, "roleIds is empty");
         }
         Weekend<BaseAuthorityRole> roleQueryWrapper = Weekend.of(BaseAuthorityRole.class);
         roleQueryWrapper.weekendCriteria()

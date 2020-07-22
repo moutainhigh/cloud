@@ -1,5 +1,9 @@
 package com.smart4y.cloud.core.infrastructure.filter;
 
+import com.smart4y.cloud.core.infrastructure.interceptor.FeignRequestInterceptor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -8,8 +12,9 @@ import java.io.IOException;
  * 参数去除空格过滤器
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
+@Slf4j
 public class XFilter implements Filter {
 
     @Override
@@ -19,6 +24,10 @@ public class XFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
+
+        String xRequestId = req.getHeader(FeignRequestInterceptor.X_REQUEST_ID);
+        MDC.put(FeignRequestInterceptor.X_REQUEST_ID, xRequestId);
+
         XServletRequestWrapper xssRequestWrapper = new XServletRequestWrapper(req);
         chain.doFilter(xssRequestWrapper, response);
     }

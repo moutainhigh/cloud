@@ -9,7 +9,7 @@ import com.smart4y.cloud.base.interfaces.converter.GatewayRateLimitConverter;
 import com.smart4y.cloud.base.interfaces.valueobject.query.RateLimitQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayRateLimitApiVO;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayRateLimitVO;
-import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.core.domain.message.ResultMessage;
 import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
@@ -46,10 +46,10 @@ public class GatewayRateLimitController {
      */
     @ApiOperation(value = "获取分页接口列表", notes = "获取分页接口列表")
     @GetMapping("/gateway/limit/rate")
-    public ResultEntity<Page<GatewayRateLimitVO>> getRateLimitListPage(RateLimitQuery query) {
+    public ResultMessage<Page<GatewayRateLimitVO>> getRateLimitListPage(RateLimitQuery query) {
         PageInfo<GatewayRateLimit> listPage = gatewayRateLimitService.findListPage(query);
         Page<GatewayRateLimitVO> result = gatewayRateLimitConverter.convertPage(listPage);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     /**
@@ -60,10 +60,10 @@ public class GatewayRateLimitController {
             @ApiImplicitParam(name = "policyId", required = true, value = "策略ID", paramType = "path"),
     })
     @GetMapping("/gateway/limit/rate/{policyId}/info")
-    public ResultEntity<GatewayRateLimitVO> getRateLimit(@PathVariable("policyId") Long policyId) {
+    public ResultMessage<GatewayRateLimitVO> getRateLimit(@PathVariable("policyId") Long policyId) {
         GatewayRateLimit policy = gatewayRateLimitService.getRateLimitPolicy(policyId);
         GatewayRateLimitVO result = gatewayRateLimitConverter.convert(policy);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     /**
@@ -74,10 +74,10 @@ public class GatewayRateLimitController {
             @ApiImplicitParam(name = "policyId", value = "策略ID", paramType = "form"),
     })
     @GetMapping("/gateway/limit/rate/api/list")
-    public ResultEntity<List<GatewayRateLimitApiVO>> getRateLimitApiList(@RequestParam("policyId") Long policyId) {
+    public ResultMessage<List<GatewayRateLimitApiVO>> getRateLimitApiList(@RequestParam("policyId") Long policyId) {
         List<GatewayRateLimitApi> list = gatewayRateLimitService.findRateLimitApiList(policyId);
         List<GatewayRateLimitApiVO> result = gatewayRateLimitApiConverter.convertList(list);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     /**
@@ -92,13 +92,13 @@ public class GatewayRateLimitController {
             @ApiImplicitParam(name = "apiIds", value = "API接口ID.多个以,隔开.选填", paramType = "form")
     })
     @PostMapping("/gateway/limit/rate/api/add")
-    public ResultEntity addRateLimitApis(
+    public ResultMessage addRateLimitApis(
             @RequestParam("policyId") Long policyId,
             @RequestParam(value = "apiIds", required = false) String apiIds
     ) {
         gatewayRateLimitService.addRateLimitApis(policyId, StringHelper.isNotBlank(apiIds) ? apiIds.split(",") : new String[]{});
         openRestTemplate.refreshGateway();
-        return ResultEntity.ok();
+        return ResultMessage.ok();
     }
 
     /**
@@ -117,7 +117,7 @@ public class GatewayRateLimitController {
             @ApiImplicitParam(name = "intervalUnit", required = true, value = "单位时间:seconds-秒,minutes-分钟,hours-小时,days-天", allowableValues = "seconds,minutes,hours,days", paramType = "form"),
     })
     @PostMapping("/gateway/limit/rate/add")
-    public ResultEntity<Long> addRateLimit(
+    public ResultMessage<Long> addRateLimit(
             @RequestParam(value = "policyName") String policyName,
             @RequestParam(value = "policyType") String policyType,
             @RequestParam(value = "limitQuota") Long limitQuota,
@@ -132,7 +132,7 @@ public class GatewayRateLimitController {
         if (result != null) {
             policyId = result.getPolicyId();
         }
-        return ResultEntity.ok(policyId);
+        return ResultMessage.ok(policyId);
     }
 
     /**
@@ -153,7 +153,7 @@ public class GatewayRateLimitController {
             @ApiImplicitParam(name = "intervalUnit", required = true, value = "单位时间:seconds-秒,minutes-分钟,hours-小时,days-天", allowableValues = "seconds,minutes,hours,days", paramType = "form"),
     })
     @PostMapping("/gateway/limit/rate/update")
-    public ResultEntity updateRateLimit(
+    public ResultMessage updateRateLimit(
             @RequestParam("policyId") Long policyId,
             @RequestParam(value = "policyName") String policyName,
             @RequestParam(value = "policyType") String policyType,
@@ -168,7 +168,7 @@ public class GatewayRateLimitController {
         rateLimit.setPolicyType(policyType);
         gatewayRateLimitService.updateRateLimitPolicy(rateLimit);
         openRestTemplate.refreshGateway();
-        return ResultEntity.ok();
+        return ResultMessage.ok();
     }
 
 
@@ -180,11 +180,11 @@ public class GatewayRateLimitController {
             @ApiImplicitParam(name = "policyId", required = true, value = "policyId", paramType = "form"),
     })
     @PostMapping("/gateway/limit/rate/remove")
-    public ResultEntity removeRateLimit(
+    public ResultMessage removeRateLimit(
             @RequestParam("policyId") Long policyId) {
         gatewayRateLimitService.removeRateLimitPolicy(policyId);
         // 刷新网关
         openRestTemplate.refreshGateway();
-        return ResultEntity.ok();
+        return ResultMessage.ok();
     }
 }

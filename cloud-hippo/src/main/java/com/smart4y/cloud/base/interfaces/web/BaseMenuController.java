@@ -11,7 +11,7 @@ import com.smart4y.cloud.base.interfaces.valueobject.query.BaseMenuQuery;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseActionVO;
 import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseMenuVO;
 import com.smart4y.cloud.core.domain.page.Page;
-import com.smart4y.cloud.core.domain.ResultEntity;
+import com.smart4y.cloud.core.domain.message.ResultMessage;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -46,10 +46,10 @@ public class BaseMenuController {
      */
     @ApiOperation(value = "获取分页菜单资源列表", notes = "获取分页菜单资源列表")
     @GetMapping("/menu")
-    public ResultEntity<Page<BaseMenuVO>> getMenuListPage(BaseMenuQuery query) {
+    public ResultMessage<Page<BaseMenuVO>> getMenuListPage(BaseMenuQuery query) {
         PageInfo<BaseMenu> pageInfo = baseMenuService.findListPage(query);
         Page<BaseMenuVO> result = baseMenuConverter.convertPage(pageInfo);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     /**
@@ -57,10 +57,10 @@ public class BaseMenuController {
      */
     @ApiOperation(value = "菜单所有资源列表", notes = "菜单所有资源列表")
     @GetMapping("/menu/all")
-    public ResultEntity<List<BaseMenuVO>> getMenuAllList() {
+    public ResultMessage<List<BaseMenuVO>> getMenuAllList() {
         List<BaseMenu> list = baseMenuService.findAllList();
         List<BaseMenuVO> result = baseMenuConverter.convertList(list);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
 
@@ -72,10 +72,10 @@ public class BaseMenuController {
             @ApiImplicitParam(name = "menuId", value = "menuId", paramType = "form"),
     })
     @GetMapping("/menu/action")
-    public ResultEntity<List<BaseActionVO>> getMenuAction(Long menuId) {
+    public ResultMessage<List<BaseActionVO>> getMenuAction(Long menuId) {
         List<BaseAction> list = baseActionService.findListByMenuId(menuId);
         List<BaseActionVO> result = baseActionConverter.convertList(list);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     /**
@@ -88,10 +88,10 @@ public class BaseMenuController {
             @ApiImplicitParam(name = "menuId", required = true, value = "menuId"),
     })
     @GetMapping("/menu/{menuId}/info")
-    public ResultEntity<BaseMenuVO> getMenu(@PathVariable("menuId") Long menuId) {
+    public ResultMessage<BaseMenuVO> getMenu(@PathVariable("menuId") Long menuId) {
         BaseMenu menu = baseMenuService.getMenu(menuId);
         BaseMenuVO result = baseMenuConverter.convert(menu);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     /**
@@ -122,7 +122,7 @@ public class BaseMenuController {
             @ApiImplicitParam(name = "menuDesc", required = false, value = "描述", paramType = "form"),
     })
     @PostMapping("/menu/add")
-    public ResultEntity<Long> addMenu(
+    public ResultMessage<Long> addMenu(
             @RequestParam(value = "menuCode") String menuCode,
             @RequestParam(value = "menuName") String menuName,
             @RequestParam(value = "icon", required = false) String icon,
@@ -150,7 +150,7 @@ public class BaseMenuController {
         if (result != null) {
             menuId = result.getMenuId();
         }
-        return ResultEntity.ok(menuId);
+        return ResultMessage.ok(menuId);
     }
 
     /**
@@ -182,7 +182,7 @@ public class BaseMenuController {
             @ApiImplicitParam(name = "menuDesc", required = false, value = "描述", paramType = "form"),
     })
     @PostMapping("/menu/update")
-    public ResultEntity updateMenu(
+    public ResultMessage updateMenu(
             @RequestParam("menuId") Long menuId,
             @RequestParam(value = "menuCode") String menuCode,
             @RequestParam(value = "menuName") String menuName,
@@ -209,7 +209,7 @@ public class BaseMenuController {
         menu.setMenuDesc(menuDesc);
         baseMenuService.updateMenu(menu);
         openRestTemplate.refreshGateway();
-        return ResultEntity.ok();
+        return ResultMessage.ok();
     }
 
     /**
@@ -220,11 +220,11 @@ public class BaseMenuController {
             @ApiImplicitParam(name = "menuId", required = true, value = "menuId", paramType = "form"),
     })
     @PostMapping("/menu/remove")
-    public ResultEntity<Boolean> removeMenu(
+    public ResultMessage<Boolean> removeMenu(
             @RequestParam("menuId") Long menuId
     ) {
         baseMenuService.removeMenu(menuId);
         openRestTemplate.refreshGateway();
-        return ResultEntity.ok();
+        return ResultMessage.ok();
     }
 }
