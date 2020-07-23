@@ -6,7 +6,7 @@ import com.smart4y.cloud.base.application.BaseApiService;
 import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.domain.model.BaseApi;
 import com.smart4y.cloud.base.infrastructure.mapper.BaseApiMapper;
-import com.smart4y.cloud.base.interfaces.valueobject.query.BaseApiQuery;
+import com.smart4y.cloud.base.interfaces.query.BaseApiQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;

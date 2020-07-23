@@ -3,11 +3,12 @@ package com.smart4y.cloud.base.interfaces.web;
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.BaseApiService;
 import com.smart4y.cloud.base.domain.model.BaseApi;
+import com.smart4y.cloud.base.interfaces.command.*;
 import com.smart4y.cloud.base.interfaces.converter.BaseApiConverter;
-import com.smart4y.cloud.base.interfaces.valueobject.query.BaseApiQuery;
-import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseApiVO;
-import com.smart4y.cloud.core.domain.page.Page;
+import com.smart4y.cloud.base.interfaces.query.BaseApiQuery;
+import com.smart4y.cloud.base.interfaces.vo.BaseApiVO;
 import com.smart4y.cloud.core.domain.message.ResultMessage;
+import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Api(tags = "系统接口资源管理")
 @RestController
@@ -51,7 +52,7 @@ public class BaseApiController {
      */
     @ApiOperation(value = "获取所有接口列表", notes = "获取所有接口列表")
     @GetMapping("/api/all")
-    public ResultMessage<List<BaseApiVO>> getApiAllList(String serviceId) {
+    public ResultMessage<List<BaseApiVO>> getApiAllList(@RequestParam("serviceId") String serviceId) {
         List<BaseApi> allList = apiService.findAllList(serviceId);
         List<BaseApiVO> result = baseApiConverter.convertList(allList);
         return ResultMessage.ok(result);
@@ -60,11 +61,11 @@ public class BaseApiController {
     /**
      * 获取接口资源
      */
+    @GetMapping("/api/{apiId}/info")
     @ApiOperation(value = "获取接口资源", notes = "获取接口资源")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "apiId", required = true, value = "ApiId", paramType = "path"),
+            @ApiImplicitParam(name = "apiId", required = true, value = "apiId", paramType = "path"),
     })
-    @GetMapping("/api/{apiId}/info")
     public ResultMessage<BaseApiVO> getApi(@PathVariable("apiId") Long apiId) {
         BaseApi api = apiService.getApi(apiId);
         BaseApiVO result = baseApiConverter.convert(api);
@@ -73,53 +74,21 @@ public class BaseApiController {
 
     /**
      * 添加接口资源
-     *
-     * @param apiCode   接口编码
-     * @param apiName   接口名称
-     * @param serviceId 服务ID
-     * @param path      请求路径
-     * @param status    是否启用
-     * @param priority  优先级越小越靠前
-     * @param apiDesc   描述
-     * @return
      */
     @ApiOperation(value = "添加接口资源", notes = "添加接口资源")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "apiCode", required = true, value = "接口编码", paramType = "form"),
-            @ApiImplicitParam(name = "apiName", required = true, value = "接口名称", paramType = "form"),
-            @ApiImplicitParam(name = "apiCategory", required = true, value = "接口分类", paramType = "form"),
-            @ApiImplicitParam(name = "serviceId", required = true, value = "服务ID", paramType = "form"),
-            @ApiImplicitParam(name = "path", required = false, value = "请求路径", paramType = "form"),
-            @ApiImplicitParam(name = "status", required = true, defaultValue = "1", allowableValues = "0,1", value = "是否启用", paramType = "form"),
-            @ApiImplicitParam(name = "priority", required = false, value = "优先级越小越靠前", paramType = "form"),
-            @ApiImplicitParam(name = "apiDesc", required = false, value = "描述", paramType = "form"),
-            @ApiImplicitParam(name = "isAuth", required = false, defaultValue = "0", allowableValues = "0,1", value = "是否身份认证", paramType = "form"),
-            @ApiImplicitParam(name = "isOpen", required = false, defaultValue = "0", allowableValues = "0,1", value = "是否公开: 0-内部的 1-公开的", paramType = "form")
-    })
     @PostMapping("/api/add")
-    public ResultMessage<Long> addApi(
-            @RequestParam(value = "apiCode") String apiCode,
-            @RequestParam(value = "apiName") String apiName,
-            @RequestParam(value = "apiCategory") String apiCategory,
-            @RequestParam(value = "serviceId") String serviceId,
-            @RequestParam(value = "path", required = false, defaultValue = "") String path,
-            @RequestParam(value = "status", defaultValue = "1") Integer status,
-            @RequestParam(value = "priority", required = false, defaultValue = "0") Integer priority,
-            @RequestParam(value = "apiDesc", required = false, defaultValue = "") String apiDesc,
-            @RequestParam(value = "isAuth", required = false, defaultValue = "1") Integer isAuth,
-            @RequestParam(value = "isOpen", required = false, defaultValue = "0") Integer isOpen
-    ) {
+    public ResultMessage<Long> addApi(@RequestBody AddApiCommand command) {
         BaseApi api = new BaseApi();
-        api.setApiCode(apiCode);
-        api.setApiName(apiName);
-        api.setApiCategory(apiCategory);
-        api.setServiceId(serviceId);
-        api.setPath(path);
-        api.setStatus(status);
-        api.setPriority(priority);
-        api.setApiDesc(apiDesc);
-        api.setIsAuth(isAuth);
-        api.setIsOpen(isOpen);
+        api.setApiCode(command.getApiCode());
+        api.setApiName(command.getApiName());
+        api.setApiCategory(command.getApiCategory());
+        api.setServiceId(command.getServiceId());
+        api.setPath(command.getPath());
+        api.setStatus(command.getStatus());
+        api.setPriority(command.getPriority());
+        api.setApiDesc(command.getApiDesc());
+        api.setIsAuth(command.getIsAuth());
+        api.setIsOpen(command.getIsOpen());
         Long apiId = null;
         apiService.addApi(api);
         openRestTemplate.refreshGateway();
@@ -128,77 +97,35 @@ public class BaseApiController {
 
     /**
      * 编辑接口资源
-     *
-     * @param apiId     接口ID
-     * @param apiCode   接口编码
-     * @param apiName   接口名称
-     * @param serviceId 服务ID
-     * @param path      请求路径
-     * @param status    是否启用
-     * @param priority  优先级越小越靠前
-     * @param apiDesc   描述
-     * @return
      */
-    @ApiOperation(value = "编辑接口资源", notes = "编辑接口资源")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "apiId", required = true, value = "接口Id", paramType = "form"),
-            @ApiImplicitParam(name = "apiCode", required = true, value = "接口编码", paramType = "form"),
-            @ApiImplicitParam(name = "apiName", required = true, value = "接口名称", paramType = "form"),
-            @ApiImplicitParam(name = "apiCategory", required = true, value = "接口分类", paramType = "form"),
-            @ApiImplicitParam(name = "serviceId", required = true, value = "服务ID", paramType = "form"),
-            @ApiImplicitParam(name = "path", required = false, value = "请求路径", paramType = "form"),
-            @ApiImplicitParam(name = "status", required = true, defaultValue = "1", allowableValues = "0,1", value = "是否启用", paramType = "form"),
-            @ApiImplicitParam(name = "priority", required = false, value = "优先级越小越靠前", paramType = "form"),
-            @ApiImplicitParam(name = "apiDesc", required = false, value = "描述", paramType = "form"),
-            @ApiImplicitParam(name = "isAuth", required = false, defaultValue = "0", allowableValues = "0,1", value = "是否身份认证", paramType = "form"),
-            @ApiImplicitParam(name = "isOpen", required = false, defaultValue = "0", allowableValues = "0,1", value = "是否公开: 0-内部的 1-公开的", paramType = "form")
-    })
     @PostMapping("/api/update")
-    public ResultMessage updateApi(
-            @RequestParam("apiId") Long apiId,
-            @RequestParam(value = "apiCode") String apiCode,
-            @RequestParam(value = "apiName") String apiName,
-            @RequestParam(value = "apiCategory") String apiCategory,
-            @RequestParam(value = "serviceId") String serviceId,
-            @RequestParam(value = "path", required = false, defaultValue = "") String path,
-            @RequestParam(value = "status", defaultValue = "1") Integer status,
-            @RequestParam(value = "priority", required = false, defaultValue = "0") Integer priority,
-            @RequestParam(value = "apiDesc", required = false, defaultValue = "") String apiDesc,
-            @RequestParam(value = "isAuth", required = false, defaultValue = "1") Integer isAuth,
-            @RequestParam(value = "isOpen", required = false, defaultValue = "0") Integer isOpen
-    ) {
+    @ApiOperation(value = "编辑接口资源", notes = "编辑接口资源")
+    public ResultMessage<Void> updateApi(@RequestBody UpdateApiCommand command) {
         BaseApi api = new BaseApi();
-        api.setApiId(apiId);
-        api.setApiCode(apiCode);
-        api.setApiName(apiName);
-        api.setApiCategory(apiCategory);
-        api.setServiceId(serviceId);
-        api.setPath(path);
-        api.setStatus(status);
-        api.setPriority(priority);
-        api.setApiDesc(apiDesc);
-        api.setIsAuth(isAuth);
-        api.setIsOpen(isOpen);
+        api.setApiId(command.getApiId());
+        api.setApiCode(command.getApiCode());
+        api.setApiName(command.getApiName());
+        api.setApiCategory(command.getApiCategory());
+        api.setServiceId(command.getServiceId());
+        api.setPath(command.getPath());
+        api.setStatus(command.getStatus());
+        api.setPriority(command.getPriority());
+        api.setApiDesc(command.getApiDesc());
+        api.setIsAuth(command.getIsAuth());
+        api.setIsOpen(command.getIsOpen());
         apiService.updateApi(api);
         // 刷新网关
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();
     }
 
-
     /**
      * 移除接口资源
-     *
-     * @param apiId
-     * @return
      */
     @ApiOperation(value = "移除接口资源", notes = "移除接口资源")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "apiId", required = true, value = "ApiId", paramType = "form"),
-    })
     @PostMapping("/api/remove")
-    public ResultMessage removeApi(@RequestParam("apiId") Long apiId) {
-        apiService.removeApi(apiId);
+    public ResultMessage<Void> removeApi(@RequestBody DeleteApiCommand command) {
+        apiService.removeApi(command.getApiId());
         // 刷新网关
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();
@@ -206,16 +133,14 @@ public class BaseApiController {
 
     /**
      * 批量删除数据
-     *
-     * @return
      */
     @ApiOperation(value = "批量删除数据", notes = "批量删除数据")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "ids", required = true, value = "多个用,号隔开", paramType = "form")
     })
     @PostMapping("/api/batch/remove")
-    public ResultMessage batchRemove(@RequestParam(value = "ids") String ids) {
-        List<Long> apiIds = Arrays.stream(ids.split(","))
+    public ResultMessage<Void> batchRemove(@RequestBody DeleteApiBatchCommand command) {
+        List<Long> apiIds = Arrays.stream(command.getIds().split(","))
                 .map(Long::parseLong).collect(Collectors.toList());
         apiService.removeApis(apiIds);
         // 刷新网关
@@ -223,22 +148,15 @@ public class BaseApiController {
         return ResultMessage.ok();
     }
 
-
     /**
      * 批量修改公开状态
-     *
-     * @return
      */
     @ApiOperation(value = "批量修改公开状态", notes = "批量修改公开状态")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "ids", required = true, value = "多个用,号隔开", paramType = "form"),
-            @ApiImplicitParam(name = "open", required = true, value = "是否公开访问:0-否 1-是", paramType = "form")
-    })
     @PostMapping("/api/batch/update/open")
-    public ResultMessage batchUpdateOpen(@RequestParam(value = "ids") String ids, @RequestParam(value = "open") Integer open) {
-        List<Long> apiIds = Arrays.stream(ids.split(","))
+    public ResultMessage<Void> batchUpdateOpen(@RequestBody UpdateApiBatchOpenCommand command) {
+        List<Long> apiIds = Arrays.stream(command.getIds().split(","))
                 .map(Long::parseLong).collect(Collectors.toList());
-        apiService.updateOpenStatusApis(open, apiIds);
+        apiService.updateOpenStatusApis(command.getOpen(), apiIds);
         // 刷新网关
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();
@@ -246,21 +164,13 @@ public class BaseApiController {
 
     /**
      * 批量修改状态
-     *
-     * @return
      */
     @ApiOperation(value = "批量修改状态", notes = "批量修改状态")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "ids", required = true, value = "多个用,号隔开", paramType = "form"),
-            @ApiImplicitParam(name = "status", required = true, value = "接口状态:0-禁用 1-启用 2", paramType = "form")
-    })
     @PostMapping("/api/batch/update/status")
-    public ResultMessage batchUpdateStatus(
-            @RequestParam(value = "ids") String ids,
-            @RequestParam(value = "status") Integer status) {
-        List<Long> apiIds = Arrays.stream(ids.split(","))
+    public ResultMessage<Void> batchUpdateStatus(@RequestBody UpdateApiBatchStatusCommand command) {
+        List<Long> apiIds = Arrays.stream(command.getIds().split(","))
                 .map(Long::parseLong).collect(Collectors.toList());
-        apiService.updateStatusApis(status, apiIds);
+        apiService.updateStatusApis(command.getStatus(), apiIds);
         // 刷新网关
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();
@@ -270,17 +180,11 @@ public class BaseApiController {
      * 批量修改身份认证
      */
     @ApiOperation(value = "批量修改身份认证", notes = "批量修改身份认证")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "ids", required = true, value = "多个用,号隔开", paramType = "form"),
-            @ApiImplicitParam(name = "auth", required = true, value = "是否身份认证:0-否 1-是", paramType = "form")
-    })
     @PostMapping("/api/batch/update/auth")
-    public ResultMessage batchUpdateAuth(
-            @RequestParam(value = "ids") String ids,
-            @RequestParam(value = "auth") Integer auth) {
-        List<Long> apiIds = Arrays.stream(ids.split(","))
+    public ResultMessage<Void> batchUpdateAuth(@RequestBody UpdateApiBatchAuthCommand command) {
+        List<Long> apiIds = Arrays.stream(command.getIds().split(","))
                 .map(Long::parseLong).collect(Collectors.toList());
-        apiService.updateAuthApis(auth, apiIds);
+        apiService.updateAuthApis(command.getAuth(), apiIds);
         // 刷新网关
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();

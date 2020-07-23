@@ -1,7 +1,7 @@
 package com.smart4y.cloud.gateway.infrastructure.feign;
 
 import com.smart4y.cloud.core.domain.message.ResultMessage;
-import com.smart4y.cloud.gateway.interfaces.GatewayRouteDTO;
+import com.smart4y.cloud.gateway.interfaces.vo.GatewayRouteDTO;
 import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
 import com.smart4y.cloud.core.interfaces.RateLimitApiDTO;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;

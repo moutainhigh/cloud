@@ -3,23 +3,20 @@ package com.smart4y.cloud.base.interfaces.web;
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.BaseDeveloperService;
 import com.smart4y.cloud.base.domain.model.BaseDeveloper;
+import com.smart4y.cloud.base.interfaces.command.AddDeveloperUserCommand;
 import com.smart4y.cloud.base.interfaces.converter.BaseDeveloperConverter;
-import com.smart4y.cloud.base.interfaces.valueobject.command.AddDeveloperUserCommand;
-import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterDeveloperThirdPartyCommand;
-import com.smart4y.cloud.base.interfaces.valueobject.query.BaseDeveloperQuery;
-import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseDeveloperVO;
-import com.smart4y.cloud.core.domain.page.Page;
+import com.smart4y.cloud.base.interfaces.query.BaseDeveloperQuery;
+import com.smart4y.cloud.base.interfaces.vo.BaseDeveloperVO;
 import com.smart4y.cloud.core.domain.message.ResultMessage;
+import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.interfaces.UserAccountVO;
+import com.smart4y.cloud.base.interfaces.command.AddDeveloperThirdPartyCommand;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,7 +24,7 @@ import java.util.List;
  * 系统用户信息
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Api(tags = "系统用户管理")
 @RestController
@@ -45,7 +42,7 @@ public class BaseDeveloperController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", required = true, value = "登录名", paramType = "path"),
     })
-    @PostMapping("/developer/login")
+    @GetMapping("/developer/login")
     public ResultMessage<UserAccountVO> developerLogin(@RequestParam(value = "username") String username) {
         UserAccountVO account = baseDeveloperService.login(username);
         return ResultMessage.ok(account);
@@ -150,18 +147,8 @@ public class BaseDeveloperController {
      */
     @ApiOperation(value = "注册第三方系统登录账号", notes = "仅限系统内部调用")
     @PostMapping("/developer/add/thirdParty")
-    public ResultMessage addDeveloperThirdParty(
-            @RequestParam(value = "account") String account,
-            @RequestParam(value = "password") String password,
-            @RequestParam(value = "accountType") String accountType,
-            @RequestParam(value = "nickName") String nickName,
-            @RequestParam(value = "avatar") String avatar) {
-        RegisterDeveloperThirdPartyCommand command = new RegisterDeveloperThirdPartyCommand();
-        command.setNickName(nickName);
-        command.setUserName(account);
-        command.setPassword(password);
-        command.setAvatar(avatar);
-        baseDeveloperService.addUserThirdParty(command, accountType);
+    public ResultMessage<Void> addDeveloperThirdParty(@RequestBody AddDeveloperThirdPartyCommand command) {
+        baseDeveloperService.addUserThirdParty(command);
         return ResultMessage.ok();
     }
 }

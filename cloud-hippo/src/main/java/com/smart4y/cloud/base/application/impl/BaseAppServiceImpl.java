@@ -6,7 +6,7 @@ import com.smart4y.cloud.base.application.BaseAppService;
 import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.domain.model.BaseApp;
 import com.smart4y.cloud.base.infrastructure.mapper.BaseAppMapper;
-import com.smart4y.cloud.base.interfaces.valueobject.query.BaseAppQuery;
+import com.smart4y.cloud.base.interfaces.query.BaseAppQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;

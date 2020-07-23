@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.GatewayAccessLogsService;
 import com.smart4y.cloud.base.domain.model.GatewayAccessLogs;
 import com.smart4y.cloud.base.infrastructure.mapper.GatewayAccessLogsMapper;
-import com.smart4y.cloud.base.interfaces.valueobject.query.GatewayAccessLogsQuery;
+import com.smart4y.cloud.base.interfaces.query.GatewayAccessLogsQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
 import lombok.extern.slf4j.Slf4j;

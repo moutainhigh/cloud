@@ -5,7 +5,7 @@ import com.smart4y.cloud.base.application.BaseUserService;
 import com.smart4y.cloud.base.domain.model.BaseAuthorityAction;
 import com.smart4y.cloud.base.domain.model.BaseUser;
 import com.smart4y.cloud.base.interfaces.converter.BaseAuthorityActionConverter;
-import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseAuthorityActionVO;
+import com.smart4y.cloud.base.interfaces.vo.BaseAuthorityActionVO;
 import com.smart4y.cloud.core.domain.OpenAuthority;
 import com.smart4y.cloud.core.domain.message.ResultMessage;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;

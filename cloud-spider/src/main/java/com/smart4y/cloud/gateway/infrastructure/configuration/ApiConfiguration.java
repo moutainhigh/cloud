@@ -16,7 +16,7 @@ import com.smart4y.cloud.gateway.infrastructure.filter.RemoveGatewayContextFilte
 import com.smart4y.cloud.gateway.infrastructure.locator.JdbcRouteDefinitionLocator;
 import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
-import com.smart4y.cloud.gateway.interfaces.actuator.ApiEndpoint;
+import com.smart4y.cloud.gateway.interfaces.web.RouteRefreshEndpoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
@@ -153,8 +153,8 @@ public class ApiConfiguration {
     @Bean
     @ConditionalOnEnabledEndpoint
     @ConditionalOnClass({Endpoint.class})
-    public ApiEndpoint apiEndpoint(ApplicationContext context, BusProperties bus) {
-        ApiEndpoint endpoint = new ApiEndpoint(context, bus.getId());
+    public RouteRefreshEndpoint apiEndpoint(ApplicationContext context, BusProperties bus) {
+        RouteRefreshEndpoint endpoint = new RouteRefreshEndpoint(context, bus.getId());
         log.info("ApiEndpoint [{}]", endpoint);
         return endpoint;
     }

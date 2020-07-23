@@ -144,6 +144,7 @@ public class SwaggerProvider implements SwaggerResourcesProvider {
         public GatewayFilter apply(Object config) {
             return (exchange, chain) -> {
                 ServerHttpRequest request = exchange.getRequest();
+                log.info(">>>>>>>>>>> {}", request.getURI());
                 String path = request.getURI().getPath();
                 if (!StringUtils.endsWithIgnoreCase(path, URI)) {
                     return chain.filter(exchange);

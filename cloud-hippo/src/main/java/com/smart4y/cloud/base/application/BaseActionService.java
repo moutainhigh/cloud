@@ -2,7 +2,7 @@ package com.smart4y.cloud.base.application;
 
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.BaseAction;
-import com.smart4y.cloud.base.interfaces.valueobject.query.BaseActionQuery;
+import com.smart4y.cloud.base.interfaces.query.BaseActionQuery;
 
 import java.util.List;
 

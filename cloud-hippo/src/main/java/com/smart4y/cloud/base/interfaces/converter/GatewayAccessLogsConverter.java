@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.interfaces.converter;
 
 import com.smart4y.cloud.base.domain.model.GatewayAccessLogs;
-import com.smart4y.cloud.base.interfaces.valueobject.vo.GatewayAccessLogsVO;
+import com.smart4y.cloud.base.interfaces.vo.GatewayAccessLogsVO;
 import com.smart4y.cloud.core.infrastructure.mapper.base.AbstractConverter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;

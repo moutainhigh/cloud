@@ -21,7 +21,7 @@ import org.springframework.core.env.Environment;
  * </p>
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @EnableFeignClients

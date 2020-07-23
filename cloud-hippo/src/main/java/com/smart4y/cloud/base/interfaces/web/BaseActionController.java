@@ -3,11 +3,14 @@ package com.smart4y.cloud.base.interfaces.web;
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.BaseActionService;
 import com.smart4y.cloud.base.domain.model.BaseAction;
+import com.smart4y.cloud.base.interfaces.command.AddActionCommand;
+import com.smart4y.cloud.base.interfaces.command.DeleteActionCommand;
+import com.smart4y.cloud.base.interfaces.command.UpdateActionCommand;
 import com.smart4y.cloud.base.interfaces.converter.BaseActionConverter;
-import com.smart4y.cloud.base.interfaces.valueobject.query.BaseActionQuery;
-import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseActionVO;
-import com.smart4y.cloud.core.domain.page.Page;
+import com.smart4y.cloud.base.interfaces.query.BaseActionQuery;
+import com.smart4y.cloud.base.interfaces.vo.BaseActionVO;
 import com.smart4y.cloud.core.domain.message.ResultMessage;
+import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -18,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @RestController
 @Api(tags = "系统功能按钮管理")
@@ -50,8 +53,7 @@ public class BaseActionController {
             @ApiImplicitParam(name = "actionId", required = true, value = "功能按钮Id", paramType = "path"),
     })
     @GetMapping("/action/{actionId}/info")
-    public ResultMessage<BaseActionVO> getAction(
-            @PathVariable("actionId") Long actionId) {
+    public ResultMessage<BaseActionVO> getAction(@PathVariable("actionId") Long actionId) {
         BaseAction action = baseActionService.getAction(actionId);
         BaseActionVO vo = baseActionConverter.convert(action);
         return ResultMessage.ok(vo);
@@ -59,38 +61,17 @@ public class BaseActionController {
 
     /**
      * 添加功能按钮
-     *
-     * @param actionCode 功能按钮编码
-     * @param actionName 功能按钮名称
-     * @param menuId     上级菜单
-     * @param status     是否启用
-     * @param priority   优先级越小越靠前
-     * @param actionDesc 描述
      */
-    @ApiOperation(value = "添加功能按钮", notes = "添加功能按钮")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "actionCode", required = true, value = "功能按钮编码", paramType = "form"),
-            @ApiImplicitParam(name = "actionName", required = true, value = "功能按钮名称", paramType = "form"),
-            @ApiImplicitParam(name = "menuId", required = true, value = "上级菜单", paramType = "form"),
-            @ApiImplicitParam(name = "status", required = true, defaultValue = "1", allowableValues = "0,1", value = "是否启用", paramType = "form"),
-            @ApiImplicitParam(name = "priority", required = false, value = "优先级越小越靠前", paramType = "form"),
-            @ApiImplicitParam(name = "actionDesc", required = false, value = "描述", paramType = "form"),
-    })
     @PostMapping("/action/add")
-    public ResultMessage<Long> addAction(
-            @RequestParam(value = "actionCode") String actionCode,
-            @RequestParam(value = "actionName") String actionName,
-            @RequestParam(value = "menuId") Long menuId,
-            @RequestParam(value = "status", defaultValue = "1") Integer status,
-            @RequestParam(value = "priority", required = false, defaultValue = "0") Integer priority,
-            @RequestParam(value = "actionDesc", required = false, defaultValue = "") String actionDesc) {
+    @ApiOperation(value = "添加功能按钮", notes = "添加功能按钮")
+    public ResultMessage<Long> addAction(@RequestBody AddActionCommand command) {
         BaseAction action = new BaseAction();
-        action.setActionCode(actionCode);
-        action.setActionName(actionName);
-        action.setMenuId(menuId);
-        action.setStatus(status);
-        action.setPriority(priority);
-        action.setActionDesc(actionDesc);
+        action.setActionCode(command.getActionCode());
+        action.setActionName(command.getActionName());
+        action.setMenuId(command.getMenuId());
+        action.setStatus(command.getStatus());
+        action.setPriority(command.getPriority());
+        action.setActionDesc(command.getActionDesc());
         Long actionId = null;
         BaseAction result = baseActionService.addAction(action);
         if (result != null) {
@@ -102,42 +83,18 @@ public class BaseActionController {
 
     /**
      * 编辑功能按钮
-     *
-     * @param actionId   功能按钮ID
-     * @param actionCode 功能按钮编码
-     * @param actionName 功能按钮名称
-     * @param menuId     上级菜单
-     * @param status     是否启用
-     * @param priority   优先级越小越靠前
-     * @param actionDesc 描述
      */
-    @ApiOperation(value = "编辑功能按钮", notes = "添加功能按钮")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "actionId", required = true, value = "功能按钮ID", paramType = "form"),
-            @ApiImplicitParam(name = "actionCode", required = true, value = "功能按钮编码", paramType = "form"),
-            @ApiImplicitParam(name = "actionName", required = true, value = "功能按钮名称", paramType = "form"),
-            @ApiImplicitParam(name = "menuId", required = true, value = "上级菜单", paramType = "form"),
-            @ApiImplicitParam(name = "status", required = true, defaultValue = "1", allowableValues = "0,1", value = "是否启用", paramType = "form"),
-            @ApiImplicitParam(name = "priority", required = false, value = "优先级越小越靠前", paramType = "form"),
-            @ApiImplicitParam(name = "actionDesc", required = false, value = "描述", paramType = "form"),
-    })
     @PostMapping("/action/update")
-    public ResultMessage updateAction(
-            @RequestParam("actionId") Long actionId,
-            @RequestParam(value = "actionCode") String actionCode,
-            @RequestParam(value = "actionName") String actionName,
-            @RequestParam(value = "menuId") Long menuId,
-            @RequestParam(value = "status", defaultValue = "1") Integer status,
-            @RequestParam(value = "priority", required = false, defaultValue = "0") Integer priority,
-            @RequestParam(value = "actionDesc", required = false, defaultValue = "") String actionDesc) {
+    @ApiOperation(value = "编辑功能按钮", notes = "添加功能按钮")
+    public ResultMessage<Void> updateAction(@RequestBody UpdateActionCommand command) {
         BaseAction action = new BaseAction();
-        action.setActionId(actionId);
-        action.setActionCode(actionCode);
-        action.setActionName(actionName);
-        action.setMenuId(menuId);
-        action.setStatus(status);
-        action.setPriority(priority);
-        action.setActionDesc(actionDesc);
+        action.setActionId(command.getActionId());
+        action.setActionCode(command.getActionCode());
+        action.setActionName(command.getActionName());
+        action.setMenuId(command.getMenuId());
+        action.setStatus(command.getStatus());
+        action.setPriority(command.getPriority());
+        action.setActionDesc(command.getActionDesc());
         baseActionService.updateAction(action);
         // 刷新网关
         openRestTemplate.refreshGateway();
@@ -147,14 +104,10 @@ public class BaseActionController {
     /**
      * 移除功能按钮
      */
-    @ApiOperation(value = "移除功能按钮", notes = "移除功能按钮")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "actionId", required = true, value = "功能按钮ID", paramType = "form")
-    })
     @PostMapping("/action/remove")
-    public ResultMessage removeAction(
-            @RequestParam("actionId") Long actionId) {
-        baseActionService.removeAction(actionId);
+    @ApiOperation(value = "移除功能按钮", notes = "移除功能按钮")
+    public ResultMessage<Void> removeAction(@RequestBody DeleteActionCommand command) {
+        baseActionService.removeAction(command.getActionId());
         // 刷新网关
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();

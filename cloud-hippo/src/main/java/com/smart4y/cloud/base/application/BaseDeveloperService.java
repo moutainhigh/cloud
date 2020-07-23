@@ -2,9 +2,9 @@ package com.smart4y.cloud.base.application;
 
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.BaseDeveloper;
-import com.smart4y.cloud.base.interfaces.valueobject.command.AddDeveloperUserCommand;
-import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterDeveloperThirdPartyCommand;
-import com.smart4y.cloud.base.interfaces.valueobject.query.BaseDeveloperQuery;
+import com.smart4y.cloud.base.interfaces.command.AddDeveloperThirdPartyCommand;
+import com.smart4y.cloud.base.interfaces.command.AddDeveloperUserCommand;
+import com.smart4y.cloud.base.interfaces.query.BaseDeveloperQuery;
 import com.smart4y.cloud.core.interfaces.UserAccountVO;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  * 系统用户资料管理
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 public interface BaseDeveloperService {
 
@@ -33,7 +33,7 @@ public interface BaseDeveloperService {
     /**
      * 添加第三方登录用户
      */
-    void addUserThirdParty(RegisterDeveloperThirdPartyCommand command, String accountType);
+    void addUserThirdParty(AddDeveloperThirdPartyCommand command);
 
     /**
      * 更新密码

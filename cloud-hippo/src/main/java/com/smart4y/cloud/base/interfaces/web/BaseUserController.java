@@ -5,15 +5,15 @@ import com.smart4y.cloud.base.application.BaseRoleService;
 import com.smart4y.cloud.base.application.BaseUserService;
 import com.smart4y.cloud.base.domain.model.BaseRole;
 import com.smart4y.cloud.base.domain.model.BaseUser;
+import com.smart4y.cloud.base.interfaces.command.AddAdminUserCommand;
+import com.smart4y.cloud.base.interfaces.command.RegisterAdminThirdPartyCommand;
 import com.smart4y.cloud.base.interfaces.converter.BaseRoleConverter;
 import com.smart4y.cloud.base.interfaces.converter.BaseUserConverter;
-import com.smart4y.cloud.base.interfaces.valueobject.command.AddAdminUserCommand;
-import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterAdminThirdPartyCommand;
-import com.smart4y.cloud.base.interfaces.valueobject.query.BaseUserQuery;
-import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseRoleVO;
-import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseUserVO;
-import com.smart4y.cloud.core.domain.page.Page;
+import com.smart4y.cloud.base.interfaces.query.BaseUserQuery;
+import com.smart4y.cloud.base.interfaces.vo.BaseRoleVO;
+import com.smart4y.cloud.base.interfaces.vo.BaseUserVO;
 import com.smart4y.cloud.core.domain.message.ResultMessage;
+import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.interfaces.UserAccountVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  * 系统用户信息
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Api(tags = "系统用户管理")
 @RestController
@@ -55,7 +55,7 @@ public class BaseUserController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", required = true, value = "登录名", paramType = "path"),
     })
-    @PostMapping("/user/login")
+    @GetMapping("/user/login")
     public ResultMessage<UserAccountVO> userLogin(@RequestParam(value = "username") String username) {
         UserAccountVO account = baseUserService.login(username);
         return ResultMessage.ok(account);

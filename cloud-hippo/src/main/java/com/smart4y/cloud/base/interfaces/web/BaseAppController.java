@@ -4,17 +4,19 @@ import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.BaseAppService;
 import com.smart4y.cloud.base.domain.model.BaseApp;
 import com.smart4y.cloud.base.interfaces.converter.BaseAppConverter;
-import com.smart4y.cloud.base.interfaces.valueobject.query.BaseAppQuery;
-import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseAppVO;
+import com.smart4y.cloud.base.interfaces.query.BaseAppQuery;
+import com.smart4y.cloud.base.interfaces.vo.BaseAppVO;
 import com.smart4y.cloud.core.domain.message.ResultMessage;
 import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.infrastructure.security.OpenClientDetails;
 import com.smart4y.cloud.core.infrastructure.security.http.OpenRestTemplate;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.BeanConvertUtils;
+import com.smart4y.cloud.core.interfaces.OpenClientDetailsDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +27,7 @@ import java.util.Map;
  * 系统用户信息
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Api(tags = "系统应用管理")
 @RestController
@@ -40,8 +42,6 @@ public class BaseAppController {
 
     /**
      * 获取分页应用列表
-     *
-     * @return
      */
     @ApiOperation(value = "获取分页应用列表", notes = "获取分页应用列表")
     @GetMapping("/app")
@@ -53,9 +53,6 @@ public class BaseAppController {
 
     /**
      * 获取应用详情
-     *
-     * @param appId
-     * @return
      */
     @ApiOperation(value = "获取应用详情", notes = "获取应用详情")
     @ApiImplicitParams({
@@ -76,9 +73,11 @@ public class BaseAppController {
             @ApiImplicitParam(name = "clientId", value = "应用ID", defaultValue = "1", required = true, paramType = "path"),
     })
     @GetMapping("/app/client/{clientId}/info")
-    public ResultMessage<OpenClientDetails> getAppClientInfo(@PathVariable("clientId") String clientId) {
+    public ResultMessage<OpenClientDetailsDTO> getAppClientInfo(@PathVariable("clientId") String clientId) {
         OpenClientDetails clientInfo = baseAppService.getAppClientInfo(clientId);
-        return ResultMessage.ok(clientInfo);
+        OpenClientDetailsDTO detailsDTO = new OpenClientDetailsDTO();
+        BeanUtils.copyProperties(clientInfo, detailsDTO);
+        return ResultMessage.ok(detailsDTO);
     }
 
     /**
@@ -267,9 +266,7 @@ public class BaseAppController {
             @ApiImplicitParam(name = "appId", value = "应用Id", required = true, paramType = "form"),
     })
     @PostMapping("/app/remove")
-    public ResultMessage removeApp(
-            @RequestParam("appId") String appId
-    ) {
+    public ResultMessage<Void> removeApp(@RequestParam("appId") String appId) {
         baseAppService.removeApp(appId);
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();

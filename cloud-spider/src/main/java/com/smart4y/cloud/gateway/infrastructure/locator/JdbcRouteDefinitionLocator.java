@@ -32,7 +32,7 @@ import java.util.Map;
  * <p>
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class JdbcRouteDefinitionLocator implements ApplicationListener<RouteRemoteRefreshedEvent>, ApplicationEventPublisherAware {
@@ -64,11 +64,10 @@ public class JdbcRouteDefinitionLocator implements ApplicationListener<RouteRemo
     /**
      * 刷新路由
      */
-    public Mono<Void> refresh() {
+    public void refresh() {
         this.loadRoutes();
         // 触发默认路由刷新事件,刷新缓存路由
         this.publisher.publishEvent(new RefreshRoutesEvent(this));
-        return Mono.empty();
     }
 
     private String getFullPath(List<GatewayRoute> routeList, String serviceId, String path) {

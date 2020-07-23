@@ -21,7 +21,7 @@ import org.springframework.core.env.Environment;
  * 开发环境下提供在线调试文档.
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @EnableFeignClients

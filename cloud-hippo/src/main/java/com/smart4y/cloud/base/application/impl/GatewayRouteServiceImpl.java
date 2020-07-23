@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.GatewayRouteService;
 import com.smart4y.cloud.base.domain.model.GatewayRoute;
 import com.smart4y.cloud.base.infrastructure.mapper.GatewayRouteMapper;
-import com.smart4y.cloud.base.interfaces.valueobject.query.GatewayRouteQuery;
+import com.smart4y.cloud.base.interfaces.query.GatewayRouteQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;

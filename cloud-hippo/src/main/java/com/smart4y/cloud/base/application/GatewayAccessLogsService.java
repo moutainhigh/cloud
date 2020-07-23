@@ -2,7 +2,7 @@ package com.smart4y.cloud.base.application;
 
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.GatewayAccessLogs;
-import com.smart4y.cloud.base.interfaces.valueobject.query.GatewayAccessLogsQuery;
+import com.smart4y.cloud.base.interfaces.query.GatewayAccessLogsQuery;
 
 /**
  * 网关访问日志

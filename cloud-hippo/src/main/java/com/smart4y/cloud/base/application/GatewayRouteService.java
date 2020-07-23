@@ -2,7 +2,7 @@ package com.smart4y.cloud.base.application;
 
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.GatewayRoute;
-import com.smart4y.cloud.base.interfaces.valueobject.query.GatewayRouteQuery;
+import com.smart4y.cloud.base.interfaces.query.GatewayRouteQuery;
 
 import java.util.List;
 

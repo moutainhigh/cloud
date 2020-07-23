@@ -7,7 +7,7 @@ import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.application.BaseMenuService;
 import com.smart4y.cloud.base.domain.model.BaseMenu;
 import com.smart4y.cloud.base.infrastructure.mapper.BaseMenuMapper;
-import com.smart4y.cloud.base.interfaces.valueobject.query.BaseMenuQuery;
+import com.smart4y.cloud.base.interfaces.query.BaseMenuQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.ResourceType;

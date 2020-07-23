@@ -2,7 +2,7 @@ package com.smart4y.cloud.base.application;
 
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.BaseMenu;
-import com.smart4y.cloud.base.interfaces.valueobject.query.BaseMenuQuery;
+import com.smart4y.cloud.base.interfaces.query.BaseMenuQuery;
 
 import java.util.List;
 

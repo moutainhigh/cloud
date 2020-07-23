@@ -3,7 +3,7 @@ package com.smart4y.cloud.base.application;
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.BaseRole;
 import com.smart4y.cloud.base.domain.model.BaseRoleUser;
-import com.smart4y.cloud.base.interfaces.valueobject.query.BaseRoleQuery;
+import com.smart4y.cloud.base.interfaces.query.BaseRoleQuery;
 
 import java.util.List;
 
