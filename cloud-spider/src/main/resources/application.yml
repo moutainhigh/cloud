@@ -82,7 +82,8 @@ management:
     web:
       exposure:
         # 开放部分端点和自定义端点
-        include: health,info,open
+#        include: health,info,open
+        include: '*'
 ##Mapper 配置
 mapper:
   mappers:
@@ -172,14 +173,16 @@ cloud:
       - /*/login/**
       - /*/logout/**
       - /*/oauth/**
-      - /actuator/health
-      - /actuator/info
+      - /actuator/**
     # 忽略权限鉴定
     authority-ignores:
       - /*/authority/granted/me
       - /*/authority/granted/me/menu
       - /*/current/user/**
+      - /actuator/**
     # 签名忽略
     sign-ignores:
       - /**/login/**
       - /**/logout/**
+      - /actuator/**
+      - /actuator/**

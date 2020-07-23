@@ -1,19 +1,18 @@
 package com.smart4y.cloud.core.infrastructure.toolkit.secret;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.toolkit.Kit;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.DateHelper;
-import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
-import com.smart4y.cloud.core.infrastructure.toolkit.random.RandomValueUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * * @author Youtao
@@ -81,65 +80,50 @@ public class SignatureUtils {
                 return true;
             }
         } catch (Exception e) {
-            log.error("validateSign error:{}", e.getMessage());
+            log.error("validateSign error:{}", e.getMessage(), e);
             return false;
         }
         return false;
     }
 
-
     /**
      * 得到签名
      *
-     * @param paramMap     参数集合不含appSecret
-     *                     必须包含appId=客户端ID
-     *                     signType = SHA256|MD5 签名方式
-     *                     timestamp=时间戳
-     *                     nonce=随机字符串
-     * @param clientSecret 验证接口的clientSecret
-     * @return
+     * @param requestParams 参数集合不含appSecret
+     *                      必须包含appId=客户端ID
+     *                      signType = SHA256|MD5 签名方式
+     *                      timestamp=时间戳
+     *                      nonce=随机字符串
+     * @param clientSecret  验证接口的clientSecret
+     * @return Sign
      */
-    public static String getSign(Map<String, String> paramMap, String clientSecret) {
-        if (paramMap == null) {
-            return "";
+    public static String getSign(Map<String, String> requestParams, String clientSecret) {
+        // 待签名字段
+        Map<String, Object> signMap = new HashMap<>(requestParams);
+        signMap.remove(CommonConstants.SIGN_SIGN_KEY);
+        signMap.put(CommonConstants.SIGN_SECRET_KEY, clientSecret);
+        String signType = requestParams.get(CommonConstants.SIGN_SIGN_TYPE_KEY);
+
+        StringBuilder builder = new StringBuilder();
+        List<String> sortedKeys = signMap.keySet().stream().sorted().collect(Collectors.toList());
+        for (String key : sortedKeys) {
+            Object value = signMap.get(key);
+            builder.append(key).append("=").append(value).append("&");
         }
-        //排序
-        Set<String> keySet = paramMap.keySet();
-        String[] keyArray = keySet.toArray(new String[keySet.size()]);
-        Arrays.sort(keyArray);
-        StringBuilder sb = new StringBuilder();
-        String signType = paramMap.get(CommonConstants.SIGN_SIGN_TYPE_KEY);
-        SignType type = null;
-        if (StringHelper.isNotBlank(signType)) {
-            type = SignType.valueOf(signType);
-        }
-        if (type == null) {
-            type = SignType.MD5;
-        }
-        for (String k : keyArray) {
-            if (k.equals(CommonConstants.SIGN_SIGN_KEY) || k.equals(CommonConstants.SIGN_SECRET_KEY)) {
-                continue;
-            }
-            if (paramMap.get(k).trim().length() > 0) {
-                // 参数值为空，则不参与签名
-                sb.append(k).append("=").append(paramMap.get(k).trim()).append("&");
-            }
-        }
-        //暂时不需要个人认证
-        sb.append(CommonConstants.SIGN_SECRET_KEY + "=").append(clientSecret);
-        String signStr = "";
-        //加密
-        switch (type) {
-            case MD5:
-                signStr = EncryptUtils.md5Hex(sb.toString()).toUpperCase();
-                break;
+        String signString = builder.toString();
+
+        String sign;
+        switch (SignType.valueOf(signType)) {
             case SHA256:
-                signStr = EncryptUtils.sha256Hex(sb.toString()).toUpperCase();
+                sign = DigestUtil.sha256Hex(signString).toUpperCase();
+                break;
+            case MD5:
+                sign = DigestUtil.md5Hex(signString).toUpperCase();
                 break;
             default:
-                break;
+                throw new IllegalStateException("Unexpected value: " + SignType.valueOf(signType));
         }
-        return signStr;
+        return sign;
     }
 
     public enum SignType {

@@ -54,7 +54,7 @@ import java.util.TimeZone;
  * 网关配置类
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @Configuration
@@ -124,12 +124,6 @@ public class ApiConfiguration {
         jackson2HttpMessageConverter.setObjectMapper(objectMapper);
         log.info("MappingJackson2HttpMessageConverter [{}]", jackson2HttpMessageConverter);
         return new HttpMessageConverters(jackson2HttpMessageConverter);
-    }
-
-    @Bean
-    @Primary
-    public SwaggerProvider swaggerProvider(RouteDefinitionLocator routeDefinitionLocator) {
-        return new SwaggerProvider(routeDefinitionLocator);
     }
 
     /**

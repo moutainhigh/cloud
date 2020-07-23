@@ -29,7 +29,7 @@
         <libphonenumber-geocoder.version>2.120</libphonenumber-geocoder.version>
         <hutool.version>4.1.19</hutool.version>
         <ip2region.version>1.7.2</ip2region.version>
-        <swagger2.version>2.9.2</swagger2.version>
+        <knife4j.version>2.0.4</knife4j.version>
 
         <mybatis.version>3.5.5</mybatis.version>
         <mapper.version>4.1.5</mapper.version>
@@ -90,12 +90,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
-        <!-- Swagger -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${swagger2.version}</version>
-        </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
@@ -129,6 +123,10 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
         </dependency>
         <!-- Spring Security -->
         <dependency>
@@ -255,6 +253,13 @@
             <groupId>org.lionsoul</groupId>
             <artifactId>ip2region</artifactId>
             <version>${ip2region.version}</version>
+        </dependency>
+
+        <!-- ((((((((((((((((((((((((( Knife4J Swagger（以下） ))))))))))))))))))))))))) -->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-micro-spring-boot-starter</artifactId>
+            <version>${knife4j.version}</version>
         </dependency>
     </dependencies>
 

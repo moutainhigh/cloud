@@ -22,6 +22,7 @@
         <spring.cloud.version>Hoxton.SR6</spring.cloud.version>
 
         <swagger-bootstrap-ui.version>1.9.5</swagger-bootstrap-ui.version>
+        <knife4j.version>2.0.4</knife4j.version>
     </properties>
 
     <dependencyManagement>
@@ -96,11 +97,17 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+
         <!-- Swagger -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>swagger-bootstrap-ui</artifactId>
             <version>${swagger-bootstrap-ui.version}</version>
+        </dependency>-->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <version>${knife4j.version}</version>
         </dependency>
     </dependencies>
 

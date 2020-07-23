@@ -1,6 +1,8 @@
 package com.smart4y.cloud.core.infrastructure.autoconfigure;
 
 import com.google.common.collect.Lists;
+import com.smart4y.cloud.core.infrastructure.exception.OpenException;
+import com.smart4y.cloud.core.infrastructure.exception.context.MessageType;
 import com.smart4y.cloud.core.infrastructure.properties.OpenSwaggerProperties;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.DateHelper;
 import com.smart4y.cloud.core.infrastructure.toolkit.random.RandomValueUtils;
@@ -12,10 +14,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.i18n.LocaleContextHolder;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.ParameterBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
+import org.springframework.web.bind.annotation.RequestMethod;
+import springfox.documentation.builders.*;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
@@ -34,7 +34,7 @@ import java.util.Locale;
  * Swagger文档生成配置
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @EnableConfigurationProperties({OpenSwaggerProperties.class})
@@ -43,9 +43,9 @@ import java.util.Locale;
 public class SwaggerAutoConfiguration {
 
     private static final String SCOPE_PREFIX = "scope.";
-    private OpenSwaggerProperties openSwaggerProperties;
-    private Locale locale = LocaleContextHolder.getLocale();
-    private MessageSource messageSource;
+    private final OpenSwaggerProperties openSwaggerProperties;
+    private final Locale locale = LocaleContextHolder.getLocale();
+    private final MessageSource messageSource;
 
     public SwaggerAutoConfiguration(OpenSwaggerProperties openSwaggerProperties, MessageSource messageSource) {
         this.openSwaggerProperties = openSwaggerProperties;
@@ -55,18 +55,41 @@ public class SwaggerAutoConfiguration {
 
     @Bean
     public Docket createRestApi() {
-        Docket docket = new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo())
+        // 添加全局响应状态码
+        List<ResponseMessage> responseMessages = new ArrayList<>();
+        ResponseMessage ok = new ResponseMessageBuilder()
+                .code(Integer.parseInt(MessageType.OK.getRtnCode()))
+                .message(OpenException.getBundleMessageText(MessageType.OK))
+                .responseModel(new ModelRef(OpenException.getBundleMessageText(MessageType.OK)))
+                .build();
+        responseMessages.add(ok);
+
+        return new Docket(DocumentationType.SWAGGER_2)
+
+                .globalResponseMessage(RequestMethod.GET, responseMessages)
+                .globalResponseMessage(RequestMethod.POST, responseMessages)
+                .globalResponseMessage(RequestMethod.PUT, responseMessages)
+                .globalResponseMessage(RequestMethod.PATCH, responseMessages)
+                .globalResponseMessage(RequestMethod.DELETE, responseMessages)
+
+                .apiInfo(createApiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
                 .paths(PathSelectors.any())
                 .build()
-                .securitySchemes(Collections.singletonList(securityScheme()));
-        return docket;
+                .securitySchemes(Collections.singletonList(apiKey()));
+    }
+
+    private ApiInfo createApiInfo() {
+        return new ApiInfoBuilder()
+                .title(openSwaggerProperties.getTitle())
+                .description(openSwaggerProperties.getDescription())
+                .version("1.0")
+                .build();
     }
 
     @Bean
-    public SecurityConfiguration security() {
+    public SecurityConfiguration securityConfiguration() {
         SecurityConfiguration realm = new SecurityConfiguration(openSwaggerProperties.getClientId(),
                 openSwaggerProperties.getClientSecret(),
                 "realm", openSwaggerProperties.getClientId(),
@@ -98,20 +121,10 @@ public class SwaggerAutoConfiguration {
      * 需要增加swagger授权回调地址
      * http://localhost:8888/webjars/springfox-swagger-ui/o2c.html
      */
-    @Bean
-    public SecurityScheme securityScheme() {
-        ApiKey apiKey = new ApiKey("BearerToken", "Authorization", "header");
-        return apiKey;
+    public SecurityScheme apiKey() {
+        return new ApiKey("BearerToken", "Authorization", "header");
     }
 
-    private ApiInfo apiInfo() {
-        ApiInfo apiInfo = new ApiInfoBuilder()
-                .title(openSwaggerProperties.getTitle())
-                .description(openSwaggerProperties.getDescription())
-                .version("1.0")
-                .build();
-        return apiInfo;
-    }
 
     /**
      * 构建全局参数

@@ -36,50 +36,57 @@ const getNonce = () => {
  * @param {*} config 请求配置
  */
 export const sign = (config, appId, appSecret, signType) => {
-  // 获取到秒级的时间戳,与后端对应
-  let data = {
-    APP_ID: appId,
-    TIMESTAMP: getDateTimeToString(),
-    SIGN_TYPE: signType,
-    NONCE: getNonce()
-  };
+  // 参与签名的公共字段
+  let _app_id = "APP_ID";
+  let _sign_type = "SIGN_TYPE";
+  let _timestamp = "TIMESTAMP";
+  let _nonce = "NONCE";
+  let _secret_key = "SECRET_KEY";
+  let _sign = "SIGN";
+  // 参与签名的公共字段
+  let signingColumns = {};
+  signingColumns[_app_id] = appId;
+  signingColumns[_sign_type] = signType;
+  signingColumns[_timestamp] = getDateTimeToString();
+  signingColumns[_nonce] = getNonce();
+  signingColumns[_secret_key] = appSecret;
 
-  const _singKey = 'SIGN';
-  const _secretKey = 'SECRET_KEY';
-  let keys = [];
+  // 参数格式化（url参数签名/request body参数的内容）
   if (config.method === 'get') {
-    // url参数签名
-    data = config.params = Object.assign(config.params ? config.params : {}, data);
-    keys = Object.keys(data)
+    signingColumns = config.params = Object.assign(config.params ? config.params : {}, signingColumns);
   } else {
-    // request body参数的内容
-    data = config.data = Object.assign(config.data ? config.data : {}, data);
-    keys = Object.keys(data)
+    signingColumns = config.data = Object.assign(config.data ? config.data : {}, signingColumns);
   }
-  // 排序
-  const skeys = keys.sort();
+  // 获取所有字段Key并排序
+  const sortedKeys = Object.keys(signingColumns).sort();
+
   let str = '';
-  skeys.filter(k => {
-    return k !== _singKey && k !== _secretKey
-  }).map(k => {
-    const v = data[k];
+  sortedKeys.map(k => {
+    const v = signingColumns[k];
     if (v || v === 0) {
       // 参数值为空，则不参与签名
-      str = str + k + '=' + v + '&'
+      str += k + '=' + v + '&'
     }
   });
-  str = str + _secretKey + '=' + appSecret;
+
   let sign = '';
-  if (data.SIGN_TYPE === 'MD5') {
-    sign = md5(str).toUpperCase()
+  switch (signType) {
+    case 'MD5':
+      sign = md5(str).toUpperCase();
+      break
+    case 'SHA256':
+      sign = sha256(str).toUpperCase();
+      break
   }
-  if (data.SIGN_TYPE === 'SHA256') {
-    sign = sha256(str).toUpperCase()
-  }
+
+  // 添加签名字段和移除应用密钥
   if (config.method === 'get') {
-    config.params[_singKey] = sign
+    config.params[_sign] = sign;
+    delete config.params[_secret_key];
   } else {
-    config.data[_singKey] = sign
+    config.data[_sign] = sign;
+    delete config.data[_secret_key];
   }
+
   return config
 };
