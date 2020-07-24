@@ -1,7 +1,7 @@
 package com.smart4y.cloud.uaa.infrastructure.configuration;
 
-import com.smart4y.cloud.core.infrastructure.exception.handler.OpenAccessDeniedHandler;
-import com.smart4y.cloud.core.infrastructure.exception.handler.OpenAuthenticationEntryPoint;
+import com.smart4y.cloud.core.exception.handler.OpenAccessDeniedHandler;
+import com.smart4y.cloud.core.exception.handler.OpenAuthenticationEntryPoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;

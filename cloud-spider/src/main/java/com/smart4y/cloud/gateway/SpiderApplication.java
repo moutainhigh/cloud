@@ -1,6 +1,6 @@
 package com.smart4y.cloud.gateway;
 
-import com.smart4y.cloud.core.infrastructure.AbstractApplication;
+import com.smart4y.cloud.core.AbstractApplication;
 import com.smart4y.cloud.gateway.infrastructure.locator.JdbcRouteDefinitionLocator;
 import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
 import lombok.extern.slf4j.Slf4j;

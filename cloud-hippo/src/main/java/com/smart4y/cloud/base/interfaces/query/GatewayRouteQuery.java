@@ -1,6 +1,6 @@
 package com.smart4y.cloud.base.interfaces.query;
 
-import com.smart4y.cloud.core.domain.page.BaseQuery;
+import com.smart4y.cloud.core.message.page.BaseQuery;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

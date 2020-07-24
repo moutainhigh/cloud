@@ -1,6 +1,6 @@
 package com.smart4y.cloud.base;
 
-import com.smart4y.cloud.core.infrastructure.AbstractApplication;
+import com.smart4y.cloud.core.AbstractApplication;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

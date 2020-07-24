@@ -1,7 +1,7 @@
 package com.smart4y.cloud.gateway.infrastructure.security;
 
-import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
-import com.smart4y.cloud.core.infrastructure.exception.context.Unauthorized401MessageType;
+import com.smart4y.cloud.core.exception.OpenAlertException;
+import com.smart4y.cloud.core.message.enums.Unauthorized401MessageType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.core.Authentication;

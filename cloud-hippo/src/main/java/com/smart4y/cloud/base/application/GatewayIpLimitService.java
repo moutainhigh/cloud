@@ -4,7 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.GatewayIpLimit;
 import com.smart4y.cloud.base.domain.model.GatewayIpLimitApi;
 import com.smart4y.cloud.base.interfaces.query.IpLimitQuery;
-import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
+import com.smart4y.cloud.core.dto.IpLimitApiDTO;
 
 import java.util.List;
 

@@ -1,12 +1,12 @@
 package com.smart4y.cloud.gateway.infrastructure.security;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
-import com.smart4y.cloud.core.domain.OpenAuthority;
-import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
-import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
-import com.smart4y.cloud.core.infrastructure.exception.context.AccessDenied403MessageType;
-import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
-import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
+import com.smart4y.cloud.core.dto.OpenAuthority;
+import com.smart4y.cloud.core.constant.CommonConstants;
+import com.smart4y.cloud.core.exception.OpenAlertException;
+import com.smart4y.cloud.core.message.enums.AccessDenied403MessageType;
+import com.smart4y.cloud.core.toolkit.base.StringHelper;
+import com.smart4y.cloud.core.dto.AuthorityResourceDTO;
 import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
 import com.smart4y.cloud.gateway.infrastructure.toolkit.ReactiveIpAddressMatcher;

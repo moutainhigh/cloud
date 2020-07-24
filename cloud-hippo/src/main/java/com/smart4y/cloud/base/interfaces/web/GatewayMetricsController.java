@@ -1,6 +1,6 @@
 package com.smart4y.cloud.base.interfaces.web;
 //
-//import com.smart4y.cloud.core.domain.message.ResultMessage;
+//import com.smart4y.cloud.core.message.ResultMessage;
 //import lombok.extern.slf4j.Slf4j;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.web.bind.annotation.GetMapping;

@@ -1,9 +1,9 @@
 package com.smart4y.cloud.uaa.interfaces.web;
 
 import com.alibaba.fastjson.JSONObject;
-import com.smart4y.cloud.core.infrastructure.security.oauth2.client.OpenOAuth2ClientDetails;
-import com.smart4y.cloud.core.infrastructure.security.oauth2.client.OpenOAuth2ClientProperties;
-import com.smart4y.cloud.core.infrastructure.toolkit.web.WebUtils;
+import com.smart4y.cloud.core.security.oauth2.client.OpenOAuth2ClientDetails;
+import com.smart4y.cloud.core.security.oauth2.client.OpenOAuth2ClientProperties;
+import com.smart4y.cloud.core.toolkit.web.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

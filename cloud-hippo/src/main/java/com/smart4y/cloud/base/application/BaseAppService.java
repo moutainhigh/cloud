@@ -3,7 +3,7 @@ package com.smart4y.cloud.base.application;
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.BaseApp;
 import com.smart4y.cloud.base.interfaces.query.BaseAppQuery;
-import com.smart4y.cloud.core.infrastructure.security.OpenClientDetails;
+import com.smart4y.cloud.core.security.OpenClientDetails;
 
 /**
  * 应用信息管理

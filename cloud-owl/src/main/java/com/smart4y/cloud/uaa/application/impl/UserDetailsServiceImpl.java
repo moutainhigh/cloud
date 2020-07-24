@@ -1,10 +1,10 @@
 package com.smart4y.cloud.uaa.application.impl;
 
-import com.smart4y.cloud.core.interfaces.UserAccountVO;
-import com.smart4y.cloud.core.domain.message.ResultMessage;
-import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
-import com.smart4y.cloud.core.infrastructure.security.OpenUserDetails;
-import com.smart4y.cloud.core.infrastructure.security.oauth2.client.OpenOAuth2ClientProperties;
+import com.smart4y.cloud.core.dto.UserAccountVO;
+import com.smart4y.cloud.core.message.ResultMessage;
+import com.smart4y.cloud.core.constant.BaseConstants;
+import com.smart4y.cloud.core.security.OpenUserDetails;
+import com.smart4y.cloud.core.security.oauth2.client.OpenOAuth2ClientProperties;
 import com.smart4y.cloud.uaa.infrastructure.feign.BaseUserFeign;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

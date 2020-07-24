@@ -4,7 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.GatewayRateLimit;
 import com.smart4y.cloud.base.domain.model.GatewayRateLimitApi;
 import com.smart4y.cloud.base.interfaces.query.RateLimitQuery;
-import com.smart4y.cloud.core.interfaces.RateLimitApiDTO;
+import com.smart4y.cloud.core.dto.RateLimitApiDTO;
 
 import java.util.List;
 

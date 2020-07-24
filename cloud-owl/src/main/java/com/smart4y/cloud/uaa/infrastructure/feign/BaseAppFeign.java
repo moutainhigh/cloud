@@ -1,8 +1,8 @@
 package com.smart4y.cloud.uaa.infrastructure.feign;
 
-import com.smart4y.cloud.core.domain.message.ResultMessage;
-import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
-import com.smart4y.cloud.core.interfaces.OpenClientDetailsDTO;
+import com.smart4y.cloud.core.message.ResultMessage;
+import com.smart4y.cloud.core.constant.BaseConstants;
+import com.smart4y.cloud.core.dto.OpenClientDetailsDTO;
 import com.smart4y.cloud.uaa.infrastructure.feign.fallback.BaseAppFeignFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

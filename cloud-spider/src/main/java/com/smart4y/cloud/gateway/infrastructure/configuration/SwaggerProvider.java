@@ -1,6 +1,6 @@
 package com.smart4y.cloud.gateway.infrastructure.configuration;
 
-import com.smart4y.cloud.core.infrastructure.properties.OpenCommonProperties;
+import com.smart4y.cloud.core.properties.OpenCommonProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@ package com.smart4y.cloud.uaa.interfaces.web;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
-import com.smart4y.cloud.core.domain.message.ResultMessage;
+import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.uaa.application.impl.GiteeAuthServiceImpl;
 import com.smart4y.cloud.uaa.application.impl.QQAuthServiceImpl;
 import com.smart4y.cloud.uaa.application.impl.WechatAuthServiceImpl;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.smart4y.cloud.base.infrastructure.mapper.BaseAuthorityUserCustomMapper">
-    <select id="selectAuthorityMenuByUser" resultType="com.smart4y.cloud.core.interfaces.AuthorityMenuDTO">
+    <select id="selectAuthorityMenuByUser" resultType="com.smart4y.cloud.core.dto.AuthorityMenuDTO">
         SELECT
             a.authority_id,
             a.authority,
@@ -18,7 +18,7 @@
         AND
             a.status = 1
     </select>
-    <select id="selectAuthorityByUser" resultType="com.smart4y.cloud.core.domain.OpenAuthority">
+    <select id="selectAuthorityByUser" resultType="com.smart4y.cloud.core.dto.OpenAuthority">
         SELECT
             a.authority_id,
             a.authority,

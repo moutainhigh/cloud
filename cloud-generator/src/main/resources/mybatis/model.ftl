@@ -3,7 +3,7 @@ package ${tableClass.packageName};
 <#--<#if tableClass.allFields??>
     <#list tableClass.allFields as field>
         <#if field.identity==true??>
-import com.smart4y.cloud.core.infrastructure.toolkit.gen.SnowflakeId;
+import SnowflakeId;
         </#if>
     </#list>
 </#if>-->

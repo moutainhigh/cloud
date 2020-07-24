@@ -1,4 +1,4 @@
-import com.smart4y.cloud.core.infrastructure.toolkit.Kit;
+import com.smart4y.cloud.core.toolkit.Kit;
 import okhttp3.*;
 
 import java.io.IOException;

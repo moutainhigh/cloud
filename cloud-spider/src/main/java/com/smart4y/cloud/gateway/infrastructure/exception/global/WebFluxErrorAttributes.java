@@ -1,7 +1,7 @@
 package com.smart4y.cloud.gateway.infrastructure.exception.global;
 
-import com.smart4y.cloud.core.domain.message.ResultMessage;
-import com.smart4y.cloud.core.infrastructure.exception.global.ExceptionHelper;
+import com.smart4y.cloud.core.message.ResultMessage;
+import com.smart4y.cloud.core.exception.global.ExceptionHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.reactive.error.DefaultErrorAttributes;
 import org.springframework.stereotype.Component;

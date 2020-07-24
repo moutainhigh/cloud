@@ -1,7 +1,7 @@
 package com.smart4y.cloud.gateway.infrastructure.locator;
 
 import com.google.common.collect.Lists;
-import com.smart4y.cloud.core.domain.event.RouteRemoteRefreshedEvent;
+import com.smart4y.cloud.core.event.RouteRemoteRefreshedEvent;
 import com.smart4y.cloud.gateway.domain.RateLimitApiObj;
 import com.smart4y.cloud.gateway.domain.model.GatewayRoute;
 import com.smart4y.cloud.gateway.domain.service.GatewayRateLimitApiDomainService;

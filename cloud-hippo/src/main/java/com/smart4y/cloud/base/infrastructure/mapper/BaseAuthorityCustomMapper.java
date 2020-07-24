@@ -1,9 +1,9 @@
 package com.smart4y.cloud.base.infrastructure.mapper;
 
-import com.smart4y.cloud.core.interfaces.AuthorityApiDTO;
-import com.smart4y.cloud.core.interfaces.AuthorityMenuDTO;
-import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
-import com.smart4y.cloud.core.domain.OpenAuthority;
+import com.smart4y.cloud.core.dto.AuthorityApiDTO;
+import com.smart4y.cloud.core.dto.AuthorityMenuDTO;
+import com.smart4y.cloud.core.dto.AuthorityResourceDTO;
+import com.smart4y.cloud.core.dto.OpenAuthority;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

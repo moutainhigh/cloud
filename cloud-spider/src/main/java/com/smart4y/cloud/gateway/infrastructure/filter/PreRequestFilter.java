@@ -1,7 +1,7 @@
 package com.smart4y.cloud.gateway.infrastructure.filter;
 
-import com.smart4y.cloud.core.infrastructure.interceptor.FeignRequestInterceptor;
-import com.smart4y.cloud.core.infrastructure.toolkit.Kit;
+import com.smart4y.cloud.core.interceptor.FeignRequestInterceptor;
+import com.smart4y.cloud.core.toolkit.Kit;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.http.server.reactive.ServerHttpRequest;

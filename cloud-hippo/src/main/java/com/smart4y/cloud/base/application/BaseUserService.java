@@ -5,7 +5,7 @@ import com.smart4y.cloud.base.domain.model.BaseUser;
 import com.smart4y.cloud.base.interfaces.command.user.AddUserCommand;
 import com.smart4y.cloud.base.interfaces.command.user.AddUserThirdPartyCommand;
 import com.smart4y.cloud.base.interfaces.query.BaseUserQuery;
-import com.smart4y.cloud.core.interfaces.UserAccountVO;
+import com.smart4y.cloud.core.dto.UserAccountVO;
 
 import java.util.List;
 

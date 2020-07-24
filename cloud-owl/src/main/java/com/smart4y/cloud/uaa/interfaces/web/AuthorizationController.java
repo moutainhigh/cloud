@@ -1,8 +1,8 @@
 package com.smart4y.cloud.uaa.interfaces.web;
 
-import com.smart4y.cloud.core.domain.message.ResultMessage;
-import com.smart4y.cloud.core.infrastructure.security.OpenHelper;
-import com.smart4y.cloud.core.infrastructure.security.OpenUserDetails;
+import com.smart4y.cloud.core.message.ResultMessage;
+import com.smart4y.cloud.core.security.OpenHelper;
+import com.smart4y.cloud.core.security.OpenUserDetails;
 import com.smart4y.cloud.uaa.interfaces.command.LoginCommand;
 import com.smart4y.cloud.uaa.interfaces.command.LogoutCommand;
 import io.swagger.annotations.Api;

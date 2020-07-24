@@ -1,7 +1,7 @@
 package com.smart4y.cloud.gateway.interfaces.web;
 
-import com.smart4y.cloud.core.domain.message.ResultMessage;
-import com.smart4y.cloud.core.infrastructure.exception.context.MessageType;
+import com.smart4y.cloud.core.message.ResultMessage;
+import com.smart4y.cloud.core.message.enums.MessageType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;

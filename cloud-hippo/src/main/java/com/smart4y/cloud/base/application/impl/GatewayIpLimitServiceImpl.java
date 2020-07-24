@@ -9,9 +9,9 @@ import com.smart4y.cloud.base.infrastructure.mapper.GatewayIpLimitApiCustomMappe
 import com.smart4y.cloud.base.infrastructure.mapper.GatewayIpLimitApiMapper;
 import com.smart4y.cloud.base.infrastructure.mapper.GatewayIpLimitMapper;
 import com.smart4y.cloud.base.interfaces.query.IpLimitQuery;
-import com.smart4y.cloud.core.application.ApplicationService;
-import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
-import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
+import com.smart4y.cloud.core.annotation.ApplicationService;
+import com.smart4y.cloud.core.toolkit.base.StringHelper;
+import com.smart4y.cloud.core.dto.IpLimitApiDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.weekend.Weekend;

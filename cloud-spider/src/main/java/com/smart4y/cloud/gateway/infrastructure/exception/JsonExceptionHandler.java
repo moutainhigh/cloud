@@ -1,9 +1,9 @@
 package com.smart4y.cloud.gateway.infrastructure.exception;
 
-import com.smart4y.cloud.core.domain.message.ResultMessage;
-import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
-import com.smart4y.cloud.core.infrastructure.exception.context.MessageType;
-import com.smart4y.cloud.core.infrastructure.exception.global.ExceptionHelper;
+import com.smart4y.cloud.core.message.ResultMessage;
+import com.smart4y.cloud.core.exception.OpenAlertException;
+import com.smart4y.cloud.core.message.enums.MessageType;
+import com.smart4y.cloud.core.exception.global.ExceptionHelper;
 import com.smart4y.cloud.gateway.application.AccessLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;

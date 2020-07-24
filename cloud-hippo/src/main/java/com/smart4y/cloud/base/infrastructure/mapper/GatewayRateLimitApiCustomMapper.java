@@ -1,6 +1,6 @@
 package com.smart4y.cloud.base.infrastructure.mapper;
 
-import com.smart4y.cloud.core.interfaces.RateLimitApiDTO;
+import com.smart4y.cloud.core.dto.RateLimitApiDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

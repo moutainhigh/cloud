@@ -2,7 +2,7 @@ package com.smart4y.cloud.base.interfaces.converter;
 
 import com.smart4y.cloud.base.domain.model.BaseRoleUser;
 import com.smart4y.cloud.base.interfaces.vo.BaseRoleUserVO;
-import com.smart4y.cloud.core.infrastructure.mapper.base.AbstractConverter;
+import com.smart4y.cloud.core.mapper.base.AbstractConverter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 

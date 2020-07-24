@@ -1,7 +1,7 @@
 package com.smart4y.cloud.uaa.infrastructure.feign.fallback;
 
-import com.smart4y.cloud.core.domain.message.ResultMessage;
-import com.smart4y.cloud.core.interfaces.UserAccountVO;
+import com.smart4y.cloud.core.message.ResultMessage;
+import com.smart4y.cloud.core.dto.UserAccountVO;
 import com.smart4y.cloud.uaa.infrastructure.feign.BaseUserFeign;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

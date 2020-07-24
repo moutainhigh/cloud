@@ -1,10 +1,10 @@
 package com.smart4y.cloud.gateway.infrastructure.locator;
 
 import com.google.common.collect.Lists;
-import com.smart4y.cloud.core.domain.message.ResultMessage;
-import com.smart4y.cloud.core.domain.event.RouteRemoteRefreshedEvent;
-import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
-import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
+import com.smart4y.cloud.core.message.ResultMessage;
+import com.smart4y.cloud.core.event.RouteRemoteRefreshedEvent;
+import com.smart4y.cloud.core.dto.AuthorityResourceDTO;
+import com.smart4y.cloud.core.dto.IpLimitApiDTO;
 import com.smart4y.cloud.gateway.infrastructure.feign.BaseAuthorityFeign;
 import com.smart4y.cloud.gateway.infrastructure.feign.GatewayFeign;
 import lombok.Getter;

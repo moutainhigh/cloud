@@ -1,8 +1,8 @@
 package com.smart4y.cloud.base.infrastructure.configuration;
 
-import com.smart4y.cloud.core.infrastructure.exception.handler.OpenAccessDeniedHandler;
-import com.smart4y.cloud.core.infrastructure.exception.handler.OpenAuthenticationEntryPoint;
-import com.smart4y.cloud.core.infrastructure.security.OpenHelper;
+import com.smart4y.cloud.core.exception.handler.OpenAccessDeniedHandler;
+import com.smart4y.cloud.core.exception.handler.OpenAuthenticationEntryPoint;
+import com.smart4y.cloud.core.security.OpenHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;

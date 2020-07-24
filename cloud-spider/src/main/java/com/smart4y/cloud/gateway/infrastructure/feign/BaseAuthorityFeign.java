@@ -1,9 +1,9 @@
 package com.smart4y.cloud.gateway.infrastructure.feign;
 
-import com.smart4y.cloud.core.interfaces.AuthorityMenuDTO;
-import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
-import com.smart4y.cloud.core.domain.message.ResultMessage;
-import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
+import com.smart4y.cloud.core.dto.AuthorityMenuDTO;
+import com.smart4y.cloud.core.dto.AuthorityResourceDTO;
+import com.smart4y.cloud.core.message.ResultMessage;
+import com.smart4y.cloud.core.constant.BaseConstants;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
