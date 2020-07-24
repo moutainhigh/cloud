@@ -2,8 +2,8 @@ package com.smart4y.cloud.base.application;
 
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.BaseDeveloper;
-import com.smart4y.cloud.base.interfaces.command.AddDeveloperThirdPartyCommand;
-import com.smart4y.cloud.base.interfaces.command.AddDeveloperUserCommand;
+import com.smart4y.cloud.base.interfaces.command.user.developer.AddDeveloperThirdPartyCommand;
+import com.smart4y.cloud.base.interfaces.command.user.developer.AddDeveloperUserCommand;
 import com.smart4y.cloud.base.interfaces.query.BaseDeveloperQuery;
 import com.smart4y.cloud.core.interfaces.UserAccountVO;
 

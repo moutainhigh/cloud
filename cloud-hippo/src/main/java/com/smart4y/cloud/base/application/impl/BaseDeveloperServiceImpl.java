@@ -8,8 +8,8 @@ import com.smart4y.cloud.base.domain.model.BaseAccount;
 import com.smart4y.cloud.base.domain.model.BaseAccountLogs;
 import com.smart4y.cloud.base.domain.model.BaseDeveloper;
 import com.smart4y.cloud.base.infrastructure.mapper.BaseDeveloperMapper;
-import com.smart4y.cloud.base.interfaces.command.AddDeveloperThirdPartyCommand;
-import com.smart4y.cloud.base.interfaces.command.AddDeveloperUserCommand;
+import com.smart4y.cloud.base.interfaces.command.user.developer.AddDeveloperThirdPartyCommand;
+import com.smart4y.cloud.base.interfaces.command.user.developer.AddDeveloperUserCommand;
 import com.smart4y.cloud.base.interfaces.query.BaseDeveloperQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
@@ -114,10 +114,10 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
 
     @Override
     public void addUserThirdParty(AddDeveloperThirdPartyCommand command) {
-        if (!baseAccountService.isExist(command.getAccount(), command.getAccountType(), ACCOUNT_DOMAIN)) {
+        if (!baseAccountService.isExist(command.getUserName(), command.getAccountType(), ACCOUNT_DOMAIN)) {
             // 保存系统用户信息
             BaseDeveloper developer = new BaseDeveloper()
-                    .setUserName(command.getAccount())
+                    .setUserName(command.getUserName())
                     .setNickName(command.getNickName())
                     .setAvatar(command.getAvatar())
                     .setUserType(BaseConstants.USER_TYPE_ADMIN)
@@ -127,7 +127,7 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
             long userId = developer.getUserId();
 
             // 注册账号信息
-            baseAccountService.register(userId, command.getAccount(), command.getPassword(), command.getAccountType(), BaseConstants.ACCOUNT_STATUS_NORMAL, ACCOUNT_DOMAIN, null);
+            baseAccountService.register(userId, command.getUserName(), command.getPassword(), command.getAccountType(), BaseConstants.ACCOUNT_STATUS_NORMAL, ACCOUNT_DOMAIN, null);
         }
     }
 

@@ -5,8 +5,7 @@ import com.smart4y.cloud.base.application.BaseRoleService;
 import com.smart4y.cloud.base.application.BaseUserService;
 import com.smart4y.cloud.base.domain.model.BaseRole;
 import com.smart4y.cloud.base.domain.model.BaseUser;
-import com.smart4y.cloud.base.interfaces.command.AddAdminUserCommand;
-import com.smart4y.cloud.base.interfaces.command.RegisterAdminThirdPartyCommand;
+import com.smart4y.cloud.base.interfaces.command.user.*;
 import com.smart4y.cloud.base.interfaces.converter.BaseRoleConverter;
 import com.smart4y.cloud.base.interfaces.converter.BaseUserConverter;
 import com.smart4y.cloud.base.interfaces.query.BaseUserQuery;
@@ -20,10 +19,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -88,26 +84,7 @@ public class BaseUserController {
      */
     @ApiOperation(value = "添加系统用户", notes = "添加系统用户")
     @PostMapping("/user/add")
-    public ResultMessage<Long> addUser(
-            @RequestParam(value = "userName") String userName,
-            @RequestParam(value = "password") String password,
-            @RequestParam(value = "nickName") String nickName,
-            @RequestParam(value = "status") Integer status,
-            @RequestParam(value = "userType") String userType,
-            @RequestParam(value = "email", required = false) String email,
-            @RequestParam(value = "mobile", required = false) String mobile,
-            @RequestParam(value = "userDesc", required = false) String userDesc,
-            @RequestParam(value = "avatar", required = false) String avatar) {
-        AddAdminUserCommand command = new AddAdminUserCommand();
-        command.setUserName(userName);
-        command.setPassword(password);
-        command.setNickName(nickName);
-        command.setUserType(userType);
-        command.setEmail(email);
-        command.setMobile(mobile);
-        command.setUserDesc(userDesc);
-        command.setAvatar(avatar);
-        command.setStatus(status);
+    public ResultMessage<Long> addUser(@RequestBody AddUserCommand command) {
         long userId = baseUserService.addUser(command);
         return ResultMessage.ok(userId);
     }
@@ -117,25 +94,16 @@ public class BaseUserController {
      */
     @ApiOperation(value = "更新系统用户", notes = "更新系统用户")
     @PostMapping("/user/update")
-    public ResultMessage updateUser(
-            @RequestParam(value = "userId") Long userId,
-            @RequestParam(value = "nickName") String nickName,
-            @RequestParam(value = "status") Integer status,
-            @RequestParam(value = "userType") String userType,
-            @RequestParam(value = "email", required = false) String email,
-            @RequestParam(value = "mobile", required = false) String mobile,
-            @RequestParam(value = "userDesc", required = false) String userDesc,
-            @RequestParam(value = "avatar", required = false) String avatar
-    ) {
+    public ResultMessage<Void> updateUser(@RequestBody UpdateUserCommand command) {
         BaseUser user = new BaseUser();
-        user.setUserId(userId);
-        user.setNickName(nickName);
-        user.setUserType(userType);
-        user.setEmail(email);
-        user.setMobile(mobile);
-        user.setUserDesc(userDesc);
-        user.setAvatar(avatar);
-        user.setStatus(status);
+        user.setUserId(command.getUserId());
+        user.setNickName(command.getNickName());
+        user.setUserType(command.getUserType());
+        user.setEmail(command.getEmail());
+        user.setMobile(command.getMobile());
+        user.setUserDesc(command.getUserDesc());
+        user.setAvatar(command.getAvatar());
+        user.setStatus(command.getStatus());
         baseUserService.updateUser(user);
         return ResultMessage.ok();
     }
@@ -145,26 +113,8 @@ public class BaseUserController {
      */
     @ApiOperation(value = "修改用户密码", notes = "修改用户密码")
     @PostMapping("/user/update/password")
-    public ResultMessage updatePassword(
-            @RequestParam(value = "userId") Long userId,
-            @RequestParam(value = "password") String password
-    ) {
-        baseUserService.updatePassword(userId, password);
-        return ResultMessage.ok();
-    }
-
-    /**
-     * 用户分配角色
-     */
-    @ApiOperation(value = "用户分配角色", notes = "用户分配角色")
-    @PostMapping("/user/roles/add")
-    public ResultMessage addUserRoles(
-            @RequestParam(value = "userId") Long userId,
-            @RequestParam(value = "roleIds", required = false) String roleIds) {
-        List<Long> collect = Arrays.stream(roleIds.split(","))
-                .map(Long::parseLong)
-                .collect(Collectors.toList());
-        baseRoleService.saveUserRoles(userId, collect);
+    public ResultMessage<Void> updatePassword(@RequestBody UpdatePasswordCommand command) {
+        baseUserService.updatePassword(command.getUserId(), command.getPassword());
         return ResultMessage.ok();
     }
 
@@ -173,11 +123,23 @@ public class BaseUserController {
      */
     @ApiOperation(value = "获取用户已分配角色", notes = "获取用户已分配角色")
     @GetMapping("/user/roles")
-    public ResultMessage<List<BaseRoleVO>> getUserRoles(
-            @RequestParam(value = "userId") Long userId) {
+    public ResultMessage<List<BaseRoleVO>> getUserRoles(@RequestParam(value = "userId") Long userId) {
         List<BaseRole> list = baseRoleService.getUserRoles(userId);
         List<BaseRoleVO> result = baseRoleConverter.convertList(list);
         return ResultMessage.ok(result);
+    }
+
+    /**
+     * 分配用户角色
+     */
+    @ApiOperation(value = "分配用户角色", notes = "分配用户角色")
+    @PostMapping("/user/roles/add")
+    public ResultMessage<Void> addUserRoles(@RequestBody AddUserRoleCommand command) {
+        List<Long> collect = Arrays.stream(command.getRoleIds().split(","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+        baseRoleService.saveUserRoles(command.getUserId(), collect);
+        return ResultMessage.ok();
     }
 
     /**
@@ -185,18 +147,8 @@ public class BaseUserController {
      */
     @ApiOperation(value = "注册第三方系统登录账号", notes = "仅限系统内部调用")
     @PostMapping("/user/add/thirdParty")
-    public ResultMessage addUserThirdParty(
-            @RequestParam(value = "account") String account,
-            @RequestParam(value = "password") String password,
-            @RequestParam(value = "accountType") String accountType,
-            @RequestParam(value = "nickName") String nickName,
-            @RequestParam(value = "avatar") String avatar) {
-        RegisterAdminThirdPartyCommand command = new RegisterAdminThirdPartyCommand();
-        command.setNickName(nickName);
-        command.setUserName(account);
-        command.setPassword(password);
-        command.setAvatar(avatar);
-        baseUserService.addUserThirdParty(command, accountType);
+    public ResultMessage<Void> addUserThirdParty(@RequestBody AddUserThirdPartyCommand command) {
+        baseUserService.addUserThirdParty(command);
         return ResultMessage.ok();
     }
 }

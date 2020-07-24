@@ -3,7 +3,7 @@ package com.smart4y.cloud.base.interfaces.web;
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.BaseApiService;
 import com.smart4y.cloud.base.domain.model.BaseApi;
-import com.smart4y.cloud.base.interfaces.command.*;
+import com.smart4y.cloud.base.interfaces.command.api.*;
 import com.smart4y.cloud.base.interfaces.converter.BaseApiConverter;
 import com.smart4y.cloud.base.interfaces.query.BaseApiQuery;
 import com.smart4y.cloud.base.interfaces.vo.BaseApiVO;
@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
  * @author Youtao
  * Created by youtao on 2019-09-05.
  */
-@Api(tags = "系统接口资源管理")
 @RestController
+@Api(tags = {"系统接口资源管理"})
 public class BaseApiController {
 
     @Autowired

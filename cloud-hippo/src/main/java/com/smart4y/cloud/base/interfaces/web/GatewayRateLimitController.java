@@ -4,6 +4,10 @@ import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.GatewayRateLimitService;
 import com.smart4y.cloud.base.domain.model.GatewayRateLimit;
 import com.smart4y.cloud.base.domain.model.GatewayRateLimitApi;
+import com.smart4y.cloud.base.interfaces.command.gateway.ratelimit.AddRateLimitApiCommand;
+import com.smart4y.cloud.base.interfaces.command.gateway.ratelimit.AddRateLimitCommand;
+import com.smart4y.cloud.base.interfaces.command.gateway.ratelimit.DeleteRateLimitCommand;
+import com.smart4y.cloud.base.interfaces.command.gateway.ratelimit.UpdateRateLimitCommand;
 import com.smart4y.cloud.base.interfaces.converter.GatewayRateLimitApiConverter;
 import com.smart4y.cloud.base.interfaces.converter.GatewayRateLimitConverter;
 import com.smart4y.cloud.base.interfaces.query.RateLimitQuery;
@@ -26,7 +30,7 @@ import java.util.List;
  * 网关流量控制
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @RestController
 @Api(tags = "网关流量控制")
@@ -82,51 +86,26 @@ public class GatewayRateLimitController {
 
     /**
      * 绑定API
-     *
-     * @param policyId 策略ID
-     * @param apiIds   API接口ID.多个以,隔开.选填
      */
     @ApiOperation(value = "绑定API", notes = "一个API只能绑定一个策略")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "policyId", value = "策略ID", defaultValue = "", required = true, paramType = "form"),
-            @ApiImplicitParam(name = "apiIds", value = "API接口ID.多个以,隔开.选填", paramType = "form")
-    })
     @PostMapping("/gateway/limit/rate/api/add")
-    public ResultMessage addRateLimitApis(
-            @RequestParam("policyId") Long policyId,
-            @RequestParam(value = "apiIds", required = false) String apiIds
-    ) {
-        gatewayRateLimitService.addRateLimitApis(policyId, StringHelper.isNotBlank(apiIds) ? apiIds.split(",") : new String[]{});
+    public ResultMessage<Void> addRateLimitApis(@RequestBody AddRateLimitApiCommand command) {
+        gatewayRateLimitService.addRateLimitApis(command.getPolicyId(), StringHelper.isNotBlank(command.getApiIds()) ? command.getApiIds().split(",") : new String[]{});
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();
     }
 
     /**
      * 添加流量控制
-     *
-     * @param policyName   策略名称
-     * @param limitQuota   限制数
-     * @param intervalUnit 单位时间
-     * @param policyType   限流规则类型
      */
     @ApiOperation(value = "添加流量控制", notes = "添加流量控制")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "policyName", required = true, value = "策略名称", paramType = "form"),
-            @ApiImplicitParam(name = "policyType", required = true, value = "限流规则类型:url,origin,user", allowableValues = "url,origin,user", paramType = "form"),
-            @ApiImplicitParam(name = "limitQuota", required = true, value = "限制数", paramType = "form"),
-            @ApiImplicitParam(name = "intervalUnit", required = true, value = "单位时间:seconds-秒,minutes-分钟,hours-小时,days-天", allowableValues = "seconds,minutes,hours,days", paramType = "form"),
-    })
     @PostMapping("/gateway/limit/rate/add")
-    public ResultMessage<Long> addRateLimit(
-            @RequestParam(value = "policyName") String policyName,
-            @RequestParam(value = "policyType") String policyType,
-            @RequestParam(value = "limitQuota") Long limitQuota,
-            @RequestParam(value = "intervalUnit") String intervalUnit) {
+    public ResultMessage<Long> addRateLimit(@RequestBody AddRateLimitCommand command) {
         GatewayRateLimit rateLimit = new GatewayRateLimit();
-        rateLimit.setPolicyName(policyName);
-        rateLimit.setLimitQuota(limitQuota);
-        rateLimit.setIntervalUnit(intervalUnit);
-        rateLimit.setPolicyType(policyType);
+        rateLimit.setPolicyName(command.getPolicyName());
+        rateLimit.setLimitQuota(command.getLimitQuota());
+        rateLimit.setIntervalUnit(command.getIntervalUnit());
+        rateLimit.setPolicyType(command.getPolicyType());
         Long policyId = null;
         GatewayRateLimit result = gatewayRateLimitService.addRateLimitPolicy(rateLimit);
         if (result != null) {
@@ -137,40 +116,20 @@ public class GatewayRateLimitController {
 
     /**
      * 编辑流量控制
-     *
-     * @param policyId     流量控制ID
-     * @param policyName   策略名称
-     * @param limitQuota   限制数
-     * @param intervalUnit 单位时间
-     * @param policyType   限流规则类型
      */
     @ApiOperation(value = "编辑流量控制", notes = "编辑流量控制")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "policyId", required = true, value = "接口Id", paramType = "form"),
-            @ApiImplicitParam(name = "policyName", required = true, value = "策略名称", paramType = "form"),
-            @ApiImplicitParam(name = "policyType", required = true, value = "限流规则类型:url,origin,user", allowableValues = "url,origin,user", paramType = "form"),
-            @ApiImplicitParam(name = "limitQuota", required = true, value = "限制数", paramType = "form"),
-            @ApiImplicitParam(name = "intervalUnit", required = true, value = "单位时间:seconds-秒,minutes-分钟,hours-小时,days-天", allowableValues = "seconds,minutes,hours,days", paramType = "form"),
-    })
     @PostMapping("/gateway/limit/rate/update")
-    public ResultMessage updateRateLimit(
-            @RequestParam("policyId") Long policyId,
-            @RequestParam(value = "policyName") String policyName,
-            @RequestParam(value = "policyType") String policyType,
-            @RequestParam(value = "limitQuota") Long limitQuota,
-            @RequestParam(value = "intervalUnit") String intervalUnit
-    ) {
+    public ResultMessage<Void> updateRateLimit(@RequestBody UpdateRateLimitCommand command) {
         GatewayRateLimit rateLimit = new GatewayRateLimit();
-        rateLimit.setPolicyId(policyId);
-        rateLimit.setPolicyName(policyName);
-        rateLimit.setLimitQuota(limitQuota);
-        rateLimit.setIntervalUnit(intervalUnit);
-        rateLimit.setPolicyType(policyType);
+        rateLimit.setPolicyId(command.getPolicyId());
+        rateLimit.setPolicyName(command.getPolicyName());
+        rateLimit.setLimitQuota(command.getLimitQuota());
+        rateLimit.setIntervalUnit(command.getIntervalUnit());
+        rateLimit.setPolicyType(command.getPolicyType());
         gatewayRateLimitService.updateRateLimitPolicy(rateLimit);
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();
     }
-
 
     /**
      * 移除流量控制
@@ -180,9 +139,8 @@ public class GatewayRateLimitController {
             @ApiImplicitParam(name = "policyId", required = true, value = "policyId", paramType = "form"),
     })
     @PostMapping("/gateway/limit/rate/remove")
-    public ResultMessage removeRateLimit(
-            @RequestParam("policyId") Long policyId) {
-        gatewayRateLimitService.removeRateLimitPolicy(policyId);
+    public ResultMessage<Void> removeRateLimit(@RequestBody DeleteRateLimitCommand command) {
+        gatewayRateLimitService.removeRateLimitPolicy(command.getPolicyId());
         // 刷新网关
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();

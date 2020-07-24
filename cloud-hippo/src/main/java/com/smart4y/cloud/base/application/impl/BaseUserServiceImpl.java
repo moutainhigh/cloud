@@ -13,8 +13,8 @@ import com.smart4y.cloud.base.domain.model.BaseAccountLogs;
 import com.smart4y.cloud.base.domain.model.BaseRole;
 import com.smart4y.cloud.base.domain.model.BaseUser;
 import com.smart4y.cloud.base.infrastructure.mapper.BaseUserMapper;
-import com.smart4y.cloud.base.interfaces.command.AddAdminUserCommand;
-import com.smart4y.cloud.base.interfaces.command.RegisterAdminThirdPartyCommand;
+import com.smart4y.cloud.base.interfaces.command.user.AddUserCommand;
+import com.smart4y.cloud.base.interfaces.command.user.AddUserThirdPartyCommand;
 import com.smart4y.cloud.base.interfaces.query.BaseUserQuery;
 import com.smart4y.cloud.core.application.ApplicationService;
 import com.smart4y.cloud.core.domain.OpenAuthority;
@@ -22,8 +22,8 @@ import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
 import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
 import com.smart4y.cloud.core.infrastructure.security.OpenSecurityConstants;
-import com.smart4y.cloud.core.infrastructure.toolkit.web.WebUtils;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
+import com.smart4y.cloud.core.infrastructure.toolkit.web.WebUtils;
 import com.smart4y.cloud.core.interfaces.UserAccountVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -39,7 +39,7 @@ import java.util.Map;
 
 /**
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @ApplicationService
@@ -57,7 +57,7 @@ public class BaseUserServiceImpl implements BaseUserService {
     private BaseAccountService baseAccountService;
 
     @Override
-    public long addUser(AddAdminUserCommand command) {
+    public long addUser(AddUserCommand command) {
         if (getUserByUsername(command.getUserName()) != null) {
             throw new OpenAlertException("用户名:" + command.getUserName() + "已存在!");
         }
@@ -101,7 +101,8 @@ public class BaseUserServiceImpl implements BaseUserService {
     }
 
     @Override
-    public void addUserThirdParty(RegisterAdminThirdPartyCommand command, String accountType) {
+    public void addUserThirdParty(AddUserThirdPartyCommand command) {
+        String accountType = command.getAccountType();
         if (!baseAccountService.isExist(command.getUserName(), accountType, ACCOUNT_DOMAIN)) {
             //保存系统用户信息
             BaseUser user = new BaseUser()

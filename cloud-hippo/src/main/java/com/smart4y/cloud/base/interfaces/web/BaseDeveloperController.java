@@ -3,14 +3,16 @@ package com.smart4y.cloud.base.interfaces.web;
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.BaseDeveloperService;
 import com.smart4y.cloud.base.domain.model.BaseDeveloper;
-import com.smart4y.cloud.base.interfaces.command.AddDeveloperUserCommand;
+import com.smart4y.cloud.base.interfaces.command.user.developer.AddDeveloperThirdPartyCommand;
+import com.smart4y.cloud.base.interfaces.command.user.developer.AddDeveloperUserCommand;
+import com.smart4y.cloud.base.interfaces.command.user.developer.UpdateDeveloperUserCommand;
+import com.smart4y.cloud.base.interfaces.command.user.UpdatePasswordCommand;
 import com.smart4y.cloud.base.interfaces.converter.BaseDeveloperConverter;
 import com.smart4y.cloud.base.interfaces.query.BaseDeveloperQuery;
 import com.smart4y.cloud.base.interfaces.vo.BaseDeveloperVO;
 import com.smart4y.cloud.core.domain.message.ResultMessage;
 import com.smart4y.cloud.core.domain.page.Page;
 import com.smart4y.cloud.core.interfaces.UserAccountVO;
-import com.smart4y.cloud.base.interfaces.command.AddDeveloperThirdPartyCommand;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -21,12 +23,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 系统用户信息
+ * 开发者用户信息
  *
  * @author Youtao
  * Created by youtao on 2019-09-05.
  */
-@Api(tags = "系统用户管理")
+@Api(tags = "开发者用户管理")
 @RestController
 public class BaseDeveloperController {
 
@@ -71,74 +73,41 @@ public class BaseDeveloperController {
     }
 
     /**
-     * 添加系统用户
+     * 添加开发者用户
      */
-    @ApiOperation(value = "添加系统用户", notes = "添加系统用户")
+    @ApiOperation(value = "添加开发者用户", notes = "添加开发者用户")
     @PostMapping("/developer/add")
-    public ResultMessage<Long> addUser(
-            @RequestParam(value = "userName") String userName,
-            @RequestParam(value = "password") String password,
-            @RequestParam(value = "nickName") String nickName,
-            @RequestParam(value = "status") Integer status,
-            @RequestParam(value = "userType") String userType,
-            @RequestParam(value = "email", required = false) String email,
-            @RequestParam(value = "mobile", required = false) String mobile,
-            @RequestParam(value = "userDesc", required = false) String userDesc,
-            @RequestParam(value = "avatar", required = false) String avatar
-    ) {
-        AddDeveloperUserCommand developer = new AddDeveloperUserCommand();
-        developer.setUserName(userName);
-        developer.setPassword(password);
-        developer.setNickName(nickName);
-        developer.setUserType(userType);
-        developer.setEmail(email);
-        developer.setMobile(mobile);
-        developer.setUserDesc(userDesc);
-        developer.setAvatar(avatar);
-        developer.setStatus(status);
-        long userId = baseDeveloperService.addUser(developer);
+    public ResultMessage<Long> addUser(@RequestBody AddDeveloperUserCommand command) {
+        long userId = baseDeveloperService.addUser(command);
         return ResultMessage.ok(userId);
     }
 
     /**
-     * 更新系统用户
+     * 更新开发者用户
      */
-    @ApiOperation(value = "更新系统用户", notes = "更新系统用户")
+    @ApiOperation(value = "更新开发者用户", notes = "更新开发者用户")
     @PostMapping("/developer/update")
-    public ResultMessage updateUser(
-            @RequestParam(value = "userId") Long userId,
-            @RequestParam(value = "nickName") String nickName,
-            @RequestParam(value = "status") Integer status,
-            @RequestParam(value = "userType") String userType,
-            @RequestParam(value = "email", required = false) String email,
-            @RequestParam(value = "mobile", required = false) String mobile,
-            @RequestParam(value = "userDesc", required = false) String userDesc,
-            @RequestParam(value = "avatar", required = false) String avatar
-    ) {
+    public ResultMessage<Void> updateUser(@RequestBody UpdateDeveloperUserCommand command) {
         BaseDeveloper developer = new BaseDeveloper();
-        developer.setUserId(userId);
-        developer.setNickName(nickName);
-        developer.setUserType(userType);
-        developer.setEmail(email);
-        developer.setMobile(mobile);
-        developer.setUserDesc(userDesc);
-        developer.setAvatar(avatar);
-        developer.setStatus(status);
+        developer.setUserId(command.getUserId());
+        developer.setNickName(command.getNickName());
+        developer.setUserType(command.getUserType());
+        developer.setEmail(command.getEmail());
+        developer.setMobile(command.getMobile());
+        developer.setUserDesc(command.getUserDesc());
+        developer.setAvatar(command.getAvatar());
+        developer.setStatus(command.getStatus());
         baseDeveloperService.updateUser(developer);
         return ResultMessage.ok();
     }
-
 
     /**
      * 修改用户密码
      */
     @ApiOperation(value = "修改用户密码", notes = "修改用户密码")
     @PostMapping("/developer/update/password")
-    public ResultMessage updatePassword(
-            @RequestParam(value = "userId") Long userId,
-            @RequestParam(value = "password") String password
-    ) {
-        baseDeveloperService.updatePassword(userId, password);
+    public ResultMessage<Void> updatePassword(@RequestBody UpdatePasswordCommand command) {
+        baseDeveloperService.updatePassword(command.getUserId(), command.getPassword());
         return ResultMessage.ok();
     }
 

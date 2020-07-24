@@ -23,12 +23,11 @@ import java.util.stream.Collectors;
  * 网关接口
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
-@Api(tags = "网关对外接口")
 @RestController
+@Api(tags = "网关对外接口")
 public class GatewayController {
-
 
     @Autowired
     private GatewayRouteConverter gatewayRouteConverter;

@@ -21,7 +21,7 @@
           </Button>
         </ButtonGroup>
       </div>
-      <Table :columns="columns" :data="data" :loading="loading" border>
+      <Table size="small" :columns="columns" :data="data" :loading="loading" border>
         <template slot="policyType" slot-scope="{ row }">
           <Tag color="green" v-if="row.policyType===1">允许-白名单</Tag>
           <Tag color="red" v-else="">拒绝-黑名单</Tag>

@@ -5,9 +5,11 @@ import com.smart4y.cloud.base.application.BaseActionService;
 import com.smart4y.cloud.base.application.BaseMenuService;
 import com.smart4y.cloud.base.domain.model.BaseAction;
 import com.smart4y.cloud.base.domain.model.BaseMenu;
+import com.smart4y.cloud.base.interfaces.command.menu.AddMenuCommand;
+import com.smart4y.cloud.base.interfaces.command.menu.DeleteMenuCommand;
+import com.smart4y.cloud.base.interfaces.command.menu.UpdateMenuCommand;
 import com.smart4y.cloud.base.interfaces.converter.BaseActionConverter;
 import com.smart4y.cloud.base.interfaces.converter.BaseMenuConverter;
-import com.smart4y.cloud.base.interfaces.command.AddMenuCommand;
 import com.smart4y.cloud.base.interfaces.query.BaseMenuQuery;
 import com.smart4y.cloud.base.interfaces.vo.BaseActionVO;
 import com.smart4y.cloud.base.interfaces.vo.BaseMenuVO;
@@ -122,58 +124,22 @@ public class BaseMenuController {
 
     /**
      * 编辑菜单资源
-     *
-     * @param menuCode 菜单编码
-     * @param menuName 菜单名称
-     * @param icon     图标
-     * @param scheme   请求前缀
-     * @param path     请求路径
-     * @param target   打开方式
-     * @param status   是否启用
-     * @param parentId 父节点ID
-     * @param priority 优先级越小越靠前
-     * @param menuDesc 描述
      */
     @ApiOperation(value = "编辑菜单资源", notes = "编辑菜单资源")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "menuId", required = true, value = "菜单ID", paramType = "form"),
-            @ApiImplicitParam(name = "menuCode", required = true, value = "菜单编码", paramType = "form"),
-            @ApiImplicitParam(name = "menuName", required = true, value = "菜单名称", paramType = "form"),
-            @ApiImplicitParam(name = "icon", required = false, value = "图标", paramType = "form"),
-            @ApiImplicitParam(name = "scheme", required = false, value = "请求协议", allowableValues = "/,http://,https://", paramType = "form"),
-            @ApiImplicitParam(name = "path", required = false, value = "请求路径", paramType = "form"),
-            @ApiImplicitParam(name = "target", required = false, value = "请求路径", allowableValues = "_self,_blank", paramType = "form"),
-            @ApiImplicitParam(name = "parentId", required = false, defaultValue = "0", value = "父节点ID", paramType = "form"),
-            @ApiImplicitParam(name = "status", required = true, defaultValue = "1", allowableValues = "0,1", value = "是否启用", paramType = "form"),
-            @ApiImplicitParam(name = "priority", required = false, value = "优先级越小越靠前", paramType = "form"),
-            @ApiImplicitParam(name = "menuDesc", required = false, value = "描述", paramType = "form"),
-    })
     @PostMapping("/menu/update")
-    public ResultMessage updateMenu(
-            @RequestParam("menuId") Long menuId,
-            @RequestParam(value = "menuCode") String menuCode,
-            @RequestParam(value = "menuName") String menuName,
-            @RequestParam(value = "icon", required = false) String icon,
-            @RequestParam(value = "scheme", required = false, defaultValue = "/") String scheme,
-            @RequestParam(value = "path", required = false, defaultValue = "") String path,
-            @RequestParam(value = "target", required = false, defaultValue = "_self") String target,
-            @RequestParam(value = "status", defaultValue = "1") Integer status,
-            @RequestParam(value = "parentId", required = false, defaultValue = "0") Long parentId,
-            @RequestParam(value = "priority", required = false, defaultValue = "0") Integer priority,
-            @RequestParam(value = "menuDesc", required = false, defaultValue = "") String menuDesc
-    ) {
+    public ResultMessage<Void> updateMenu(@RequestBody UpdateMenuCommand command) {
         BaseMenu menu = new BaseMenu();
-        menu.setMenuId(menuId);
-        menu.setMenuCode(menuCode);
-        menu.setMenuName(menuName);
-        menu.setIcon(icon);
-        menu.setPath(path);
-        menu.setScheme(scheme);
-        menu.setTarget(target);
-        menu.setStatus(status);
-        menu.setParentId(parentId);
-        menu.setPriority(priority);
-        menu.setMenuDesc(menuDesc);
+        menu.setMenuId(command.getMenuId());
+        menu.setMenuCode(command.getMenuCode());
+        menu.setMenuName(command.getMenuName());
+        menu.setIcon(command.getIcon());
+        menu.setPath(command.getPath());
+        menu.setScheme(command.getScheme());
+        menu.setTarget(command.getTarget());
+        menu.setStatus(command.getStatus());
+        menu.setParentId(command.getParentId());
+        menu.setPriority(command.getPriority());
+        menu.setMenuDesc(command.getMenuDesc());
         baseMenuService.updateMenu(menu);
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();
@@ -183,14 +149,9 @@ public class BaseMenuController {
      * 移除菜单资源
      */
     @ApiOperation(value = "移除菜单资源", notes = "移除菜单资源")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "menuId", required = true, value = "menuId", paramType = "form"),
-    })
     @PostMapping("/menu/remove")
-    public ResultMessage<Boolean> removeMenu(
-            @RequestParam("menuId") Long menuId
-    ) {
-        baseMenuService.removeMenu(menuId);
+    public ResultMessage<Boolean> removeMenu(@RequestBody DeleteMenuCommand command) {
+        baseMenuService.removeMenu(command.getMenuId());
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();
     }

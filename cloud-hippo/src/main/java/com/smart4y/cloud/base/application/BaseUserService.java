@@ -2,8 +2,8 @@ package com.smart4y.cloud.base.application;
 
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.BaseUser;
-import com.smart4y.cloud.base.interfaces.command.AddAdminUserCommand;
-import com.smart4y.cloud.base.interfaces.command.RegisterAdminThirdPartyCommand;
+import com.smart4y.cloud.base.interfaces.command.user.AddUserCommand;
+import com.smart4y.cloud.base.interfaces.command.user.AddUserThirdPartyCommand;
 import com.smart4y.cloud.base.interfaces.query.BaseUserQuery;
 import com.smart4y.cloud.core.interfaces.UserAccountVO;
 
@@ -13,14 +13,14 @@ import java.util.List;
  * 系统用户资料管理
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 public interface BaseUserService {
 
     /**
      * 添加用户信息
      */
-    long addUser(AddAdminUserCommand command);
+    long addUser(AddUserCommand command);
 
     /**
      * 更新系统用户
@@ -33,7 +33,7 @@ public interface BaseUserService {
     /**
      * 添加第三方登录用户
      */
-    void addUserThirdParty(RegisterAdminThirdPartyCommand command, String accountType);
+    void addUserThirdParty(AddUserThirdPartyCommand command);
 
     /**
      * 更新密码

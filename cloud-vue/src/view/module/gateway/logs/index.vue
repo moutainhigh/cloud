@@ -20,7 +20,7 @@
         </FormItem>
       </Form>
 
-      <Table :columns="columns" :data="data" :loading="loading" border>
+      <Table size="small" :columns="columns" :data="data" :loading="loading" border>
         <template slot="httpStatus" slot-scope="{ row }">
           <Badge status="success" v-if="row.httpStatus==='200'"/>
           <Badge status="error" v-else=""/>
@@ -85,7 +85,6 @@
                     serviceId: ''
                 },
                 columns: [
-                    {type: 'selection', width: 60, align: 'center'},
                     {title: '请求地址', key: 'path', width: 220},
                     {
                         title: '请求方式',

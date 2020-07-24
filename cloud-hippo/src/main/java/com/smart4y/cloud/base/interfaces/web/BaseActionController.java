@@ -3,9 +3,9 @@ package com.smart4y.cloud.base.interfaces.web;
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.BaseActionService;
 import com.smart4y.cloud.base.domain.model.BaseAction;
-import com.smart4y.cloud.base.interfaces.command.AddActionCommand;
-import com.smart4y.cloud.base.interfaces.command.DeleteActionCommand;
-import com.smart4y.cloud.base.interfaces.command.UpdateActionCommand;
+import com.smart4y.cloud.base.interfaces.command.action.AddActionCommand;
+import com.smart4y.cloud.base.interfaces.command.action.DeleteActionCommand;
+import com.smart4y.cloud.base.interfaces.command.action.UpdateActionCommand;
 import com.smart4y.cloud.base.interfaces.converter.BaseActionConverter;
 import com.smart4y.cloud.base.interfaces.query.BaseActionQuery;
 import com.smart4y.cloud.base.interfaces.vo.BaseActionVO;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by youtao on 2019-09-05.
  */
 @RestController
-@Api(tags = "系统功能按钮管理")
+@Api(tags = {"系统功能按钮管理"})
 public class BaseActionController {
 
     @Autowired

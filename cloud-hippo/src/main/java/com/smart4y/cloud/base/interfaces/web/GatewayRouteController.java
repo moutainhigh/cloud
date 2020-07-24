@@ -3,6 +3,9 @@ package com.smart4y.cloud.base.interfaces.web;
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.GatewayRouteService;
 import com.smart4y.cloud.base.domain.model.GatewayRoute;
+import com.smart4y.cloud.base.interfaces.command.gateway.AddRouteCommand;
+import com.smart4y.cloud.base.interfaces.command.gateway.DeleteRouteCommand;
+import com.smart4y.cloud.base.interfaces.command.gateway.UpdateRouteCommand;
 import com.smart4y.cloud.base.interfaces.converter.GatewayRouteConverter;
 import com.smart4y.cloud.base.interfaces.query.GatewayRouteQuery;
 import com.smart4y.cloud.base.interfaces.vo.GatewayRouteVO;
@@ -21,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
  * 网关智能路由
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Api(tags = "网关智能路由")
 @RestController
@@ -61,46 +64,19 @@ public class GatewayRouteController {
 
     /**
      * 添加路由
-     *
-     * @param path        路径表达式
-     * @param routeName   描述
-     * @param serviceId   服务名方转发
-     * @param url         地址转发
-     * @param stripPrefix 忽略前缀
-     * @param retryable   支持重试
-     * @param status      是否启用
      */
     @ApiOperation(value = "添加路由", notes = "添加路由")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "path", required = true, value = "路径表达式", paramType = "form"),
-            @ApiImplicitParam(name = "routeName", required = true, value = "路由标识", paramType = "form"),
-            @ApiImplicitParam(name = "routeDesc", required = true, value = "路由名称", paramType = "form"),
-            @ApiImplicitParam(name = "serviceId", value = "服务名方转发", paramType = "form"),
-            @ApiImplicitParam(name = "url", value = "地址转发", paramType = "form"),
-            @ApiImplicitParam(name = "stripPrefix", allowableValues = "0,1", defaultValue = "1", value = "忽略前缀", paramType = "form"),
-            @ApiImplicitParam(name = "retryable", allowableValues = "0,1", defaultValue = "0", value = "支持重试", paramType = "form"),
-            @ApiImplicitParam(name = "status", allowableValues = "0,1", defaultValue = "1", value = "是否启用", paramType = "form")
-    })
     @PostMapping("/gateway/route/add")
-    public ResultMessage<Long> addRoute(
-            @RequestParam(value = "routeName", defaultValue = "") String routeName,
-            @RequestParam(value = "routeDesc", defaultValue = "") String routeDesc,
-            @RequestParam(value = "path") String path,
-            @RequestParam(value = "serviceId", required = false) String serviceId,
-            @RequestParam(value = "url", required = false) String url,
-            @RequestParam(value = "stripPrefix", required = false, defaultValue = "1") Integer stripPrefix,
-            @RequestParam(value = "retryable", required = false, defaultValue = "0") Integer retryable,
-            @RequestParam(value = "status", defaultValue = "1") Integer status
-    ) {
+    public ResultMessage<Long> addRoute(@RequestBody AddRouteCommand command) {
         GatewayRoute route = new GatewayRoute();
-        route.setPath(path);
-        route.setServiceId(serviceId);
-        route.setUrl(url);
-        route.setRetryable(retryable);
-        route.setStripPrefix(stripPrefix);
-        route.setStatus(status);
-        route.setRouteName(routeName);
-        route.setRouteDesc(routeDesc);
+        route.setPath(command.getPath());
+        route.setServiceId(command.getServiceId());
+        route.setUrl(command.getUrl());
+        route.setRetryable(command.getRetryable());
+        route.setStripPrefix(command.getStripPrefix());
+        route.setStatus(command.getStatus());
+        route.setRouteName(command.getRouteName());
+        route.setRouteDesc(command.getRouteDesc());
         if (route.getUrl() != null && StringHelper.isNotEmpty(route.getUrl())) {
             route.setServiceId(null);
         }
@@ -112,50 +88,20 @@ public class GatewayRouteController {
 
     /**
      * 编辑路由
-     *
-     * @param routeId     路由ID
-     * @param path        路径表达式
-     * @param serviceId   服务名方转发
-     * @param url         地址转发
-     * @param stripPrefix 忽略前缀
-     * @param retryable   支持重试
-     * @param status      是否启用
-     * @param routeName   描述
      */
     @ApiOperation(value = "编辑路由", notes = "编辑路由")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "routeId", required = true, value = "路由Id", paramType = "form"),
-            @ApiImplicitParam(name = "routeName", required = true, value = "路由标识", paramType = "form"),
-            @ApiImplicitParam(name = "routeDesc", required = true, value = "路由名称", paramType = "form"),
-            @ApiImplicitParam(name = "path", required = true, value = "路径表达式", paramType = "form"),
-            @ApiImplicitParam(name = "serviceId", value = "服务名方转发", paramType = "form"),
-            @ApiImplicitParam(name = "url", value = "地址转发", paramType = "form"),
-            @ApiImplicitParam(name = "stripPrefix", allowableValues = "0,1", defaultValue = "1", value = "忽略前缀", paramType = "form"),
-            @ApiImplicitParam(name = "retryable", allowableValues = "0,1", defaultValue = "0", value = "支持重试", paramType = "form"),
-            @ApiImplicitParam(name = "status", allowableValues = "0,1", defaultValue = "1", value = "是否启用", paramType = "form")
-    })
     @PostMapping("/gateway/route/update")
-    public ResultMessage updateRoute(
-            @RequestParam("routeId") Long routeId,
-            @RequestParam(value = "routeName", defaultValue = "") String routeName,
-            @RequestParam(value = "routeDesc", defaultValue = "") String routeDesc,
-            @RequestParam(value = "path") String path,
-            @RequestParam(value = "serviceId", required = false) String serviceId,
-            @RequestParam(value = "url", required = false) String url,
-            @RequestParam(value = "stripPrefix", required = false, defaultValue = "1") Integer stripPrefix,
-            @RequestParam(value = "retryable", required = false, defaultValue = "0") Integer retryable,
-            @RequestParam(value = "status", defaultValue = "1") Integer status
-    ) {
+    public ResultMessage<Void> updateRoute(@RequestBody UpdateRouteCommand command) {
         GatewayRoute route = new GatewayRoute();
-        route.setRouteId(routeId);
-        route.setPath(path);
-        route.setServiceId(serviceId);
-        route.setUrl(url);
-        route.setRetryable(retryable);
-        route.setStripPrefix(stripPrefix);
-        route.setStatus(status);
-        route.setRouteName(routeName);
-        route.setRouteDesc(routeDesc);
+        route.setRouteId(command.getRouteId());
+        route.setRouteName(command.getRouteName());
+        route.setRouteDesc(command.getRouteDesc());
+        route.setPath(command.getPath());
+        route.setServiceId(command.getServiceId());
+        route.setUrl(command.getUrl());
+        route.setStripPrefix(command.getStripPrefix());
+        route.setRetryable(command.getRetryable());
+        route.setStatus(command.getStatus());
         if (route.getUrl() != null && StringHelper.isNotEmpty(route.getUrl())) {
             route.setServiceId(null);
         }
@@ -169,14 +115,9 @@ public class GatewayRouteController {
      * 移除路由
      */
     @ApiOperation(value = "移除路由", notes = "移除路由")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "routeId", required = true, value = "routeId", paramType = "form"),
-    })
     @PostMapping("/gateway/route/remove")
-    public ResultMessage removeRoute(
-            @RequestParam("routeId") Long routeId
-    ) {
-        gatewayRouteService.removeRoute(routeId);
+    public ResultMessage<Void> removeRoute(@RequestBody DeleteRouteCommand command) {
+        gatewayRouteService.removeRoute(command.getRouteId());
         // 刷新网关
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();

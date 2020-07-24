@@ -24,7 +24,7 @@
           </Button>
         </ButtonGroup>
       </div>
-      <Table :columns="columns" :data="data" :loading="loading" border>
+      <Table size="small" :columns="columns" :data="data" :loading="loading" border>
         <template slot="status" slot-scope="{ row }">
           <Badge status="success" text="启用" v-if="row.status===1"/>
           <Badge status="error" text="禁用" v-else=""/>
@@ -199,11 +199,6 @@
                     userIds: []
                 },
                 columns: [
-                    {
-                        type: 'selection',
-                        width: 60,
-                        align: 'center'
-                    },
                     {
                         title: '角色名称',
                         key: 'roleName',

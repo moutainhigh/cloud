@@ -6,6 +6,7 @@ import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
 import com.smart4y.cloud.core.infrastructure.toolkit.Kit;
 import com.smart4y.cloud.core.infrastructure.toolkit.base.DateHelper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.util.Assert;
 
 import java.text.ParseException;
@@ -75,15 +76,12 @@ public class SignatureUtils {
             String sign = paramsMap.get(CommonConstants.SIGN_SIGN_KEY);
             //重新生成签名
             String signNew = getSign(paramsMap, clientSecret);
-            //判断当前签名是否正确
-            if (signNew.equals(sign)) {
-                return true;
-            }
+
+            return signNew.equals(sign);
         } catch (Exception e) {
             log.error("validateSign error:{}", e.getMessage(), e);
             return false;
         }
-        return false;
     }
 
     /**
@@ -108,7 +106,9 @@ public class SignatureUtils {
         List<String> sortedKeys = signMap.keySet().stream().sorted().collect(Collectors.toList());
         for (String key : sortedKeys) {
             Object value = signMap.get(key);
-            builder.append(key).append("=").append(value).append("&");
+            if (ObjectUtils.isNotEmpty(value)) {
+                builder.append(key).append("=").append(value).append("&");
+            }
         }
         String signString = builder.toString();
 

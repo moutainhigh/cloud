@@ -1,242 +1,255 @@
 <template>
-  <div>
-    <Card shadow>
-      <Form :label-width="80"
-            :model="pageInfo"
-            inline
-            ref="searchForm">
-        <FormItem label="AppId" prop="appId">
-          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.appId"/>
-        </FormItem>
-        <FormItem label="中文名称" prop="appName">
-          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.appName"/>
-        </FormItem>
-        <FormItem label="英文名称" prop="appName">
-          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.appNameEn"/>
-        </FormItem>
-        <FormItem>
-          <Button @click="handleSearch(1)" type="primary">查询</Button>&nbsp;
-          <Button @click="handleResetForm('searchForm')">重置</Button>
-        </FormItem>
-      </Form>
-      <div class="search-con search-con-top">
-        <ButtonGroup>
-          <Button :disabled="hasAuthority('systemAppEdit')?false:true" @click="handleModal()" class="search-btn"
-                  type="primary">
-            <span>添加</span>
-          </Button>
-        </ButtonGroup>
-      </div>
-      <Alert show-icon type="info">客户端模式,请授权相关接口资源。否则请求网关服务器将提示<code>"权限不足,拒绝访问!"</code></Alert>
-      <Table :columns="columns" :data="data" :loading="loading" border>
-        <template slot="status" slot-scope="{ row }">
-          <Badge status="success" text="上线" v-if="row.status===1"/>
-          <Badge status="error" text="下线" v-else=""/>
-        </template>
-        <template slot="appType" slot-scope="{ row }">
-          <Tag color="blue" v-if="row.appType==='server'">服务器应用</Tag>
-          <Tag color="blue" v-else-if="row.appType==='app'">手机应用</Tag>
-          <Tag color="blue" v-else-if="row.appType==='pc'">PC网页应用</Tag>
-          <Tag color="blue" v-else="">手机网页应用</Tag>
-        </template>
-        <template slot="action" slot-scope="{ row }">
-          <a :disabled="row.appId != 'gateway' && hasAuthority('systemAppEdit') ?false:true" @click="handleModal(row)">
-            编辑</a>&nbsp;
-          <Dropdown @on-click="handleClick($event,row)" ref="dropdown" transfer v-show="hasAuthority('systemAppEdit')">
-            <a :disabled="row.appId === 'gateway' ?true:false" href="javascript:void(0)">
-              <span>更多</span>
-              <Icon type="ios-arrow-down"></Icon>
-            </a>
-            <DropdownMenu slot="list">
-              <DropdownItem name="resetSecret">重置密钥</DropdownItem>
-              <DropdownItem name="remove">删除应用</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        </template>
-      </Table>
-      <Page :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total" @on-change="handlePage" @on-page-size-change='handlePageSize'
-            show-elevator
-            show-sizer
-            show-total transfer></Page>
-    </Card>
-
-    <Modal :title="modalTitle"
-           @on-cancel="handleReset"
-           v-model="modalVisible"
-           width="40">
-      <div>
-        <Tabs :value="current" @on-click="handleTabClick">
-          <TabPane label="应用信息" name="form1">
-            <Form :label-width="135" :model="formItem" :rules="formItemRules" ref="form1" v-show="current=='form1'">
-              <FormItem label="应用图标">
-                <div class="upload-list" v-for="item in uploadList">
-                  <template v-if="item.status === 'finished'">
-                    <img :src="item.url">
-                    <div class="upload-list-cover">
-                      <Icon @click.native="handleView(item.name)" type="ios-eye-outline"></Icon>
-                      <Icon @click.native="handleRemoveImg(item)" type="ios-trash-outline"></Icon>
-                    </div>
-                  </template>
-                  <template v-else>
-                    <Progress :percent="item.percentage" hide-info v-if="item.showProgress"></Progress>
-                  </template>
-                </div>
-                <Upload
-                  :before-upload="handleBeforeUpload"
-                  :default-file-list="defaultList"
-                  :format="['jpg','jpeg','png']"
-                  :max-size="2048"
-                  :on-exceeded-size="handleMaxSize"
-                  :on-format-error="handleFormatError"
-                  :on-success="handleSuccess"
-                  :show-upload-list="false"
-                  action="//jsonplaceholder.typicode.com/posts/"
-                  ref="upload"
-                  style="display: inline-block;width:58px;"
-                  type="drag">
-                  <div style="width: 58px;height:58px;line-height: 58px;">
-                    <Icon size="20" type="ios-camera"></Icon>
-                  </div>
-                </Upload>
-              </FormItem>
-              <FormItem label="AppId">
-                <Input disabled placeholder="请输入内容" v-model="formItem.appId"></Input>
-              </FormItem>
-              <FormItem label="开发者">
-                <Select clearable filterable v-model="formItem.developerId">
-                  <Option :label="item.userName" :title="item.userName" :value="item.userId"
-                          @click.native="handleOnSelectUser(item)" v-for="item in selectUsers">
-                    <span>{{ item.userName }}</span>
-                  </Option>
-                </Select>
-              </FormItem>
-              <FormItem label="应用名称" prop="appName">
-                <Input placeholder="请输入内容" v-model="formItem.appName"></Input>
-              </FormItem>
-              <FormItem label="英文名称" prop="appNameEn">
-                <Input placeholder="请输入内容" v-model="formItem.appNameEn"></Input>
-              </FormItem>
-              <FormItem label="应用类型" prop="appType">
-                <Select @on-change="handleOnAppTypeChange" v-model="formItem.appType">
-                  <Option value="server">服务器应用</Option>
-                  <Option value="app">手机应用</Option>
-                  <Option value="pc">PC网页应用</Option>
-                  <Option value="wap">手机网页应用</Option>
-                </Select>
-              </FormItem>
-              <FormItem label="操作系统" prop="appOs" v-if="formItem.appType === 'app'">
-                <RadioGroup v-model="formItem.appOs">
-                  <Radio label="ios">
-                    <Icon type="logo-apple"></Icon>
-                    <span>苹果IOS</span>
-                  </Radio>
-                  <Radio label="android">
-                    <Icon type="logo-android"></Icon>
-                    <span>安卓Android</span>
-                  </Radio>
-                </RadioGroup>
-              </FormItem>
-              <FormItem label="应用官网" prop="website">
-                <Input placeholder="请输入内容" v-model="formItem.website"></Input>
-              </FormItem>
-              <FormItem label="状态">
-                <RadioGroup type="button" v-model="formItem.status">
-                  <Radio label="0">下线</Radio>
-                  <Radio label="1">上线</Radio>
-                </RadioGroup>
-              </FormItem>
-              <FormItem label="描述">
-                <Input placeholder="请输入内容" type="textarea" v-model="formItem.appDesc"></Input>
-              </FormItem>
+    <div>
+        <Card shadow>
+            <Form :label-width="80"
+                  :model="pageInfo"
+                  inline
+                  ref="searchForm">
+                <FormItem label="AppId" prop="appId">
+                    <Input placeholder="请输入关键字" type="text" v-model="pageInfo.appId"/>
+                </FormItem>
+                <FormItem label="中文名称" prop="appName">
+                    <Input placeholder="请输入关键字" type="text" v-model="pageInfo.appName"/>
+                </FormItem>
+                <FormItem label="英文名称" prop="appName">
+                    <Input placeholder="请输入关键字" type="text" v-model="pageInfo.appNameEn"/>
+                </FormItem>
+                <FormItem>
+                    <Button @click="handleSearch(1)" type="primary">查询</Button>&nbsp;
+                    <Button @click="handleResetForm('searchForm')">重置</Button>
+                </FormItem>
             </Form>
-          </TabPane>
-          <TabPane :disabled="!formItem.appId" label="开发信息" name="form2">
-            <Form :label-width="135" :model="formItem" :rules="formItemRules" ref="form2" v-show="current=='form2'">
-              <FormItem label="ApiKey">
-                <Input disabled placeholder="请输入内容" v-model="formItem.apiKey"></Input>
-              </FormItem>
-              <FormItem label="SecretKey">
-                <Input disabled placeholder="请输入内容" v-model="formItem.secretKey"></Input>
-              </FormItem>
-              <FormItem label="授权类型" prop="grantTypes">
-                <CheckboxGroup v-model="formItem.grantTypes">
-                  <Tooltip :content="item.desc" v-for="item in selectGrantTypes">
-                    <Checkbox :label="item.label"><span>{{ item.title }}</span></Checkbox>
-                  </Tooltip>
-                </CheckboxGroup>
-              </FormItem>
-              <FormItem label="用户授权范围" prop="scopes">
+            <div class="search-con search-con-top">
+                <ButtonGroup>
+                    <Button :disabled="hasAuthority('systemAppEdit')?false:true" @click="handleModal()"
+                            class="search-btn"
+                            type="primary">
+                        <span>添加</span>
+                    </Button>
+                </ButtonGroup>
+            </div>
+            <Alert show-icon type="info">客户端模式,请授权相关接口资源。否则请求网关服务器将提示<code>"权限不足,拒绝访问!"</code></Alert>
+            <Table size="small" :columns="columns" :data="data" :loading="loading" border>
+                <template slot="status" slot-scope="{ row }">
+                    <Badge status="success" text="上线" v-if="row.status===1"/>
+                    <Badge status="error" text="下线" v-else=""/>
+                </template>
+                <template slot="appType" slot-scope="{ row }">
+                    <Tag color="blue" v-if="row.appType==='server'">服务器应用</Tag>
+                    <Tag color="blue" v-else-if="row.appType==='app'">手机应用</Tag>
+                    <Tag color="blue" v-else-if="row.appType==='pc'">PC网页应用</Tag>
+                    <Tag color="blue" v-else="">手机网页应用</Tag>
+                </template>
+                <template slot="action" slot-scope="{ row }">
+                    <a :disabled="row.appId != 'gateway' && hasAuthority('systemAppEdit') ?false:true"
+                       @click="handleModal(row)">
+                        编辑</a>&nbsp;
+                    <Dropdown @on-click="handleClick($event,row)" ref="dropdown" transfer
+                              v-show="hasAuthority('systemAppEdit')">
+                        <a :disabled="row.appId === 'gateway' ?true:false" href="javascript:void(0)">
+                            <span>更多</span>
+                            <Icon type="ios-arrow-down"></Icon>
+                        </a>
+                        <DropdownMenu slot="list">
+                            <DropdownItem name="resetSecret">重置密钥</DropdownItem>
+                            <DropdownItem name="remove">删除应用</DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown>
+                </template>
+            </Table>
+            <Page :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total" @on-change="handlePage"
+                  @on-page-size-change='handlePageSize'
+                  show-elevator
+                  show-sizer
+                  show-total transfer></Page>
+        </Card>
+
+        <Modal :title="modalTitle"
+               @on-cancel="handleReset"
+               v-model="modalVisible"
+               width="40">
+            <div>
+                <Tabs :value="current" @on-click="handleTabClick">
+                    <TabPane label="应用信息" name="form1">
+                        <Form :label-width="135" :model="formItem" :rules="formItemRules" ref="form1"
+                              v-show="current=='form1'">
+                            <FormItem label="应用图标">
+                                <div class="upload-list" v-for="item in uploadList">
+                                    <template v-if="item.status === 'finished'">
+                                        <img :src="item.url">
+                                        <div class="upload-list-cover">
+                                            <Icon @click.native="handleView(item.name)" type="ios-eye-outline"></Icon>
+                                            <Icon @click.native="handleRemoveImg(item)" type="ios-trash-outline"></Icon>
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <Progress :percent="item.percentage" hide-info
+                                                  v-if="item.showProgress"></Progress>
+                                    </template>
+                                </div>
+                                <Upload
+                                        :before-upload="handleBeforeUpload"
+                                        :default-file-list="defaultList"
+                                        :format="['jpg','jpeg','png']"
+                                        :max-size="2048"
+                                        :on-exceeded-size="handleMaxSize"
+                                        :on-format-error="handleFormatError"
+                                        :on-success="handleSuccess"
+                                        :show-upload-list="false"
+                                        action="//jsonplaceholder.typicode.com/posts/"
+                                        ref="upload"
+                                        style="display: inline-block;width:58px;"
+                                        type="drag">
+                                    <div style="width: 58px;height:58px;line-height: 58px;">
+                                        <Icon size="20" type="ios-camera"></Icon>
+                                    </div>
+                                </Upload>
+                            </FormItem>
+                            <FormItem label="AppId">
+                                <Input disabled placeholder="请输入内容" v-model="formItem.appId"></Input>
+                            </FormItem>
+                            <FormItem label="开发者">
+                                <Select clearable filterable v-model="formItem.developerId">
+                                    <Option :label="item.userName" :title="item.userName" :value="item.userId"
+                                            @click.native="handleOnSelectUser(item)" v-for="item in selectUsers">
+                                        <span>{{ item.userName }}</span>
+                                    </Option>
+                                </Select>
+                            </FormItem>
+                            <FormItem label="应用名称" prop="appName">
+                                <Input placeholder="请输入内容" v-model="formItem.appName"></Input>
+                            </FormItem>
+                            <FormItem label="英文名称" prop="appNameEn">
+                                <Input placeholder="请输入内容" v-model="formItem.appNameEn"></Input>
+                            </FormItem>
+                            <FormItem label="应用类型" prop="appType">
+                                <Select @on-change="handleOnAppTypeChange" v-model="formItem.appType">
+                                    <Option value="server">服务器应用</Option>
+                                    <Option value="app">手机应用</Option>
+                                    <Option value="pc">PC网页应用</Option>
+                                    <Option value="wap">手机网页应用</Option>
+                                </Select>
+                            </FormItem>
+                            <FormItem label="操作系统" prop="appOs" v-if="formItem.appType === 'app'">
+                                <RadioGroup v-model="formItem.appOs">
+                                    <Radio label="ios">
+                                        <Icon type="logo-apple"></Icon>
+                                        <span>苹果IOS</span>
+                                    </Radio>
+                                    <Radio label="android">
+                                        <Icon type="logo-android"></Icon>
+                                        <span>安卓Android</span>
+                                    </Radio>
+                                </RadioGroup>
+                            </FormItem>
+                            <FormItem label="应用官网" prop="website">
+                                <Input placeholder="请输入内容" v-model="formItem.website"></Input>
+                            </FormItem>
+                            <FormItem label="状态">
+                                <RadioGroup type="button" v-model="formItem.status">
+                                    <Radio label="0">下线</Radio>
+                                    <Radio label="1">上线</Radio>
+                                </RadioGroup>
+                            </FormItem>
+                            <FormItem label="描述">
+                                <Input placeholder="请输入内容" type="textarea" v-model="formItem.appDesc"></Input>
+                            </FormItem>
+                        </Form>
+                    </TabPane>
+                    <TabPane :disabled="!formItem.appId" label="开发信息" name="form2">
+                        <Form :label-width="135" :model="formItem" :rules="formItemRules" ref="form2"
+                              v-show="current=='form2'">
+                            <FormItem label="ApiKey">
+                                <Input disabled placeholder="请输入内容" v-model="formItem.apiKey"></Input>
+                            </FormItem>
+                            <FormItem label="SecretKey">
+                                <Input disabled placeholder="请输入内容" v-model="formItem.secretKey"></Input>
+                            </FormItem>
+                            <FormItem label="授权类型" prop="grantTypes">
+                                <CheckboxGroup v-model="formItem.grantTypes">
+                                    <Tooltip :content="item.desc" v-for="item in selectGrantTypes">
+                                        <Checkbox :label="item.label"><span>{{ item.title }}</span></Checkbox>
+                                    </Tooltip>
+                                </CheckboxGroup>
+                            </FormItem>
+                            <FormItem label="用户授权范围" prop="scopes">
             <span slot="label">用户授权范围
             <Tooltip content="提醒用户确认授权可访问的资源">
               <Icon size="16" type="ios-alert"/>
             </Tooltip>
             </span>
-                <CheckboxGroup v-model="formItem.scopes">
-                  <Checkbox :label="item.label" v-for="item in selectScopes"><span>{{ item.title }}</span>
-                  </Checkbox>
-                </CheckboxGroup>
-              </FormItem>
-              <FormItem label="自动授权范围">
+                                <CheckboxGroup v-model="formItem.scopes">
+                                    <Checkbox :label="item.label" v-for="item in selectScopes">
+                                        <span>{{ item.title }}</span>
+                                    </Checkbox>
+                                </CheckboxGroup>
+                            </FormItem>
+                            <FormItem label="自动授权范围">
             <span slot="label">自动授权范围
               <Tooltip content="不再提醒用户确认授权可访问的资源">
               <Icon size="16" type="ios-alert"/>
             </Tooltip>
             </span>
-                <CheckboxGroup v-model="formItem.autoApproveScopes">
-                  <Checkbox :label="item.label" v-for="item in selectScopes"><span>{{ item.title }}</span>
-                  </Checkbox>
-                </CheckboxGroup>
-              </FormItem>
-              <FormItem label="令牌有效期" prop="accessTokenValidity">
-                <RadioGroup type="button" v-model="formItem.tokenValidity">
-                  <Radio label="1">设置有效期</Radio>
-                  <Radio label="0">不限制</Radio>
-                </RadioGroup>
-              </FormItem>
-              <FormItem label="访问令牌有效期" prop="accessTokenValidity" v-show="formItem.tokenValidity === '1'">
-                <InputNumber :min="900" v-model="formItem.accessTokenValidity"></InputNumber>
-                <span>&nbsp;&nbsp;秒</span>
-              </FormItem>
-              <FormItem label="刷新令牌有效期" prop="refreshTokenValidity" v-show="formItem.tokenValidity === '1'">
-                <InputNumber :min="900" v-model="formItem.refreshTokenValidity"></InputNumber>
-                <span>&nbsp;&nbsp;秒</span>
-              </FormItem>
-              <FormItem label="第三方登陆回调地址" prop="redirectUrls">
-                <Input placeholder="请输入内容" type="textarea" v-model="formItem.redirectUrls"></Input>
-                <span>多个地址使用,逗号隔开</span>
-              </FormItem>
-            </Form>
-          </TabPane>
-          <TabPane :disabled="!formItem.appId" label="分配权限" name="form3">
-            <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form3" v-show="current=='form3'">
-              <FormItem label="过期时间" prop="expireTime">
-                <Badge text="授权已过期" v-if="formItem.isExpired">
-                  <DatePicker class="ivu-form-item-error" placeholder="授权有效期" type="datetime"
-                              v-model="formItem.expireTime"></DatePicker>
-                </Badge>
-                <DatePicker placeholder="设置有效期" type="datetime" v-else="" v-model="formItem.expireTime"></DatePicker>
-              </FormItem>
-              <FormItem label="功能接口" prop="authorities">
-                <Transfer
-                  :data="selectApis"
-                  :list-style="{width: '45%',height: '480px'}"
-                  :render-format="transferRender"
-                  :target-keys="formItem.authorities"
-                  :titles="['选择接口', '已选择接口']"
-                  @on-change="handleTransferChange"
-                  filterable>
-                </Transfer>
-              </FormItem>
-            </Form>
-          </TabPane>
-        </Tabs>
-        <div class="drawer-footer">
-          <Button @click="handleReset" type="default">取消</Button>&nbsp;
-          <Button :loading="saving" @click="handleSubmit" type="primary">保存</Button>
-        </div>
-      </div>
-    </Modal>
-  </div>
+                                <CheckboxGroup v-model="formItem.autoApproveScopes">
+                                    <Checkbox :label="item.label" v-for="item in selectScopes">
+                                        <span>{{ item.title }}</span>
+                                    </Checkbox>
+                                </CheckboxGroup>
+                            </FormItem>
+                            <FormItem label="令牌有效期" prop="accessTokenValidity">
+                                <RadioGroup type="button" v-model="formItem.tokenValidity">
+                                    <Radio label="1">设置有效期</Radio>
+                                    <Radio label="0">不限制</Radio>
+                                </RadioGroup>
+                            </FormItem>
+                            <FormItem label="访问令牌有效期" prop="accessTokenValidity"
+                                      v-show="formItem.tokenValidity === '1'">
+                                <InputNumber :min="900" v-model="formItem.accessTokenValidity"></InputNumber>
+                                <span>&nbsp;&nbsp;秒</span>
+                            </FormItem>
+                            <FormItem label="刷新令牌有效期" prop="refreshTokenValidity"
+                                      v-show="formItem.tokenValidity === '1'">
+                                <InputNumber :min="900" v-model="formItem.refreshTokenValidity"></InputNumber>
+                                <span>&nbsp;&nbsp;秒</span>
+                            </FormItem>
+                            <FormItem label="第三方登陆回调地址" prop="redirectUrls">
+                                <Input placeholder="请输入内容" type="textarea" v-model="formItem.redirectUrls"></Input>
+                                <span>多个地址使用,逗号隔开</span>
+                            </FormItem>
+                        </Form>
+                    </TabPane>
+                    <TabPane :disabled="!formItem.appId" label="分配权限" name="form3">
+                        <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form3"
+                              v-show="current=='form3'">
+                            <FormItem label="过期时间" prop="expireTime">
+                                <Badge text="授权已过期" v-if="formItem.isExpired">
+                                    <DatePicker class="ivu-form-item-error" placeholder="授权有效期" type="datetime"
+                                                v-model="formItem.expireTime"></DatePicker>
+                                </Badge>
+                                <DatePicker placeholder="设置有效期" type="datetime" v-else=""
+                                            v-model="formItem.expireTime"></DatePicker>
+                            </FormItem>
+                            <FormItem label="功能接口" prop="authorities">
+                                <Transfer
+                                        :data="selectApis"
+                                        :list-style="{width: '45%',height: '480px'}"
+                                        :render-format="transferRender"
+                                        :target-keys="formItem.authorities"
+                                        :titles="['选择接口', '已选择接口']"
+                                        @on-change="handleTransferChange"
+                                        filterable>
+                                </Transfer>
+                            </FormItem>
+                        </Form>
+                    </TabPane>
+                </Tabs>
+                <div class="drawer-footer">
+                    <Button @click="handleReset" type="default">取消</Button>&nbsp;
+                    <Button :loading="saving" @click="handleSubmit" type="primary">保存</Button>
+                </div>
+            </div>
+        </Modal>
+    </div>
 </template>
 
 <script>
@@ -357,41 +370,13 @@
                     tokenValidity: '1'
                 },
                 columns: [
+                    {title: '应用名称', key: 'appName', width: 120},
+                    {title: 'AppId', key: 'appId', width: 130},
+                    {title: 'ApiKey', key: 'apiKey', width: 200},
+                    {title: 'SecretKey', key: 'secretKey', width: 260},
+                    {title: '状态', slot: 'status', key: 'status', width: 100},
                     {
-                        type: 'selection',
-                        width: 60,
-                        align: 'center'
-                    },
-                    {
-                        title: '应用名称',
-                        key: 'appName',
-                        width: 200
-                    },
-                    {
-                        title: 'AppId',
-                        key: 'appId',
-                        width: 200
-                    },
-                    {
-                        title: 'ApiKey',
-                        key: 'apiKey',
-                        width: 250
-                    },
-                    {
-                        title: 'SecretKey',
-                        key: 'secretKey',
-                        width: 300
-                    },
-                    {
-                        title: '开发者',
-                        key: 'userName',
-                        width: 200
-                    },
-                    {
-                        title: '应用类型',
-                        slot: 'appType',
-                        width: 180,
-                        filters: [
+                        title: '应用类型', slot: 'appType', width: 150, filters: [
                             {
                                 label: '服务器应用',
                                 value: 0
@@ -422,17 +407,8 @@
                             }
                         }
                     },
-                    {
-                        title: '状态',
-                        slot: 'status',
-                        key: 'status'
-                    },
-                    {
-                        title: '操作',
-                        slot: 'action',
-                        fixed: 'right',
-                        width: 120
-                    }
+                    {title: '开发者', key: 'userName', width: 120},
+                    {title: '操作', slot: 'action', fixed: 'right', width: 120}
                 ],
                 data: []
             }
@@ -751,44 +727,44 @@
     }
 </script>
 <style scoped>
-  .upload-list {
-    display: inline-block;
-    width: 60px;
-    height: 60px;
-    text-align: center;
-    line-height: 60px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    overflow: hidden;
-    background: #fff;
-    position: relative;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, .2);
-    margin-right: 4px;
-  }
+    .upload-list {
+        display: inline-block;
+        width: 60px;
+        height: 60px;
+        text-align: center;
+        line-height: 60px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        overflow: hidden;
+        background: #fff;
+        position: relative;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+        margin-right: 4px;
+    }
 
-  .upload-list img {
-    width: 100%;
-    height: 100%;
-  }
+    .upload-list img {
+        width: 100%;
+        height: 100%;
+    }
 
-  .upload-list-cover {
-    display: none;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, .6);
-  }
+    .upload-list-cover {
+        display: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, .6);
+    }
 
-  .upload-list:hover .upload-list-cover {
-    display: block;
-  }
+    .upload-list:hover .upload-list-cover {
+        display: block;
+    }
 
-  .upload-list-cover i {
-    color: #fff;
-    font-size: 20px;
-    cursor: pointer;
-    margin: 0 2px;
-  }
+    .upload-list-cover i {
+        color: #fff;
+        font-size: 20px;
+        cursor: pointer;
+        margin: 0 2px;
+    }
 </style>

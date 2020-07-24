@@ -7,6 +7,7 @@ import org.springframework.boot.actuate.endpoint.web.annotation.RestControllerEn
 import org.springframework.cloud.bus.endpoint.AbstractBusEndpoint;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * 自定义网关监控端点
@@ -28,7 +29,7 @@ public class RouteRefreshEndpoint extends AbstractBusEndpoint {
      * /actuator/open/refresh?destination = customers：**
      */
     @PostMapping("/refresh")
-    public ResultMessage<Void> busRefresh(RefreshRouteCommand command) {
+    public ResultMessage<Void> busRefresh(@RequestBody RefreshRouteCommand command) {
         this.publish(new RouteRemoteRefreshedEvent(this, this.getInstanceId(), command.getDestination()));
         return ResultMessage.ok();
     }

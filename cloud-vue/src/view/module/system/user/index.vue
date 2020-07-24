@@ -1,166 +1,176 @@
 <template>
-  <div>
-    <Card>
-      <Form :label-width="80"
-            :model="pageInfo"
-            inline
-            ref="searchForm">
-        <FormItem label="登录名" prop="userName">
-          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.userName"/>
-        </FormItem>
-        <FormItem label="手机号" prop="mobile">
-          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.mobile"/>
-        </FormItem>
-        <FormItem label="邮箱" prop="email">
-          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.email"/>
-        </FormItem>
-        <FormItem>
-          <Button @click="handleSearch(1)" type="primary">查询</Button>&nbsp;
-          <Button @click="handleResetForm('searchForm')">重置</Button>
-        </FormItem>
-      </Form>
+    <div>
+        <Card>
+            <Form :label-width="80"
+                  :model="pageInfo"
+                  inline
+                  ref="searchForm">
+                <FormItem label="登录名" prop="userName">
+                    <Input placeholder="请输入关键字" type="text" v-model="pageInfo.userName"/>
+                </FormItem>
+                <FormItem label="手机号" prop="mobile">
+                    <Input placeholder="请输入关键字" type="text" v-model="pageInfo.mobile"/>
+                </FormItem>
+                <FormItem label="邮箱" prop="email">
+                    <Input placeholder="请输入关键字" type="text" v-model="pageInfo.email"/>
+                </FormItem>
+                <FormItem>
+                    <Button @click="handleSearch(1)" type="primary">查询</Button>&nbsp;
+                    <Button @click="handleResetForm('searchForm')">重置</Button>
+                </FormItem>
+            </Form>
 
-      <div class="search-con search-con-top">
-        <ButtonGroup>
-          <Button :disabled="hasAuthority('systemUserEdit')?false:true" @click="handleModal()"
-                  type="primary">
-            <span>添加</span>
-          </Button>
-        </ButtonGroup>
-      </div>
+            <div class="search-con search-con-top">
+                <ButtonGroup>
+                    <Button :disabled="hasAuthority('systemUserEdit')?false:true" @click="handleModal()"
+                            type="primary">
+                        <span>添加</span>
+                    </Button>
+                </ButtonGroup>
+            </div>
 
-      <Table :columns="columns" :data="data" :loading="loading" border>
-        <template slot="status" slot-scope="{ row }">
-          <Badge status="success" text="正常" v-if="row.status===1"/>
-          <Badge status="warning" text="锁定" v-else-if="row.status===2"/>
-          <Badge status="error" text="禁用" v-else=""/>
-        </template>
-        <template slot="action" slot-scope="{ row }">
-          <a :disabled="hasAuthority('systemUserEdit')?false:true" @click="handleModal(row)">编辑</a>&nbsp;
-          <Dropdown @on-click="handleClick($event,row)" ref="dropdown" transfer v-show="hasAuthority('systemUserEdit')">
-            <a href="javascript:void(0)">
-              <span>更多</span>
-              <Icon type="ios-arrow-down"></Icon>
-            </a>
-            <DropdownMenu slot="list">
-              <DropdownItem name="sendToEmail">发送到密保邮箱</DropdownItem>
-            </DropdownMenu>
-          </Dropdown>&nbsp;
-        </template>
-      </Table>
-      <Page :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total" @on-change="handlePage" @on-page-size-change='handlePageSize'
-            show-elevator
-            show-sizer
-            show-total transfer></Page>
-    </Card>
-    <Modal :title="modalTitle"
-           @on-cancel="handleReset"
-           v-model="modalVisible"
-           width="40">
-      <div>
-        <Tabs :value="current" @on-click="handleTabClick">
-          <TabPane label="用户信息" name="form1">
-            <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form1" v-show="current == 'form1'">
-              <FormItem label="用户类型" prop="userType">
-                <RadioGroup v-model="formItem.userType">
-                  <Radio label="super">超级管理员</Radio>
-                  <Radio label="normal">普通管理员</Radio>
-                </RadioGroup>
-              </FormItem>
-              <FormItem label="昵称" prop="nickName">
-                <Input placeholder="请输入内容" v-model="formItem.nickName"></Input>
-              </FormItem>
-              <FormItem label="登录名" prop="userName">
-                <Input :disabled="formItem.userId?true:false" placeholder="请输入内容" v-model="formItem.userName"></Input>
-              </FormItem>
-              <FormItem label="登录密码" prop="password" v-if="formItem.userId?false:true">
-                <Input placeholder="请输入内容" type="password" v-model="formItem.password"></Input>
-              </FormItem>
-              <FormItem label="再次确认密码" prop="passwordConfirm" v-if="formItem.userId?false:true">
-                <Input placeholder="请输入内容" type="password" v-model="formItem.passwordConfirm"></Input>
-              </FormItem>
-              <FormItem label="邮箱" prop="email">
-                <Input placeholder="请输入内容" v-model="formItem.email"></Input>
-              </FormItem>
-              <FormItem label="手机号" prop="mobile">
-                <Input placeholder="请输入内容" v-model="formItem.mobile"></Input>
-              </FormItem>
-              <FormItem label="状态">
-                <RadioGroup type="button" v-model="formItem.status">
-                  <Radio label="0">禁用</Radio>
-                  <Radio label="1">正常</Radio>
-                  <Radio label="2">锁定</Radio>
-                </RadioGroup>
-              </FormItem>
-              <FormItem label="描述">
-                <Input placeholder="请输入内容" type="textarea" v-model="formItem.userDesc"></Input>
-              </FormItem>
-            </Form>
-          </TabPane>
-          <TabPane :disabled="!formItem.userId" label="分配角色" name="form2">
-            <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form2" v-show="current == 'form2'">
-              <FormItem label="分配角色" prop="grantRoles">
-                <CheckboxGroup v-model="formItem.grantRoles">
-                  <Checkbox :label="item.roleId" v-for="item in selectRoles"><span>{{ item.roleName }}</span></Checkbox>
-                </CheckboxGroup>
-              </FormItem>
-            </Form>
-          </TabPane>
-          <TabPane :disabled="!formItem.userId" label="分配权限" name="form3">
-            <Alert show-icon type="info">
-              支持用户单独分配功能权限<code>(除角色已经分配菜单功能,禁止勾选!)</code></Alert>
-            <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form3" v-show="current == 'form3'">
-              <FormItem label="过期时间" prop="expireTime">
-                <Badge text="授权已过期" v-if="formItem.isExpired">
-                  <DatePicker class="ivu-form-item-error" placeholder="设置有效期" type="datetime"
-                              v-model="formItem.expireTime"></DatePicker>
-                </Badge>
-                <DatePicker placeholder="设置有效期" type="datetime" v-else="" v-model="formItem.expireTime"></DatePicker>
-              </FormItem>
-              <FormItem label="功能菜单" prop="grantMenus">
-                <tree-table
-                  :columns="columns2"
-                  :data="selectMenus"
-                  :expand-type="false"
-                  :is-fold="false"
-                  :selectable="true"
-                  :tree-type="true"
-                  expand-key="menuName"
-                  ref="tree"
-                  style="max-height:450px;overflow: auto">
-                  <template slot="operation" slot-scope="scope">
-                    <CheckboxGroup v-model="formItem.grantActions">
-                      <Checkbox :disabled="item.disabled" :label="item.authorityId"
-                                v-for="item in scope.row.actionList">
-                        <span :title="item.actionDesc">{{item.actionName}}</span>
-                      </Checkbox>
-                    </CheckboxGroup>
-                  </template>
-                </tree-table>
-              </FormItem>
-            </Form>
-          </TabPane>
-          <TabPane :disabled="!formItem.userId" label="修改密码" name="form4">
-            <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form4" v-show="current == 'form4'">
-              <FormItem label="登录名" prop="userName">
-                <Input :disabled="formItem.userId?true:false" placeholder="请输入内容" v-model="formItem.userName"></Input>
-              </FormItem>
-              <FormItem label="登录密码" prop="password">
-                <Input placeholder="请输入内容" type="password" v-model="formItem.password"></Input>
-              </FormItem>
-              <FormItem label="再次确认密码" prop="passwordConfirm">
-                <Input placeholder="请输入内容" type="password" v-model="formItem.passwordConfirm"></Input>
-              </FormItem>
-            </Form>
-          </TabPane>
-        </Tabs>
-        <div class="drawer-footer">
-          <Button @click="handleReset" type="default">取消</Button>&nbsp;
-          <Button :loading="saving" @click="handleSubmit" type="primary">保存</Button>
-        </div>
-      </div>
-    </Modal>
-  </div>
+            <Table size="small" :columns="columns" :data="data" :loading="loading" border>
+                <template slot="status" slot-scope="{ row }">
+                    <Badge status="success" text="正常" v-if="row.status===1"/>
+                    <Badge status="warning" text="锁定" v-else-if="row.status===2"/>
+                    <Badge status="error" text="禁用" v-else=""/>
+                </template>
+                <template slot="action" slot-scope="{ row }">
+                    <a :disabled="hasAuthority('systemUserEdit')?false:true" @click="handleModal(row)">编辑</a>&nbsp;
+                    <Dropdown @on-click="handleClick($event,row)" ref="dropdown" transfer
+                              v-show="hasAuthority('systemUserEdit')">
+                        <a href="javascript:void(0)">
+                            <span>更多</span>
+                            <Icon type="ios-arrow-down"></Icon>
+                        </a>
+                        <DropdownMenu slot="list">
+                            <DropdownItem name="sendToEmail">发送到密保邮箱</DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown>&nbsp;
+                </template>
+            </Table>
+            <Page :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total" @on-change="handlePage"
+                  @on-page-size-change='handlePageSize'
+                  show-elevator
+                  show-sizer
+                  show-total transfer></Page>
+        </Card>
+        <Modal :title="modalTitle"
+               @on-cancel="handleReset"
+               v-model="modalVisible"
+               width="40">
+            <div>
+                <Tabs :value="current" @on-click="handleTabClick">
+                    <TabPane label="用户信息" name="form1">
+                        <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form1"
+                              v-show="current == 'form1'">
+                            <FormItem label="用户类型" prop="userType">
+                                <RadioGroup v-model="formItem.userType">
+                                    <Radio label="super">超级管理员</Radio>
+                                    <Radio label="normal">普通管理员</Radio>
+                                </RadioGroup>
+                            </FormItem>
+                            <FormItem label="昵称" prop="nickName">
+                                <Input placeholder="请输入内容" v-model="formItem.nickName"></Input>
+                            </FormItem>
+                            <FormItem label="登录名" prop="userName">
+                                <Input :disabled="formItem.userId?true:false" placeholder="请输入内容"
+                                       v-model="formItem.userName"></Input>
+                            </FormItem>
+                            <FormItem label="登录密码" prop="password" v-if="formItem.userId?false:true">
+                                <Input placeholder="请输入内容" type="password" v-model="formItem.password"></Input>
+                            </FormItem>
+                            <FormItem label="再次确认密码" prop="passwordConfirm" v-if="formItem.userId?false:true">
+                                <Input placeholder="请输入内容" type="password" v-model="formItem.passwordConfirm"></Input>
+                            </FormItem>
+                            <FormItem label="邮箱" prop="email">
+                                <Input placeholder="请输入内容" v-model="formItem.email"></Input>
+                            </FormItem>
+                            <FormItem label="手机号" prop="mobile">
+                                <Input placeholder="请输入内容" v-model="formItem.mobile"></Input>
+                            </FormItem>
+                            <FormItem label="状态">
+                                <RadioGroup type="button" v-model="formItem.status">
+                                    <Radio label="0">禁用</Radio>
+                                    <Radio label="1">正常</Radio>
+                                    <Radio label="2">锁定</Radio>
+                                </RadioGroup>
+                            </FormItem>
+                            <FormItem label="描述">
+                                <Input placeholder="请输入内容" type="textarea" v-model="formItem.userDesc"></Input>
+                            </FormItem>
+                        </Form>
+                    </TabPane>
+                    <TabPane :disabled="!formItem.userId" label="分配角色" name="form2">
+                        <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form2"
+                              v-show="current == 'form2'">
+                            <FormItem label="分配角色" prop="grantRoles">
+                                <CheckboxGroup v-model="formItem.grantRoles">
+                                    <Checkbox :label="item.roleId" v-for="item in selectRoles">
+                                        <span>{{ item.roleName }}</span></Checkbox>
+                                </CheckboxGroup>
+                            </FormItem>
+                        </Form>
+                    </TabPane>
+                    <TabPane :disabled="!formItem.userId" label="分配权限" name="form3">
+                        <Alert show-icon type="info">
+                            支持用户单独分配功能权限<code>(除角色已经分配菜单功能,禁止勾选!)</code></Alert>
+                        <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form3"
+                              v-show="current == 'form3'">
+                            <FormItem label="过期时间" prop="expireTime">
+                                <Badge text="授权已过期" v-if="formItem.isExpired">
+                                    <DatePicker class="ivu-form-item-error" placeholder="设置有效期" type="datetime"
+                                                v-model="formItem.expireTime"></DatePicker>
+                                </Badge>
+                                <DatePicker placeholder="设置有效期" type="datetime" v-else=""
+                                            v-model="formItem.expireTime"></DatePicker>
+                            </FormItem>
+                            <FormItem label="功能菜单" prop="grantMenus">
+                                <tree-table
+                                        :columns="columns2"
+                                        :data="selectMenus"
+                                        :expand-type="false"
+                                        :is-fold="false"
+                                        :selectable="true"
+                                        :tree-type="true"
+                                        expand-key="menuName"
+                                        ref="tree"
+                                        style="max-height:450px;overflow: auto">
+                                    <template slot="operation" slot-scope="scope">
+                                        <CheckboxGroup v-model="formItem.grantActions">
+                                            <Checkbox :disabled="item.disabled" :label="item.authorityId"
+                                                      v-for="item in scope.row.actionList">
+                                                <span :title="item.actionDesc">{{item.actionName}}</span>
+                                            </Checkbox>
+                                        </CheckboxGroup>
+                                    </template>
+                                </tree-table>
+                            </FormItem>
+                        </Form>
+                    </TabPane>
+                    <TabPane :disabled="!formItem.userId" label="修改密码" name="form4">
+                        <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form4"
+                              v-show="current == 'form4'">
+                            <FormItem label="登录名" prop="userName">
+                                <Input :disabled="formItem.userId?true:false" placeholder="请输入内容"
+                                       v-model="formItem.userName"></Input>
+                            </FormItem>
+                            <FormItem label="登录密码" prop="password">
+                                <Input placeholder="请输入内容" type="password" v-model="formItem.password"></Input>
+                            </FormItem>
+                            <FormItem label="再次确认密码" prop="passwordConfirm">
+                                <Input placeholder="请输入内容" type="password" v-model="formItem.passwordConfirm"></Input>
+                            </FormItem>
+                        </Form>
+                    </TabPane>
+                </Tabs>
+                <div class="drawer-footer">
+                    <Button @click="handleReset" type="default">取消</Button>&nbsp;
+                    <Button :loading="saving" @click="handleSubmit" type="primary">保存</Button>
+                </div>
+            </div>
+        </Modal>
+    </div>
 </template>
 
 <script>
@@ -281,56 +291,15 @@
                     isExpired: false
                 },
                 columns: [
-                    {
-                        type: 'selection',
-                        width: 60,
-                    },
-                    {
-                        title: '登录名',
-                        key: 'userName',
-                        width: 200
-                    },
-                    {
-                        title: '昵称',
-                        key: 'nickName',
-                        width: 150
-                    },
-                    {
-                        title: '邮箱',
-                        key: 'email',
-                        width: 200
-                    },
-                    {
-                        title: '手机号',
-                        key: 'mobile',
-                        width: 200
-                    },
-                    {
-                        title: '状态',
-                        slot: 'status',
-                        key: 'status',
-                        width: 100
-                    },
-                    {
-                        title: '用户类型',
-                        key: 'userType',
-                        width: 150
-                    },
-                    {
-                        title: '注册时间',
-                        key: 'createdDate',
-                        width: 180
-                    },
-                    {
-                        title: '描述',
-                        key: 'userDesc'
-                    },
-                    {
-                        title: '操作',
-                        slot: 'action',
-                        fixed: 'right',
-                        width: 150
-                    }
+                    {title: '登录名', key: 'userName'},
+                    {title: '昵称', key: 'nickName'},
+                    {title: '邮箱', key: 'email', width: 180},
+                    {title: '手机号', key: 'mobile', width: 120},
+                    {title: '状态', slot: 'status', key: 'status'},
+                    {title: '用户类型', key: 'userType'},
+                    {title: '注册时间', key: 'createdDate', width: 160},
+                    {title: '描述', key: 'userDesc'},
+                    {title: '操作', slot: 'action', fixed: 'right'}
                 ],
                 columns2: [
                     {
