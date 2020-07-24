@@ -7,7 +7,7 @@ services:
       NAME: "nacos"
     hostname: "nacos"
     networks:
-      - sia
+      - cloud
     ports:
       - "8848:8848"
     environment:
@@ -28,7 +28,7 @@ services:
 #      NAME: "mysql"
 #    hostname: "mysql"
 #    networks:
-#      - sia
+#      - cloud
 #    ports:
 #      - "3306:3306"
 #    environment:
@@ -55,7 +55,7 @@ services:
       NAME: "redis"
     hostname: "redis"
     networks:
-      - sia
+      - cloud
     ports:
       - "6379:6379"
     environment:
@@ -77,7 +77,7 @@ services:
       NAME: "zookeeper"
     hostname: "zookeeper"
     networks:
-      - sia
+      - cloud
     ports:
       - "2181:2181"
     restart: always
@@ -89,7 +89,7 @@ services:
       NAME: "elasticsearch"
     hostname: "elasticsearch"
     networks:
-      - sia
+      - cloud
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -108,7 +108,7 @@ services:
       NAME: "kafka"
     hostname: "kafka"
     networks:
-      - sia
+      - cloud
     ports:
       - "9092:9092"
     environment:
@@ -139,7 +139,7 @@ services:
       NAME: "rabbitmq"
     hostname: "rabbitmq"
     networks:
-      - sia
+      - cloud
     ports:
       - "5671:5671"
       - "5672:5672"
@@ -160,5 +160,5 @@ services:
       retries: 128
 
 networks:
-  sia:
+  cloud:
     driver: bridge

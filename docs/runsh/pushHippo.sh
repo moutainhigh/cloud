@@ -10,7 +10,8 @@ ALIYUN_REGISTRY=registry.cn-hangzhou.aliyuncs.com
 #echo "mvn clean package..."
 #mvn clean package
 
-echo "#2 推送服务镜像到阿里云私服"
+echo "#2 推送服务镜像到阿里云私服 password:Docker123456"
+docker login --username=youtao531@163.com ${ALIYUN_REGISTRY}
 docker tag cloud/cloud-hippo:${SOURCE_VERSION} ${ALIYUN_REGISTRY}/smart4y/cloud-hippo:${TARGET_VERSION}
 docker push ${ALIYUN_REGISTRY}/smart4y/cloud-hippo:${TARGET_VERSION}
 

@@ -11,7 +11,7 @@ ALIYUN_REGISTRY=registry.cn-hangzhou.aliyuncs.com
 #mvn clean package
 
 echo "#2 推送服务镜像到阿里云私服"
-
+docker login --username=youtao531@163.com ${ALIYUN_REGISTRY}
 docker tag cloud/cloud-spider:${SOURCE_VERSION} ${ALIYUN_REGISTRY}/smart4y/cloud-spider:${TARGET_VERSION}
 docker push ${ALIYUN_REGISTRY}/smart4y/cloud-spider:${TARGET_VERSION}
 

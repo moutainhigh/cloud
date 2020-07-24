@@ -7,7 +7,7 @@ services:
       NAME: "rabbitmq"
     hostname: "rabbitmq"
     networks:
-      - sia
+      - cloud
     ports:
       - "5671:5671"
       - "5672:5672"
@@ -19,8 +19,8 @@ services:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
       - RABBITMQ_DEFAULT_VHOST=/
-    #    volumes:
-    #      - ${DOCKER_VOL_DIR}/rabbitmq/lib:/var/rabbitmq/lib
+    volumes:
+      - ${DOCKER_VOL_DIR}/rabbitmq/lib:/var/rabbitmq/lib
     healthcheck:
       test: "rabbitmqctl eval '{ true, rabbit_app_booted_and_running } = { rabbit:is_booted(node()), rabbit_app_booted_and_running }, { [], no_alarms } = { rabbit:alarms(), no_alarms }, [] /= rabbit_networking:active_listeners(), rabbitmq_node_is_healthy. ' || exit 1"
       interval: 15s
@@ -28,5 +28,5 @@ services:
       retries: 128
 
 networks:
-  sia:
+  cloud:
     driver: bridge

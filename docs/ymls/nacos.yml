@@ -7,7 +7,7 @@ services:
       NAME: "nacos"
     hostname: "nacos"
     networks:
-      - sia
+      - cloud
     ports:
       - "8848:8848"
     environment:
@@ -22,5 +22,5 @@ services:
     restart: on-failure
 
 networks:
-  sia:
+  cloud:
     driver: bridge

@@ -7,7 +7,7 @@ services:
       NAME: "redis"
     hostname: "redis"
     networks:
-      - sia
+      - cloud
     ports:
       - "6379:6379"
     environment:
@@ -18,10 +18,10 @@ services:
       interval: 15s
       timeout: 5s
       retries: 128
-  #    volumes:
-  #      - ${DOCKER_VOL_DIR}/redis/conf:/usr/local/etc/redis
-  #      - ${DOCKER_VOL_DIR}/redis/data:/data
+    volumes:
+      - ${DOCKER_VOL_DIR}/redis/conf:/usr/local/etc/redis
+      - ${DOCKER_VOL_DIR}/redis/data:/data
 
 networks:
-  sia:
+  cloud:
     driver: bridge
