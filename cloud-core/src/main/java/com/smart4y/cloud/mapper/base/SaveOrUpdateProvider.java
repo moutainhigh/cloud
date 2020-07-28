@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.mapper.base;
+package com.smart4y.cloud.mapper.base;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.mapping.MappedStatement;

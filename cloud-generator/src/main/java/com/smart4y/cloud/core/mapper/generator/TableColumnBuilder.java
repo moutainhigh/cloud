@@ -1,6 +1,6 @@
 package com.smart4y.cloud.core.mapper.generator;
 
-import com.smart4y.cloud.core.mapper.BaseEntity;
+import com.smart4y.cloud.mapper.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;

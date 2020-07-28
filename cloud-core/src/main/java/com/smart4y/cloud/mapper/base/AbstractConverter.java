@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.mapper.base;
+package com.smart4y.cloud.mapper.base;
 
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.core.message.page.Page;

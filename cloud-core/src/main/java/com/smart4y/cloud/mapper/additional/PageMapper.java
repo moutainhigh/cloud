@@ -1,4 +1,4 @@
-package com.smart4y.cloud.mapper;
+package com.smart4y.cloud.mapper.additional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

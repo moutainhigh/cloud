@@ -2,7 +2,7 @@ package com.smart4y.cloud.base.interfaces.converter;
 
 import com.smart4y.cloud.base.domain.model.BaseMenu;
 import com.smart4y.cloud.base.interfaces.vo.BaseMenuVO;
-import com.smart4y.cloud.core.mapper.base.AbstractConverter;
+import com.smart4y.cloud.mapper.base.AbstractConverter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 

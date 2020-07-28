@@ -2,11 +2,9 @@ package com.smart4y.cloud.mapper;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.smart4y.cloud.core.mapper.BaseEntity;
 import com.smart4y.cloud.core.message.page.OpenThreadContext;
 import com.smart4y.cloud.core.message.page.Page;
 import com.smart4y.cloud.core.spring.SpringContextHolder;
-import com.smart4y.cloud.mapper.CloudMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;

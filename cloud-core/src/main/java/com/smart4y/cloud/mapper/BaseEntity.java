@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.mapper;
+package com.smart4y.cloud.mapper;
 
 import com.smart4y.cloud.core.ddd.Entity;
 

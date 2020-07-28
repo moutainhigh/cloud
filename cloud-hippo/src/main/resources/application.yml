@@ -99,7 +99,7 @@ mybatis:
     local-cache-scope: session
     #设置当JDBC类型为空时，插入空值时的处理方式
     jdbc-type-for-null: null
-    default-enum-type-handler: com.smart4y.cloud.core.mapper.enumhandler.EnumHandler
+    default-enum-type-handler: com.smart4y.cloud.mapper.enumhandler.EnumHandler
 cloud:
   ##开启资源扫描
   scan:

@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.mapper.enumhandler;
+package com.smart4y.cloud.mapper.enumhandler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.type.BaseTypeHandler;

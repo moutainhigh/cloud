@@ -1,6 +1,6 @@
-package com.smart4y.cloud.mapper;
+package com.smart4y.cloud.mapper.additional;
 
-import com.smart4y.cloud.core.mapper.base.SaveOrUpdateProvider;
+import com.smart4y.cloud.mapper.base.SaveOrUpdateProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 
 /**
