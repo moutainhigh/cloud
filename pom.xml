@@ -10,14 +10,11 @@
 
     <modules>
         <module>cloud-common</module>
-
         <module>cloud-core</module>
         <module>cloud-generator</module>
-
         <module>cloud-hippo</module>
         <module>cloud-owl</module>
         <module>cloud-spider</module>
-
         <module>cloud-vue</module>
     </modules>
 
