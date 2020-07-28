@@ -1,7 +1,7 @@
 package com.smart4y.cloud.gateway.domain.service;
 
 import com.smart4y.cloud.core.annotation.DomainService;
-import com.smart4y.cloud.core.mapper.BaseDomainService;
+import com.smart4y.cloud.mapper.BaseDomainService;
 import com.smart4y.cloud.gateway.domain.RateLimitApiObj;
 import com.smart4y.cloud.gateway.domain.model.GatewayRateLimitApi;
 import com.smart4y.cloud.gateway.infrastructure.mapper.GatewayCustomMapper;

@@ -9,6 +9,8 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>cloud-common</module>
+
         <module>cloud-core</module>
         <module>cloud-generator</module>
 
@@ -48,6 +50,12 @@
                 <scope>import</scope>
             </dependency>
 
+
+            <dependency>
+                <groupId>com.smart4y</groupId>
+                <artifactId>cloud-common-messaging</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.smart4y</groupId>
                 <artifactId>cloud-core</artifactId>

@@ -2,7 +2,7 @@ package com.smart4y.cloud.gateway.domain.service;
 
 import com.smart4y.cloud.core.annotation.DomainService;
 import com.smart4y.cloud.core.constant.BaseConstants;
-import com.smart4y.cloud.core.mapper.BaseDomainService;
+import com.smart4y.cloud.mapper.BaseDomainService;
 import com.smart4y.cloud.gateway.domain.model.GatewayRoute;
 import tk.mybatis.mapper.weekend.Weekend;
 

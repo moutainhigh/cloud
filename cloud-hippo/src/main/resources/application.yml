@@ -58,7 +58,7 @@ management:
 mapper:
   mappers:
     - tk.mybatis.mapper.common.Mapper
-    - com.smart4y.cloud.core.mapper.CloudMapper
+    - com.smart4y.cloud.mapper.CloudMapper
   not-empty: true
   identity: MYSQL
 ##分页配置

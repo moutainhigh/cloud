@@ -1,8 +1,8 @@
-package com.smart4y.cloud.core.mapper;
+package com.smart4y.cloud.mapper;
 
-import com.smart4y.cloud.core.mapper.additional.SaveOrUpdateMapper;
-import com.smart4y.cloud.core.mapper.additional.BatchMapper;
-import com.smart4y.cloud.core.mapper.additional.PageMapper;
+import com.smart4y.cloud.mapper.SaveOrUpdateMapper;
+import com.smart4y.cloud.mapper.BatchMapper;
+import com.smart4y.cloud.mapper.PageMapper;
 import tk.mybatis.mapper.common.Mapper;
 
 /**

@@ -1,8 +1,9 @@
 package com.smart4y.cloud.core.configuration;
 
+import com.smart4y.cloud.core.AbstractApplication;
 import com.smart4y.cloud.core.eventhandler.RequestMappingScannedEventHandler;
-import com.smart4y.cloud.core.exception.handler.OpenRestResponseErrorHandler;
 import com.smart4y.cloud.core.exception.global.OpenGlobalExceptionHandler;
+import com.smart4y.cloud.core.exception.handler.OpenRestResponseErrorHandler;
 import com.smart4y.cloud.core.filter.XFilter;
 import com.smart4y.cloud.core.properties.OpenCommonProperties;
 import com.smart4y.cloud.core.properties.OpenIdGenProperties;
@@ -23,6 +24,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.bus.BusProperties;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
@@ -33,9 +35,10 @@ import javax.sql.DataSource;
  * 默认配置类
  *
  * @author Youtao
- *         Created by youtao on 2019-09-06.
+ * Created by youtao on 2019-09-06.
  */
 @Slf4j
+@ComponentScan(basePackageClasses = AbstractApplication.class)
 @EnableConfigurationProperties({OpenCommonProperties.class, OpenIdGenProperties.class, OpenOAuth2ClientProperties.class, OpenScanProperties.class})
 public class AutoConfiguration {
 
@@ -44,8 +47,8 @@ public class AutoConfiguration {
      * body缓存
      */
     @Bean
-    public FilterRegistrationBean xFilter() {
-        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean<>(new XFilter());
+    public FilterRegistrationBean<XFilter> xFilter() {
+        FilterRegistrationBean<XFilter> filterRegistrationBean = new FilterRegistrationBean<>(new XFilter());
         log.info("XFilter [{}]", filterRegistrationBean);
         return filterRegistrationBean;
     }

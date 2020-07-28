@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.mapper.additional;
+package com.smart4y.cloud.mapper;
 
 import java.util.List;
 
