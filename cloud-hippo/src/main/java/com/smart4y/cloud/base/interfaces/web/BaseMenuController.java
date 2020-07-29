@@ -66,7 +66,6 @@ public class BaseMenuController {
         return ResultMessage.ok(result);
     }
 
-
     /**
      * 获取菜单下所有操作
      */

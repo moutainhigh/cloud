@@ -5,12 +5,12 @@ import request from '@/libs/request'
  * @param menuId
  */
 export const getActionsByMenu = (menuId) => {
-  const params = {menuId: menuId};
-  return request({
-    url: 'base/menu/action',
-    params,
-    method: 'get'
-  })
+    const params = {menuId: menuId};
+    return request({
+        url: 'base/menu/action',
+        params,
+        method: 'get'
+    })
 };
 
 /**
@@ -24,19 +24,19 @@ export const getActionsByMenu = (menuId) => {
  * @param actionDesc
  */
 export const addAction = ({actionCode, actionName, menuId, status, priority, actionDesc}) => {
-  const data = {
-    actionCode: actionCode,
-    actionName: actionName,
-    menuId: menuId,
-    status: status,
-    priority: priority,
-    actionDesc: actionDesc
-  };
-  return request({
-    url: 'base/action/add',
-    data,
-    method: 'post'
-  })
+    const data = {
+        actionCode: actionCode,
+        actionName: actionName,
+        menuId: menuId,
+        status: status,
+        priority: priority,
+        actionDesc: actionDesc
+    };
+    return request({
+        url: 'base/action/add',
+        data,
+        method: 'post'
+    })
 };
 
 /**
@@ -51,20 +51,20 @@ export const addAction = ({actionCode, actionName, menuId, status, priority, act
  * @param actionDesc
  */
 export const updateAction = ({actionId, actionCode, actionName, menuId, status, priority, actionDesc}) => {
-  const data = {
-    actionId: actionId,
-    actionCode: actionCode,
-    actionName: actionName,
-    menuId: menuId,
-    status: status,
-    priority: priority,
-    actionDesc: actionDesc
-  };
-  return request({
-    url: 'base/action/update',
-    data,
-    method: 'post'
-  })
+    const data = {
+        actionId: actionId,
+        actionCode: actionCode,
+        actionName: actionName,
+        menuId: menuId,
+        status: status,
+        priority: priority,
+        actionDesc: actionDesc
+    };
+    return request({
+        url: 'base/action/update',
+        data,
+        method: 'post'
+    })
 };
 
 /**
@@ -72,12 +72,12 @@ export const updateAction = ({actionId, actionCode, actionName, menuId, status, 
  * @param actionId
  */
 export const removeAction = (actionId) => {
-  const data = {
-    actionId: actionId
-  };
-  return request({
-    url: 'base/action/remove',
-    data,
-    method: 'post'
-  })
+    const data = {
+        actionId: actionId
+    };
+    return request({
+        url: 'base/action/remove',
+        data,
+        method: 'post'
+    })
 };

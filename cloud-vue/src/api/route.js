@@ -6,12 +6,12 @@ import request from '@/libs/request'
  * @param limit
  */
 export const getRoutes = ({page, limit}) => {
-  const params = {page: page, limit: limit}
-  return request({
-    url: 'base/gateway/route',
-    params,
-    method: 'get'
-  })
+    const params = {page: page, limit: limit}
+    return request({
+        url: 'base/gateway/route',
+        params,
+        method: 'get'
+    })
 }
 
 /**
@@ -28,21 +28,21 @@ export const getRoutes = ({page, limit}) => {
  * @param isAuth
  */
 export const addRoute = ({path, serviceId, url, stripPrefix, retryable, status, routeName, routeDesc}) => {
-  const data = {
-    path: path,
-    serviceId: serviceId,
-    url: url,
-    stripPrefix: stripPrefix,
-    retryable: retryable,
-    status: status,
-    routeName: routeName,
-    routeDesc: routeDesc
-  }
-  return request({
-    url: 'base/gateway/route/add',
-    data,
-    method: 'post'
-  })
+    const data = {
+        path: path,
+        serviceId: serviceId,
+        url: url,
+        stripPrefix: stripPrefix,
+        retryable: retryable,
+        status: status,
+        routeName: routeName,
+        routeDesc: routeDesc
+    }
+    return request({
+        url: 'base/gateway/route/add',
+        data,
+        method: 'post'
+    })
 }
 
 /**
@@ -60,22 +60,22 @@ export const addRoute = ({path, serviceId, url, stripPrefix, retryable, status, 
  * @param isAuth
  */
 export const updateRoute = ({routeId, path, serviceId, url, stripPrefix, retryable, status, routeName, routeDesc}) => {
-  const data = {
-    routeId: routeId,
-    path: path,
-    serviceId: serviceId,
-    url: url,
-    stripPrefix: stripPrefix,
-    retryable: retryable,
-    status: status,
-    routeName: routeName,
-    routeDesc: routeDesc
-  }
-  return request({
-    url: 'base/gateway/route/update',
-    data,
-    method: 'post'
-  })
+    const data = {
+        routeId: routeId,
+        path: path,
+        serviceId: serviceId,
+        url: url,
+        stripPrefix: stripPrefix,
+        retryable: retryable,
+        status: status,
+        routeName: routeName,
+        routeDesc: routeDesc
+    }
+    return request({
+        url: 'base/gateway/route/update',
+        data,
+        method: 'post'
+    })
 }
 
 /**
@@ -83,12 +83,12 @@ export const updateRoute = ({routeId, path, serviceId, url, stripPrefix, retryab
  * @param apiId
  */
 export const removeRoute = (routeId) => {
-  const data = {
-    routeId: routeId
-  }
-  return request({
-    url: 'base/gateway/route/remove',
-    data,
-    method: 'post'
-  })
+    const data = {
+        routeId: routeId
+    }
+    return request({
+        url: 'base/gateway/route/remove',
+        data,
+        method: 'post'
+    })
 }

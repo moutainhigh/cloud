@@ -7,25 +7,25 @@ import request from '@/libs/request'
  * @param policyName
  */
 export const getIpLimits = ({page, limit, policyName}) => {
-  const params = {page: page, limit: limit, policyName: policyName};
-  return request({
-    url: 'base/gateway/limit/ip',
-    params,
-    method: 'get'
-  })
+    const params = {page: page, limit: limit, policyName: policyName};
+    return request({
+        url: 'base/gateway/limit/ip',
+        params,
+        method: 'get'
+    })
 };
 
 export const addIpLimit = ({policyName, policyType, ipAddress}) => {
-  const data = {
-    policyName: policyName,
-    policyType: policyType,
-    ipAddress: ipAddress
-  }
-  return request({
-    url: 'base/gateway/limit/ip/add',
-    data,
-    method: 'post'
-  })
+    const data = {
+        policyName: policyName,
+        policyType: policyType,
+        ipAddress: ipAddress
+    }
+    return request({
+        url: 'base/gateway/limit/ip/add',
+        data,
+        method: 'post'
+    })
 }
 
 /**
@@ -35,17 +35,17 @@ export const addIpLimit = ({policyName, policyType, ipAddress}) => {
  * @param ipAddress
  */
 export const updateIpLimit = ({policyId, policyName, policyType, ipAddress}) => {
-  const data = {
-    policyId: policyId,
-    policyName: policyName,
-    policyType: policyType,
-    ipAddress: ipAddress
-  };
-  return request({
-    url: 'base/gateway/limit/ip/update',
-    data,
-    method: 'post'
-  })
+    const data = {
+        policyId: policyId,
+        policyName: policyName,
+        policyType: policyType,
+        ipAddress: ipAddress
+    };
+    return request({
+        url: 'base/gateway/limit/ip/update',
+        data,
+        method: 'post'
+    })
 };
 
 /**
@@ -53,14 +53,14 @@ export const updateIpLimit = ({policyId, policyName, policyType, ipAddress}) => 
  * @param apiId
  */
 export const removeIpLimit = (policyId) => {
-  const data = {
-    policyId: policyId
-  }
-  return request({
-    url: 'base/gateway/limit/ip/remove',
-    data,
-    method: 'post'
-  })
+    const data = {
+        policyId: policyId
+    }
+    return request({
+        url: 'base/gateway/limit/ip/remove',
+        data,
+        method: 'post'
+    })
 }
 
 /**
@@ -68,14 +68,14 @@ export const removeIpLimit = (policyId) => {
  * @param policyId
  */
 export const getIpLimitApis = (policyId) => {
-  const params = {
-    policyId: policyId
-  }
-  return request({
-    url: 'base/gateway/limit/ip/api/list',
-    params,
-    method: 'get'
-  })
+    const params = {
+        policyId: policyId
+    }
+    return request({
+        url: 'base/gateway/limit/ip/api/list',
+        params,
+        method: 'get'
+    })
 }
 
 /**
@@ -84,13 +84,13 @@ export const getIpLimitApis = (policyId) => {
  * @param apiIds
  */
 export const addIpLimitApis = ({policyId, apiIds}) => {
-  const data = {
-    policyId: policyId,
-    apiIds: apiIds.join(',')
-  }
-  return request({
-    url: 'base/gateway/limit/ip/api/add',
-    data,
-    method: 'post'
-  })
+    const data = {
+        policyId: policyId,
+        apiIds: apiIds.join(',')
+    }
+    return request({
+        url: 'base/gateway/limit/ip/api/add',
+        data,
+        method: 'post'
+    })
 }

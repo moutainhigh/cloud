@@ -6,12 +6,12 @@ import request from '@/libs/request'
  * @param limit
  */
 export const getApps = ({page, limit, appId, appName, appNameEn}) => {
-  const params = {page: page, limit: limit, appId: appId, appName: appName, appNameEn: appNameEn}
-  return request({
-    url: 'base/app',
-    params,
-    method: 'get'
-  })
+    const params = {page: page, limit: limit, appId: appId, appName: appName, appNameEn: appNameEn}
+    return request({
+        url: 'base/app',
+        params,
+        method: 'get'
+    })
 };
 
 /**
@@ -27,22 +27,22 @@ export const getApps = ({page, limit, appId, appName, appNameEn}) => {
  * @param userId
  */
 export const addApp = ({appName, appNameEn, appType, appIcon, appOs, appDesc, status, website, developerId}) => {
-  const data = {
-    appName: appName,
-    appNameEn: appNameEn,
-    appType: appType,
-    appIcon: appIcon,
-    appOs: appOs,
-    appDesc: appDesc,
-    status: status,
-    website: website,
-    developerId: developerId
-  };
-  return request({
-    url: 'base/app/add',
-    data,
-    method: 'post'
-  })
+    const data = {
+        appName: appName,
+        appNameEn: appNameEn,
+        appType: appType,
+        appIcon: appIcon,
+        appOs: appOs,
+        appDesc: appDesc,
+        status: status,
+        website: website,
+        developerId: developerId
+    };
+    return request({
+        url: 'base/app/add',
+        data,
+        method: 'post'
+    })
 };
 
 /**
@@ -59,23 +59,23 @@ export const addApp = ({appName, appNameEn, appType, appIcon, appOs, appDesc, st
  * @param userId
  */
 export const updateApp = ({appId, appName, appNameEn, appType, appIcon, appOs, appDesc, status, website, developerId}) => {
-  const data = {
-    appId: appId,
-    appName: appName,
-    appNameEn: appNameEn,
-    appType: appType,
-    appIcon: appIcon,
-    appOs: appOs,
-    appDesc: appDesc,
-    status: status,
-    website: website,
-    developerId: developerId
-  };
-  return request({
-    url: 'base/app/update',
-    data,
-    method: 'post'
-  })
+    const data = {
+        appId: appId,
+        appName: appName,
+        appNameEn: appNameEn,
+        appType: appType,
+        appIcon: appIcon,
+        appOs: appOs,
+        appDesc: appDesc,
+        status: status,
+        website: website,
+        developerId: developerId
+    };
+    return request({
+        url: 'base/app/update',
+        data,
+        method: 'post'
+    })
 };
 
 /**
@@ -89,20 +89,20 @@ export const updateApp = ({appId, appName, appNameEn, appType, appIcon, appOs, a
  * @param autoApproveScopes
  */
 export const updateAppClientInfo = ({appId, grantTypes, redirectUrls, scopes, accessTokenValidity, refreshTokenValidity, autoApproveScopes}) => {
-  const data = {
-    appId: appId,
-    grantTypes: grantTypes.join(','),
-    redirectUrls: redirectUrls,
-    scopes: scopes.join(','),
-    accessTokenValidity: accessTokenValidity,
-    refreshTokenValidity: refreshTokenValidity,
-    autoApproveScopes: autoApproveScopes.join(',')
-  };
-  return request({
-    url: 'base/app/client/update',
-    data,
-    method: 'post'
-  })
+    const data = {
+        appId: appId,
+        grantTypes: grantTypes.join(','),
+        redirectUrls: redirectUrls,
+        scopes: scopes.join(','),
+        accessTokenValidity: accessTokenValidity,
+        refreshTokenValidity: refreshTokenValidity,
+        autoApproveScopes: autoApproveScopes.join(',')
+    };
+    return request({
+        url: 'base/app/client/update',
+        data,
+        method: 'post'
+    })
 };
 
 /**
@@ -110,14 +110,14 @@ export const updateAppClientInfo = ({appId, grantTypes, redirectUrls, scopes, ac
  * @param appId
  */
 export const removeApp = ({appId}) => {
-  const data = {
-    appId: appId
-  };
-  return request({
-    url: 'base/app/remove',
-    data,
-    method: 'post'
-  })
+    const data = {
+        appId: appId
+    };
+    return request({
+        url: 'base/app/remove',
+        data,
+        method: 'post'
+    })
 };
 
 /**
@@ -125,14 +125,14 @@ export const removeApp = ({appId}) => {
  * @param appId
  */
 export const restApp = ({appId}) => {
-  const data = {
-    appId: appId
-  };
-  return request({
-    url: 'base/app/reset',
-    data,
-    method: 'post'
-  })
+    const data = {
+        appId: appId
+    };
+    return request({
+        url: 'base/app/reset',
+        data,
+        method: 'post'
+    })
 };
 
 /**
@@ -140,10 +140,10 @@ export const restApp = ({appId}) => {
  * @param appId
  */
 export const getAppInfo = ({appId}) => {
-  return request({
-    url: `base/app/${appId}/info`,
-    method: 'get'
-  })
+    return request({
+        url: `base/app/${appId}/info`,
+        method: 'get'
+    })
 };
 
 /**
@@ -151,8 +151,8 @@ export const getAppInfo = ({appId}) => {
  * @param appId
  */
 export const getAppClientInfo = ({clientId}) => {
-  return request({
-    url: `base/app/client/${clientId}/info`,
-    method: 'get'
-  })
+    return request({
+        url: `base/app/client/${clientId}/info`,
+        method: 'get'
+    })
 };

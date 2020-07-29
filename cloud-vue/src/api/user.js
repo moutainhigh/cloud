@@ -7,59 +7,59 @@ import {getToken} from '@/libs/util'
  * @param password
  */
 export const login = ({username, password}) => {
-  const data = {
-    username,
-    password
-  };
-  return request({
-    url: 'uaa/login/token',
-    data,
-    method: 'post'
-  })
+    const data = {
+        username,
+        password
+    };
+    return request({
+        url: 'uaa/login/token',
+        data,
+        method: 'post'
+    })
 };
 
 /**
  * 登出
  */
 export const logout = () => {
-  return request({
-    url: 'uaa/logout/token',
-    data: {token: getToken()},
-    method: 'post'
-  })
+    return request({
+        url: 'uaa/logout/token',
+        data: {token: getToken()},
+        method: 'post'
+    })
 };
 
 /**
  * 获取用户信息
  */
 export const getUserInfo = () => {
-  return request({
-    url: 'uaa/current/user',
-    method: 'get'
-  })
+    return request({
+        url: 'uaa/current/user',
+        method: 'get'
+    })
 };
 
 /**
  * 获取登录用户菜单权限
  */
 export const getCurrentUserMenu = () => {
-  return request({
-    url: 'base/current/user/menu',
-    method: 'get'
-  })
+    return request({
+        url: 'base/current/user/menu',
+        method: 'get'
+    })
 };
 
 export const updateCurrentUserInfo = ({nickName, userDesc, avatar}) => {
-  const data = {
-    nickName: nickName,
-    userDesc: userDesc,
-    avatar: avatar
-  }
-  return request({
-    url: 'base/current/user/update',
-    data,
-    method: 'post'
-  })
+    const data = {
+        nickName: nickName,
+        userDesc: userDesc,
+        avatar: avatar
+    }
+    return request({
+        url: 'base/current/user/update',
+        data,
+        method: 'post'
+    })
 };
 
 /**
@@ -67,21 +67,22 @@ export const updateCurrentUserInfo = ({nickName, userDesc, avatar}) => {
  * @param params
  */
 export const getUsers = (params) => {
-  return request({
-    url: 'base/user',
-    params,
-    method: 'get'
-  })
+    console.log(params);
+    return request({
+        url: 'base/user',
+        params,
+        method: 'get'
+    })
 };
 
 /**
  * 获取所有用户列表
  */
 export const getAllUsers = () => {
-  return request({
-    url: 'base/user/all',
-    method: 'get'
-  })
+    return request({
+        url: 'base/user/all',
+        method: 'get'
+    })
 };
 
 /**
@@ -97,22 +98,22 @@ export const getAllUsers = () => {
  * @param avatar
  */
 export const addUser = ({userName, password, nickName, status, userType, email, mobile, userDesc, avatar}) => {
-  const data = {
-    userName: userName,
-    nickName: nickName,
-    password: password,
-    status: status,
-    userType: userType,
-    email: email,
-    mobile: mobile,
-    userDesc: userDesc,
-    avatar: avatar
-  };
-  return request({
-    url: 'base/user/add',
-    data,
-    method: 'post'
-  })
+    const data = {
+        userName: userName,
+        nickName: nickName,
+        password: password,
+        status: status,
+        userType: userType,
+        email: email,
+        mobile: mobile,
+        userDesc: userDesc,
+        avatar: avatar
+    };
+    return request({
+        url: 'base/user/add',
+        data,
+        method: 'post'
+    })
 };
 
 /**
@@ -127,21 +128,21 @@ export const addUser = ({userName, password, nickName, status, userType, email, 
  * @param avatar
  */
 export const updateUser = ({userId, nickName, status, userType, email, mobile, userDesc, avatar}) => {
-  const data = {
-    userId: userId,
-    nickName: nickName,
-    status: status,
-    userType: userType,
-    email: email,
-    mobile: mobile,
-    userDesc: userDesc,
-    avatar: avatar
-  };
-  return request({
-    url: 'base/user/update',
-    data,
-    method: 'post'
-  })
+    const data = {
+        userId: userId,
+        nickName: nickName,
+        status: status,
+        userType: userType,
+        email: email,
+        mobile: mobile,
+        userDesc: userDesc,
+        avatar: avatar
+    };
+    return request({
+        url: 'base/user/update',
+        data,
+        method: 'post'
+    })
 };
 
 /**
@@ -149,12 +150,12 @@ export const updateUser = ({userId, nickName, status, userType, email, mobile, u
  * @param data
  */
 export const addUserRoles = ({userId, grantRoles}) => {
-  const data = {userId: userId, roleIds: grantRoles.join(',')}
-  return request({
-    url: 'base/user/roles/add',
-    data,
-    method: 'post'
-  })
+    const data = {userId: userId, roleIds: grantRoles.join(',')}
+    return request({
+        url: 'base/user/roles/add',
+        data,
+        method: 'post'
+    })
 };
 
 /**
@@ -162,14 +163,14 @@ export const addUserRoles = ({userId, grantRoles}) => {
  * @param userId
  */
 export const getUserRoles = (userId) => {
-  const params = {
-    userId: userId
-  };
-  return request({
-    url: 'base/user/roles',
-    params,
-    method: 'get'
-  })
+    const params = {
+        userId: userId
+    };
+    return request({
+        url: 'base/user/roles',
+        params,
+        method: 'get'
+    })
 };
 
 /**
@@ -178,13 +179,13 @@ export const getUserRoles = (userId) => {
  * @param password
  */
 export const updatePassword = ({userId, password}) => {
-  const data = {
-    userId: userId,
-    password: password
-  };
-  return request({
-    url: 'base/user/update/password',
-    data,
-    method: 'post'
-  })
+    const data = {
+        userId: userId,
+        password: password
+    };
+    return request({
+        url: 'base/user/update/password',
+        data,
+        method: 'post'
+    })
 };

@@ -1,76 +1,77 @@
 <template>
-  <div>
-    <div class="search-con search-con-top">
-      <ButtonGroup>
-        <Button
-          :disabled="value.menuId && value.menuId!=='0' && !value.hasChild && hasAuthority('systemMenuEdit')?false:true"
-          @click="handleModal()" class="search-btn" type="primary">
-          <span>添加功能按钮</span>
-        </Button>
-      </ButtonGroup>
-    </div>
-    <Alert show-icon type="info">请绑定相关接口资源。否则请求网关服务器将提示<code>"权限不足,拒绝访问!"</code></Alert>
-    <Table :columns="columns" :data="data" :loading="loading" border>
-      <template slot="status" slot-scope="{ row }">
-        <Badge status="success" v-if="row.status===1"/>
-        <Badge status="error" v-else=""/>
-        <span>{{row.actionName}}</span>
-      </template>
-      <template slot="action" slot-scope="{ row }">
-        <a :disabled="hasAuthority('systemMenuEdit')?false:true" @click="handleModal(row)">编辑</a> &nbsp;
-        <a :disabled="hasAuthority('systemMenuEdit')?false:true" @click="handleModal(row,forms[1])">接口权限</a> &nbsp;
-        <a :disabled="hasAuthority('systemMenuEdit')?false:true" @click="handleRemove(row)">删除</a>
-      </template>
-    </Table>
-    <Modal :title="modalTitle"
-           @on-cancel="handleReset"
-           v-model="modalVisible"
-           width="40">
-      <div>
-        <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form1" v-show="current=='form1'">
-          <FormItem label="上级菜单">
-            <Input disabled v-model="value.menuName"></Input>
-          </FormItem>
-          <FormItem label="功能标识" prop="actionCode">
-            <Input placeholder="请输入内容" v-model="formItem.actionCode"></Input>
-            <span>菜单标识+自定义标识.默认后缀：View、Edit</span>
-          </FormItem>
-          <FormItem label="功能名称" prop="actionName">
-            <Input placeholder="请输入内容" v-model="formItem.actionName"></Input>
-          </FormItem>
-          <FormItem label="优先级">
-            <InputNumber v-model="formItem.priority"></InputNumber>
-          </FormItem>
-          <FormItem label="状态">
-            <RadioGroup type="button" v-model="formItem.status">
-              <Radio label="0">禁用</Radio>
-              <Radio label="1">启用</Radio>
-            </RadioGroup>
-          </FormItem>
-          <FormItem label="描述">
-            <Input placeholder="请输入内容" type="textarea" v-model="formItem.actionDesc"></Input>
-          </FormItem>
-        </Form>
-        <Form :model="formItem" :rules="formItemRules" ref="form2" v-show="current=='form2'">
-          <FormItem prop="authorities">
-            <Transfer
-              :data="selectApis"
-              :list-style="{width: '45%',height: '480px'}"
-              :render-format="transferRender"
-              :target-keys="formItem.authorityIds"
-              :titles="['选择接口', '已选择接口']"
-              @on-change="handleTransferChange"
-              filterable>
-            </Transfer>
-          </FormItem>
-        </Form>
-        <div class="drawer-footer">
-          <Button @click="handleReset" type="default">取消</Button>&nbsp;
-          <Button :loading="saving" @click="handleSubmit" type="primary">保存</Button>
+    <div>
+        <div class="search-con search-con-top">
+            <ButtonGroup>
+                <Button
+                        :disabled="value.menuId && value.menuId!=='0' && !value.hasChild && hasAuthority('systemMenuEdit')?false:true"
+                        @click="handleModal()" class="search-btn" type="primary">
+                    <span>添加功能按钮</span>
+                </Button>
+            </ButtonGroup>
         </div>
-      </div>
-    </Modal>
-  </div>
+        <Alert show-icon type="info">请绑定相关接口资源。否则请求网关服务器将提示<code>"权限不足,拒绝访问!"</code></Alert>
+        <Table size="small" :columns="columns" :data="data" :loading="loading" border>
+            <template slot="status" slot-scope="{ row }">
+                <!--                <Badge status="success" v-if="row.status===1"/>-->
+                <!--                <Badge status="error" v-else=""/>-->
+                <span>{{row.actionName}}</span>
+            </template>
+            <template slot="action" slot-scope="{ row }">
+                <a :disabled="hasAuthority('systemMenuEdit')?false:true" @click="handleModal(row)">编辑</a> &nbsp;
+                <a :disabled="hasAuthority('systemMenuEdit')?false:true" @click="handleModal(row,forms[1])">接口权限</a>
+                &nbsp;
+                <a :disabled="hasAuthority('systemMenuEdit')?false:true" @click="handleRemove(row)">删除</a>
+            </template>
+        </Table>
+        <Modal :title="modalTitle"
+               @on-cancel="handleReset"
+               v-model="modalVisible"
+               width="40">
+            <div>
+                <Form :label-width="100" :model="formItem" :rules="formItemRules" ref="form1" v-show="current=='form1'">
+                    <FormItem label="上级菜单">
+                        <Input disabled v-model="value.menuName"></Input>
+                    </FormItem>
+                    <FormItem label="功能标识" prop="actionCode">
+                        <Input placeholder="请输入内容" v-model="formItem.actionCode"></Input>
+                        <span>菜单标识+自定义标识.默认后缀：View、Edit</span>
+                    </FormItem>
+                    <FormItem label="功能名称" prop="actionName">
+                        <Input placeholder="请输入内容" v-model="formItem.actionName"></Input>
+                    </FormItem>
+                    <FormItem label="优先级">
+                        <InputNumber v-model="formItem.priority"></InputNumber>
+                    </FormItem>
+                    <FormItem label="状态">
+                        <RadioGroup type="button" v-model="formItem.status">
+                            <Radio label="0">禁用</Radio>
+                            <Radio label="1">启用</Radio>
+                        </RadioGroup>
+                    </FormItem>
+                    <FormItem label="描述">
+                        <Input placeholder="请输入内容" type="textarea" v-model="formItem.actionDesc"></Input>
+                    </FormItem>
+                </Form>
+                <Form :model="formItem" :rules="formItemRules" ref="form2" v-show="current=='form2'">
+                    <FormItem prop="authorities">
+                        <Transfer
+                                :data="selectApis"
+                                :list-style="{width: '45%',height: '480px'}"
+                                :render-format="transferRender"
+                                :target-keys="formItem.authorityIds"
+                                :titles="['选择接口', '已选择接口']"
+                                @on-change="handleTransferChange"
+                                filterable>
+                        </Transfer>
+                    </FormItem>
+                </Form>
+                <div class="drawer-footer">
+                    <Button @click="handleReset" type="default">取消</Button>&nbsp;
+                    <Button :loading="saving" @click="handleSubmit" type="primary">保存</Button>
+                </div>
+            </div>
+        </Modal>
+    </div>
 </template>
 
 <script>
@@ -124,21 +125,9 @@
                     actionDesc: ''
                 },
                 columns: [
-                    {
-                        title: '功能名称',
-                        slot: 'status',
-                        width: 150
-                    },
-                    {
-                        title: '功能编码',
-                        key: 'actionCode'
-                    },
-                    {
-                        title: '操作',
-                        slot: 'action',
-                        fixed: 'right',
-                        width: 160
-                    }
+                    {title: '名称', slot: 'status', width: 80},
+                    {title: '编码', key: 'actionCode', width: 150},
+                    {title: '操作', slot: 'action', fixed: 'right', width: 160}
                 ],
                 data: []
             }

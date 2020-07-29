@@ -1,9 +1,9 @@
-package com.smart4y.cloud.core.eventhandler;
+package com.smart4y.cloud.core.event.scanner;
 
 import com.google.common.collect.Lists;
-import com.smart4y.cloud.core.event.ResourceScannedEvent;
 import com.smart4y.cloud.core.constant.BaseConstants;
 import com.smart4y.cloud.core.constant.QueueConstants;
+import com.smart4y.cloud.core.event.ResourceScannedEvent;
 import com.smart4y.cloud.core.properties.OpenScanProperties;
 import com.smart4y.cloud.core.toolkit.base.StringHelper;
 import com.smart4y.cloud.core.toolkit.reflection.ReflectionUtils;
@@ -45,13 +45,14 @@ import java.util.concurrent.CompletableFuture;
  * Created by youtao on 2019-09-05.
  */
 @Slf4j
-public class RequestMappingScannedEventHandler implements ApplicationListener<ApplicationReadyEvent> {
+public class RequestMappingScanner implements ApplicationListener<ApplicationReadyEvent> {
 
     private static final AntPathMatcher pathMatch = new AntPathMatcher();
     private final OpenScanProperties scanProperties;
     private AmqpTemplate amqpTemplate;
+    private static boolean scanned = false;
 
-    public RequestMappingScannedEventHandler(AmqpTemplate amqpTemplate, OpenScanProperties scanProperties) {
+    public RequestMappingScanner(AmqpTemplate amqpTemplate, OpenScanProperties scanProperties) {
         this.amqpTemplate = amqpTemplate;
         this.scanProperties = scanProperties;
     }
@@ -62,39 +63,19 @@ public class RequestMappingScannedEventHandler implements ApplicationListener<Ap
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         ConfigurableApplicationContext applicationContext = event.getApplicationContext();
-        if (amqpTemplate == null || scanProperties == null || !scanProperties.isRegisterRequestMapping()) {
+        if (scanned || scanProperties == null || !scanProperties.isRegisterRequestMapping()) {
             return;
         }
+        scanned = true;
         Environment env = applicationContext.getEnvironment();
         // 服务名称
-        String serviceId = env.getProperty("spring.application.name", "application");
+        String serviceId = env.getRequiredProperty("spring.application.name");
         // 所有接口映射
         RequestMappingHandlerMapping mapping = applicationContext.getBean(RequestMappingHandlerMapping.class);
         // 获取url与类和方法的对应信息
         Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
-        List<RequestMatcher> permitAll = Lists.newArrayList();
-        try {
-            // 获取所有安全配置适配器
-            Map<String, WebSecurityConfigurerAdapter> securityConfigurerAdapterMap = applicationContext.getBeansOfType(WebSecurityConfigurerAdapter.class);
-            for (Map.Entry<String, WebSecurityConfigurerAdapter> stringWebSecurityConfigurerAdapterEntry : securityConfigurerAdapterMap.entrySet()) {
-                WebSecurityConfigurerAdapter configurer = stringWebSecurityConfigurerAdapterEntry.getValue();
-                HttpSecurity httpSecurity = (HttpSecurity) ReflectionUtils.getFieldValue(configurer, "http");
-                if (null != httpSecurity) {
-                    FilterSecurityInterceptor filterSecurityInterceptor = httpSecurity.getSharedObject(FilterSecurityInterceptor.class);
-                    FilterInvocationSecurityMetadataSource metadataSource = filterSecurityInterceptor.getSecurityMetadataSource();
-                    Map<RequestMatcher, Collection<ConfigAttribute>> requestMap = (Map) ReflectionUtils.getFieldValue(metadataSource, "requestMap");
-                    if (null != requestMap) {
-                        for (Map.Entry<RequestMatcher, Collection<ConfigAttribute>> match : requestMap.entrySet()) {
-                            if (match.getValue().toString().contains("permitAll")) {
-                                permitAll.add(match.getKey());
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            log.error("error：{}", e.getLocalizedMessage(), e);
-        }
+        // 获取忽略鉴权资源集
+        List<RequestMatcher> permitAll = getPermitAllUrls(applicationContext);
 
         List<String> apiCodes = new ArrayList<>();
         List<ResourceScannedEvent.Mapping> list = new ArrayList<>();
@@ -108,13 +89,14 @@ public class RequestMappingScannedEventHandler implements ApplicationListener<Ap
             Set<MediaType> mediaTypeSet = info.getProducesCondition().getProducibleMediaTypes();
             for (MethodParameter params : method.getMethodParameters()) {
                 if (params.hasParameterAnnotation(RequestBody.class)) {
-                    mediaTypeSet.add(MediaType.APPLICATION_JSON_UTF8);
+                    mediaTypeSet.add(MediaType.APPLICATION_JSON);
                     break;
                 }
             }
             String mediaTypes = getMediaTypes(mediaTypeSet);
             // 请求类型
             RequestMethodsRequestCondition methodsCondition = info.getMethodsCondition();
+            // 请求方法类型GET,POST...
             String methods = getMethods(methodsCondition.getMethods());
             // 请求路径
             PatternsRequestCondition p = info.getPatternsCondition();
@@ -123,9 +105,10 @@ public class RequestMappingScannedEventHandler implements ApplicationListener<Ap
             String className = method.getMethod().getDeclaringClass().getName();
             // 方法名
             String methodName = method.getMethod().getName();
+            // 方法全类限定名
             // String fullName = className + "." + methodName;
-            // md5码
-            String md5 = EncryptUtils.md5Hex(serviceId + urls);
+            // md5
+            String md5 = EncryptUtils.md5Hex(serviceId + urls + methods);
             if (apiCodes.contains(md5)) {
                 continue;
             } else {
@@ -170,6 +153,7 @@ public class RequestMappingScannedEventHandler implements ApplicationListener<Ap
                     .setIsAuth(isAuth);
             list.add(mappings);
         }
+
         ResourceScannedEvent scannedEvent = new ResourceScannedEvent()
                 .setApplication(serviceId)
                 .setMappings(list);
@@ -183,6 +167,36 @@ public class RequestMappingScannedEventHandler implements ApplicationListener<Ap
                 log.error("发送失败：{}", e.getLocalizedMessage(), e);
             }
         });
+    }
+
+    /**
+     * 获取忽略鉴权资源集
+     */
+    private List<RequestMatcher> getPermitAllUrls(ConfigurableApplicationContext applicationContext) {
+        List<RequestMatcher> permitAll = Lists.newArrayList();
+        try {
+            // 获取所有安全配置适配器
+            Map<String, WebSecurityConfigurerAdapter> securityConfigurerAdapterMap = applicationContext.getBeansOfType(WebSecurityConfigurerAdapter.class);
+            for (Map.Entry<String, WebSecurityConfigurerAdapter> stringWebSecurityConfigurerAdapterEntry : securityConfigurerAdapterMap.entrySet()) {
+                WebSecurityConfigurerAdapter configurer = stringWebSecurityConfigurerAdapterEntry.getValue();
+                HttpSecurity httpSecurity = (HttpSecurity) ReflectionUtils.getFieldValue(configurer, "http");
+                if (null != httpSecurity) {
+                    FilterSecurityInterceptor filterSecurityInterceptor = httpSecurity.getSharedObject(FilterSecurityInterceptor.class);
+                    FilterInvocationSecurityMetadataSource metadataSource = filterSecurityInterceptor.getSecurityMetadataSource();
+                    Map<RequestMatcher, Collection<ConfigAttribute>> requestMap = (Map) ReflectionUtils.getFieldValue(metadataSource, "requestMap");
+                    if (null != requestMap) {
+                        for (Map.Entry<RequestMatcher, Collection<ConfigAttribute>> match : requestMap.entrySet()) {
+                            if (match.getValue().toString().contains("permitAll")) {
+                                permitAll.add(match.getKey());
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.error("error：{}", e.getLocalizedMessage(), e);
+        }
+        return permitAll;
     }
 
     private String getMediaTypes(Set<MediaType> mediaTypes) {

@@ -5,9 +5,9 @@ import request from '@/libs/request'
  * @param info
  */
 export const saveErrorLogger = info => {
-  return request({
-    url: 'save_error_logger',
-    data: info,
-    method: 'post'
-  })
+    return request({
+        url: 'save_error_logger',
+        data: info,
+        method: 'post'
+    })
 };

@@ -6,10 +6,10 @@ import request from '@/libs/request'
  * @param limit
  */
 export const getNotifyHttpLogs = ({page, limit, url, type, result}) => {
-  const params = {page: page, limit: limit, url: url, type: type, result: result}
-  return request({
-    url: 'msg/webhook/logs',
-    params,
-    method: 'get'
-  })
+    const params = {page: page, limit: limit, url: url, type: type, result: result}
+    return request({
+        url: 'msg/webhook/logs',
+        params,
+        method: 'get'
+    })
 }

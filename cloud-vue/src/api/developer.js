@@ -6,21 +6,21 @@ import request from '@/libs/request'
  * @param limit
  */
 export const getDevelopers = (params) => {
-  return request({
-    url: 'base/developer',
-    params,
-    method: 'get'
-  })
+    return request({
+        url: 'base/developer',
+        params,
+        method: 'get'
+    })
 };
 
 /**
  * 获取所有开发者列表
  */
 export const getAllDevelopers = () => {
-  return request({
-    url: 'base/developer/all',
-    method: 'get'
-  })
+    return request({
+        url: 'base/developer/all',
+        method: 'get'
+    })
 };
 
 /**
@@ -36,22 +36,22 @@ export const getAllDevelopers = () => {
  * @param avatar
  */
 export const addDeveloper = ({userName, password, nickName, status, userType, email, mobile, userDesc, avatar}) => {
-  const data = {
-    userName: userName,
-    nickName: nickName,
-    password: password,
-    status: status,
-    userType: userType,
-    email: email,
-    mobile: mobile,
-    userDesc: userDesc,
-    avatar: avatar
-  };
-  return request({
-    url: 'base/developer/add',
-    data,
-    method: 'post'
-  })
+    const data = {
+        userName: userName,
+        nickName: nickName,
+        password: password,
+        status: status,
+        userType: userType,
+        email: email,
+        mobile: mobile,
+        userDesc: userDesc,
+        avatar: avatar
+    };
+    return request({
+        url: 'base/developer/add',
+        data,
+        method: 'post'
+    })
 };
 
 /**
@@ -64,21 +64,21 @@ export const addDeveloper = ({userName, password, nickName, status, userType, em
  * @param avatar
  */
 export const updateDeveloper = ({userId, nickName, status, userType, email, mobile, userDesc, avatar}) => {
-  const data = {
-    userId: userId,
-    nickName: nickName,
-    status: status,
-    userType: userType,
-    email: email,
-    mobile: mobile,
-    userDesc: userDesc,
-    avatar: avatar
-  };
-  return request({
-    url: 'base/developer/update',
-    data,
-    method: 'post'
-  })
+    const data = {
+        userId: userId,
+        nickName: nickName,
+        status: status,
+        userType: userType,
+        email: email,
+        mobile: mobile,
+        userDesc: userDesc,
+        avatar: avatar
+    };
+    return request({
+        url: 'base/developer/update',
+        data,
+        method: 'post'
+    })
 };
 
 /**
@@ -86,13 +86,13 @@ export const updateDeveloper = ({userId, nickName, status, userType, email, mobi
  * @param developerId
  */
 export const updatePassword = ({userId, password}) => {
-  const data = {
-    userId: userId,
-    password: password
-  };
-  return request({
-    url: 'base/developer/update/password',
-    data,
-    method: 'post'
-  })
+    const data = {
+        userId: userId,
+        password: password
+    };
+    return request({
+        url: 'base/developer/update/password',
+        data,
+        method: 'post'
+    })
 };

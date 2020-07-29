@@ -5,8 +5,8 @@ import com.smart4y.cloud.base.application.BaseApiService;
 import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.domain.model.BaseApi;
 import com.smart4y.cloud.base.infrastructure.constants.RedisConstants;
-import com.smart4y.cloud.core.event.ResourceScannedEvent;
 import com.smart4y.cloud.core.constant.QueueConstants;
+import com.smart4y.cloud.core.event.ResourceScannedEvent;
 import com.smart4y.cloud.core.security.http.OpenRestTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -75,21 +75,21 @@ public class ResourceScannedEventHandler {
                             .setLastModifiedDate(now))
                     .collect(Collectors.toList());
             List<String> codes = Lists.newArrayList();
-//            for (BaseApi api : apis) {
-//                codes.add(api.getApiCode());
-//                BaseApi save = baseApiService.getApi(api.getApiCode());
-//                if (save == null) {
-//                    api.setIsOpen(0);
-//                    api.setIsPersist(1);
-//                    baseApiService.addApi(api);
-//                } else {
-//                    api.setApiId(save.getApiId());
-//                    baseApiService.updateApi(api);
-//                }
-//            }
+            for (BaseApi api : apis) {
+                codes.add(api.getApiCode());
+                BaseApi save = baseApiService.getApi(api.getApiCode());
+                if (save == null) {
+                    api.setIsOpen(0);
+                    api.setIsPersist(1);
+                    baseApiService.addApi(api);
+                } else {
+                    api.setApiId(save.getApiId());
+                    baseApiService.updateApi(api);
+                }
+            }
             if (CollectionUtils.isNotEmpty(apis)) {
                 // 清理无效权限数据
-//                baseAuthorityService.clearInvalidApi(serviceId, codes);
+                baseAuthorityService.clearInvalidApi(serviceId, codes);
                 openRestTemplate.refreshGateway();
                 this.redisTemplate.opsForValue().set(key, String.valueOf(apis.size()), Duration.ofMinutes(3));
             }

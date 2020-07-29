@@ -99,7 +99,6 @@ public class SignatureUtils {
         // 待签名字段
         Map<String, Object> signMap = new HashMap<>(requestParams);
         signMap.remove(CommonConstants.SIGN_SIGN_KEY);
-        signMap.put(CommonConstants.SIGN_SECRET_KEY, clientSecret);
         String signType = requestParams.get(CommonConstants.SIGN_SIGN_TYPE_KEY);
 
         StringBuilder builder = new StringBuilder();
@@ -110,6 +109,7 @@ public class SignatureUtils {
                 builder.append(key).append("=").append(value).append("&");
             }
         }
+        builder.append(CommonConstants.SIGN_SECRET_KEY).append("=").append(clientSecret);
         String signString = builder.toString();
 
         String sign;
@@ -123,6 +123,7 @@ public class SignatureUtils {
             default:
                 throw new IllegalStateException("Unexpected value: " + SignType.valueOf(signType));
         }
+
         return sign;
     }
 

@@ -1,7 +1,7 @@
 package com.smart4y.cloud.core.configuration;
 
 import com.smart4y.cloud.core.AbstractApplication;
-import com.smart4y.cloud.core.eventhandler.RequestMappingScannedEventHandler;
+import com.smart4y.cloud.core.event.scanner.RequestMappingScanner;
 import com.smart4y.cloud.core.exception.global.OpenGlobalExceptionHandler;
 import com.smart4y.cloud.core.exception.handler.OpenRestResponseErrorHandler;
 import com.smart4y.cloud.core.filter.XFilter;
@@ -101,9 +101,9 @@ public class AutoConfiguration {
      * 自定义请求资源扫描 配置
      */
     @Bean
-    @ConditionalOnMissingBean(RequestMappingScannedEventHandler.class)
-    public RequestMappingScannedEventHandler requestMappingScan(AmqpTemplate amqpTemplate, OpenScanProperties openScanProperties) {
-        RequestMappingScannedEventHandler scan = new RequestMappingScannedEventHandler(amqpTemplate, openScanProperties);
+    @ConditionalOnMissingBean(RequestMappingScanner.class)
+    public RequestMappingScanner requestMappingScan(AmqpTemplate amqpTemplate, OpenScanProperties openScanProperties) {
+        RequestMappingScanner scan = new RequestMappingScanner(amqpTemplate, openScanProperties);
         log.info("RequestMappingScan [{}]", scan);
         return scan;
     }

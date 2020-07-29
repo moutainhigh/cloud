@@ -7,26 +7,26 @@ import request from '@/libs/request'
  * @param policyName
  */
 export const getRateLimits = ({page, limit, policyName}) => {
-  const params = {page: page, limit: limit, policyName: policyName};
-  return request({
-    url: 'base/gateway/limit/rate',
-    params,
-    method: 'get'
-  })
+    const params = {page: page, limit: limit, policyName: policyName};
+    return request({
+        url: 'base/gateway/limit/rate',
+        params,
+        method: 'get'
+    })
 };
 
 export const addRateLimit = ({policyName, policyType, limitQuota, intervalUnit}) => {
-  const data = {
-    policyName: policyName,
-    policyType: policyType,
-    limitQuota: limitQuota,
-    intervalUnit: intervalUnit
-  };
-  return request({
-    url: 'base/gateway/limit/rate/add',
-    data,
-    method: 'post'
-  })
+    const data = {
+        policyName: policyName,
+        policyType: policyType,
+        limitQuota: limitQuota,
+        intervalUnit: intervalUnit
+    };
+    return request({
+        url: 'base/gateway/limit/rate/add',
+        data,
+        method: 'post'
+    })
 }
 
 /**
@@ -36,18 +36,18 @@ export const addRateLimit = ({policyName, policyType, limitQuota, intervalUnit})
  * @param ipAddress
  */
 export const updateRateLimit = ({policyId, policyName, policyType, limitQuota, intervalUnit}) => {
-  const data = {
-    policyId: policyId,
-    policyName: policyName,
-    policyType: policyType,
-    limitQuota: limitQuota,
-    intervalUnit: intervalUnit
-  }
-  return request({
-    url: 'base/gateway/limit/rate/update',
-    data,
-    method: 'post'
-  })
+    const data = {
+        policyId: policyId,
+        policyName: policyName,
+        policyType: policyType,
+        limitQuota: limitQuota,
+        intervalUnit: intervalUnit
+    }
+    return request({
+        url: 'base/gateway/limit/rate/update',
+        data,
+        method: 'post'
+    })
 }
 
 /**
@@ -55,14 +55,14 @@ export const updateRateLimit = ({policyId, policyName, policyType, limitQuota, i
  * @param apiId
  */
 export const removeRateLimit = (policyId) => {
-  const data = {
-    policyId: policyId
-  }
-  return request({
-    url: 'base/gateway/limit/rate/remove',
-    data,
-    method: 'post'
-  })
+    const data = {
+        policyId: policyId
+    }
+    return request({
+        url: 'base/gateway/limit/rate/remove',
+        data,
+        method: 'post'
+    })
 }
 
 /**
@@ -70,14 +70,14 @@ export const removeRateLimit = (policyId) => {
  * @param policyId
  */
 export const getRateLimitApis = (policyId) => {
-  const params = {
-    policyId: policyId
-  }
-  return request({
-    url: 'base/gateway/limit/rate/api/list',
-    params,
-    method: 'get'
-  })
+    const params = {
+        policyId: policyId
+    }
+    return request({
+        url: 'base/gateway/limit/rate/api/list',
+        params,
+        method: 'get'
+    })
 }
 
 /**
@@ -86,13 +86,13 @@ export const getRateLimitApis = (policyId) => {
  * @param apiIds
  */
 export const addRateLimitApis = ({policyId, apiIds}) => {
-  const data = {
-    policyId: policyId,
-    apiIds: apiIds.join(',')
-  }
-  return request({
-    url: 'base/gateway/limit/rate/api/add',
-    data,
-    method: 'post'
-  })
+    const data = {
+        policyId: policyId,
+        apiIds: apiIds.join(',')
+    }
+    return request({
+        url: 'base/gateway/limit/rate/api/add',
+        data,
+        method: 'post'
+    })
 }
