@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value = "BaseApiQuery", description = "接口分页查询")
-public class BaseApiQuery extends BaseQuery {
+public class BaseResourceQuery extends BaseQuery {
 
     @ApiModelProperty(value = "接口编码")
     private String apiCode;

@@ -1,8 +1,8 @@
 package com.smart4y.cloud.base.application;
 
 import com.github.pagehelper.PageInfo;
-import com.smart4y.cloud.base.domain.model.BaseApi;
-import com.smart4y.cloud.base.interfaces.query.BaseApiQuery;
+import com.smart4y.cloud.base.domain.model.BaseResource;
+import com.smart4y.cloud.base.interfaces.query.BaseResourceQuery;
 
 import java.util.List;
 
@@ -12,22 +12,22 @@ import java.util.List;
  * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
-public interface BaseApiService {
+public interface BaseResourceService {
 
     /**
      * 分页查询
      */
-    PageInfo<BaseApi> findListPage(BaseApiQuery query);
+    PageInfo<BaseResource> findListPage(BaseResourceQuery query);
 
     /**
      * 查询列表
      */
-    List<BaseApi> findAllList(String serviceId);
+    List<BaseResource> findAllList(String serviceId);
 
     /**
      * 根据主键获取接口
      */
-    BaseApi getApi(long apiId);
+    BaseResource getApi(long apiId);
 
     /**
      * 检查接口编码是否存在
@@ -43,7 +43,7 @@ public interface BaseApiService {
      * @param api
      * @return
      */
-    void addApi(BaseApi api);
+    void addApi(BaseResource api);
 
     /**
      * 修改接口
@@ -51,7 +51,7 @@ public interface BaseApiService {
      * @param api
      * @return
      */
-    void updateApi(BaseApi api);
+    void updateApi(BaseResource api);
 
     /**
      * 查询接口
@@ -59,7 +59,7 @@ public interface BaseApiService {
      * @param apiCode
      * @return
      */
-    BaseApi getApi(String apiCode);
+    BaseResource getApi(String apiCode);
 
     /**
      * 移除接口

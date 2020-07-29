@@ -1,11 +1,11 @@
 package com.smart4y.cloud.base.infrastructure.mapper;
 
-import com.smart4y.cloud.base.domain.model.BaseApi;
+import com.smart4y.cloud.base.domain.model.BaseResource;
 import com.smart4y.cloud.mapper.CloudMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 @Mapper
 @Repository
-public interface BaseApiMapper extends CloudMapper<BaseApi> {
+public interface BaseResourceMapper extends CloudMapper<BaseResource> {
 }

@@ -12,13 +12,13 @@ import java.io.Serializable;
  * 系统资源-API接口
  *
  * @author Youtao
- *         Created by youtao on 2019/09/17.
+ * Created by youtao on 2019/09/17.
  */
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
-@ApiModel(value = "BaseApiVO", description = "系统资源（API接口）")
-public class BaseApiVO implements Serializable {
+@ApiModel(value = "BaseResourceVO", description = "系统资源（API接口）")
+public class BaseResourceVO implements Serializable {
 
     /**
      * 接口ID

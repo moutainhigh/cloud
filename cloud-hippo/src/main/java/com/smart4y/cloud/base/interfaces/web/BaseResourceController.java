@@ -1,12 +1,12 @@
 package com.smart4y.cloud.base.interfaces.web;
 
 import com.github.pagehelper.PageInfo;
-import com.smart4y.cloud.base.application.BaseApiService;
-import com.smart4y.cloud.base.domain.model.BaseApi;
+import com.smart4y.cloud.base.application.BaseResourceService;
+import com.smart4y.cloud.base.domain.model.BaseResource;
 import com.smart4y.cloud.base.interfaces.command.api.*;
-import com.smart4y.cloud.base.interfaces.converter.BaseApiConverter;
-import com.smart4y.cloud.base.interfaces.query.BaseApiQuery;
-import com.smart4y.cloud.base.interfaces.vo.BaseApiVO;
+import com.smart4y.cloud.base.interfaces.converter.BaseResourceConverter;
+import com.smart4y.cloud.base.interfaces.query.BaseResourceQuery;
+import com.smart4y.cloud.base.interfaces.vo.BaseResourceVO;
 import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.core.message.page.Page;
 import com.smart4y.cloud.core.security.http.OpenRestTemplate;
@@ -27,12 +27,12 @@ import java.util.stream.Collectors;
  */
 @RestController
 @Api(tags = {"系统接口资源管理"})
-public class BaseApiController {
+public class BaseResourceController {
 
     @Autowired
-    private BaseApiConverter baseApiConverter;
+    private BaseResourceConverter baseResourceConverter;
     @Autowired
-    private BaseApiService apiService;
+    private BaseResourceService baseResourceService;
     @Autowired
     private OpenRestTemplate openRestTemplate;
 
@@ -41,9 +41,9 @@ public class BaseApiController {
      */
     @ApiOperation(value = "获取分页接口列表", notes = "获取分页接口列表")
     @GetMapping(value = "/api")
-    public ResultMessage<Page<BaseApiVO>> getApiList(BaseApiQuery query) {
-        PageInfo<BaseApi> listPage = apiService.findListPage(query);
-        Page<BaseApiVO> result = baseApiConverter.convertPage(listPage);
+    public ResultMessage<Page<BaseResourceVO>> getApiList(BaseResourceQuery query) {
+        PageInfo<BaseResource> listPage = baseResourceService.findListPage(query);
+        Page<BaseResourceVO> result = baseResourceConverter.convertPage(listPage);
         return ResultMessage.ok(result);
     }
 
@@ -52,9 +52,9 @@ public class BaseApiController {
      */
     @ApiOperation(value = "获取所有接口列表", notes = "获取所有接口列表")
     @GetMapping("/api/all")
-    public ResultMessage<List<BaseApiVO>> getApiAllList(@RequestParam("serviceId") String serviceId) {
-        List<BaseApi> allList = apiService.findAllList(serviceId);
-        List<BaseApiVO> result = baseApiConverter.convertList(allList);
+    public ResultMessage<List<BaseResourceVO>> getApiAllList(@RequestParam("serviceId") String serviceId) {
+        List<BaseResource> allList = baseResourceService.findAllList(serviceId);
+        List<BaseResourceVO> result = baseResourceConverter.convertList(allList);
         return ResultMessage.ok(result);
     }
 
@@ -66,9 +66,9 @@ public class BaseApiController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "apiId", required = true, value = "apiId", paramType = "path"),
     })
-    public ResultMessage<BaseApiVO> getApi(@PathVariable("apiId") Long apiId) {
-        BaseApi api = apiService.getApi(apiId);
-        BaseApiVO result = baseApiConverter.convert(api);
+    public ResultMessage<BaseResourceVO> getApi(@PathVariable("apiId") Long apiId) {
+        BaseResource api = baseResourceService.getApi(apiId);
+        BaseResourceVO result = baseResourceConverter.convert(api);
         return ResultMessage.ok(result);
     }
 
@@ -78,7 +78,7 @@ public class BaseApiController {
     @ApiOperation(value = "添加接口资源", notes = "添加接口资源")
     @PostMapping("/api/add")
     public ResultMessage<Long> addApi(@RequestBody AddApiCommand command) {
-        BaseApi api = new BaseApi();
+        BaseResource api = new BaseResource();
         api.setApiCode(command.getApiCode());
         api.setApiName(command.getApiName());
         api.setApiCategory(command.getApiCategory());
@@ -90,7 +90,7 @@ public class BaseApiController {
         api.setIsAuth(command.getIsAuth());
         api.setIsOpen(command.getIsOpen());
         Long apiId = null;
-        apiService.addApi(api);
+        baseResourceService.addApi(api);
         openRestTemplate.refreshGateway();
         return ResultMessage.ok(apiId);
     }
@@ -101,7 +101,7 @@ public class BaseApiController {
     @PostMapping("/api/update")
     @ApiOperation(value = "编辑接口资源", notes = "编辑接口资源")
     public ResultMessage<Void> updateApi(@RequestBody UpdateApiCommand command) {
-        BaseApi api = new BaseApi();
+        BaseResource api = new BaseResource();
         api.setApiId(command.getApiId());
         api.setApiCode(command.getApiCode());
         api.setApiName(command.getApiName());
@@ -113,7 +113,7 @@ public class BaseApiController {
         api.setApiDesc(command.getApiDesc());
         api.setIsAuth(command.getIsAuth());
         api.setIsOpen(command.getIsOpen());
-        apiService.updateApi(api);
+        baseResourceService.updateApi(api);
         // 刷新网关
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();
@@ -125,7 +125,7 @@ public class BaseApiController {
     @ApiOperation(value = "移除接口资源", notes = "移除接口资源")
     @PostMapping("/api/remove")
     public ResultMessage<Void> removeApi(@RequestBody DeleteApiCommand command) {
-        apiService.removeApi(command.getApiId());
+        baseResourceService.removeApi(command.getApiId());
         // 刷新网关
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();
@@ -142,7 +142,7 @@ public class BaseApiController {
     public ResultMessage<Void> batchRemove(@RequestBody DeleteApiBatchCommand command) {
         List<Long> apiIds = Arrays.stream(command.getIds().split(","))
                 .map(Long::parseLong).collect(Collectors.toList());
-        apiService.removeApis(apiIds);
+        baseResourceService.removeApis(apiIds);
         // 刷新网关
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();
@@ -156,7 +156,7 @@ public class BaseApiController {
     public ResultMessage<Void> batchUpdateOpen(@RequestBody UpdateApiBatchOpenCommand command) {
         List<Long> apiIds = Arrays.stream(command.getIds().split(","))
                 .map(Long::parseLong).collect(Collectors.toList());
-        apiService.updateOpenStatusApis(command.getOpen(), apiIds);
+        baseResourceService.updateOpenStatusApis(command.getOpen(), apiIds);
         // 刷新网关
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();
@@ -170,7 +170,7 @@ public class BaseApiController {
     public ResultMessage<Void> batchUpdateStatus(@RequestBody UpdateApiBatchStatusCommand command) {
         List<Long> apiIds = Arrays.stream(command.getIds().split(","))
                 .map(Long::parseLong).collect(Collectors.toList());
-        apiService.updateStatusApis(command.getStatus(), apiIds);
+        baseResourceService.updateStatusApis(command.getStatus(), apiIds);
         // 刷新网关
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();
@@ -184,7 +184,7 @@ public class BaseApiController {
     public ResultMessage<Void> batchUpdateAuth(@RequestBody UpdateApiBatchAuthCommand command) {
         List<Long> apiIds = Arrays.stream(command.getIds().split(","))
                 .map(Long::parseLong).collect(Collectors.toList());
-        apiService.updateAuthApis(command.getAuth(), apiIds);
+        baseResourceService.updateAuthApis(command.getAuth(), apiIds);
         // 刷新网关
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();

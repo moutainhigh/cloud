@@ -49,7 +49,6 @@
         <!--<table tableName="base_account" domainObjectName="BaseAccount"/>
         <table tableName="base_account_logs" domainObjectName="BaseAccountLogs"/>
         <table tableName="base_action" domainObjectName="BaseAction"/>
-        <table tableName="base_api" domainObjectName="BaseApi"/>
         <table tableName="base_app" domainObjectName="BaseApp"/>
         <table tableName="base_authority" domainObjectName="BaseAuthority"/>
         <table tableName="base_authority_action" domainObjectName="BaseAuthorityAction"/>
@@ -58,6 +57,7 @@
         <table tableName="base_authority_user" domainObjectName="BaseAuthorityUser"/>
         <table tableName="base_developer" domainObjectName="BaseDeveloper"/>
         <table tableName="base_menu" domainObjectName="BaseMenu"/>
+        <table tableName="base_resource" domainObjectName="BaseResource"/>
         <table tableName="base_role" domainObjectName="BaseRole"/>
         <table tableName="base_role_user" domainObjectName="BaseRoleUser"/>
         <table tableName="base_user" domainObjectName="BaseUser"/>

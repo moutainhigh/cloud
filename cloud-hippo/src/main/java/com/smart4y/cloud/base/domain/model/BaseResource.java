@@ -19,10 +19,10 @@ import java.time.LocalDateTime;
  *         Created by youtao on 2019/09/17.
  */
 @Data
-@Table(name = "base_api")
+@Table(name = "base_resource")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class BaseApi extends BaseEntity<BaseApi> {
+public class BaseResource extends BaseEntity<BaseResource> {
 
     /**
      * 接口ID
@@ -137,7 +137,7 @@ public class BaseApi extends BaseEntity<BaseApi> {
     /**
      * 构造器
      */
-    public BaseApi() {
+    public BaseResource() {
         super();
     }
 }

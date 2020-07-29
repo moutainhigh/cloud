@@ -1,9 +1,9 @@
 package com.smart4y.cloud.base.application.eventhandler;
 
 import com.google.common.collect.Lists;
-import com.smart4y.cloud.base.application.BaseApiService;
 import com.smart4y.cloud.base.application.BaseAuthorityService;
-import com.smart4y.cloud.base.domain.model.BaseApi;
+import com.smart4y.cloud.base.application.BaseResourceService;
+import com.smart4y.cloud.base.domain.model.BaseResource;
 import com.smart4y.cloud.base.infrastructure.constants.RedisConstants;
 import com.smart4y.cloud.core.constant.QueueConstants;
 import com.smart4y.cloud.core.event.ResourceScannedEvent;
@@ -38,7 +38,7 @@ public class ResourceScannedEventHandler {
     @Autowired
     private BaseAuthorityService baseAuthorityService;
     @Autowired
-    private BaseApiService baseApiService;
+    private BaseResourceService baseResourceService;
 
     @RabbitListener(queues = QueueConstants.QUEUE_SCAN_API_RESOURCE)
     public void handle(@Payload ResourceScannedEvent event) {
@@ -53,8 +53,8 @@ public class ResourceScannedEventHandler {
             }
             List<ResourceScannedEvent.Mapping> mappings = event.getMappings();
             LocalDateTime now = LocalDateTime.now();
-            List<BaseApi> apis = mappings.stream()
-                    .map(x -> new BaseApi()
+            List<BaseResource> apis = mappings.stream()
+                    .map(x -> new BaseResource()
                             //.setApiId()
                             //.setApiCategory()
                             //.setPriority()
@@ -75,16 +75,16 @@ public class ResourceScannedEventHandler {
                             .setLastModifiedDate(now))
                     .collect(Collectors.toList());
             List<String> codes = Lists.newArrayList();
-            for (BaseApi api : apis) {
+            for (BaseResource api : apis) {
                 codes.add(api.getApiCode());
-                BaseApi save = baseApiService.getApi(api.getApiCode());
+                BaseResource save = baseResourceService.getApi(api.getApiCode());
                 if (save == null) {
                     api.setIsOpen(0);
                     api.setIsPersist(1);
-                    baseApiService.addApi(api);
+                    baseResourceService.addApi(api);
                 } else {
                     api.setApiId(save.getApiId());
-                    baseApiService.updateApi(api);
+                    baseResourceService.updateApi(api);
                 }
             }
             if (CollectionUtils.isNotEmpty(apis)) {

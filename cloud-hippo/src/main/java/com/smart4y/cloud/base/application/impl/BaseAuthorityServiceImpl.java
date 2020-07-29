@@ -20,7 +20,6 @@ import com.smart4y.cloud.core.dto.AuthorityResourceDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 import tk.mybatis.mapper.weekend.Weekend;
@@ -40,9 +39,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @ApplicationService
 public class BaseAuthorityServiceImpl implements BaseAuthorityService {
-
-    @Value("${spring.application.name}")
-    private String DEFAULT_SERVICE_ID;
 
     @Autowired
     private BaseAuthorityMapper baseAuthorityMapper;
@@ -67,9 +63,9 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
     @Autowired
     private BaseActionService baseActionService;
     @Autowired
-    private BaseApiMapper baseApiMapper;
+    private BaseResourceMapper baseResourceMapper;
     @Autowired
-    private BaseApiService baseApiService;
+    private BaseResourceService baseResourceService;
     @Autowired
     private BaseRoleService baseRoleService;
     @Autowired
@@ -136,7 +132,7 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
             baseAuthority.setStatus(operation.getStatus());
         }
         if (ResourceType.api.equals(resourceType)) {
-            BaseApi api = baseApiService.getApi(resourceId);
+            BaseResource api = baseResourceService.getApi(resourceId);
             authority = OpenSecurityConstants.AUTHORITY_PREFIX_API + api.getApiCode();
             baseAuthority.setApiId(resourceId);
             baseAuthority.setStatus(api.getStatus());
@@ -473,14 +469,14 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
         if (StringHelper.isBlank(serviceId)) {
             return;
         }
-        Weekend<BaseApi> apiWeekend = Weekend.of(BaseApi.class);
-        WeekendCriteria<BaseApi, Object> criteria = apiWeekend.weekendCriteria();
-        criteria.andEqualTo(BaseApi::getServiceId, serviceId);
+        Weekend<BaseResource> apiWeekend = Weekend.of(BaseResource.class);
+        WeekendCriteria<BaseResource, Object> criteria = apiWeekend.weekendCriteria();
+        criteria.andEqualTo(BaseResource::getServiceId, serviceId);
         if (CollectionUtils.isNotEmpty(codes)) {
-            criteria.andNotIn(BaseApi::getApiCode, codes);
+            criteria.andNotIn(BaseResource::getApiCode, codes);
         }
-        List<Long> invalidApiIds = baseApiMapper.selectByExample(apiWeekend).stream()
-                .map(BaseApi::getApiId)
+        List<Long> invalidApiIds = baseResourceMapper.selectByExample(apiWeekend).stream()
+                .map(BaseResource::getApiId)
                 .collect(Collectors.toList());
 
         if (CollectionUtils.isNotEmpty(invalidApiIds)) {
@@ -521,10 +517,10 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
                 baseAuthorityMapper.deleteByExample(authorityDeleteWeekend);
 
                 // 移除接口资源
-                Weekend<BaseApi> apiDeleteWeekend = Weekend.of(BaseApi.class);
+                Weekend<BaseResource> apiDeleteWeekend = Weekend.of(BaseResource.class);
                 apiDeleteWeekend.weekendCriteria()
-                        .andIn(BaseApi::getApiId, invalidApiIds);
-                baseApiMapper.deleteByExample(apiDeleteWeekend);
+                        .andIn(BaseResource::getApiId, invalidApiIds);
+                baseResourceMapper.deleteByExample(apiDeleteWeekend);
             }
         }
     }
