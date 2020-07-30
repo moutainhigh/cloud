@@ -6,17 +6,17 @@ import com.smart4y.cloud.base.application.*;
 import com.smart4y.cloud.base.domain.model.*;
 import com.smart4y.cloud.base.infrastructure.mapper.*;
 import com.smart4y.cloud.core.annotation.ApplicationService;
-import com.smart4y.cloud.core.dto.OpenAuthority;
 import com.smart4y.cloud.core.constant.CommonConstants;
 import com.smart4y.cloud.core.constant.ResourceType;
+import com.smart4y.cloud.core.dto.AuthorityApiDTO;
+import com.smart4y.cloud.core.dto.AuthorityMenuDTO;
+import com.smart4y.cloud.core.dto.AuthorityResourceDTO;
+import com.smart4y.cloud.core.dto.OpenAuthority;
 import com.smart4y.cloud.core.exception.OpenAlertException;
 import com.smart4y.cloud.core.message.enums.MessageType;
 import com.smart4y.cloud.core.security.OpenHelper;
 import com.smart4y.cloud.core.security.OpenSecurityConstants;
 import com.smart4y.cloud.core.toolkit.base.StringHelper;
-import com.smart4y.cloud.core.dto.AuthorityApiDTO;
-import com.smart4y.cloud.core.dto.AuthorityMenuDTO;
-import com.smart4y.cloud.core.dto.AuthorityResourceDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,25 +47,21 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
     @Autowired
     private BaseAuthorityRoleCustomMapper baseAuthorityRoleCustomMapper;
     @Autowired
-    private BaseAuthorityUserMapper baseAuthorityUserMapper;
-    @Autowired
-    private BaseAuthorityUserCustomMapper baseAuthorityUserCustomMapper;
-    @Autowired
     private BaseAuthorityAppMapper baseAuthorityAppMapper;
     @Autowired
     private BaseAuthorityAppCustomMapper baseAuthorityAppCustomMapper;
     @Autowired
     private BaseAuthorityCustomMapper baseAuthorityCustomMapper;
     @Autowired
-    private BaseAuthorityActionMapper baseAuthorityActionMapper;
+    private BaseAuthorityElementMapper baseAuthorityElementMapper;
     @Autowired
     private BaseMenuService baseMenuService;
     @Autowired
-    private BaseActionService baseActionService;
+    private BaseElementService baseElementService;
     @Autowired
-    private BaseResourceMapper baseResourceMapper;
+    private BaseOperationMapper baseOperationMapper;
     @Autowired
-    private BaseResourceService baseResourceService;
+    private BaseOperationService baseOperationService;
     @Autowired
     private BaseRoleService baseRoleService;
     @Autowired
@@ -105,11 +101,11 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
     }
 
     @Override
-    public List<BaseAuthorityAction> findAuthorityAction(Long actionId) {
-        Weekend<BaseAuthorityAction> queryWrapper = Weekend.of(BaseAuthorityAction.class);
+    public List<BaseAuthorityElement> findAuthorityAction(Long actionId) {
+        Weekend<BaseAuthorityElement> queryWrapper = Weekend.of(BaseAuthorityElement.class);
         queryWrapper.weekendCriteria()
-                .andEqualTo(BaseAuthorityAction::getActionId, actionId);
-        return baseAuthorityActionMapper.selectByExample(queryWrapper);
+                .andEqualTo(BaseAuthorityElement::getActionId, actionId);
+        return baseAuthorityElementMapper.selectByExample(queryWrapper);
     }
 
     @Override
@@ -126,13 +122,13 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
             baseAuthority.setStatus(menu.getStatus());
         }
         if (ResourceType.action.equals(resourceType)) {
-            BaseAction operation = baseActionService.getAction(resourceId);
+            BaseElement operation = baseElementService.getAction(resourceId);
             authority = OpenSecurityConstants.AUTHORITY_PREFIX_ACTION + operation.getActionCode();
             baseAuthority.setActionId(resourceId);
             baseAuthority.setStatus(operation.getStatus());
         }
         if (ResourceType.api.equals(resourceType)) {
-            BaseResource api = baseResourceService.getApi(resourceId);
+            BaseOperation api = baseOperationService.getApi(resourceId);
             authority = OpenSecurityConstants.AUTHORITY_PREFIX_API + api.getApiCode();
             baseAuthority.setApiId(resourceId);
             baseAuthority.setStatus(api.getStatus());
@@ -184,17 +180,12 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
                 .andEqualTo(BaseAuthorityRole::getAuthorityId, authority.getAuthorityId());
         int roleGrantedCount = baseAuthorityRoleMapper.selectCountByExample(roleQueryWrapper);
 
-        Weekend<BaseAuthorityUser> userQueryWrapper = Weekend.of(BaseAuthorityUser.class);
-        userQueryWrapper.weekendCriteria()
-                .andEqualTo(BaseAuthorityUser::getAuthorityId, authority.getAuthorityId());
-        int userGrantedCount = baseAuthorityUserMapper.selectCountByExample(userQueryWrapper);
-
         Weekend<BaseAuthorityApp> appQueryWrapper = Weekend.of(BaseAuthorityApp.class);
         appQueryWrapper.weekendCriteria()
                 .andEqualTo(BaseAuthorityApp::getAuthorityId, authority.getAuthorityId());
         int appGrantedCount = baseAuthorityAppMapper.selectCountByExample(appQueryWrapper);
 
-        return roleGrantedCount > 0 || userGrantedCount > 0 || appGrantedCount > 0;
+        return roleGrantedCount > 0 || appGrantedCount > 0;
     }
 
     private Weekend<BaseAuthority> buildQueryWrapper(Long resourceId, ResourceType resourceType) {
@@ -222,10 +213,10 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
 
     @Override
     public void removeAuthorityAction(Long actionId) {
-        Weekend<BaseAuthorityAction> queryWrapper = Weekend.of(BaseAuthorityAction.class);
+        Weekend<BaseAuthorityElement> queryWrapper = Weekend.of(BaseAuthorityElement.class);
         queryWrapper.weekendCriteria()
-                .andEqualTo(BaseAuthorityAction::getActionId, actionId);
-        baseAuthorityActionMapper.deleteByExample(queryWrapper);
+                .andEqualTo(BaseAuthorityElement::getActionId, actionId);
+        baseAuthorityElementMapper.deleteByExample(queryWrapper);
     }
 
     @Override
@@ -267,30 +258,6 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
         }
         // 获取用户角色列表
         List<Long> roleIds = baseRoleService.getUserRoleIds(userId);
-        // 清空用户已有授权
-        // 清空角色已有授权
-        Weekend<BaseAuthorityUser> userQueryWrapper = Weekend.of(BaseAuthorityUser.class);
-        userQueryWrapper.weekendCriteria()
-                .andEqualTo(BaseAuthorityUser::getUserId, userId);
-        baseAuthorityUserMapper.deleteByExample(userQueryWrapper);
-        if (CollectionUtils.isNotEmpty(authorityIds)) {
-            BaseAuthorityUser authority;
-            for (Long id : authorityIds) {
-                if (roleIds != null && roleIds.size() > 0) {
-                    // 防止重复授权
-                    if (isGrantedByRoleIds(id, roleIds)) {
-                        continue;
-                    }
-                }
-                authority = new BaseAuthorityUser();
-                authority.setAuthorityId(id);
-                authority.setUserId(userId);
-                authority.setExpireTime(expireTime);
-                authority.setCreatedDate(LocalDateTime.now());
-                authority.setLastModifiedDate(LocalDateTime.now());
-                baseAuthorityUserMapper.insert(authority);
-            }
-        }
     }
 
     @CacheEvict(value = {"apps"}, key = "'client:'+#appId")
@@ -357,12 +324,12 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
         removeAuthorityAction(actionId);
         if (CollectionUtils.isNotEmpty(authorityIds)) {
             for (Long id : authorityIds) {
-                BaseAuthorityAction authority = new BaseAuthorityAction();
+                BaseAuthorityElement authority = new BaseAuthorityElement();
                 authority.setActionId(actionId);
                 authority.setAuthorityId(id);
                 authority.setCreatedDate(LocalDateTime.now());
                 authority.setLastModifiedDate(LocalDateTime.now());
-                baseAuthorityActionMapper.insert(authority);
+                baseAuthorityElementMapper.insert(authority);
             }
         }
     }
@@ -407,11 +374,7 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
                 }
             }
         }
-        // 加入用户特殊授权
-        List<OpenAuthority> userGrantedAuthority = baseAuthorityUserCustomMapper.selectAuthorityByUser(userId);
-        if (userGrantedAuthority != null && userGrantedAuthority.size() > 0) {
-            authorities.addAll(userGrantedAuthority);
-        }
+
         // 权限去重
         Set h = new HashSet<>(authorities);
         authorities.clear();
@@ -437,11 +400,7 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
                 }
             }
         }
-        // 加入用户特殊授权
-        List<AuthorityMenuDTO> userGrantedAuthority = baseAuthorityUserCustomMapper.selectAuthorityMenuByUser(userId);
-        if (userGrantedAuthority != null && userGrantedAuthority.size() > 0) {
-            authorities.addAll(userGrantedAuthority);
-        }
+
         // 权限去重
         Set h = new HashSet<>(authorities);
         authorities.clear();
@@ -469,14 +428,14 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
         if (StringHelper.isBlank(serviceId)) {
             return;
         }
-        Weekend<BaseResource> apiWeekend = Weekend.of(BaseResource.class);
-        WeekendCriteria<BaseResource, Object> criteria = apiWeekend.weekendCriteria();
-        criteria.andEqualTo(BaseResource::getServiceId, serviceId);
+        Weekend<BaseOperation> apiWeekend = Weekend.of(BaseOperation.class);
+        WeekendCriteria<BaseOperation, Object> criteria = apiWeekend.weekendCriteria();
+        criteria.andEqualTo(BaseOperation::getServiceId, serviceId);
         if (CollectionUtils.isNotEmpty(codes)) {
-            criteria.andNotIn(BaseResource::getApiCode, codes);
+            criteria.andNotIn(BaseOperation::getApiCode, codes);
         }
-        List<Long> invalidApiIds = baseResourceMapper.selectByExample(apiWeekend).stream()
-                .map(BaseResource::getApiId)
+        List<Long> invalidApiIds = baseOperationMapper.selectByExample(apiWeekend).stream()
+                .map(BaseOperation::getApiId)
                 .collect(Collectors.toList());
 
         if (CollectionUtils.isNotEmpty(invalidApiIds)) {
@@ -500,15 +459,12 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
                 Weekend<BaseAuthorityApp> appWeekend = Weekend.of(BaseAuthorityApp.class);
                 appWeekend.weekendCriteria().andIn(BaseAuthorityApp::getAuthorityId, invalidAuthorityIds);
                 baseAuthorityAppMapper.deleteByExample(appWeekend);
-                Weekend<BaseAuthorityAction> actionWeekend = Weekend.of(BaseAuthorityAction.class);
-                actionWeekend.weekendCriteria().andIn(BaseAuthorityAction::getAuthorityId, invalidAuthorityIds);
-                baseAuthorityActionMapper.deleteByExample(actionWeekend);
+                Weekend<BaseAuthorityElement> actionWeekend = Weekend.of(BaseAuthorityElement.class);
+                actionWeekend.weekendCriteria().andIn(BaseAuthorityElement::getAuthorityId, invalidAuthorityIds);
+                baseAuthorityElementMapper.deleteByExample(actionWeekend);
                 Weekend<BaseAuthorityRole> roleWeekend = Weekend.of(BaseAuthorityRole.class);
                 roleWeekend.weekendCriteria().andIn(BaseAuthorityRole::getAuthorityId, invalidAuthorityIds);
                 baseAuthorityRoleMapper.deleteByExample(roleWeekend);
-                Weekend<BaseAuthorityUser> userWeekend = Weekend.of(BaseAuthorityUser.class);
-                userWeekend.weekendCriteria().andIn(BaseAuthorityUser::getAuthorityId, invalidAuthorityIds);
-                baseAuthorityUserMapper.deleteByExample(userWeekend);
 
                 // 移除权限数据
                 Weekend<BaseAuthority> authorityDeleteWeekend = Weekend.of(BaseAuthority.class);
@@ -517,10 +473,10 @@ public class BaseAuthorityServiceImpl implements BaseAuthorityService {
                 baseAuthorityMapper.deleteByExample(authorityDeleteWeekend);
 
                 // 移除接口资源
-                Weekend<BaseResource> apiDeleteWeekend = Weekend.of(BaseResource.class);
+                Weekend<BaseOperation> apiDeleteWeekend = Weekend.of(BaseOperation.class);
                 apiDeleteWeekend.weekendCriteria()
-                        .andIn(BaseResource::getApiId, invalidApiIds);
-                baseResourceMapper.deleteByExample(apiDeleteWeekend);
+                        .andIn(BaseOperation::getApiId, invalidApiIds);
+                baseOperationMapper.deleteByExample(apiDeleteWeekend);
             }
         }
     }

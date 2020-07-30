@@ -2,13 +2,13 @@ package com.smart4y.cloud.base.interfaces.web;
 
 import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.application.BaseUserService;
-import com.smart4y.cloud.base.domain.model.BaseAuthorityAction;
+import com.smart4y.cloud.base.domain.model.BaseAuthorityElement;
 import com.smart4y.cloud.base.domain.model.BaseUser;
 import com.smart4y.cloud.base.interfaces.command.authority.GrantAuthorityActionCommand;
 import com.smart4y.cloud.base.interfaces.command.authority.GrantAuthorityAppCommand;
 import com.smart4y.cloud.base.interfaces.command.authority.GrantAuthorityRoleCommand;
 import com.smart4y.cloud.base.interfaces.command.authority.GrantAuthorityUserCommand;
-import com.smart4y.cloud.base.interfaces.converter.BaseAuthorityActionConverter;
+import com.smart4y.cloud.base.interfaces.converter.BaseAuthorityElementConverter;
 import com.smart4y.cloud.base.interfaces.vo.BaseAuthorityActionVO;
 import com.smart4y.cloud.core.dto.OpenAuthority;
 import com.smart4y.cloud.core.message.ResultMessage;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 public class BaseAuthorityController {
 
     @Autowired
-    private BaseAuthorityActionConverter baseAuthorityActionConverter;
+    private BaseAuthorityElementConverter baseAuthorityElementConverter;
     @Autowired
     private BaseAuthorityService baseAuthorityService;
     @Autowired
@@ -84,8 +84,8 @@ public class BaseAuthorityController {
     })
     @GetMapping("/authority/action")
     public ResultMessage<List<BaseAuthorityActionVO>> findAuthorityAction(@RequestParam(value = "actionId") Long actionId) {
-        List<BaseAuthorityAction> list = baseAuthorityService.findAuthorityAction(actionId);
-        List<BaseAuthorityActionVO> result = baseAuthorityActionConverter.convertList(list);
+        List<BaseAuthorityElement> list = baseAuthorityService.findAuthorityAction(actionId);
+        List<BaseAuthorityActionVO> result = baseAuthorityElementConverter.convertList(list);
         return ResultMessage.ok(result);
     }
 

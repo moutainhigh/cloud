@@ -19,10 +19,10 @@ import java.time.LocalDateTime;
  *         Created by youtao on 2019/09/17.
  */
 @Data
-@Table(name = "base_resource")
+@Table(name = "base_operation")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class BaseResource extends BaseEntity<BaseResource> {
+public class BaseOperation extends BaseEntity<BaseOperation> {
 
     /**
      * 接口ID
@@ -137,7 +137,7 @@ public class BaseResource extends BaseEntity<BaseResource> {
     /**
      * 构造器
      */
-    public BaseResource() {
+    public BaseOperation() {
         super();
     }
 }

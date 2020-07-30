@@ -10,34 +10,28 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 /**
- * 系统权限-用户关联
+ * 系统权限-功能操作关联表
  *
  * @author Youtao
  *         Created by youtao on 2019/09/17.
  */
 @Data
-@Table(name = "base_authority_user")
+@Table(name = "base_authority_element")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class BaseAuthorityUser extends BaseEntity<BaseAuthorityUser> {
+public class BaseAuthorityElement extends BaseEntity<BaseAuthorityElement> {
 
     /**
-     * 权限ID
+     * 操作ID
+     */
+    @Column(name = "action_id")
+    private Long actionId;
+
+    /**
+     * API
      */
     @Column(name = "authority_id")
     private Long authorityId;
-
-    /**
-     * 用户ID
-     */
-    @Column(name = "user_id")
-    private Long userId;
-
-    /**
-     * 过期时间
-     */
-    @Column(name = "expire_time")
-    private LocalDateTime expireTime;
 
     /**
      * 创建时间
@@ -54,7 +48,7 @@ public class BaseAuthorityUser extends BaseEntity<BaseAuthorityUser> {
     /**
      * 构造器
      */
-    public BaseAuthorityUser() {
+    public BaseAuthorityElement() {
         super();
     }
 }

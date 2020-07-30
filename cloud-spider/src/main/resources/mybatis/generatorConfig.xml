@@ -49,7 +49,7 @@
         <!--<table tableName="gateway_route" domainObjectName="GatewayRoute"/>
         <table tableName="gateway_rate_limit" domainObjectName="GatewayRateLimit"/>
         <table tableName="gateway_rate_limit_api" domainObjectName="GatewayRateLimitApi"/>
-        <table tableName="base_resource" domainObjectName="BaseResource"/>-->
+        <table tableName="base_operation" domainObjectName="BaseResource"/>-->
         <table tableName="hello" domainObjectName="Hello">
             <columnOverride column="user_name" javaType="com.smart4y.cloud.base.domain.model.GatewayRoute"/>
         </table>

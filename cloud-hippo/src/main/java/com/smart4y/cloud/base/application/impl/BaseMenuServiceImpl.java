@@ -2,7 +2,7 @@ package com.smart4y.cloud.base.application.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.smart4y.cloud.base.application.BaseActionService;
+import com.smart4y.cloud.base.application.BaseElementService;
 import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.application.BaseMenuService;
 import com.smart4y.cloud.base.domain.model.BaseMenu;
@@ -39,7 +39,7 @@ public class BaseMenuServiceImpl implements BaseMenuService {
     @Autowired
     private BaseAuthorityService baseAuthorityService;
     @Autowired
-    private BaseActionService baseActionService;
+    private BaseElementService baseElementService;
 
     @Override
     public PageInfo<BaseMenu> findListPage(BaseMenuQuery query) {
@@ -139,7 +139,7 @@ public class BaseMenuServiceImpl implements BaseMenuService {
         // 移除菜单权限
         baseAuthorityService.removeAuthority(menuId, ResourceType.menu);
         // 移除功能按钮和相关权限
-        baseActionService.removeByMenuId(menuId);
+        baseElementService.removeByMenuId(menuId);
         // 移除菜单信息
         baseMenuMapper.deleteByPrimaryKey(menuId);
     }

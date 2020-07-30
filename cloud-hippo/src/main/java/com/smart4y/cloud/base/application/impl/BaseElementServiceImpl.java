@@ -2,10 +2,10 @@ package com.smart4y.cloud.base.application.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.smart4y.cloud.base.application.BaseActionService;
+import com.smart4y.cloud.base.application.BaseElementService;
 import com.smart4y.cloud.base.application.BaseAuthorityService;
-import com.smart4y.cloud.base.domain.model.BaseAction;
-import com.smart4y.cloud.base.infrastructure.mapper.BaseActionMapper;
+import com.smart4y.cloud.base.domain.model.BaseElement;
+import com.smart4y.cloud.base.infrastructure.mapper.BaseElementMapper;
 import com.smart4y.cloud.base.interfaces.query.BaseActionQuery;
 import com.smart4y.cloud.core.annotation.ApplicationService;
 import com.smart4y.cloud.core.constant.BaseConstants;
@@ -29,60 +29,60 @@ import java.util.List;
  */
 @Slf4j
 @ApplicationService
-public class BaseActionServiceImpl implements BaseActionService {
+public class BaseElementServiceImpl implements BaseElementService {
 
     @Value("${spring.application.name}")
     private String DEFAULT_SERVICE_ID;
 
     @Autowired
-    private BaseActionMapper baseActionMapper;
+    private BaseElementMapper baseElementMapper;
     @Autowired
     private BaseAuthorityService baseAuthorityService;
 
     @Override
-    public PageInfo<BaseAction> findListPage(BaseActionQuery query) {
-        Weekend<BaseAction> queryWrapper = Weekend.of(BaseAction.class);
-        WeekendCriteria<BaseAction, Object> criteria = queryWrapper.weekendCriteria();
+    public PageInfo<BaseElement> findListPage(BaseActionQuery query) {
+        Weekend<BaseElement> queryWrapper = Weekend.of(BaseElement.class);
+        WeekendCriteria<BaseElement, Object> criteria = queryWrapper.weekendCriteria();
         if (StringHelper.isNotBlank(query.getActionCode())) {
-            criteria.andLike(BaseAction::getActionCode, query.getActionCode() + "%");
+            criteria.andLike(BaseElement::getActionCode, query.getActionCode() + "%");
         }
         if (StringHelper.isNotBlank(query.getActionName())) {
-            criteria.andLike(BaseAction::getActionName, query.getActionName() + "%");
+            criteria.andLike(BaseElement::getActionName, query.getActionName() + "%");
         }
         queryWrapper.orderBy("createdDate").desc();
 
         PageHelper.startPage(query.getPage(), query.getLimit(), Boolean.TRUE);
-        List<BaseAction> list = baseActionMapper.selectByExample(queryWrapper);
+        List<BaseElement> list = baseElementMapper.selectByExample(queryWrapper);
         return new PageInfo<>(list);
     }
 
     @Override
-    public List<BaseAction> findListByMenuId(Long menuId) {
-        Weekend<BaseAction> queryWrapper = Weekend.of(BaseAction.class);
+    public List<BaseElement> findListByMenuId(Long menuId) {
+        Weekend<BaseElement> queryWrapper = Weekend.of(BaseElement.class);
         queryWrapper.weekendCriteria()
-                .andEqualTo(BaseAction::getMenuId, menuId);
-        List<BaseAction> list = baseActionMapper.selectByExample(queryWrapper);
+                .andEqualTo(BaseElement::getMenuId, menuId);
+        List<BaseElement> list = baseElementMapper.selectByExample(queryWrapper);
         //根据优先级从小到大排序
-        list.sort(Comparator.comparing(BaseAction::getPriority));
+        list.sort(Comparator.comparing(BaseElement::getPriority));
         return list;
     }
 
     @Override
-    public BaseAction getAction(long actionId) {
-        return baseActionMapper.selectByPrimaryKey(actionId);
+    public BaseElement getAction(long actionId) {
+        return baseElementMapper.selectByPrimaryKey(actionId);
     }
 
     @Override
     public Boolean isExist(String actionCode) {
-        Weekend<BaseAction> queryWrapper = Weekend.of(BaseAction.class);
+        Weekend<BaseElement> queryWrapper = Weekend.of(BaseElement.class);
         queryWrapper.weekendCriteria()
-                .andEqualTo(BaseAction::getActionCode, actionCode);
-        int count = baseActionMapper.selectCountByExample(queryWrapper);
+                .andEqualTo(BaseElement::getActionCode, actionCode);
+        int count = baseElementMapper.selectCountByExample(queryWrapper);
         return count > 0;
     }
 
     @Override
-    public BaseAction addAction(BaseAction aciton) {
+    public BaseElement addAction(BaseElement aciton) {
         if (isExist(aciton.getActionCode())) {
             throw new OpenAlertException(MessageType.BAD_REQUEST, String.format("%s编码已存在!", aciton.getActionCode()));
         }
@@ -101,15 +101,15 @@ public class BaseActionServiceImpl implements BaseActionService {
         aciton.setCreatedDate(LocalDateTime.now());
         aciton.setServiceId(DEFAULT_SERVICE_ID);
         aciton.setLastModifiedDate(LocalDateTime.now());
-        baseActionMapper.insert(aciton);
+        baseElementMapper.insert(aciton);
         // 同步权限表里的信息
         baseAuthorityService.saveOrUpdateAuthority(aciton.getActionId(), ResourceType.action);
         return aciton;
     }
 
     @Override
-    public BaseAction updateAction(BaseAction aciton) {
-        BaseAction saved = getAction(aciton.getActionId());
+    public BaseElement updateAction(BaseElement aciton) {
+        BaseElement saved = getAction(aciton.getActionId());
         if (saved == null) {
             throw new OpenAlertException(MessageType.BAD_REQUEST, String.format("%s信息不存在", aciton.getActionId()));
         }
@@ -126,7 +126,7 @@ public class BaseActionServiceImpl implements BaseActionService {
             aciton.setPriority(0);
         }
         aciton.setLastModifiedDate(LocalDateTime.now());
-        baseActionMapper.updateByPrimaryKeySelective(aciton);
+        baseElementMapper.updateByPrimaryKeySelective(aciton);
         // 同步权限表里的信息
         baseAuthorityService.saveOrUpdateAuthority(aciton.getActionId(), ResourceType.action);
         return aciton;
@@ -134,20 +134,20 @@ public class BaseActionServiceImpl implements BaseActionService {
 
     @Override
     public void removeAction(Long actionId) {
-        BaseAction aciton = getAction(actionId);
+        BaseElement aciton = getAction(actionId);
         if (aciton != null && aciton.getIsPersist().equals(BaseConstants.ENABLED)) {
             throw new OpenAlertException(MessageType.BAD_REQUEST, "保留数据，不允许删除");
         }
         baseAuthorityService.removeAuthorityAction(actionId);
         baseAuthorityService.removeAuthority(actionId, ResourceType.action);
-        baseActionMapper.deleteByPrimaryKey(actionId);
+        baseElementMapper.deleteByPrimaryKey(actionId);
     }
 
     @Override
     public void removeByMenuId(Long menuId) {
-        List<BaseAction> actionList = findListByMenuId(menuId);
+        List<BaseElement> actionList = findListByMenuId(menuId);
         if (actionList != null && actionList.size() > 0) {
-            for (BaseAction action : actionList) {
+            for (BaseElement action : actionList) {
                 removeAction(action.getActionId());
             }
         }

@@ -17,7 +17,7 @@
             r.url
         FROM gateway_rate_limit_api AS i
         INNER JOIN gateway_rate_limit AS p ON i.policy_id = p.policy_id
-        INNER JOIN base_resource AS a ON i.api_id = a.api_id
+        INNER JOIN base_operation AS a ON i.api_id = a.api_id
         INNER JOIN gateway_route AS r ON a.service_id = r.route_name
         WHERE p.policy_type = 'url'
     </select>

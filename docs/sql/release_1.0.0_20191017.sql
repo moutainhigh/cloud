@@ -138,12 +138,12 @@ VALUES
 UNLOCK TABLES;
 
 
-# Dump of table base_action
+# Dump of table base_element
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `base_action`;
+DROP TABLE IF EXISTS `base_element`;
 
-CREATE TABLE `base_action` (
+CREATE TABLE `base_element` (
   `action_id` bigint(20) NOT NULL COMMENT '资源ID',
   `action_code` varchar(100) COLLATE utf8_bin NOT NULL COMMENT '资源编码',
   `action_name` varchar(100) COLLATE utf8_bin NOT NULL COMMENT '资源名称',
@@ -160,10 +160,10 @@ CREATE TABLE `base_action` (
   UNIQUE KEY `action_id` (`action_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT COMMENT='系统资源-功能操作';
 
-LOCK TABLES `base_action` WRITE;
-/*!40000 ALTER TABLE `base_action` DISABLE KEYS */;
+LOCK TABLES `base_element` WRITE;
+/*!40000 ALTER TABLE `base_element` DISABLE KEYS */;
 
-INSERT INTO `base_action` (`action_id`, `action_code`, `action_name`, `action_desc`, `menu_id`, `priority`, `status`, `is_persist`, `service_id`, `created_date`, `last_modified_date`)
+INSERT INTO `base_element` (`action_id`, `action_code`, `action_name`, `action_desc`, `menu_id`, `priority`, `status`, `is_persist`, `service_id`, `created_date`, `last_modified_date`)
 VALUES
 	(1131849293404176385,X'73797374656D4D656E7556696577',X'E69FA5E79C8B',X'',3,0,1,1,X'6F70656E2D636C6F75642D626173652D736572766572','2019-05-24 17:07:54','2019-08-22 14:25:48'),
 	(1131849510572654593,X'73797374656D4D656E7545646974',X'E7BC96E8BE91',X'',3,0,1,1,X'6F70656E2D636C6F75642D626173652D736572766572','2019-05-24 17:08:46','2019-05-24 17:08:46'),
@@ -190,16 +190,16 @@ VALUES
 	(1164422088547635202,X'646576656C6F70657256696577',X'E69FA5E79C8B',X'',1149253733673287682,0,1,0,X'6F70656E2D636C6F75642D626173652D736572766572','2019-08-22 14:20:34','2019-08-22 14:24:53'),
 	(1164422211189084162,X'646576656C6F70657245646974',X'E7BC96E8BE91',X'',1149253733673287682,0,1,0,X'6F70656E2D636C6F75642D626173652D736572766572','2019-08-22 14:21:04','2019-08-22 14:21:04');
 
-/*!40000 ALTER TABLE `base_action` ENABLE KEYS */;
+/*!40000 ALTER TABLE `base_element` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
-# Dump of table base_resource
+# Dump of table base_operation
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `base_resource`;
+DROP TABLE IF EXISTS `base_operation`;
 
-CREATE TABLE `base_resource` (
+CREATE TABLE `base_operation` (
   `api_id` bigint(20) NOT NULL COMMENT '接口ID',
   `api_code` varchar(255) COLLATE utf8_bin NOT NULL COMMENT '接口编码',
   `api_name` varchar(100) COLLATE utf8_bin NOT NULL COMMENT '接口名称',
@@ -224,10 +224,10 @@ CREATE TABLE `base_resource` (
   KEY `service_id` (`service_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin ROW_FORMAT=COMPACT COMMENT='系统资源-API接口';
 
-LOCK TABLES `base_resource` WRITE;
-/*!40000 ALTER TABLE `base_resource` DISABLE KEYS */;
+LOCK TABLES `base_operation` WRITE;
+/*!40000 ALTER TABLE `base_operation` DISABLE KEYS */;
 
-INSERT INTO `base_resource` (`api_id`, `api_code`, `api_name`, `service_id`, `path`, `priority`, `status`, `is_persist`, `is_auth`, `is_open`, `api_desc`, `request_method`, `method_name`, `class_name`, `api_category`, `content_type`, `created_date`, `last_modified_date`)
+INSERT INTO `base_operation` (`api_id`, `api_code`, `api_name`, `service_id`, `path`, `priority`, `status`, `is_persist`, `is_auth`, `is_open`, `api_desc`, `request_method`, `method_name`, `class_name`, `api_category`, `content_type`, `created_date`, `last_modified_date`)
 VALUES
 	(1,X'616C6C',X'E585A8E983A8',X'636C6F75642D737069646572',X'2F2A2A',0,1,1,1,1,X'E68980E69C89E8AFB7E6B182',X'4745542C504F5354',NULL,NULL,X'64656661756C74',NULL,'2019-03-07 21:52:17','2019-03-14 21:41:28'),
 	(2,X'6163747561746F72',X'E79B91E68EA7E7ABAFE782B9',X'636C6F75642D737069646572',X'2F6163747561746F722F2A2A',0,1,1,1,1,X'E79B91E68EA7E7ABAFE782B9',X'504F5354',NULL,NULL,X'64656661756C74',NULL,'2019-03-07 21:52:17','2019-03-14 21:41:28'),
@@ -459,7 +459,7 @@ VALUES
 	(1156037706206314497,X'3163333335333038623432663133633937653266343161653432343138663536',X'E689B9E9878FE4BFAEE694B9E78AB6E68081',X'6F70656E2D636C6F75642D626173652D736572766572',X'2F6170692F62617463682F7570646174652F737461747573',0,1,1,1,1,X'E689B9E9878FE4BFAEE694B9E78AB6E68081',X'504F5354',X'6261746368557064617465537461747573',X'636F6D2E6F70656E636C6F75642E626173652E7365727665722E636F6E74726F6C6C65722E42617365417069436F6E74726F6C6C6572',X'64656661756C74',X'','2019-07-30 11:04:01','2019-08-19 18:59:18'),
 	(1156038470987317250,X'6238633731663635336161383032626265646631366334656339623230653365',X'E88EB7E58F96E5BD93E5898DE799BBE5BD95E794A8E688B7E4BFA1E681AF2D53534FE58D95E782B9E799BBE5BD95',X'6F70656E2D636C6F75642D7561612D61646D696E2D736572766572',X'2F63757272656E742F757365722F73736F',0,1,1,1,0,X'E88EB7E58F96E5BD93E5898DE799BBE5BD95E794A8E688B7E4BFA1E681AF2D53534FE58D95E782B9E799BBE5BD95',X'474554',X'7072696E636970616C',X'636F6D2E6F70656E636C6F75642E7561612E61646D696E2E7365727665722E636F6E74726F6C6C65722E4C6F67696E436F6E74726F6C6C6572',X'64656661756C74',X'','2019-07-30 11:07:04','2019-08-22 14:36:44');
 
-/*!40000 ALTER TABLE `base_resource` ENABLE KEYS */;
+/*!40000 ALTER TABLE `base_operation` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
@@ -825,12 +825,12 @@ VALUES
 UNLOCK TABLES;
 
 
-# Dump of table base_authority_action
+# Dump of table base_authority_element
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `base_authority_action`;
+DROP TABLE IF EXISTS `base_authority_element`;
 
-CREATE TABLE `base_authority_action` (
+CREATE TABLE `base_authority_element` (
   `action_id` bigint(20) NOT NULL COMMENT '操作ID',
   `authority_id` bigint(20) NOT NULL COMMENT 'API',
   `created_date` datetime DEFAULT NULL COMMENT '创建时间',
@@ -839,10 +839,10 @@ CREATE TABLE `base_authority_action` (
   KEY `authority_id` (`authority_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统权限-功能操作关联表';
 
-LOCK TABLES `base_authority_action` WRITE;
-/*!40000 ALTER TABLE `base_authority_action` DISABLE KEYS */;
+LOCK TABLES `base_authority_element` WRITE;
+/*!40000 ALTER TABLE `base_authority_element` DISABLE KEYS */;
 
-INSERT INTO `base_authority_action` (`action_id`, `authority_id`, `created_date`, `last_modified_date`)
+INSERT INTO `base_authority_element` (`action_id`, `authority_id`, `created_date`, `last_modified_date`)
 VALUES
 	(1131864400507056130,1149168013625450498,'2019-08-22 14:54:41','2019-08-22 14:54:41'),
 	(1131864400507056130,1131813663584489473,'2019-08-22 14:54:41','2019-08-22 14:54:41'),
@@ -1027,7 +1027,7 @@ VALUES
 	(1152234326254051329,1152138203942273026,NULL,NULL),
 	(1131864444878598146,1131753771607683074,NULL,NULL);
 
-/*!40000 ALTER TABLE `base_authority_action` ENABLE KEYS */;
+/*!40000 ALTER TABLE `base_authority_element` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
@@ -1130,23 +1130,6 @@ VALUES
 
 /*!40000 ALTER TABLE `base_authority_role` ENABLE KEYS */;
 UNLOCK TABLES;
-
-
-# Dump of table base_authority_user
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `base_authority_user`;
-
-CREATE TABLE `base_authority_user` (
-  `authority_id` bigint(20) NOT NULL COMMENT '权限ID',
-  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
-  `expire_time` datetime DEFAULT NULL COMMENT '过期时间',
-  `created_date` datetime DEFAULT NULL COMMENT '创建时间',
-  `last_modified_date` datetime DEFAULT NULL COMMENT '修改时间',
-  KEY `authority_id` (`authority_id`) USING BTREE,
-  KEY `user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='系统权限-用户关联';
-
 
 
 # Dump of table base_developer

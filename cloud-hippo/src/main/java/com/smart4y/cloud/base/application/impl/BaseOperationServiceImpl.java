@@ -2,10 +2,10 @@ package com.smart4y.cloud.base.application.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.smart4y.cloud.base.application.BaseResourceService;
+import com.smart4y.cloud.base.application.BaseOperationService;
 import com.smart4y.cloud.base.application.BaseAuthorityService;
-import com.smart4y.cloud.base.domain.model.BaseResource;
-import com.smart4y.cloud.base.infrastructure.mapper.BaseResourceMapper;
+import com.smart4y.cloud.base.domain.model.BaseOperation;
+import com.smart4y.cloud.base.infrastructure.mapper.BaseOperationMapper;
 import com.smart4y.cloud.base.interfaces.query.BaseResourceQuery;
 import com.smart4y.cloud.core.annotation.ApplicationService;
 import com.smart4y.cloud.core.constant.BaseConstants;
@@ -27,68 +27,68 @@ import java.util.List;
  */
 @Slf4j
 @ApplicationService
-public class BaseResourceServiceImpl implements BaseResourceService {
+public class BaseOperationServiceImpl implements BaseOperationService {
 
     @Autowired
-    private BaseResourceMapper baseResourceMapper;
+    private BaseOperationMapper baseOperationMapper;
     @Autowired
     private BaseAuthorityService baseAuthorityService;
 
     @Override
-    public PageInfo<BaseResource> findListPage(BaseResourceQuery query) {
-        Weekend<BaseResource> queryWrapper = Weekend.of(BaseResource.class);
-        WeekendCriteria<BaseResource, Object> criteria = queryWrapper.weekendCriteria();
+    public PageInfo<BaseOperation> findListPage(BaseResourceQuery query) {
+        Weekend<BaseOperation> queryWrapper = Weekend.of(BaseOperation.class);
+        WeekendCriteria<BaseOperation, Object> criteria = queryWrapper.weekendCriteria();
         if (StringHelper.isNotBlank(query.getPath())) {
-            criteria.andLike(BaseResource::getPath, query.getPath() + "%");
+            criteria.andLike(BaseOperation::getPath, query.getPath() + "%");
         }
         if (StringHelper.isNotBlank(query.getApiName())) {
-            criteria.andLike(BaseResource::getApiName, query.getApiName() + "%");
+            criteria.andLike(BaseOperation::getApiName, query.getApiName() + "%");
         }
         if (StringHelper.isNotBlank(query.getApiCode())) {
-            criteria.andLike(BaseResource::getApiCode, query.getApiCode() + "%");
+            criteria.andLike(BaseOperation::getApiCode, query.getApiCode() + "%");
         }
         if (StringHelper.isNotBlank(query.getServiceId())) {
-            criteria.andEqualTo(BaseResource::getServiceId, query.getServiceId());
+            criteria.andEqualTo(BaseOperation::getServiceId, query.getServiceId());
         }
         if (null != query.getStatus()) {
-            criteria.andEqualTo(BaseResource::getStatus, query.getStatus());
+            criteria.andEqualTo(BaseOperation::getStatus, query.getStatus());
         }
         if (null != query.getIsAuth()) {
-            criteria.andEqualTo(BaseResource::getIsAuth, query.getIsAuth());
+            criteria.andEqualTo(BaseOperation::getIsAuth, query.getIsAuth());
         }
         queryWrapper.orderBy("createdDate").desc();
 
         PageHelper.startPage(query.getPage(), query.getLimit(), Boolean.TRUE);
-        List<BaseResource> list = baseResourceMapper.selectByExample(queryWrapper);
+        List<BaseOperation> list = baseOperationMapper.selectByExample(queryWrapper);
         return new PageInfo<>(list);
     }
 
     @Override
-    public List<BaseResource> findAllList(String serviceId) {
-        Weekend<BaseResource> queryWrapper = Weekend.of(BaseResource.class);
-        WeekendCriteria<BaseResource, Object> criteria = queryWrapper.weekendCriteria();
+    public List<BaseOperation> findAllList(String serviceId) {
+        Weekend<BaseOperation> queryWrapper = Weekend.of(BaseOperation.class);
+        WeekendCriteria<BaseOperation, Object> criteria = queryWrapper.weekendCriteria();
         if (StringHelper.isNotBlank(serviceId)) {
-            criteria.andEqualTo(BaseResource::getServiceId, serviceId);
+            criteria.andEqualTo(BaseOperation::getServiceId, serviceId);
         }
-        return baseResourceMapper.selectByExample(queryWrapper);
+        return baseOperationMapper.selectByExample(queryWrapper);
     }
 
     @Override
-    public BaseResource getApi(long apiId) {
-        return baseResourceMapper.selectByPrimaryKey(apiId);
+    public BaseOperation getApi(long apiId) {
+        return baseOperationMapper.selectByPrimaryKey(apiId);
     }
 
     @Override
     public Boolean isExist(String apiCode) {
-        Weekend<BaseResource> queryWrapper = Weekend.of(BaseResource.class);
+        Weekend<BaseOperation> queryWrapper = Weekend.of(BaseOperation.class);
         queryWrapper.weekendCriteria()
-                .andEqualTo(BaseResource::getApiCode, apiCode);
-        int count = baseResourceMapper.selectCountByExample(queryWrapper);
+                .andEqualTo(BaseOperation::getApiCode, apiCode);
+        int count = baseOperationMapper.selectCountByExample(queryWrapper);
         return count > 0;
     }
 
     @Override
-    public void addApi(BaseResource api) {
+    public void addApi(BaseOperation api) {
         if (isExist(api.getApiCode())) {
             throw new OpenAlertException(MessageType.BAD_REQUEST, String.format("%s编码已存在!", api.getApiCode()));
         }
@@ -109,14 +109,14 @@ public class BaseResourceServiceImpl implements BaseResourceService {
         }
         api.setCreatedDate(LocalDateTime.now());
         api.setLastModifiedDate(LocalDateTime.now());
-        baseResourceMapper.insert(api);
+        baseOperationMapper.insert(api);
         // 同步权限表里的信息
         baseAuthorityService.saveOrUpdateAuthority(api.getApiId(), ResourceType.api);
     }
 
     @Override
-    public void updateApi(BaseResource api) {
-        BaseResource saved = getApi(api.getApiId());
+    public void updateApi(BaseOperation api) {
+        BaseOperation saved = getApi(api.getApiId());
         if (saved == null) {
             throw new OpenAlertException(MessageType.NOT_FOUND, "信息不存在!");
         }
@@ -133,67 +133,67 @@ public class BaseResourceServiceImpl implements BaseResourceService {
             api.setApiCategory(BaseConstants.DEFAULT_API_CATEGORY);
         }
         api.setLastModifiedDate(LocalDateTime.now());
-        baseResourceMapper.updateByPrimaryKeySelective(api);
+        baseOperationMapper.updateByPrimaryKeySelective(api);
         // 同步权限表里的信息
         baseAuthorityService.saveOrUpdateAuthority(api.getApiId(), ResourceType.api);
     }
 
     @Override
-    public BaseResource getApi(String apiCode) {
-        Weekend<BaseResource> queryWrapper = Weekend.of(BaseResource.class);
+    public BaseOperation getApi(String apiCode) {
+        Weekend<BaseOperation> queryWrapper = Weekend.of(BaseOperation.class);
         queryWrapper.weekendCriteria()
-                .andEqualTo(BaseResource::getApiCode, apiCode);
-        return baseResourceMapper.selectOneByExample(queryWrapper);
+                .andEqualTo(BaseOperation::getApiCode, apiCode);
+        return baseOperationMapper.selectOneByExample(queryWrapper);
     }
 
 
     @Override
     public void removeApi(Long apiId) {
-        BaseResource api = getApi(apiId);
+        BaseOperation api = getApi(apiId);
         if (api != null && api.getIsPersist().equals(BaseConstants.ENABLED)) {
             throw new OpenAlertException(MessageType.BAD_REQUEST, "保留数据，不允许删除");
         }
         baseAuthorityService.removeAuthority(apiId, ResourceType.api);
-        baseResourceMapper.deleteByPrimaryKey(apiId);
+        baseOperationMapper.deleteByPrimaryKey(apiId);
     }
 
     @Override
     public void removeApis(List<Long> apiIds) {
-        Weekend<BaseResource> queryWrapper = Weekend.of(BaseResource.class);
+        Weekend<BaseOperation> queryWrapper = Weekend.of(BaseOperation.class);
         queryWrapper.weekendCriteria()
-                .andIn(BaseResource::getApiId, apiIds)
-                .andEqualTo(BaseResource::getIsPersist, BaseConstants.DISABLED);
-        baseResourceMapper.deleteByExample(queryWrapper);
+                .andIn(BaseOperation::getApiId, apiIds)
+                .andEqualTo(BaseOperation::getIsPersist, BaseConstants.DISABLED);
+        baseOperationMapper.deleteByExample(queryWrapper);
     }
 
     @Override
     public void updateOpenStatusApis(int isOpen, List<Long> apiIds) {
-        Weekend<BaseResource> wrapper = Weekend.of(BaseResource.class);
+        Weekend<BaseOperation> wrapper = Weekend.of(BaseOperation.class);
         wrapper.weekendCriteria()
-                .andIn(BaseResource::getApiId, apiIds);
-        BaseResource entity = new BaseResource();
+                .andIn(BaseOperation::getApiId, apiIds);
+        BaseOperation entity = new BaseOperation();
         entity.setIsOpen(isOpen);
-        baseResourceMapper.updateByExampleSelective(entity, wrapper);
+        baseOperationMapper.updateByExampleSelective(entity, wrapper);
     }
 
     @Override
     public void updateStatusApis(int status, List<Long> apiIds) {
-        Weekend<BaseResource> queryWrapper = Weekend.of(BaseResource.class);
+        Weekend<BaseOperation> queryWrapper = Weekend.of(BaseOperation.class);
         queryWrapper.weekendCriteria()
-                .andIn(BaseResource::getApiId, apiIds);
-        BaseResource entity = new BaseResource();
+                .andIn(BaseOperation::getApiId, apiIds);
+        BaseOperation entity = new BaseOperation();
         entity.setStatus(status);
-        baseResourceMapper.updateByExampleSelective(entity, queryWrapper);
+        baseOperationMapper.updateByExampleSelective(entity, queryWrapper);
     }
 
     @Override
     public void updateAuthApis(int auth, List<Long> apiIds) {
-        Weekend<BaseResource> wrapper = Weekend.of(BaseResource.class);
+        Weekend<BaseOperation> wrapper = Weekend.of(BaseOperation.class);
         wrapper.weekendCriteria()
-                .andIn(BaseResource::getApiId, apiIds)
-                .andEqualTo(BaseResource::getIsPersist, BaseConstants.DISABLED);
-        BaseResource entity = new BaseResource();
+                .andIn(BaseOperation::getApiId, apiIds)
+                .andEqualTo(BaseOperation::getIsPersist, BaseConstants.DISABLED);
+        BaseOperation entity = new BaseOperation();
         entity.setStatus(auth);
-        baseResourceMapper.updateByExampleSelective(entity, wrapper);
+        baseOperationMapper.updateByExampleSelective(entity, wrapper);
     }
 }

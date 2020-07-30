@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.application;
 
 import com.github.pagehelper.PageInfo;
-import com.smart4y.cloud.base.domain.model.BaseResource;
+import com.smart4y.cloud.base.domain.model.BaseOperation;
 import com.smart4y.cloud.base.interfaces.query.BaseResourceQuery;
 
 import java.util.List;
@@ -12,22 +12,22 @@ import java.util.List;
  * @author Youtao
  *         Created by youtao on 2019-09-05.
  */
-public interface BaseResourceService {
+public interface BaseOperationService {
 
     /**
      * 分页查询
      */
-    PageInfo<BaseResource> findListPage(BaseResourceQuery query);
+    PageInfo<BaseOperation> findListPage(BaseResourceQuery query);
 
     /**
      * 查询列表
      */
-    List<BaseResource> findAllList(String serviceId);
+    List<BaseOperation> findAllList(String serviceId);
 
     /**
      * 根据主键获取接口
      */
-    BaseResource getApi(long apiId);
+    BaseOperation getApi(long apiId);
 
     /**
      * 检查接口编码是否存在
@@ -43,7 +43,7 @@ public interface BaseResourceService {
      * @param api
      * @return
      */
-    void addApi(BaseResource api);
+    void addApi(BaseOperation api);
 
     /**
      * 修改接口
@@ -51,7 +51,7 @@ public interface BaseResourceService {
      * @param api
      * @return
      */
-    void updateApi(BaseResource api);
+    void updateApi(BaseOperation api);
 
     /**
      * 查询接口
@@ -59,7 +59,7 @@ public interface BaseResourceService {
      * @param apiCode
      * @return
      */
-    BaseResource getApi(String apiCode);
+    BaseOperation getApi(String apiCode);
 
     /**
      * 移除接口

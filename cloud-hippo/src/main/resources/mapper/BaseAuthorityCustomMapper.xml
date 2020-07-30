@@ -29,7 +29,7 @@
             route.path AS prefix
         FROM
             base_authority AS a
-        INNER JOIN base_resource AS api ON a.api_id = api.api_id
+        INNER JOIN base_operation AS api ON a.api_id = api.api_id
         LEFT JOIN gateway_route AS route ON route.route_name = api.service_id
         UNION ALL
             SELECT
@@ -42,11 +42,11 @@
                 api.`status`,
                 route.path AS prefix
             FROM
-                base_authority_action AS ac
+                base_authority_element AS ac
             INNER JOIN base_authority AS a ON a.action_id = ac.action_id
             INNER JOIN base_authority AS a2 ON ac.authority_id = a2.authority_id
-            INNER JOIN base_resource AS api ON a2.api_id = api.api_id
-            INNER JOIN base_action AS action ON ac.action_id = action.action_id
+            INNER JOIN base_operation AS api ON a2.api_id = api.api_id
+            INNER JOIN base_element AS action ON ac.action_id = action.action_id
             LEFT JOIN gateway_route AS route ON route.route_name = api.service_id
             WHERE
                 `action`.`status` = 1
@@ -73,7 +73,7 @@
         route.path as prefix
         FROM
         base_authority AS a
-        INNER JOIN base_resource AS api ON a.api_id = api.api_id
+        INNER JOIN base_operation AS api ON a.api_id = api.api_id
         INNER JOIN gateway_route AS route ON route.route_name = api.service_id
         <where>
             <if test="status!=null">

@@ -1,6 +1,6 @@
 package com.smart4y.cloud.base.interfaces.converter;
 
-import com.smart4y.cloud.base.domain.model.BaseAuthorityAction;
+import com.smart4y.cloud.base.domain.model.BaseAuthorityElement;
 import com.smart4y.cloud.base.interfaces.vo.BaseAuthorityActionVO;
 import com.smart4y.cloud.mapper.base.AbstractConverter;
 import org.springframework.beans.BeanUtils;
@@ -13,10 +13,10 @@ import java.util.Map;
  *         Created by youtao on 2019/9/27.
  */
 @Component
-public class BaseAuthorityActionConverter extends AbstractConverter<BaseAuthorityAction, BaseAuthorityActionVO> {
+public class BaseAuthorityElementConverter extends AbstractConverter<BaseAuthorityElement, BaseAuthorityActionVO> {
 
     @Override
-    public BaseAuthorityActionVO convert(BaseAuthorityAction source, Map<String, Object> parameters) {
+    public BaseAuthorityActionVO convert(BaseAuthorityElement source, Map<String, Object> parameters) {
         BaseAuthorityActionVO target = new BaseAuthorityActionVO();
         BeanUtils.copyProperties(source, target);
         target.setCreatedDate(toLocalDateTime(source.getCreatedDate()));

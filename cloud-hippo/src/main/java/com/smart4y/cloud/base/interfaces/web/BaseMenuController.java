@@ -1,14 +1,14 @@
 package com.smart4y.cloud.base.interfaces.web;
 
 import com.github.pagehelper.PageInfo;
-import com.smart4y.cloud.base.application.BaseActionService;
+import com.smart4y.cloud.base.application.BaseElementService;
 import com.smart4y.cloud.base.application.BaseMenuService;
-import com.smart4y.cloud.base.domain.model.BaseAction;
+import com.smart4y.cloud.base.domain.model.BaseElement;
 import com.smart4y.cloud.base.domain.model.BaseMenu;
 import com.smart4y.cloud.base.interfaces.command.menu.AddMenuCommand;
 import com.smart4y.cloud.base.interfaces.command.menu.DeleteMenuCommand;
 import com.smart4y.cloud.base.interfaces.command.menu.UpdateMenuCommand;
-import com.smart4y.cloud.base.interfaces.converter.BaseActionConverter;
+import com.smart4y.cloud.base.interfaces.converter.BaseElementConverter;
 import com.smart4y.cloud.base.interfaces.converter.BaseMenuConverter;
 import com.smart4y.cloud.base.interfaces.query.BaseMenuQuery;
 import com.smart4y.cloud.base.interfaces.vo.BaseActionVO;
@@ -36,11 +36,11 @@ public class BaseMenuController {
     @Autowired
     private BaseMenuConverter baseMenuConverter;
     @Autowired
-    private BaseActionConverter baseActionConverter;
+    private BaseElementConverter baseElementConverter;
     @Autowired
     private BaseMenuService baseMenuService;
     @Autowired
-    private BaseActionService baseActionService;
+    private BaseElementService baseElementService;
     @Autowired
     private OpenRestTemplate openRestTemplate;
 
@@ -75,8 +75,8 @@ public class BaseMenuController {
     })
     @GetMapping("/menu/action")
     public ResultMessage<List<BaseActionVO>> getMenuAction(Long menuId) {
-        List<BaseAction> list = baseActionService.findListByMenuId(menuId);
-        List<BaseActionVO> result = baseActionConverter.convertList(list);
+        List<BaseElement> list = baseElementService.findListByMenuId(menuId);
+        List<BaseActionVO> result = baseElementConverter.convertList(list);
         return ResultMessage.ok(result);
     }
 

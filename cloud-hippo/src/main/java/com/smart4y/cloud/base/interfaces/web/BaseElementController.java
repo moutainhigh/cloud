@@ -1,12 +1,12 @@
 package com.smart4y.cloud.base.interfaces.web;
 
 import com.github.pagehelper.PageInfo;
-import com.smart4y.cloud.base.application.BaseActionService;
-import com.smart4y.cloud.base.domain.model.BaseAction;
+import com.smart4y.cloud.base.application.BaseElementService;
+import com.smart4y.cloud.base.domain.model.BaseElement;
 import com.smart4y.cloud.base.interfaces.command.action.AddActionCommand;
 import com.smart4y.cloud.base.interfaces.command.action.DeleteActionCommand;
 import com.smart4y.cloud.base.interfaces.command.action.UpdateActionCommand;
-import com.smart4y.cloud.base.interfaces.converter.BaseActionConverter;
+import com.smart4y.cloud.base.interfaces.converter.BaseElementConverter;
 import com.smart4y.cloud.base.interfaces.query.BaseActionQuery;
 import com.smart4y.cloud.base.interfaces.vo.BaseActionVO;
 import com.smart4y.cloud.core.message.ResultMessage;
@@ -25,12 +25,12 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @Api(tags = {"系统功能按钮管理"})
-public class BaseActionController {
+public class BaseElementController {
 
     @Autowired
-    private BaseActionConverter baseActionConverter;
+    private BaseElementConverter baseElementConverter;
     @Autowired
-    private BaseActionService baseActionService;
+    private BaseElementService baseElementService;
     @Autowired
     private OpenRestTemplate openRestTemplate;
 
@@ -40,8 +40,8 @@ public class BaseActionController {
     @GetMapping("/action")
     @ApiOperation(value = "获取分页功能按钮列表", notes = "获取分页功能按钮列表")
     public ResultMessage<Page<BaseActionVO>> findActionListPage(BaseActionQuery query) {
-        PageInfo<BaseAction> listPage = baseActionService.findListPage(query);
-        Page<BaseActionVO> page = baseActionConverter.convertPage(listPage);
+        PageInfo<BaseElement> listPage = baseElementService.findListPage(query);
+        Page<BaseActionVO> page = baseElementConverter.convertPage(listPage);
         return ResultMessage.ok(page);
     }
 
@@ -54,8 +54,8 @@ public class BaseActionController {
     })
     @GetMapping("/action/{actionId}/info")
     public ResultMessage<BaseActionVO> getAction(@PathVariable("actionId") Long actionId) {
-        BaseAction action = baseActionService.getAction(actionId);
-        BaseActionVO vo = baseActionConverter.convert(action);
+        BaseElement action = baseElementService.getAction(actionId);
+        BaseActionVO vo = baseElementConverter.convert(action);
         return ResultMessage.ok(vo);
     }
 
@@ -65,7 +65,7 @@ public class BaseActionController {
     @PostMapping("/action/add")
     @ApiOperation(value = "添加功能按钮", notes = "添加功能按钮")
     public ResultMessage<Long> addAction(@RequestBody AddActionCommand command) {
-        BaseAction action = new BaseAction();
+        BaseElement action = new BaseElement();
         action.setActionCode(command.getActionCode());
         action.setActionName(command.getActionName());
         action.setMenuId(command.getMenuId());
@@ -73,7 +73,7 @@ public class BaseActionController {
         action.setPriority(command.getPriority());
         action.setActionDesc(command.getActionDesc());
         Long actionId = null;
-        BaseAction result = baseActionService.addAction(action);
+        BaseElement result = baseElementService.addAction(action);
         if (result != null) {
             actionId = result.getActionId();
             openRestTemplate.refreshGateway();
@@ -87,7 +87,7 @@ public class BaseActionController {
     @PostMapping("/action/update")
     @ApiOperation(value = "编辑功能按钮", notes = "添加功能按钮")
     public ResultMessage<Void> updateAction(@RequestBody UpdateActionCommand command) {
-        BaseAction action = new BaseAction();
+        BaseElement action = new BaseElement();
         action.setActionId(command.getActionId());
         action.setActionCode(command.getActionCode());
         action.setActionName(command.getActionName());
@@ -95,7 +95,7 @@ public class BaseActionController {
         action.setStatus(command.getStatus());
         action.setPriority(command.getPriority());
         action.setActionDesc(command.getActionDesc());
-        baseActionService.updateAction(action);
+        baseElementService.updateAction(action);
         // 刷新网关
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();
@@ -107,7 +107,7 @@ public class BaseActionController {
     @PostMapping("/action/remove")
     @ApiOperation(value = "移除功能按钮", notes = "移除功能按钮")
     public ResultMessage<Void> removeAction(@RequestBody DeleteActionCommand command) {
-        baseActionService.removeAction(command.getActionId());
+        baseElementService.removeAction(command.getActionId());
         // 刷新网关
         openRestTemplate.refreshGateway();
         return ResultMessage.ok();

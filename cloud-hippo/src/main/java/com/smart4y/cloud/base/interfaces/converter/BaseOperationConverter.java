@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.interfaces.converter;
 
-import com.smart4y.cloud.base.domain.model.BaseAction;
-import com.smart4y.cloud.base.interfaces.vo.BaseActionVO;
+import com.smart4y.cloud.base.domain.model.BaseOperation;
+import com.smart4y.cloud.base.interfaces.vo.BaseResourceVO;
 import com.smart4y.cloud.mapper.base.AbstractConverter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
@@ -13,11 +13,11 @@ import java.util.Map;
  *         Created by youtao on 2019/9/27.
  */
 @Component
-public class BaseActionConverter extends AbstractConverter<BaseAction, BaseActionVO> {
+public class BaseOperationConverter extends AbstractConverter<BaseOperation, BaseResourceVO> {
 
     @Override
-    public BaseActionVO convert(BaseAction source, Map<String, Object> parameters) {
-        BaseActionVO target = new BaseActionVO();
+    public BaseResourceVO convert(BaseOperation source, Map<String, Object> parameters) {
+        BaseResourceVO target = new BaseResourceVO();
         BeanUtils.copyProperties(source, target);
         target.setCreatedDate(toLocalDateTime(source.getCreatedDate()));
         target.setLastModifiedDate(toLocalDateTime(source.getLastModifiedDate()));

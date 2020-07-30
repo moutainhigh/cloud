@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.application;
 
 import com.smart4y.cloud.base.domain.model.BaseAuthority;
-import com.smart4y.cloud.base.domain.model.BaseAuthorityAction;
+import com.smart4y.cloud.base.domain.model.BaseAuthorityElement;
 import com.smart4y.cloud.core.dto.AuthorityApiDTO;
 import com.smart4y.cloud.core.dto.AuthorityMenuDTO;
 import com.smart4y.cloud.core.dto.AuthorityResourceDTO;
@@ -50,7 +50,7 @@ public interface BaseAuthorityService {
      * @param actionId
      * @return
      */
-    List<BaseAuthorityAction> findAuthorityAction(Long actionId);
+    List<BaseAuthorityElement> findAuthorityAction(Long actionId);
 
 
     /**

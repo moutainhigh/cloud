@@ -6,7 +6,7 @@ import com.smart4y.cloud.core.ddd.Entity;
  * 实体基类
  * <code>
  * 批量添加字段方法：
- * alter table base_resource_menu add (
+ * alter table base_operation_menu add (
  * `create_date` datetime COMMENT '创建时间',
  * `last_modified_date` datetime DEFAULT NULL COMMENT '最后修改时间',
  * `remove_date` datetime DEFAULT NULL COMMENT '逻辑删除时间',
