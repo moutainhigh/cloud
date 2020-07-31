@@ -1,10 +1,10 @@
 package com.smart4y.cloud.core.exception.global;
 
-import com.smart4y.cloud.core.message.IMessageType;
-import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.core.exception.OpenAlertException;
 import com.smart4y.cloud.core.exception.OpenException;
 import com.smart4y.cloud.core.exception.OpenSignatureException;
+import com.smart4y.cloud.core.message.IMessageType;
+import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.core.message.enums.AccessDenied403MessageType;
 import com.smart4y.cloud.core.message.enums.MessageType;
 import com.smart4y.cloud.core.message.enums.Unauthorized401MessageType;
@@ -103,6 +103,8 @@ public class ExceptionHelper {
             messageType = MessageType.NOT_FOUND;
         } else if (className.contains("HttpRequestMethodNotSupportedException")) {
             messageType = MessageType.METHOD_NOT_ALLOWED;
+        } else if (className.contains("HttpMediaTypeNotSupportedException")) {
+            messageType = MessageType.UNSUPPORTED_MEDIA_TYPE;
         } else if (className.contains("HttpMediaTypeNotAcceptableException")) {
             messageType = MessageType.MEDIA_TYPE_NOT_ACCEPTABLE;
         } else if (className.contains("MethodArgumentNotValidException")) {

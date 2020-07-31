@@ -23,7 +23,7 @@ import javax.sql.DataSource;
  * Oauth2资源服务器配置
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Configuration
 @EnableResourceServer
@@ -63,7 +63,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
                 // feign访问或无需身份认证
                 .antMatchers(
-                        "/cloud/health",
+//                        "/access/**", 测试，访问控制
                         "/v2/api-docs",
                         "/authority/access",
                         "/authority/app",

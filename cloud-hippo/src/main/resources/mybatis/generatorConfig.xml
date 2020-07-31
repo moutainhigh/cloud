@@ -7,12 +7,12 @@
              defaultModelType="flat">
 
         <!-- Mapper.java Mapper.xml 生成插件 -->
-        <plugin type="MapperClassAndXmlPlugin">
+        <plugin type="com.smart4y.cloud.core.mapper.generator.plugins.MapperClassAndXmlPlugin">
             <property name="mappers" value="com.smart4y.cloud.mapper.CloudMapper"/>
             <property name="author" value="Youtao"/>
         </plugin>
         <!-- Entity 生成插件 使用`javaModelGenerator`的`targetPackage`参数 -->
-        <plugin type="EntityPlugin">
+        <plugin type="com.smart4y.cloud.core.mapper.generator.plugins.EntityPlugin">
             <property name="author" value="Youtao"/>
         </plugin>
 
@@ -33,13 +33,13 @@
             <property name="forceBigDecimals" value="true"/>
         </javaTypeResolver>
         <!-- Entity 路径 -->
-        <javaModelGenerator targetPackage="com.smart4y.cloud.base.domain.model"
+        <javaModelGenerator targetPackage="com.smart4y.cloud.base.access.domain.model"
                             targetProject="src/main/java"/>
         <!-- Mapper.xml 路径 -->
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
         <!-- Mapper.java 路径 -->
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="com.smart4y.cloud.base.infrastructure.mapper"
+                             targetPackage="com.smart4y.cloud.base.access.infrastructure.persistence.mybatis"
                              targetProject="src/main/java"/>
 
         <!-- 使用"%"匹配所有表或者单独定义表 -->
@@ -67,8 +67,11 @@
         <table tableName="gateway_rate_limit_api" domainObjectName="GatewayRateLimitApi"/>
         <table tableName="gateway_route" domainObjectName="GatewayRoute"/>-->
         <!-- 指定数据库表 -->
-        <table tableName="hello" domainObjectName="Hello">
-            <columnOverride column="user_name" javaType="com.smart4y.cloud.base.domain.model.GatewayRoute"/>
+        <!--<table tableName="hello" domainObjectName="Hello">
+            <columnOverride column="user_name" javaType="com.smart4y.cloud.base.gateway.domain.model.GatewayRoute"/>
+        </table>-->
+        <table tableName="rbac_%">
+            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
         </table>
     </context>
 </generatorConfiguration>

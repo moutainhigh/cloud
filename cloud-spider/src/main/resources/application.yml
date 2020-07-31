@@ -131,6 +131,9 @@ mybatis:
     jdbc-type-for-null: null
     default-enum-type-handler: com.smart4y.cloud.mapper.enumhandler.EnumHandler
 cloud:
+  ##开启资源扫描
+  scan:
+    register-request-mapping: false
   ##资源服务器公共配置
   common:
     #API网关访问地址
@@ -163,9 +166,9 @@ cloud:
   ##开放api
   api:
     # 参数签名验证
-    check-sign: true
+    check-sign: false
     # 访问权限控制
-    access-control: true
+    access-control: false
     # swagger调试（生产环境设为false）
     api-debug: true
     # 始终放行
