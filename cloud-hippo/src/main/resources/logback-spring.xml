@@ -83,6 +83,7 @@
     <!-- 开发环境 -->
     <springProfile name="default,dev,test">
         <logger name="com.smart4y.cloud" level="INFO"/>
+        <logger name="com.smart4y.cloud.base" level="DEBUG"/>
         <logger name="org.springframework.amqp" level="info"/>
         <logger name="com.alibaba.nacos.client.naming" level="warn"/>
         <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="info"/>

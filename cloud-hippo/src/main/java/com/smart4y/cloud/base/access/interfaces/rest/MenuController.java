@@ -18,13 +18,12 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
  * on 2020/7/30 15:03
  */
 @Slf4j
-@Api(tags = {"访问控制"})
+@Api(tags = {"访问控制 - 菜单"})
 @RestController
 public class MenuController extends BaseAccessController {
 
     @GetMapping("/menus")
-    @ApiOperation(value = "菜单:所有",
-            produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "菜单:所有")
     public ResultMessage<List<RbacMenu>> getMenus() {
         return ok();
     }

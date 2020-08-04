@@ -18,13 +18,12 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
  * on 2020/7/30 15:03
  */
 @Slf4j
-@Api(tags = {"访问控制"})
+@Api(tags = {"访问控制 - 权限"})
 @RestController
 public class PrivilegeController extends BaseAccessController {
 
     @GetMapping("/privileges")
-    @ApiOperation(value = "权限:所有",
-            produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "权限:所有")
     public ResultMessage<List<RbacPrivilege>> getPrivileges() {
         return ok();
     }

@@ -24,6 +24,7 @@
     "html2canvas": "^1.0.0-rc.5",
     "iview-area": "^1.5.17",
     "js-cookie": "^2.2.1",
+    "moment": "^2.27.0",
     "simplemde": "^1.11.2",
     "sortablejs": "^1.10.2",
     "tree-table-vue": "^1.1.0",

@@ -93,7 +93,7 @@ public class ResourceScannedEventHandler {
                 openRestTemplate.refreshGateway();
                 this.redisTemplate.opsForValue().set(key, String.valueOf(apis.size()), Duration.ofMinutes(3));
             }
-            log.info("资源扫描完成：{}", event);
+            log.info("资源扫描完成 - 服务名：{}，资源数量：{}", event.getApplication(), event.getMappings().size());
         } catch (Exception e) {
             log.error("资源扫描处理异常：{}", e.getLocalizedMessage(), e);
         }

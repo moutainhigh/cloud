@@ -9,9 +9,9 @@ import lombok.EqualsAndHashCode;
 import com.smart4y.cloud.mapper.BaseEntity;
 
 /**
- * 组织角色表
+ * 组织角色关联表
  *
- * @author Youtao on 2020/07/30 14:55
+ * @author Youtao on 2020/08/04 11:05
  */
 @Data
 @Accessors(chain = true)

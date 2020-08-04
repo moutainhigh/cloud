@@ -15,7 +15,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>cloud-common-messaging</module>
     </modules>
 
     <properties>

@@ -12,7 +12,7 @@ import javax.persistence.Id;
 /**
  * 组织表
  *
- * @author Youtao on 2020/07/30 14:55
+ * @author Youtao on 2020/08/04 11:05
  */
 @Data
 @Accessors(chain = true)
@@ -40,10 +40,22 @@ public class RbacGroup extends BaseEntity<RbacGroup> {
     private String groupName;
 
     /**
-     * 组织类型
+     * 组织类型（g-集团，c-公司，d-部门，t-小组）
      */
     @Column(name = "group_type")
     private String groupType;
+
+    /**
+     * 组织状态（10-启用，20-禁用，30-锁定）
+     */
+    @Column(name = "group_state")
+    private String groupState;
+
+    /**
+     * 组织是否存在子节点（0-不存在 1-存在）
+     */
+    @Column(name = "exist_child")
+    private Boolean existChild;
 
     /**
      * 创建时间

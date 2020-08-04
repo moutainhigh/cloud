@@ -11,6 +11,21 @@ import lombok.Getter;
  */
 public enum MessageType implements IMessageType<String> {
 
+    // 表示成功
+    //GET: 200 OK 请求成功
+    //POST: 201 Created 创建成功
+    //PUT: 200 OK 更新成功
+    //DELETE: 204 No Content 找不到要删除的内容
+    // 表示客户端错误
+    //400 Bad Request：服务器不理解客户端的请求，未做任何处理
+    //401 Unauthorized：用户未提供身份验证凭据，或者没有通过身份验证
+    //403 Forbidden：用户通过了身份验证，但是不具有访问资源所需的权限
+    //404 Not Found：所请求的资源不存在，或不可用
+    //415 Unsupported Media Type：客户端要求的返回格式不支持。比如，API 只能返回 JSON 格式，但是客户端要求返回 XML 格式等
+    // 表示服务端错误
+    //500 Internal Server Error：客户端请求有效，服务器处理时发生了意外
+    //503 Service Unavailable：服务器无法处理请求，一般用于网站维护状态
+
     /**
      * 成功
      * <p>

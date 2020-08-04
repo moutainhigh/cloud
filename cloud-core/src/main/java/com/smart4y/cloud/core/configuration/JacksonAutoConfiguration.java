@@ -1,5 +1,6 @@
 package com.smart4y.cloud.core.configuration;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -24,7 +25,7 @@ import static com.smart4y.cloud.core.configuration.JacksonAutoConfiguration.Seri
  * Jackson 序列化配置
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class JacksonAutoConfiguration {
@@ -38,13 +39,13 @@ public class JacksonAutoConfiguration {
         objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         // 排序key
         objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
-        //忽略空bean转json错误
+        // 忽略空bean转json错误
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        //忽略在json字符串中存在，在java类中不存在字段，防止错误。
+        // 忽略在json字符串中存在，在java类中不存在字段，防止错误。
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         /*
          * 序列换成json时,将所有的long变成string
-         * 因为js中得数字类型不能包含所有的java long值
+         * 因为js中的数字类型不能包含所有的java long值
          */
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
