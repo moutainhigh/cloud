@@ -6,7 +6,6 @@ import com.smart4y.cloud.base.access.domain.model.RbacRole;
 import com.smart4y.cloud.base.access.domain.model.RbacUser;
 import com.smart4y.cloud.base.access.interfaces.dtos.group.*;
 import com.smart4y.cloud.core.message.ResultMessage;
-import com.smart4y.cloud.core.message.page.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -31,20 +30,13 @@ public class GroupController extends BaseAccessController {
     @Autowired
     private GroupApplicationService groupApplicationService;
 
-    @GetMapping("/groups/page")
-    @ApiOperation(value = "组织:分页")
-    public ResultMessage<Page<RbacGroup>> getGroupsPage(RbacGroupPageQuery query) {
-        Page<RbacGroup> result = groupApplicationService.getGroupsPage(query);
-        return ok(result);
-    }
-
-    @GetMapping("/groups")
-    @ApiOperation(value = "组织:查询")
+    @GetMapping("/groups/children")
+    @ApiOperation(value = "组织:子级:查询")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "groupParentId", value = "组织父级ID", defaultValue = "0", required = true, paramType = "query", dataType = "long", example = "122367153805459456")
+            @ApiImplicitParam(name = "groupId", value = "组织ID", defaultValue = "0", required = true, paramType = "query", dataType = "long", example = "122367153805459456")
     })
-    public ResultMessage<List<RbacGroup>> getGroups(RbacGroupQuery query) {
-        List<RbacGroup> result = groupApplicationService.getGroups(query);
+    public ResultMessage<List<RbacGroup>> getGroupChildren(RbacGroupQuery query) {
+        List<RbacGroup> result = groupApplicationService.getGroupChildren(query);
         return ok(result);
     }
 

@@ -1,19 +1,5 @@
 package ${tableClass.packageName};
 
-<#--<#if tableClass.allFields??>
-    <#list tableClass.allFields as field>
-        <#if field.identity==true??>
-import SnowflakeId;
-        </#if>
-    </#list>
-</#if>-->
-<#--<#if tableClass.allFields??>
-    <#list tableClass.allFields as field>
-        <#if field.identity==true??>
-import tk.mybatis.mapper.annotation.KeySql;
-        </#if>
-    </#list>
-</#if>-->
 <#list tableClass.javaTypes as fullyQualifiedJavaType>
 import ${fullyQualifiedJavaType};
 </#list>
@@ -35,7 +21,7 @@ public class ${tableClass.shortClassName} extends BaseEntity<${tableClass.shortC
      */
     <#if field.identity==true??>
     @Id
-    <#--@KeySql(genId = SnowflakeId.class)-->
+    @KeySql(genId = SnowflakeId.class)
     </#if>
     @Column(name = "${field.columnName}")
     private ${field.shortTypeName} ${field.fieldName};

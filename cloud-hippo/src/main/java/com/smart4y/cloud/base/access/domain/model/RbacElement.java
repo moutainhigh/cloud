@@ -3,8 +3,10 @@ package com.smart4y.cloud.base.access.domain.model;
 import javax.persistence.Column;
 import javax.persistence.Table;
 import lombok.experimental.Accessors;
+import tk.mybatis.mapper.annotation.KeySql;
 import java.time.LocalDateTime;
 import lombok.Data;
+import com.smart4y.cloud.core.toolkit.gen.SnowflakeId;
 import lombok.EqualsAndHashCode;
 import com.smart4y.cloud.mapper.BaseEntity;
 import javax.persistence.Id;
@@ -12,7 +14,7 @@ import javax.persistence.Id;
 /**
  * 页面元素表（对应页面按钮）
  *
- * @author Youtao on 2020/08/04 11:05
+ * @author Youtao on 2020/08/06 16:01
  */
 @Data
 @Accessors(chain = true)
@@ -24,6 +26,7 @@ public class RbacElement extends BaseEntity<RbacElement> {
      * 页面元素ID
      */
     @Id
+    @KeySql(genId = SnowflakeId.class)
     @Column(name = "element_id")
     private Long elementId;
 

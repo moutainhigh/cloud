@@ -1,5 +1,6 @@
 package com.smart4y.cloud.core.mapper.generator;
 
+import com.smart4y.cloud.core.toolkit.gen.SnowflakeId;
 import com.smart4y.cloud.mapper.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,6 +11,7 @@ import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.config.ColumnOverride;
+import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -145,6 +147,9 @@ public final class TableColumnBuilder {
         List<ColumnField> pkFields = tableClass.getPkFields();
         if (CollectionUtils.isNotEmpty(pkFields)) {
             qualifiedJavaTypeSet.add(new FullyQualifiedJavaType(Id.class.getName()));
+            // 若表中有主键，则设置主键生成策略
+            qualifiedJavaTypeSet.add(new FullyQualifiedJavaType(KeySql.class.getName()));
+            qualifiedJavaTypeSet.add(new FullyQualifiedJavaType(SnowflakeId.class.getName()));
         }
         qualifiedJavaTypeSet.add(new FullyQualifiedJavaType(Table.class.getName()));
         qualifiedJavaTypeSet.add(new FullyQualifiedJavaType(Column.class.getName()));

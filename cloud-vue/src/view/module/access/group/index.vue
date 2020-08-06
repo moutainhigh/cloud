@@ -103,7 +103,7 @@
   </div>
 </template>
 <script>
-import {getGroupRoles, getGroups, getGroupUsers, viewGroup} from '@/api/access/group';
+import {getGroupRoles, getGroupChildren, getGroupUsers, viewGroup} from '@/api/access/group';
 
 export default {
   data() {
@@ -277,7 +277,7 @@ export default {
       }
       this.group.deeply = items.reverse();
 
-      getGroups({groupId: node.groupId})
+      getGroupChildren({groupId: node.groupId})
         .then(res => {
           let array = [];
           res.data.map(item => {

@@ -75,7 +75,7 @@ public class GroupApplicationServiceImpl extends BaseDomainService<RbacGroup> im
     }
 
     @Override
-    public List<RbacGroup> getGroups(RbacGroupQuery query) {
+    public List<RbacGroup> getGroupChildren(RbacGroupQuery query) {
         Weekend<RbacGroup> weekend = Weekend.of(RbacGroup.class);
         weekend
                 .weekendCriteria()

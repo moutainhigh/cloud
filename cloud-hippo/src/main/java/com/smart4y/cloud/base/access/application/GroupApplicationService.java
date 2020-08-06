@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface GroupApplicationService {
 
-    List<RbacGroup> getGroups(RbacGroupQuery query);
+    List<RbacGroup> getGroupChildren(RbacGroupQuery query);
 
     Page<RbacGroup> getGroupsPage(RbacGroupPageQuery query);
 

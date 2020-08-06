@@ -1,39 +1,15 @@
 import request from '@/libs/request'
 
 /**
- * 分页查询组织
- *
- * @param page
- * @param limit
- * @param groupParentId
- * @param groupType
- * @param groupState
- * @returns {*}
- */
-export const getGroupsPage = ({page, limit, groupParentId, groupType, groupState}) => {
-    const params = {
-        page: page,
-        limit: limit,
-        groupParentId: groupParentId,
-        groupType: groupType,
-        groupState: groupState
-    }
-    return request({
-        url: 'base/access/groups/page',
-        params,
-        method: 'get'
-    })
-};
-/**
  * 根据{groupId}查询组织列表
  *
  * @param groupId
  * @returns {*}
  */
-export const getGroups = ({groupId}) => {
+export const getGroupChildren = ({groupId}) => {
     const params = {groupId: groupId}
     return request({
-        url: 'base/access/groups',
+        url: 'base/access/groups/children',
         params,
         method: 'get'
     })
