@@ -2,6 +2,8 @@ package com.smart4y.cloud.base.access.interfaces.rest;
 
 import com.smart4y.cloud.base.access.application.GroupApplicationService;
 import com.smart4y.cloud.base.access.domain.model.RbacGroup;
+import com.smart4y.cloud.base.access.domain.model.RbacRole;
+import com.smart4y.cloud.base.access.domain.model.RbacUser;
 import com.smart4y.cloud.base.access.interfaces.dtos.group.*;
 import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.core.message.page.Page;
@@ -77,6 +79,16 @@ public class GroupController extends BaseAccessController {
         return ok(result);
     }
 
+    @GetMapping("/groups/{groupId}/roles")
+    @ApiOperation(value = "组织:角色:所有", notes = "查询组织{groupId}下的直接角色（不查询下下级数据）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "groupId", value = "组织ID", required = true, paramType = "path", dataType = "long", example = "122367153805459456")
+    })
+    public ResultMessage<List<RbacRole>> getGroupRoles(@PathVariable("groupId") Long groupId) {
+        List<RbacRole> result = groupApplicationService.getGroupRoles(groupId);
+        return ok(result);
+    }
+
     @PostMapping("/groups/{groupId}/roles")
     @ApiOperation(value = "组织:角色:分配", notes = "为组织{groupId}分配角色")
     @ApiImplicitParams({
@@ -96,7 +108,17 @@ public class GroupController extends BaseAccessController {
         return ok();
     }
 
-    @PostMapping("/groups/{groupId}/privileges")
+    @GetMapping("/groups/{groupId}/users")
+    @ApiOperation(value = "组织:用户:所有", notes = "查询组织{groupId}下的直接用户（不查询下下级数据）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "groupId", value = "组织ID", required = true, paramType = "path", dataType = "long", example = "122367153805459456")
+    })
+    public ResultMessage<List<RbacUser>> getGroupUsers(@PathVariable("groupId") Long groupId) {
+        List<RbacUser> result = groupApplicationService.getGroupUsers(groupId);
+        return ok(result);
+    }
+
+    @PostMapping("/groups/{groupId}/users")
     @ApiOperation(value = "组织:用户:分配", notes = "为组织{groupId}分配用户")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "groupId", value = "组织ID", required = true, paramType = "path", dataType = "long", example = "122367153805459456")

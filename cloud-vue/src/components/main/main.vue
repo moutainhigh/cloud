@@ -21,7 +21,7 @@
             <keep-alive :include="cacheList">
               <router-view/>
             </keep-alive>
-            <ABackTop :height="100" :bottom="80" :right="50" container=".main-layout-view-wrapper"></ABackTop>
+            <ABackTop :height="100" :bottom="80" :right="15" container=".main-layout-view-wrapper"></ABackTop>
           </Content>
         </Layout>
       </Content>
@@ -75,7 +75,7 @@
               <keep-alive :include="cacheList">
                 <router-view/>
               </keep-alive>
-              <ABackTop :height="100" :bottom="80" :right="50" container=".main-layout-view-wrapper"></ABackTop>
+              <ABackTop :height="100" :bottom="80" :right="15" container=".main-layout-view-wrapper"></ABackTop>
             </Content>
           </Layout>
         </Content>

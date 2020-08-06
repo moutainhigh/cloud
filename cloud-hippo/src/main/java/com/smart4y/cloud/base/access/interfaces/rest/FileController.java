@@ -1,6 +1,5 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
-import com.smart4y.cloud.base.access.domain.model.RbacFile;
 import com.smart4y.cloud.base.access.interfaces.dtos.file.CreateFileCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.file.ModifyFileCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.file.RbacFilePageQuery;

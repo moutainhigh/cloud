@@ -68,7 +68,7 @@ Vue.prototype.hasAuthority = function (authorities) {
  * @param formatter 显示格式
  */
 Vue.filter("dateFmt", (dateObj, formatter = "YYYY-MM-DD") => {
-    if (!dateObj.year) {
+    if (!dateObj || !dateObj.year) {
         return '';
     }
     let vv = dateObj.year
