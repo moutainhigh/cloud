@@ -7,7 +7,8 @@
 <script>
 import Editor from 'wangeditor'
 import 'wangeditor/release/wangEditor.min.css'
-import { oneOf } from '@/libs/tools'
+import {oneOf} from '@/libs/tools'
+
 export default {
   name: 'Editor',
   props: {
@@ -41,16 +42,16 @@ export default {
     }
   },
   computed: {
-    editorId () {
+    editorId() {
       return `editor${this._uid}`
     }
   },
   methods: {
-    setHtml (val) {
+    setHtml(val) {
       this.editor.txt.html(val)
     }
   },
-  mounted () {
+  mounted() {
     this.editor = new Editor(`#${this.editorId}`)
     this.editor.customConfig.onchange = (html) => {
       let text = this.editor.txt.text()
@@ -69,7 +70,7 @@ export default {
 </script>
 
 <style lang="less">
-.editor-wrapper *{
+.editor-wrapper * {
   z-index: 100 !important;
 }
 </style>

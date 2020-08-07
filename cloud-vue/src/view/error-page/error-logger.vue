@@ -8,10 +8,11 @@
 
 <script>
 import dayjs from 'dayjs'
-import { mapMutations } from 'vuex'
+import {mapMutations} from 'vuex'
+
 export default {
   name: 'error_logger_page',
-  data () {
+  data() {
     return {
       columns: [
         {
@@ -23,21 +24,23 @@ export default {
           key: 'type',
           title: '类型',
           width: 100,
-          render: (h, { row }) => {
+          render: (h, {row}) => {
             return (
-              <div>
-                <icon size={16} type={row.type === 'ajax' ? 'md-link' : 'md-code-working'}></icon>
-              </div>
-            )
+                < div >
+                < icon
+            size = {16}
+            type = {row.type === 'ajax' ? 'md-link' : 'md-code-working'} > < /icon>
+                < /div>
+          )
           }
         },
         {
           key: 'code',
           title: '标识',
-          render: (h, { row }) => {
+          render: (h, {row}) => {
             return (
-              <span>{ row.code === 0 ? '-' : row.code }</span>
-            )
+                < span > {row.code === 0 ? '-' : row.code} < /span>
+          )
           }
         },
         {
@@ -51,10 +54,14 @@ export default {
         {
           key: 'time',
           title: '时间',
-          render: (h, { row }) => {
+          render: (h, {row}) => {
             return (
-              <span>{ dayjs(row.time).format('YYYY-MM-DD HH:mm:ss') }</span>
-            )
+                < span > {dayjs(row.time
+          ).
+            format('YYYY-MM-DD HH:mm:ss')
+          }<
+            /span>
+          )
           },
           sortable: true,
           sortType: 'desc'
@@ -63,7 +70,7 @@ export default {
     }
   },
   computed: {
-    errorList () {
+    errorList() {
       return this.$store.state.app.errorList
     }
   },
@@ -71,16 +78,16 @@ export default {
     ...mapMutations([
       'setHasReadErrorLoggerStatus'
     ]),
-    exportData () {
+    exportData() {
       this.$refs.table.exportCsv({
         filename: '错误日志.csv'
       })
     }
   },
-  activated () {
+  activated() {
     this.setHasReadErrorLoggerStatus()
   },
-  mounted () {
+  mounted() {
     this.setHasReadErrorLoggerStatus()
   }
 }

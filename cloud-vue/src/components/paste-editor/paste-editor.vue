@@ -6,8 +6,9 @@
 <script>
 import CodeMirror from 'codemirror'
 import 'codemirror/lib/codemirror.css'
-import { forEach } from '@/libs/tools'
+import {forEach} from '@/libs/tools'
 import createPlaceholder from './plugins/placeholder'
+
 export default {
   name: 'PasteEditor',
   props: {
@@ -21,7 +22,7 @@ export default {
       default: '从网页或其他应用软件复制表格数据，粘贴到这里 。默认第一行是表头，使用回车键添加新行，使用Tab键区分列。'
     }
   },
-  data () {
+  data() {
     return {
       pasteDataArr: [],
       rowArrLength: 0,
@@ -29,28 +30,28 @@ export default {
     }
   },
   watch: {
-    pasteData (val) {
+    pasteData(val) {
       if (val === '') {
         this.editor.setValue('')
       }
     }
   },
   computed: {
-    rowNum () {
+    rowNum() {
       return this.pasteDataArr.length
     },
-    colNum () {
+    colNum() {
       return this.pasteDataArr[0] ? this.pasteDataArr[0].length : 0
     }
   },
   methods: {
-    handleKeyup (e) {
+    handleKeyup(e) {
       this.handleAreaData()
     },
     /**
      * @description 处理粘贴操作
      */
-    handleContentChanged (content) {
+    handleContentChanged(content) {
       let pasteData = content.trim()
       this.$emit('on-content-change', pasteData)
       let rows = pasteData.split((/[\n\u0085\u2028\u2029]|\r\n?/g)).map(row => {
@@ -65,7 +66,7 @@ export default {
     /**
      * @description 检查除第一行的每一行列数是否与第一行相同
      */
-    checkColNumInEveryRow () {
+    checkColNumInEveryRow() {
       let i = 0
       const len = this.rowNum
       if (len === 0) return
@@ -83,19 +84,19 @@ export default {
     /**
      * @description 标记不符合格式的一行
      */
-    markIncorrectRow (index) {
+    markIncorrectRow(index) {
       this.editor.addLineClass(index, 'text', 'incorrect-row')
     },
     /**
      * @description 标记不符合格式的一行
      */
-    clearLineClass () {
+    clearLineClass() {
       forEach(this.pasteDataArr, (item, index) => {
         this.editor.removeLineClass(index, 'text', 'incorrect-row')
       })
     }
   },
-  mounted () {
+  mounted() {
     createPlaceholder(CodeMirror)
     this.editor = CodeMirror.fromTextArea(this.$refs.codemirror, {
       lineNumbers: true,

@@ -5,7 +5,7 @@
       <Col span="6">
         <Card>
           <p class="title">总销售额</p>
-          <a href="javascript:;" slot="extra">
+          <a href="javascript:" slot="extra">
             <Tooltip content="指标说明" placement="top">
               <Icon type="ios-information-circle-outline"/>
             </Tooltip>
@@ -24,7 +24,7 @@
       <Col span="6">
         <Card>
           <p>总销售额</p>
-          <a href="javascript:;" slot="extra">
+          <a href="javascript:" slot="extra">
             <Tooltip content="指标说明" placement="top">
               <Icon type="ios-information-circle-outline"/>
             </Tooltip>
@@ -38,7 +38,7 @@
       <Col span="6">
         <Card>
           <p>总销售额</p>
-          <a href="javascript:;" slot="extra">
+          <a href="javascript:" slot="extra">
             <Tooltip content="指标说明" placement="top">
               <Icon type="ios-information-circle-outline"/>
             </Tooltip>
@@ -52,7 +52,7 @@
       <Col span="6">
         <Card>
           <p>运营活动效果</p>
-          <a href="javascript:;" slot="extra">
+          <a href="javascript:" slot="extra">
             <Tooltip content="指标说明" placement="top">
               <Icon type="ios-information-circle-outline"/>
             </Tooltip>
@@ -141,7 +141,7 @@
       <Col span="12">
         <Card>
           <p slot="title">销售额占比</p>
-          <a href="javascript:;" slot="extra">
+          <a href="javascript:" slot="extra">
             <Icon type="ios-more"/>
           </a>
           <div>
@@ -159,124 +159,137 @@
 </template>
 
 <style scoped lang="less">
-  .content {
-    background-color: #f0f2f5;
-    text-align: left;
+.content {
+  background-color: #f0f2f5;
+  text-align: left;
+}
+
+.bottom {
+  margin-top: 15px;
+}
+
+.pageContent {
+  text-align: right;
+  padding-top: 20px;
+}
+
+.num-info {
+  .title {
+    color: rgba(0, 0, 0, .45);
+    font-size: 14px;
+    height: 22px;
+    line-height: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    white-space: nowrap;
   }
 
-  .bottom {
-    margin-top: 15px;
-  }
+  .value {
+    .total {
+      color: rgba(0, 0, 0, .85);
+      display: inline-block;
+      line-height: 32px;
+      height: 32px;
+      font-size: 24px;
+      margin-right: 32px;
+    }
 
-  .pageContent {
-    text-align: right;
-    padding-top: 20px;
-  }
-
-  .num-info {
-    .title {
+    .subtotal {
       color: rgba(0, 0, 0, .45);
-      font-size: 14px;
-      height: 22px;
-      line-height: 22px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      word-break: break-all;
-      white-space: nowrap;
-    }
-    .value {
-      .total {
-        color: rgba(0, 0, 0, .85);
-        display: inline-block;
-        line-height: 32px;
-        height: 32px;
-        font-size: 24px;
-        margin-right: 32px;
-      }
-      .subtotal {
-        color: rgba(0, 0, 0, .45);
-        font-size: 16px;
-        vertical-align: top;
-        margin-right: 0;
-        i {
-          font-size: 22px;
-          color: red;
-          transform: scale(.82);
-          margin-left: 4px;
-        }
-      }
-    }
-  }
+      font-size: 16px;
+      vertical-align: top;
+      margin-right: 0;
 
-  #chart, #myChart {
-    width: 100%;
-    height: 100px;
-    margin: auto;
-    top: -10px;
-  }
-
-  #search, #search1 {
-    height: 100px;
-  }
-
-  #pie {
-    height: 452px;
-  }
-
-  #sale, #scan {
-    height: 300px;
-  }
-
-  .ivu-divider-horizontal {
-    margin: 10px 0;
-  }
-
-  .txt-left {
-    text-align: left;
-    .title, a {
-      color: rgba(0, 0, 0, .45);
-      font-size: 14px;
-    }
-    .num {
-      font-size: 30px;
-      color: #000;
-      margin-bottom: 10px;
-    }
-    .des, .footer {
-      color: rgba(0, 0, 0, .65);
-      font-size: 14px;
       i {
         font-size: 22px;
-        margin-right: 10px;
+        color: red;
+        transform: scale(.82);
+        margin-left: 4px;
       }
     }
-    .des {
-      margin-top: 23px;
-    }
-    .chart_divider {
-      margin-top: -55px;
-    }
-    .progress {
-      margin: 8px 0;
+  }
+}
+
+#chart, #myChart {
+  width: 100%;
+  height: 100px;
+  margin: auto;
+  top: -10px;
+}
+
+#search, #search1 {
+  height: 100px;
+}
+
+#pie {
+  height: 452px;
+}
+
+#sale, #scan {
+  height: 300px;
+}
+
+.ivu-divider-horizontal {
+  margin: 10px 0;
+}
+
+.txt-left {
+  text-align: left;
+
+  .title, a {
+    color: rgba(0, 0, 0, .45);
+    font-size: 14px;
+  }
+
+  .num {
+    font-size: 30px;
+    color: #000;
+    margin-bottom: 10px;
+  }
+
+  .des, .footer {
+    color: rgba(0, 0, 0, .65);
+    font-size: 14px;
+
+    i {
+      font-size: 22px;
+      margin-right: 10px;
     }
   }
 
-  .tab {
-    margin-top: 15px;
-    padding:20px 10px 15px;
-    background-color: #fff;
-    .extra-item {
-      display: inline-block;
-      margin-right: 24px;
-      a {
-        margin-left: 24px;
-      }
-    }
-    .title {
-      font-size: 14px;
-      color: rgba(0, 0, 0, 0.85);
-      text-align: left;
+  .des {
+    margin-top: 23px;
+  }
+
+  .chart_divider {
+    margin-top: -55px;
+  }
+
+  .progress {
+    margin: 8px 0;
+  }
+}
+
+.tab {
+  margin-top: 15px;
+  padding: 20px 10px 15px;
+  background-color: #fff;
+
+  .extra-item {
+    display: inline-block;
+    margin-right: 24px;
+
+    a {
+      margin-left: 24px;
     }
   }
+
+  .title {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.85);
+    text-align: left;
+  }
+}
 
 </style>

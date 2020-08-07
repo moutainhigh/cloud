@@ -7,31 +7,32 @@
 
 <script>
 import './error.less'
+
 export default {
   name: 'backBtnGroup',
-  data () {
+  data() {
     return {
       second: 5,
       timer: null
     }
   },
   methods: {
-    backHome () {
+    backHome() {
       this.$router.replace({
         name: this.$config.homeName
       })
     },
-    backPrev () {
+    backPrev() {
       this.$router.go(-1)
     }
   },
-  mounted () {
+  mounted() {
     this.timer = setInterval(() => {
       if (this.second === 0) this.backHome()
       else this.second--
     }, 1000)
   },
-  beforeDestroy () {
+  beforeDestroy() {
     clearInterval(this.timer)
   }
 }

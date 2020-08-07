@@ -103,7 +103,7 @@
   </div>
 </template>
 <script>
-import {getGroupRoles, getGroupChildren, getGroupUsers, viewGroup} from '@/api/access/group';
+import {getGroupChildren, getGroupRoles, getGroupUsers, viewGroup} from '@/api/access/group';
 
 export default {
   data() {
@@ -192,12 +192,12 @@ export default {
       }
       this.role.loading = true;
       getGroupRoles(this.role.pageInfo)
-        .then(res => {
-          this.role.data = res.data;
-        })
-        .finally(() => {
-          this.role.loading = false;
-        })
+          .then(res => {
+            this.role.data = res.data;
+          })
+          .finally(() => {
+            this.role.loading = false;
+          })
     },
     handleUserSearch(page) {
       if (page) {
@@ -205,12 +205,12 @@ export default {
       }
       this.user.loading = true;
       getGroupUsers(this.user.pageInfo)
-        .then(res => {
-          this.user.data = res.data;
-        })
-        .finally(() => {
-          this.user.loading = false;
-        })
+          .then(res => {
+            this.user.data = res.data;
+          })
+          .finally(() => {
+            this.user.loading = false;
+          })
     },
     /**
      * 加载子节点
@@ -278,19 +278,19 @@ export default {
       this.group.deeply = items.reverse();
 
       getGroupChildren({groupId: node.groupId})
-        .then(res => {
-          let array = [];
-          res.data.map(item => {
-            item.title = item.groupName;
-            item.loading = false;
-            item.children = [];
-            item.parent = node;
-            array.push(item);
+          .then(res => {
+            let array = [];
+            res.data.map(item => {
+              item.title = item.groupName;
+              item.loading = false;
+              item.children = [];
+              item.parent = node;
+              array.push(item);
+            });
+            callback(array);
+          })
+          .finally(() => {
           });
-          callback(array);
-        })
-        .finally(() => {
-        });
     },
     /**
      * 点击选中节点文字
@@ -321,11 +321,11 @@ export default {
 
         // viewData 组织详情
         viewGroup({groupId: node.groupId})
-          .then(res => {
-            this.group.viewData = res.data;
-          })
-          .finally(() => {
-          });
+            .then(res => {
+              this.group.viewData = res.data;
+            })
+            .finally(() => {
+            });
         this.user.pageInfo.groupId = node.groupId;
         this.role.pageInfo.groupId = node.groupId;
         this.handleRoleSearch(1);

@@ -10,7 +10,7 @@ export default {
   created() {
     try {
       document.body.removeChild(document.getElementById('appLoading'))
-      setTimeout(function() {
+      setTimeout(function () {
         document.getElementById('app').style.display = 'block';
       }, 500)
     } catch (e) {
@@ -21,16 +21,18 @@ export default {
 </script>
 
 <style lang="less">
-.size{
+.size {
   width: 100%;
   height: 100%;
 }
-html,body{
+
+html, body {
   .size;
   overflow: hidden;
   margin: 0;
   padding: 0;
 }
+
 #app {
   .size;
 }

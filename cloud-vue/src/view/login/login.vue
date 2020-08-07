@@ -88,25 +88,27 @@ export default {
     },
     openWin(url, name, iWidth, iHeight) {
       //获得窗口的垂直位置
-      var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+      let iTop = (window.screen.availHeight - 30 - iHeight) / 2;
       //获得窗口的水平位置
-      var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+      let iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
       window.open(url, name, 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',status=no,toolbar=no,menubar=no,location=no,resizable=no,scrollbars=0,titlebar=no');
     },
     handleSubmit() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
-          this.loading = true
-          let username = this.form.username
-          let password = this.form.password
-          let auto = this.form.auto
-          this.handleLogin({username, password, auto}).then(res => {
-            this.$router.push({
-              name: this.$config.homeName
-            })
-          }).finally(() => {
-            this.loading = false
-          })
+          this.loading = true;
+          let username = this.form.username;
+          let password = this.form.password;
+          let auto = this.form.auto;
+          this.handleLogin({username, password, auto})
+              .then(res => {
+                this.$router.push({
+                  name: this.$config.homeName
+                })
+              })
+              .finally(() => {
+                this.loading = false;
+              });
         }
       })
     }
@@ -115,6 +117,3 @@ export default {
   }
 }
 </script>
-<style>
-
-</style>

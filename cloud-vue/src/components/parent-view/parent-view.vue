@@ -6,13 +6,13 @@
 <script>
 export default {
   name: 'ParentView',
-  data () {
+  data() {
     return {
       cacheChaildName: ''
     }
   },
   computed: {
-    notCacheName () {
+    notCacheName() {
       return (this.$route.meta && this.$route.meta.notCache) ? this.$route.name : ''
     }
   }

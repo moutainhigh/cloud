@@ -377,24 +377,7 @@ export default {
      * @param data
      */
     renderChildren(h, {root, node, data}) {
-      let iconType = '';
-      switch (data['menuType']) {
-        case 'g':
-          iconType = 'md-cloud';
-          break;
-        case 'c':
-          iconType = 'md-podium';
-          break;
-        case 'd':
-          iconType = 'md-home';
-          break;
-        case 't':
-          iconType = 'md-people';
-          break;
-        case 'p':
-          iconType = 'md-person';
-          break;
-      }
+      let menuIcon = data['menuIcon'] ? data['menuIcon'] : 'md-document';
       return h('span', {
         style: {
           display: 'inline-block',
@@ -404,7 +387,7 @@ export default {
         h('span', [
           h('Icon', {
             props: {
-              type: iconType
+              type: menuIcon
             },
             style: {marginRight: '8px'}
           }),

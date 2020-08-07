@@ -19,7 +19,7 @@ import 'highlight.js/styles/googlecode.css' //样式文件
 import moment from 'moment';
 
 Vue.use(iView, {
-  i18n: (key, value) => i18n.t(key, value)
+    i18n: (key, value) => i18n.t(key, value)
 })
 
 Vue.component(TreeTable.name, TreeTable)
@@ -55,14 +55,14 @@ importDirective(Vue)
  * @returns {boolean}
  */
 Vue.prototype.hasAuthority = function (authorities) {
-  if (!authorities) {
-    return false;
-  }
-  // return authorities.split(',').some(item => {
-  //   return store.state.user.access.includes("ACTION_" + item);
-  // })
-  // FIXME 后期需要修改为新逻辑，此处先统一返回验证通过
-  return true;
+    if (!authorities) {
+        return false;
+    }
+    // return authorities.split(',').some(item => {
+    //   return store.state.user.access.includes("ACTION_" + item);
+    // })
+    // FIXME 后期需要修改为新逻辑，此处先统一返回验证通过
+    return true;
 }
 /**
  * 全局过滤器 - 时间格式化
@@ -75,24 +75,24 @@ Vue.prototype.hasAuthority = function (authorities) {
  * @param formatter 显示格式
  */
 Vue.filter("dateFmt", (dateObj, formatter = "YYYY-MM-DD") => {
-  if (!dateObj || !dateObj.year) {
-    return '';
-  }
-  let vv = dateObj.year
-    + "-" + dateObj['monthValue']
-    + "-" + dateObj['dayOfMonth']
-    + " " + (dateObj.hour ? dateObj.hour : '00')
-    + ":" + (dateObj.minute ? dateObj.minute : '00')
-    + ":" + (dateObj.second ? dateObj.second : '00')
-  ;
-  return moment(vv, moment.HTML5_FMT.DATETIME_LOCAL_SECONDS).format(formatter);
+    if (!dateObj || !dateObj.year) {
+        return '';
+    }
+    let vv = dateObj.year
+        + "-" + dateObj['monthValue']
+        + "-" + dateObj['dayOfMonth']
+        + " " + (dateObj.hour ? dateObj.hour : '00')
+        + ":" + (dateObj.minute ? dateObj.minute : '00')
+        + ":" + (dateObj.second ? dateObj.second : '00')
+    ;
+    return moment(vv, moment.HTML5_FMT.DATETIME_LOCAL_SECONDS).format(formatter);
 })
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  i18n,
-  store,
-  render: h => h(App)
+    el: '#app',
+    router,
+    i18n,
+    store,
+    render: h => h(App)
 })

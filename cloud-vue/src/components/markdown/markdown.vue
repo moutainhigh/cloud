@@ -7,6 +7,7 @@
 <script>
 import Simplemde from 'simplemde'
 import 'simplemde/dist/simplemde.min.css'
+
 export default {
   name: 'MarkdownEditor',
   props: {
@@ -25,13 +26,13 @@ export default {
       default: true
     }
   },
-  data () {
+  data() {
     return {
       editor: null
     }
   },
   methods: {
-    addEvents () {
+    addEvents() {
       this.editor.codemirror.on('change', () => {
         let value = this.editor.value()
         if (this.localCache) localStorage.markdownContent = value
@@ -46,7 +47,7 @@ export default {
       })
     }
   },
-  mounted () {
+  mounted() {
     this.editor = new Simplemde(Object.assign(this.options, {
       element: this.$refs.editor
     }))
@@ -62,14 +63,16 @@ export default {
 </script>
 
 <style lang="less">
-.markdown-wrapper{
-  .editor-toolbar.fullscreen{
+.markdown-wrapper {
+  .editor-toolbar.fullscreen {
     z-index: 9999;
   }
-  .CodeMirror-fullscreen{
+
+  .CodeMirror-fullscreen {
     z-index: 9999;
   }
-  .CodeMirror-fullscreen ~ .editor-preview-side{
+
+  .CodeMirror-fullscreen ~ .editor-preview-side {
     z-index: 9999;
   }
 }

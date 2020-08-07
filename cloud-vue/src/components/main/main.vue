@@ -85,9 +85,9 @@
       <h3>导航布局</h3>
       <div>
         <p @click="changeLayout('left')" style="display: inline-block;margin-left: 20px;cursor: pointer"><img
-          src="../../assets/images/layout-left.svg"/></p>
+            src="../../assets/images/layout-left.svg"/></p>
         <p @click="changeLayout('top')" style="display: inline-block;margin-left: 20px;cursor: pointer"><img
-          src="../../assets/images/layout-top.svg"/></p>
+            src="../../assets/images/layout-top.svg"/></p>
       </div>
     </Drawer>
   </Layout>
@@ -115,7 +115,8 @@ import Layout from "../../../node_modules/iview/src/components/layout/layout";
 export default {
   name: 'Main',
   components: {
-    Layout, SideMenu,
+    Layout,
+    SideMenu,
     HeaderBar,
     Language,
     TagsNav,
@@ -141,9 +142,6 @@ export default {
     ...mapGetters([
       'errorCount'
     ]),
-    breadCrumbList() {
-      return this.$store.state.app.breadCrumbList
-    },
     headerLogoClass() {
       return [
         'main-layout-header-logo',
@@ -156,33 +154,33 @@ export default {
         this.collapsed ? 'main-layout-content-collapsed' : ''
       ]
     },
-    tagNavList() {
-      return this.$store.state.app.tagNavList
+    breadCrumbList() {
+      return this.$store.state.app.breadCrumbList;
     },
-    tagRouter() {
-      return this.$store.state.app.tagRouter
+    tagNavList() {
+      // 标签页内容
+      return this.$store.state.app.tagNavList;
     },
     userAvatar() {
-      return this.$store.state.user.avatarImgPath
+      return this.getAvatar();
     },
     userName() {
-      return this.$store.state.user.userName
+      return this.getUserName();
     },
     nickName() {
-      return this.$store.state.user.nickName
-    }
-    ,
+      return this.getNickName();
+    },
     cacheList() {
-      return this.tagNavList.length ? this.tagNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : []
+      return this.tagNavList.length ? this.tagNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : [];
     },
     menuList() {
-      return this.$store.getters.menuList
+      return this.$store.getters.menuList;
     },
     local() {
-      return this.$store.state.app.local
+      return this.$store.state.app.local;
     },
     hasReadErrorPage() {
-      return this.$store.state.app.hasReadErrorPage
+      return this.$store.state.app.hasReadErrorPage;
     }
   },
   methods: {
@@ -190,7 +188,13 @@ export default {
       'setBreadCrumb',
       'setTagNavList',
       'addTag',
-      'setLocal'
+      'setLocal',
+
+      'getUserId',
+      'getUserName',
+      'getNickName',
+      'getAccess',
+      'getAvatar',
     ]),
     ...mapActions([
       'handleLogin'

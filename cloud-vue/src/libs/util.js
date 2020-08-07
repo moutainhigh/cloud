@@ -28,11 +28,7 @@ export const hasChild = (item) => {
 
 const showThisMenuEle = (item, access) => {
     if (item.meta && item.meta.access && item.meta.access.length) {
-        if (hasOneOf(item.meta.access, access)) {
-            return true
-        } else {
-            return false
-        }
+        return !!hasOneOf(item.meta.access, access);
     } else {
         return true
     }
@@ -40,6 +36,7 @@ const showThisMenuEle = (item, access) => {
 
 /**
  * @param {Array} list 通过路由列表得到菜单列表
+ * @param access
  * @returns {Array}
  */
 export const getMenuByRouter = (list, access) => {
@@ -62,8 +59,9 @@ export const getMenuByRouter = (list, access) => {
 }
 
 /**
- * @param {Array} routeMetched 当前路由metched
  * @returns {Array}
+ * @param route
+ * @param homeRoute
  */
 export const getBreadCrumbList = (route, homeRoute) => {
     let homeItem = {...homeRoute, icon: homeRoute.meta.icon}
@@ -74,12 +72,11 @@ export const getBreadCrumbList = (route, homeRoute) => {
     }).map(item => {
         let meta = {...item.meta}
         if (meta.title && typeof meta.title === 'function') meta.title = meta.title(route)
-        let obj = {
+        return {
             icon: (item.meta && item.meta.icon) || '',
             name: item.name,
             meta: meta
         }
-        return obj
     })
     res = res.filter(item => {
         return !item.meta.hideInMenu
@@ -133,6 +130,7 @@ export const getTagNavListFromLocalstorage = () => {
 
 /**
  * @param {Array} routers 路由列表数组
+ * @param homeName
  * @description 用于找到路由列表中name为home的对象
  */
 export const getHomeRoute = (routers, homeName = 'home') => {
@@ -205,7 +203,7 @@ export const canTurnTo = (name, access, routes) => {
  */
 export const getParams = url => {
     let paramObj = {}
-    if (url.indexOf('?') != -1) {
+    if (url.indexOf('?') !== -1) {
         const keyValueArr = url.split('?')[1].split('&')
         keyValueArr.forEach(item => {
             const keyValue = item.split('=')
@@ -217,7 +215,7 @@ export const getParams = url => {
 
 /**
  * @param {Array} list 标签列表
- * @param {String} name 当前关闭的标签的name
+ * @param route
  */
 export const getNextRoute = (list, route) => {
     let res = {}
@@ -423,14 +421,13 @@ export const scrollTop = (el, from = 0, to, duration = 500, endCallback) => {
 export const setTitle = (routeItem, vm) => {
     const handledRoute = getRouteTitleHandled(routeItem)
     const pageTitle = showTitle(handledRoute, vm)
-    const resTitle = pageTitle ? `${title} - ${pageTitle}` : title
-    window.document.title = resTitle
+    window.document.title = pageTitle ? `${title} - ${pageTitle}` : title
 }
 
 /**
  *  验证url
- * @param str_url
  * @returns {boolean}
+ * @param url
  */
 export const isURL = (url) => {
     let strRegex = '((https|http|ftp|rtsp|mms)?://)'
@@ -441,6 +438,7 @@ export const isURL = (url) => {
 /**
  * 格式化路由菜单
  * @param array
+ * @param access
  * @returns {Array}
  */
 export const formatRouters = (array, access) => {
@@ -548,7 +546,7 @@ export const filterRouter = (array, access, routers) => {
 
 /**
  * 将普通列表无限递归转换为树
- * @param  {[type]} list       [普通的列表，必须包括 opt.primaryKey 指定的键和 opt.parentKey 指定的键]
+ * @param array
  * @param {[type]} opt [配置参数，支持 primaryKey(主键 默认id) parentKey(父级id对应键 默认pid) nameKey(节点标题对应的key 默认name) valueKey(节点值对应的key 默认id) checkedKey(节点是否选中的字段 默认checked，传入数组则判断主键是否在此数组中) startPid(第一层扫描的PID 默认0) currentDept(当前层 默认0) maxDept(最大递归层 默认100) childKey(递归完成后子节点对应键 默认list) deptPrefix(根据层级重复的前缀 默认'')]
  * @return {[type]}            [description]
  */
@@ -578,7 +576,7 @@ export const listConvertGroup = (array, groupKey) => {
         } else {
             for (var j = 0; j < dest.length; j++) {
                 var dj = dest[j]
-                if (dj[groupKey] == ai[groupKey]) {
+                if (dj[groupKey] === ai[groupKey]) {
                     dj['children'].push(ai)
                     break
                 }
@@ -606,7 +604,7 @@ export const updateTreeNode = (nodes, primaryKey, value, data) => {
 
 /**
  *  实际的递归函数，将会变化的参数抽取出来
- * @param list
+ * @param array
  * @param startPid
  * @param currentDept
  * @param opt
@@ -663,15 +661,15 @@ export const readUserAgent = (ua) => {
         trident: ua.indexOf('Trident') > -1, // IE内核
         presto: ua.indexOf('Presto') > -1, // opera内核
         webKit: ua.indexOf('AppleWebKit') > -1, // 苹果、谷歌内核
-        gecko: ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') == -1, // 火狐内核
+        gecko: ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1, // 火狐内核
         mobile: !!ua.match(/AppleWebKit.*Mobile.*/), // 是否为移动终端
         ios: !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), // ios终端
         android: ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1, // android终端
         iPhone: ua.indexOf('iPhone') > -1, // 是否为iPhone或者QQHD浏览器
         iPad: ua.indexOf('iPad') > -1, // 是否iPad
-        webApp: ua.indexOf('Safari') == -1, // 是否web应该程序，没有头部与底部
+        webApp: ua.indexOf('Safari') === -1, // 是否web应该程序，没有头部与底部
         weixin: ua.indexOf('MicroMessenger') > -1, // 是否微信 （2015-01-22新增）
-        qq: ua.match(/\sQQ/i) == ' qq' // 是否QQ
+        qq: ua.match(/\sQQ/i) === ' qq' // 是否QQ
     }
     if (data.terminalType.ios || data.terminalType.iPhone || data.terminalType.iPad) {
         data.terminal = '苹果'

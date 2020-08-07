@@ -42,11 +42,11 @@
           </h3>
           <Divider/>
           <p>登陆名</p>
-          <p style="color: #9ea7b4">当前登录名:{{profile.userName}}</p>
+          <p style="color: #9ea7b4">当前登录名:{{ profile.userName }}</p>
           <Divider/>
           <p>绑定手机</p>
           <p style="color: #9ea7b4">
-            <span v-if="profile.mobile">已绑定手机：{{profile.mobile}}&nbsp;&nbsp;<a>修改</a></span>
+            <span v-if="profile.mobile">已绑定手机：{{ profile.mobile }}&nbsp;&nbsp;<a>修改</a></span>
             <span v-else="">
                尚未绑定手机 <a>绑定</a>
             </span>
@@ -54,7 +54,7 @@
           <Divider/>
           <p>绑定邮箱</p>
           <p style="color: #9ea7b4">
-            <span v-if="profile.email">已绑定邮箱：{{profile.email}}&nbsp;&nbsp;<a>修改</a></span>
+            <span v-if="profile.email">已绑定邮箱：{{ profile.email }}&nbsp;&nbsp;<a>修改</a></span>
             <span v-else="">
                尚未绑定手机 <a>绑定</a>
             </span>
@@ -67,69 +67,69 @@
 </template>
 
 <script>
-    import {updateCurrentUserInfo} from '@/api/user'
+import {updateCurrentUserInfo} from '@/api/user'
 
-    export default {
-        name: 'message_page',
-        data() {
-            return {
-                currentSelect: 'profile',
-                formItemRules: {
-                    nickName: [
-                        {required: true, message: '昵称不能为空', trigger: 'blur'}
-                    ]
-                },
-                profile: this.$store.state.user,
-            }
-        },
-        methods: {
-            handleSubmit(form) {
-                if (form === 'userForm') {
-                    this.$refs['userForm'].validate((valid) => {
-                        if (valid) {
-                            updateCurrentUserInfo(this.profile).then(res => {
-                                if (res.rtnCode === '200') {
-                                    this.$Message.success('修改成功')
-                                    this.$store.commit("setAvatar", this.profile.avatar)
-                                    this.$store.commit("setNickName", this.profile.nickName)
-                                }
-                            }).finally(() => {
-                                this.saving = false
-                            })
-                        }
-                    })
-                }
-            },
-            handleSelect(name) {
-                this.currentSelect = name
-            }
-        },
-        mounted() {
-        }
+export default {
+  name: 'message_page',
+  data() {
+    return {
+      currentSelect: 'profile',
+      formItemRules: {
+        nickName: [
+          {required: true, message: '昵称不能为空', trigger: 'blur'}
+        ]
+      },
+      profile: this.$store.state.user,
     }
+  },
+  methods: {
+    handleSubmit(form) {
+      if (form === 'userForm') {
+        this.$refs['userForm'].validate((valid) => {
+          if (valid) {
+            updateCurrentUserInfo(this.profile).then(res => {
+              if (res.rtnCode === '200') {
+                this.$Message.success('修改成功')
+                this.$store.commit("setAvatar", this.profile.avatar)
+                this.$store.commit("setNickName", this.profile.nickName)
+              }
+            }).finally(() => {
+              this.saving = false
+            })
+          }
+        })
+      }
+    },
+    handleSelect(name) {
+      this.currentSelect = name
+    }
+  },
+  mounted() {
+  }
+}
 </script>
 
 <style lang="less">
-  .account-setting {
-    &-con {
-      height: ~"calc(100vh - 176px)";
-      display: inline-block;
-      vertical-align: top;
-      position: relative;
+.account-setting {
+  &-con {
+    height: ~"calc(100vh - 176px)";
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
 
-      &.left-con {
-        border-right: 1px solid #e6e6e6;
-      }
+    &.left-con {
+      border-right: 1px solid #e6e6e6;
+    }
 
-      &.view-con {
-        position: absolute;
-        left: 264px;
-        top: 16px;
-        right: 16px;
-        bottom: 16px;
-        overflow: auto;
-        padding: 12px 20px 0;
-      }
+    &.view-con {
+      position: absolute;
+      left: 264px;
+      top: 16px;
+      right: 16px;
+      bottom: 16px;
+      overflow: auto;
+      padding: 12px 20px 0;
     }
   }
+}
 </style>

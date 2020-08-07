@@ -16,8 +16,8 @@
           <Badge status="error" text="禁用" v-else=""/>
         </template>
         <template slot="routeType" slot-scope="{ row }">
-          <span v-if="row.serviceId"><Tag color="green">负载均衡</Tag>{{row.serviceId}}</span>
-          <span v-else-if="row.url"><Tag color="blue">反向代理</Tag>{{row.url}}</span>
+          <span v-if="row.serviceId"><Tag color="green">负载均衡</Tag>{{ row.serviceId }}</span>
+          <span v-else-if="row.url"><Tag color="blue">反向代理</Tag>{{ row.url }}</span>
         </template>
 
         <template slot="action" slot-scope="{ row }">
@@ -34,7 +34,8 @@
           </Dropdown>&nbsp;
         </template>
       </Table>
-      <Page :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total" @on-change="handlePage" @on-page-size-change='handlePageSize'
+      <Page :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total" @on-change="handlePage"
+            @on-page-size-change='handlePageSize'
             show-elevator
             show-sizer show-total></Page>
     </Card>
@@ -63,8 +64,10 @@
                     v-if="selectType==='service'">
             <Input placeholder="服务名称application.name" v-model="formItem.serviceId"></Input>
           </FormItem>
-          <FormItem :rules="[{required: true, message: '服务地址不能为空', trigger: 'blur'},{type: 'url', message: '请输入有效网址', trigger: 'blur'}]" label="反向代理" prop="url"
-                    v-if="selectType==='url'">
+          <FormItem
+              :rules="[{required: true, message: '服务地址不能为空', trigger: 'blur'},{type: 'url', message: '请输入有效网址', trigger: 'blur'}]"
+              label="反向代理" prop="url"
+              v-if="selectType==='url'">
             <Input placeholder="http://localhost:8080" v-model="formItem.url"></Input>
           </FormItem>
           <FormItem label="忽略前缀">
@@ -96,175 +99,175 @@
 </template>
 
 <script>
-    import {addRoute, getRoutes, removeRoute, updateRoute} from '@/api/route'
-    import {refreshGateway} from '@/api/gateway'
+import {addRoute, getRoutes, removeRoute, updateRoute} from '@/api/route'
+import {refreshGateway} from '@/api/gateway'
 
-    export default {
-        name: 'GatewayRoute',
-        data() {
-            return {
-                loading: false,
-                saving: false,
-                modalVisible: false,
-                modalTitle: '',
-                pageInfo: {
-                    total: 0,
-                    page: 1,
-                    limit: 10
-                },
-                selectType: 'service',
-                selectServiceList: [],
-                formItemRules: {
-                    routeDesc: [
-                        {required: true, message: '路由名称不能为空', trigger: 'blur'}
-                    ],
-                    routeName: [
-                        {required: true, message: '路由标识不能为空', trigger: 'blur'}
-                    ],
-                    path: [
-                        {required: true, message: '路由前缀不能为空', trigger: 'blur'}
-                    ]
-                },
-                formItem: {
-                    routeId: '',
-                    path: '',
-                    serviceId: '',
-                    url: '',
-                    stripPrefix: 0,
-                    retryable: 0,
-                    status: 1,
-                    routeName: '',
-                    routeDesc: ''
-                },
-                columns: [
-                    {title: '路由名称', key: 'routeDesc', width: 150},
-                    {title: '路由标识', key: 'routeName', width: 120},
-                    {title: '路由前缀', key: 'path', width: 100},
-                    {title: '路由方式', key: 'routeType', slot: 'routeType', width: 200},
-                    {title: '忽略前缀', key: 'stripPrefix'},
-                    {title: '失败重试', key: 'retryable'},
-                    {title: '状态', key: 'status', slot: 'status'},
-                    {title: '操作', slot: 'action', fixed: 'right', width: 120}
-                ],
-                data: []
-            }
-        },
-        methods: {
-            handleModal(data) {
-                if (data) {
-                    this.modalTitle = '编辑路由';
-                    this.formItem = Object.assign({}, this.formItem, data)
-                } else {
-                    this.modalTitle = '添加路由'
-                }
-                this.formItem.status = this.formItem.status + '';
-                this.formItem.stripPrefix = this.formItem.stripPrefix + '';
-                this.formItem.retryable = this.formItem.retryable + '';
-                this.formItem.url = this.formItem.service ? '' : this.formItem.url;
-                this.formItem.service = this.formItem.url ? '' : this.formItem.service;
-                this.selectType = this.formItem.url ? 'url' : 'service';
-                this.modalVisible = true
-            },
-            handleReset() {
-                this.formItem = {
-                    routeId: '',
-                    path: '',
-                    serviceId: '',
-                    url: '',
-                    stripPrefix: 0,
-                    retryable: 0,
-                    status: 1,
-                    routeName: '',
-                    routeDesc: ''
-                };
-                //重置验证
-                this.$refs['routeForm'].resetFields();
-                this.modalVisible = false;
-                this.saving = false;
-            },
-            handleSubmit() {
-                this.$refs['routeForm'].validate((valid) => {
-                    if (valid) {
-                        this.saving = true;
-                        if (this.formItem.routeId) {
-                            updateRoute(this.formItem).then(res => {
-                                if (res.rtnCode === '200') {
-                                    this.$Message.success('保存成功');
-                                    this.handleReset()
-                                }
-                                this.handleSearch()
-                            }).finally(() => {
-                                this.saving = false
-                            })
-                        } else {
-                            addRoute(this.formItem).then(res => {
-                                this.handleReset();
-                                this.handleSearch();
-                                if (res.rtnCode === '200') {
-                                    this.$Message.success('保存成功')
-                                }
-                            }).finally(() => {
-                                this.saving = false
-                            })
-                        }
-                    }
-                })
-            },
-            handleSearch(page) {
-                if (page) {
-                    this.pageInfo.page = page
-                }
-                this.loading = true;
-                getRoutes({page: this.pageInfo.page, limit: this.pageInfo.limit}).then(res => {
-                    this.data = res.data.records;
-                    this.pageInfo.total = parseInt(res.data.total)
-                }).finally(() => {
-                    this.loading = false
-                })
-            },
-            handlePage(current) {
-                this.pageInfo.page = current;
-                this.handleSearch()
-            },
-            handlePageSize(size) {
-                this.pageInfo.limit = size;
-                this.handleSearch()
-            },
-            handleRemove(data) {
-                this.$Modal.confirm({
-                    title: '确定删除吗？',
-                    onOk: () => {
-                        removeRoute(data.routeId).then(res => {
-                            if (res.rtnCode === '200') {
-                                this.pageInfo.page = 1;
-                                this.$Message.success('删除成功')
-                            }
-                            this.handleSearch()
-                        })
-                    }
-                })
-            },
-            handleClick(name, row) {
-                if (name === 'remove') {
-                    this.handleRemove(row);
-                }
-            },
-            handleRefreshGateway() {
-                this.$Modal.confirm({
-                    title: '提示',
-                    content: '将重新加载所有网关实例包括（访问权限、流量限制、IP访问限制、路由缓存），是否继续？',
-                    onOk: () => {
-                        refreshGateway().then(res => {
-                            if (res.rtnCode === '200') {
-                                this.$Message.success('刷新成功')
-                            }
-                        })
-                    }
-                })
-            }
-        },
-        mounted: function () {
-            this.handleSearch()
-        }
+export default {
+  name: 'GatewayRoute',
+  data() {
+    return {
+      loading: false,
+      saving: false,
+      modalVisible: false,
+      modalTitle: '',
+      pageInfo: {
+        total: 0,
+        page: 1,
+        limit: 10
+      },
+      selectType: 'service',
+      selectServiceList: [],
+      formItemRules: {
+        routeDesc: [
+          {required: true, message: '路由名称不能为空', trigger: 'blur'}
+        ],
+        routeName: [
+          {required: true, message: '路由标识不能为空', trigger: 'blur'}
+        ],
+        path: [
+          {required: true, message: '路由前缀不能为空', trigger: 'blur'}
+        ]
+      },
+      formItem: {
+        routeId: '',
+        path: '',
+        serviceId: '',
+        url: '',
+        stripPrefix: 0,
+        retryable: 0,
+        status: 1,
+        routeName: '',
+        routeDesc: ''
+      },
+      columns: [
+        {title: '路由名称', key: 'routeDesc', width: 150},
+        {title: '路由标识', key: 'routeName', width: 120},
+        {title: '路由前缀', key: 'path', width: 100},
+        {title: '路由方式', key: 'routeType', slot: 'routeType', width: 200},
+        {title: '忽略前缀', key: 'stripPrefix'},
+        {title: '失败重试', key: 'retryable'},
+        {title: '状态', key: 'status', slot: 'status'},
+        {title: '操作', slot: 'action', fixed: 'right', width: 120}
+      ],
+      data: []
     }
+  },
+  methods: {
+    handleModal(data) {
+      if (data) {
+        this.modalTitle = '编辑路由';
+        this.formItem = Object.assign({}, this.formItem, data)
+      } else {
+        this.modalTitle = '添加路由'
+      }
+      this.formItem.status = this.formItem.status + '';
+      this.formItem.stripPrefix = this.formItem.stripPrefix + '';
+      this.formItem.retryable = this.formItem.retryable + '';
+      this.formItem.url = this.formItem.service ? '' : this.formItem.url;
+      this.formItem.service = this.formItem.url ? '' : this.formItem.service;
+      this.selectType = this.formItem.url ? 'url' : 'service';
+      this.modalVisible = true
+    },
+    handleReset() {
+      this.formItem = {
+        routeId: '',
+        path: '',
+        serviceId: '',
+        url: '',
+        stripPrefix: 0,
+        retryable: 0,
+        status: 1,
+        routeName: '',
+        routeDesc: ''
+      };
+      //重置验证
+      this.$refs['routeForm'].resetFields();
+      this.modalVisible = false;
+      this.saving = false;
+    },
+    handleSubmit() {
+      this.$refs['routeForm'].validate((valid) => {
+        if (valid) {
+          this.saving = true;
+          if (this.formItem.routeId) {
+            updateRoute(this.formItem).then(res => {
+              if (res.rtnCode === '200') {
+                this.$Message.success('保存成功');
+                this.handleReset()
+              }
+              this.handleSearch()
+            }).finally(() => {
+              this.saving = false
+            })
+          } else {
+            addRoute(this.formItem).then(res => {
+              this.handleReset();
+              this.handleSearch();
+              if (res.rtnCode === '200') {
+                this.$Message.success('保存成功')
+              }
+            }).finally(() => {
+              this.saving = false
+            })
+          }
+        }
+      })
+    },
+    handleSearch(page) {
+      if (page) {
+        this.pageInfo.page = page
+      }
+      this.loading = true;
+      getRoutes({page: this.pageInfo.page, limit: this.pageInfo.limit}).then(res => {
+        this.data = res.data.records;
+        this.pageInfo.total = parseInt(res.data.total)
+      }).finally(() => {
+        this.loading = false
+      })
+    },
+    handlePage(current) {
+      this.pageInfo.page = current;
+      this.handleSearch()
+    },
+    handlePageSize(size) {
+      this.pageInfo.limit = size;
+      this.handleSearch()
+    },
+    handleRemove(data) {
+      this.$Modal.confirm({
+        title: '确定删除吗？',
+        onOk: () => {
+          removeRoute(data.routeId).then(res => {
+            if (res.rtnCode === '200') {
+              this.pageInfo.page = 1;
+              this.$Message.success('删除成功')
+            }
+            this.handleSearch()
+          })
+        }
+      })
+    },
+    handleClick(name, row) {
+      if (name === 'remove') {
+        this.handleRemove(row);
+      }
+    },
+    handleRefreshGateway() {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '将重新加载所有网关实例包括（访问权限、流量限制、IP访问限制、路由缓存），是否继续？',
+        onOk: () => {
+          refreshGateway().then(res => {
+            if (res.rtnCode === '200') {
+              this.$Message.success('刷新成功')
+            }
+          })
+        }
+      })
+    }
+  },
+  mounted: function () {
+    this.handleSearch()
+  }
+}
 </script>

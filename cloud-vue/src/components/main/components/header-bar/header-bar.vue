@@ -8,6 +8,7 @@
 <script>
 import siderTrigger from './sider-trigger'
 import './header-bar.less'
+
 export default {
   name: 'HeaderBar',
   components: {
@@ -17,11 +18,9 @@ export default {
     collapsed: Boolean,
     screenWidth: 0
   },
-  computed: {
-
-  },
+  computed: {},
   methods: {
-    handleCollpasedChange (state) {
+    handleCollpasedChange(state) {
       this.$emit('on-coll-change', state)
     }
   }
