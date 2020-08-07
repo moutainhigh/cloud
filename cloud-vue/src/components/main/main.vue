@@ -85,9 +85,9 @@
       <h3>导航布局</h3>
       <div>
         <p @click="changeLayout('left')" style="display: inline-block;margin-left: 20px;cursor: pointer"><img
-            src="../../assets/images/layout-left.svg"/></p>
+          src="../../assets/images/layout-left.svg"/></p>
         <p @click="changeLayout('top')" style="display: inline-block;margin-left: 20px;cursor: pointer"><img
-            src="../../assets/images/layout-top.svg"/></p>
+          src="../../assets/images/layout-top.svg"/></p>
       </div>
     </Drawer>
   </Layout>
@@ -162,13 +162,13 @@ export default {
       return this.$store.state.app.tagNavList;
     },
     userAvatar() {
-      return this.getAvatar();
+      return this.$store.state.user.avatarImgPath;
     },
     userName() {
-      return this.getUserName();
+      return this.$store.state.user.userName;
     },
     nickName() {
-      return this.getNickName();
+      return this.$store.state.user.nickName;
     },
     cacheList() {
       return this.tagNavList.length ? this.tagNavList.filter(item => !(item.meta && item.meta.notCache)).map(item => item.name) : [];
@@ -188,13 +188,7 @@ export default {
       'setBreadCrumb',
       'setTagNavList',
       'addTag',
-      'setLocal',
-
-      'getUserId',
-      'getUserName',
-      'getNickName',
-      'getAccess',
-      'getAvatar',
+      'setLocal'
     ]),
     ...mapActions([
       'handleLogin'

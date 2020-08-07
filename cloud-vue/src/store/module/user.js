@@ -21,37 +21,17 @@ export default {
     setAvatar(state, avatarPath) {
       state.avatarImgPath = avatarPath
     },
-    getAvatar(state) {
-      console.info('-------> 获取用户头像：%s', state.avatarImgPath);
-      return state.avatarImgPath;
-    },
     setNickName(state, nickName) {
       state.nickName = nickName
-    },
-    getNickName(state) {
-      console.info('-------> 获取用户昵称：%s', state.nickName);
-      return state.nickName;
     },
     setUserId(state, id) {
       state.userId = id
     },
-    getUserId(state) {
-      console.info('-------> 获取用户ID：%s', state.nickName);
-      return state.userId;
-    },
     setUserName(state, name) {
       state.userName = name
     },
-    getUserName(state) {
-      console.info('-------> 获取用户名：%s', state.userName);
-      return state.userName;
-    },
     setAccess(state, access) {
       state.access = access
-    },
-    getAccess(state) {
-      console.info('-------> 获取用户权限：%s', state.access);
-      return state.access;
     },
     setToken(state, {token, auto}) {
       state.token = token;
@@ -152,7 +132,6 @@ export default {
             // 获取用户菜单
             // getCurrentUserMenu()
             //     .then(res => {
-            //         console.info('-------> 设置用户菜单Old：%o', res.data);
             //         commit('setUserMenus', res.data);
             //         resolve(state);
             //     })
