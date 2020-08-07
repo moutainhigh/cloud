@@ -437,17 +437,17 @@ export const isURL = (url) => {
 
 /**
  * 格式化路由菜单
- * @param array
+ * @param menuArray
  * @param access
  * @returns {Array}
  */
-export const formatRouters = (array, access) => {
+export const formatRouters = (menuArray, access) => {
     let opt = {
         primaryKey: 'menuId',
-        parentKey: 'parentId',
+        parentKey: 'menuParentId',
         startPid: '0'
     }
-    let menus = listConvertTree(array, opt)
+    let menus = listConvertTree(menuArray, opt)
     let routers = filterRouter(menus, access, [])
     const error_404 = {
         path: '*',
@@ -462,37 +462,100 @@ export const formatRouters = (array, access) => {
     return routers
 }
 
-export const filterRouter = (array, access, routers) => {
-    let list = array.map(item => {
-            let path = startWith(item.path, '/') ? item.path.substring(1) : item.path
-            let url = item.scheme + item.path
+/**
+ * 将普通列表无限递归转换为树
+ * @param menuArray
+ * @param opt{{}}
+ * {{
+ * primaryKey: '(主键 默认id)',
+ * parentKey: '(父级id对应键 默认pid)', nameKey: '(节点标题对应的key 默认name)',
+ * valueKey: '(节点值对应的key 默认id)',
+ * checkedKey: '(节点是否选中的字段 默认checked，传入数组则判断主键是否在此数组中)',
+ * startPid:'(第一层扫描的PID 默认0)',
+ * currentDept: '(当前层 默认0)',
+ * maxDept: '(最大递归层 默认100)',
+ * childKey: '(递归完成后子节点对应键 默认list) ',
+ * deptPrefix: '(根据层级重复的前缀 默认空字符串)'}}
+ * @returns {Array}
+ */
+export const listConvertTree = (menuArray, opt) => {
+    let obj = {
+        primaryKey: opt['primaryKey'] || 'id',
+        parentKey: opt['parentKey'] || 'pid',
+        startPid: opt['startPid'] || 0,
+        currentDept: opt['currentDept'] || 0,
+        maxDept: opt['maxDept'] || 100,
+        childKey: opt['childKey'] || 'children'
+    }
+    return listToTree(menuArray, obj.startPid, obj.currentDept, obj)
+}
+
+/**
+ *  实际的递归函数，将会变化的参数抽取出来
+ * @param menuArray
+ * @param startPid
+ * @param currentDept
+ * @param opt
+ * @returns {Array}
+ */
+export const listToTree = (menuArray, startPid, currentDept, opt) => {
+    if (opt.maxDept < currentDept) {
+        return []
+    }
+    let child = []
+    if (menuArray && menuArray.length > 0) {
+        child = menuArray.map(menu => {
+            // 筛查符合条件的数据（主键 = startPid）
+            if (typeof menu[opt.parentKey] !== 'undefined' && menu[opt.parentKey] === startPid) {
+                // 满足条件则递归
+                let nextChild = listToTree(menuArray, menu[opt.primaryKey], currentDept + 1, opt)
+                // 节点信息保存
+                if (nextChild.length > 0) {
+                    menu['hasChild'] = true
+                    menu[opt.childKey] = nextChild
+                } else {
+                    menu['hasChild'] = false
+                }
+                return menu
+            }
+        }).filter(item => {
+            return item !== undefined
+        })
+    }
+    return child
+}
+
+export const filterRouter = (menuTreeArray, access, routers) => {
+    let list = menuTreeArray.map(menu => {
+            let path = startWith(menu.menuPath, '/') ? menu.menuPath.substring(1) : menu.menuPath
+            let url = menu.menuSchema + menu.menuPath
             let router = {
                 // 使用菜单id不使用menuCode防止修改后,刷新后缓存的页面无法找到
-                name: `${item.menuCode}`,
+                name: `${menu.menuCode}`,
                 path: url,
                 meta: {
                     access: access,
                     hideInMenu: false,
-                    title: item.menuName,
+                    title: menu.menuName,
                     notCache: true,
-                    icon: item.icon || 'md-document',
+                    icon: menu.menuIcon || 'md-document',
                     hideInBread: false
                 },
                 children: []
             }
-            if (item.parentId === 0 || item.parentId === '0') {
+            if (menu.menuParentId === 0 || menu.menuParentId === '0') {
                 // 根节点
                 router.path = '/'
                 router.component = (resolve) => {
                     require(['_c/main'], resolve)
                 }
-                if (!hasChild(item)) {
+                if (!hasChild(menu)) {
                     // 非根节点
-                    if (item.target === '_blank') {
+                    if (menu.menuTarget === '_blank') {
                         // 新窗口打开,使用meta.href
                         router.meta.href = url
                     } else {
-                        if (item.scheme === '/') {
+                        if (menu.menuSchema === '/') {
                             // 内部组件
                             router.component = (resolve) => {
                                 require([`@/view/module/${path}.vue`], resolve)
@@ -509,11 +572,11 @@ export const filterRouter = (array, access, routers) => {
                 }
             } else {
                 // 非根节点
-                if (item.target === '_blank') {
+                if (menu.menuTarget === '_blank') {
                     // 新窗口打开,使用meta.href
                     router.meta.href = url
                 } else {
-                    if (item.scheme === '/') {
+                    if (menu.menuSchema === '/') {
                         // 内部组件
                         router.component = (resolve) => {
                             require([`@/view/module/${path}.vue`], resolve)
@@ -528,38 +591,20 @@ export const filterRouter = (array, access, routers) => {
                     }
                 }
                 // 多级菜单
-                if (hasChild(item)) {
+                if (hasChild(menu)) {
                     router.component = (resolve) => {
                         require(['_c/parent-view'], resolve)
                     }
                 }
             }
-            if (hasChild(item)) {
-                router.children.push(...filterRouter(item.children, access, []))
+            if (hasChild(menu)) {
+                router.children.push(...filterRouter(menu.children, access, []))
             }
             return router
         }
     )
     routers.push(...list)
     return routers
-}
-
-/**
- * 将普通列表无限递归转换为树
- * @param array
- * @param {[type]} opt [配置参数，支持 primaryKey(主键 默认id) parentKey(父级id对应键 默认pid) nameKey(节点标题对应的key 默认name) valueKey(节点值对应的key 默认id) checkedKey(节点是否选中的字段 默认checked，传入数组则判断主键是否在此数组中) startPid(第一层扫描的PID 默认0) currentDept(当前层 默认0) maxDept(最大递归层 默认100) childKey(递归完成后子节点对应键 默认list) deptPrefix(根据层级重复的前缀 默认'')]
- * @return {[type]}            [description]
- */
-export const listConvertTree = (array, opt) => {
-    let obj = {
-        primaryKey: opt.primaryKey || 'id',
-        parentKey: opt.parentKey || 'pid',
-        startPid: opt.startPid || 0,
-        currentDept: opt.currentDept || 0,
-        maxDept: opt.maxDept || 100,
-        childKey: opt.childKey || 'children'
-    }
-    return listToTree(array, obj.startPid, obj.currentDept, obj)
 }
 
 export const listConvertGroup = (array, groupKey) => {
@@ -600,41 +645,6 @@ export const updateTreeNode = (nodes, primaryKey, value, data) => {
         })
     }
     return update(nodes)
-}
-
-/**
- *  实际的递归函数，将会变化的参数抽取出来
- * @param array
- * @param startPid
- * @param currentDept
- * @param opt
- * @returns {Array}
- */
-export const listToTree = (array, startPid, currentDept, opt) => {
-    if (opt.maxDept < currentDept) {
-        return []
-    }
-    let child = []
-    if (array && array.length > 0) {
-        child = array.map(item => {
-            // 筛查符合条件的数据（主键 = startPid）
-            if (typeof item[opt.parentKey] !== 'undefined' && item[opt.parentKey] === startPid) {
-                // 满足条件则递归
-                let nextChild = listToTree(array, item[opt.primaryKey], currentDept + 1, opt)
-                // 节点信息保存
-                if (nextChild.length > 0) {
-                    item['hasChild'] = true
-                    item[opt.childKey] = nextChild
-                } else {
-                    item['hasChild'] = false
-                }
-                return item
-            }
-        }).filter(item => {
-            return item !== undefined
-        })
-    }
-    return child
 }
 
 export const startWith = (str, prefix) => {

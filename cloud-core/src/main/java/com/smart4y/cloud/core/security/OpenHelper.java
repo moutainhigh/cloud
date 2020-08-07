@@ -7,6 +7,7 @@ import com.smart4y.cloud.core.toolkit.reflection.ReflectionUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,12 +31,13 @@ import org.springframework.util.Assert;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 认证信息帮助类
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class OpenHelper {
@@ -43,6 +45,7 @@ public class OpenHelper {
     /**
      * 获取认证用户信息
      */
+    @Nullable
     public static OpenUserDetails getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && authentication instanceof OAuth2Authentication) {
@@ -63,6 +66,30 @@ public class OpenHelper {
             }
         }
         return null;
+    }
+
+    /**
+     * 获取认证用户Id
+     */
+    @Nullable
+    public static Long getUserId() {
+        OpenUserDetails userDetails = getUser();
+        return null == userDetails ? null : userDetails.getUserId();
+    }
+
+    /**
+     * 获取认证用户信息
+     */
+    public static Optional<OpenUserDetails> getUserOptional() {
+        return Optional.ofNullable(getUser());
+    }
+
+    /**
+     * 获取认证用户Id
+     */
+    public static Optional<Long> getUserIdOptional() {
+        return getUserOptional()
+                .map(OpenUserDetails::getUserId);
     }
 
     /**
@@ -100,13 +127,6 @@ public class OpenHelper {
                 tokenStore.storeAccessToken(token, oAuth2Authentication);
             }
         }
-    }
-
-    /**
-     * 获取认证用户Id
-     */
-    public static Long getUserId() {
-        return getUser().getUserId();
     }
 
     /**
@@ -175,7 +195,7 @@ public class OpenHelper {
     /**
      * 构建资源服务器RedisToken服务类
      */
-    public static ResourceServerTokenServices buildRedisTokenServices(RedisConnectionFactory redisConnectionFactory) throws Exception {
+    public static ResourceServerTokenServices buildRedisTokenServices(RedisConnectionFactory redisConnectionFactory) {
         OpenRedisTokenService tokenServices = new OpenRedisTokenService();
         // 这里的签名key 保持和认证中心一致
         RedisTokenStore redisTokenStore = new RedisTokenStore(redisConnectionFactory);

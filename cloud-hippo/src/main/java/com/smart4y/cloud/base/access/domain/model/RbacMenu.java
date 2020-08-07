@@ -14,7 +14,7 @@ import javax.persistence.Id;
 /**
  * 菜单表
  *
- * @author Youtao on 2020/08/06 16:01
+ * @author Youtao on 2020/08/07 14:58
  */
 @Data
 @Accessors(chain = true)
@@ -41,6 +41,12 @@ public class RbacMenu extends BaseEntity<RbacMenu> {
      */
     @Column(name = "menu_name")
     private String menuName;
+
+    /**
+     * 菜单编码
+     */
+    @Column(name = "menu_code")
+    private String menuCode;
 
     /**
      * 菜单图标
@@ -71,6 +77,12 @@ public class RbacMenu extends BaseEntity<RbacMenu> {
      */
     @Column(name = "menu_state")
     private String menuState;
+
+    /**
+     * 菜单排序
+     */
+    @Column(name = "menu_sorted")
+    private Integer menuSorted;
 
     /**
      * 菜单是否存在子节点（0-不存在 1-存在）

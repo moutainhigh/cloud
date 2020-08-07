@@ -14,7 +14,7 @@ import javax.persistence.Id;
 /**
  * 权限表
  *
- * @author Youtao on 2020/08/06 16:01
+ * @author Youtao on 2020/08/07 14:58
  */
 @Data
 @Accessors(chain = true)
@@ -39,8 +39,8 @@ public class RbacPrivilege extends BaseEntity<RbacPrivilege> {
     /**
      * 权限标识
      */
-    @Column(name = "authority")
-    private String authority;
+    @Column(name = "privilege")
+    private String privilege;
 
     /**
      * 创建时间

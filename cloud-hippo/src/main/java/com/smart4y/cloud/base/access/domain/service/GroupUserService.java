@@ -12,7 +12,15 @@ import java.util.List;
  * on 2020/8/4 16:16
  */
 @DomainService
-public class GroupUserDomainService extends BaseDomainService<RbacGroupUser> {
+public class GroupUserService extends BaseDomainService<RbacGroupUser> {
+
+    public List<RbacGroupUser> getGroups(long userId) {
+        Weekend<RbacGroupUser> weekend = Weekend.of(RbacGroupUser.class);
+        weekend
+                .weekendCriteria()
+                .andEqualTo(RbacGroupUser::getUserId, userId);
+        return this.list(weekend);
+    }
 
     public List<RbacGroupUser> getUsers(long groupId) {
         Weekend<RbacGroupUser> weekend = Weekend.of(RbacGroupUser.class);

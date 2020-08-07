@@ -2,10 +2,10 @@ package com.smart4y.cloud.base.access.application.impl;
 
 import com.smart4y.cloud.base.access.application.GroupApplicationService;
 import com.smart4y.cloud.base.access.domain.model.*;
-import com.smart4y.cloud.base.access.domain.service.GroupRoleDomainService;
-import com.smart4y.cloud.base.access.domain.service.GroupUserDomainService;
-import com.smart4y.cloud.base.access.domain.service.RoleDomainService;
-import com.smart4y.cloud.base.access.domain.service.UserDomainService;
+import com.smart4y.cloud.base.access.domain.service.GroupRoleService;
+import com.smart4y.cloud.base.access.domain.service.GroupUserService;
+import com.smart4y.cloud.base.access.domain.service.RoleService;
+import com.smart4y.cloud.base.access.domain.service.UserService;
 import com.smart4y.cloud.base.access.interfaces.dtos.group.RbacGroupPageQuery;
 import com.smart4y.cloud.base.access.interfaces.dtos.group.RbacGroupQuery;
 import com.smart4y.cloud.core.annotation.ApplicationService;
@@ -29,13 +29,13 @@ import java.util.stream.Collectors;
 public class GroupApplicationServiceImpl extends BaseDomainService<RbacGroup> implements GroupApplicationService {
 
     @Autowired
-    private GroupUserDomainService groupUserDomainService;
+    private GroupUserService groupUserService;
     @Autowired
-    private GroupRoleDomainService groupRoleDomainService;
+    private GroupRoleService groupRoleService;
     @Autowired
-    private UserDomainService userDomainService;
+    private UserService userService;
     @Autowired
-    private RoleDomainService roleDomainService;
+    private RoleService roleService;
 
     @Override
     public Page<RbacGroup> getGroupsPage(RbacGroupPageQuery query) {
@@ -60,18 +60,18 @@ public class GroupApplicationServiceImpl extends BaseDomainService<RbacGroup> im
 
     @Override
     public List<RbacUser> getGroupUsers(long groupId) {
-        List<RbacGroupUser> groupUsers = groupUserDomainService.getUsers(groupId);
+        List<RbacGroupUser> groupUsers = groupUserService.getUsers(groupId);
         List<Long> userIds = groupUsers.stream().map(RbacGroupUser::getUserId).collect(Collectors.toList());
 
-        return userDomainService.getUsers(userIds);
+        return userService.getUsers(userIds);
     }
 
     @Override
     public List<RbacRole> getGroupRoles(long groupId) {
-        List<RbacGroupRole> groupUsers = groupRoleDomainService.getUsers(groupId);
+        List<RbacGroupRole> groupUsers = groupRoleService.getRoles(groupId);
         List<Long> roleIds = groupUsers.stream().map(RbacGroupRole::getRoleId).collect(Collectors.toList());
 
-        return roleDomainService.getUsers(roleIds);
+        return roleService.getUsers(roleIds);
     }
 
     @Override

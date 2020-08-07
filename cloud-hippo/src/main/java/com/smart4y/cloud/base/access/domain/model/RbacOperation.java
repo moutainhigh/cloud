@@ -14,7 +14,7 @@ import javax.persistence.Id;
 /**
  * 功能操作表
  *
- * @author Youtao on 2020/08/06 16:01
+ * @author Youtao on 2020/08/07 14:58
  */
 @Data
 @Accessors(chain = true)

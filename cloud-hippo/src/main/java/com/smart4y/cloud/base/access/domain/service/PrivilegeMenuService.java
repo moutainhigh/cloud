@@ -1,6 +1,6 @@
 package com.smart4y.cloud.base.access.domain.service;
 
-import com.smart4y.cloud.base.access.domain.model.RbacUser;
+import com.smart4y.cloud.base.access.domain.model.RbacPrivilegeMenu;
 import com.smart4y.cloud.core.annotation.DomainService;
 import com.smart4y.cloud.mapper.BaseDomainService;
 import org.apache.commons.collections4.CollectionUtils;
@@ -12,19 +12,19 @@ import java.util.List;
 
 /**
  * @author Youtao
- * on 2020/8/4 16:16
+ * on 2020/8/7 14:51
  */
 @DomainService
-public class UserDomainService extends BaseDomainService<RbacUser> {
+public class PrivilegeMenuService extends BaseDomainService<RbacPrivilegeMenu> {
 
-    public List<RbacUser> getUsers(Collection<Long> userIds) {
-        if (CollectionUtils.isEmpty(userIds)) {
+    public List<RbacPrivilegeMenu> getMenus(Collection<Long> privilegeIds) {
+        if (CollectionUtils.isEmpty(privilegeIds)) {
             return Collections.emptyList();
         }
-        Weekend<RbacUser> weekend = Weekend.of(RbacUser.class);
+        Weekend<RbacPrivilegeMenu> weekend = Weekend.of(RbacPrivilegeMenu.class);
         weekend
                 .weekendCriteria()
-                .andIn(RbacUser::getUserId, userIds);
+                .andIn(RbacPrivilegeMenu::getPrivilegeId, privilegeIds);
         return this.list(weekend);
     }
 }

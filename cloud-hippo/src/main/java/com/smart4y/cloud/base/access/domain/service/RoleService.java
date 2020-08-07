@@ -15,7 +15,7 @@ import java.util.List;
  * on 2020/8/4 16:16
  */
 @DomainService
-public class RoleDomainService extends BaseDomainService<RbacRole> {
+public class RoleService extends BaseDomainService<RbacRole> {
 
     public List<RbacRole> getUsers(Collection<Long> roleIds) {
         if (CollectionUtils.isEmpty(roleIds)) {
