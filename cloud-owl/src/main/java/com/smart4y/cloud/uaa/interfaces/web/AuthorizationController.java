@@ -1,5 +1,6 @@
 package com.smart4y.cloud.uaa.interfaces.web;
 
+import com.alibaba.fastjson.JSONObject;
 import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.core.security.OpenHelper;
 import com.smart4y.cloud.core.security.OpenUserDetails;
@@ -57,8 +58,8 @@ public class AuthorizationController extends BaseController {
      */
     @PostMapping("/login/token")
     @ApiOperation(value = "获取用户访问令牌", notes = "基于oauth2密码模式登录,无需签名,返回access_token")
-    public ResultMessage getLoginToken(@RequestBody LoginCommand command, @RequestHeader HttpHeaders httpHeaders) throws Exception {
-        Map result = getToken(command.getUsername(), command.getPassword(), null, httpHeaders);
+    public ResultMessage<JSONObject> getLoginToken(@RequestBody LoginCommand command, @RequestHeader HttpHeaders httpHeaders) throws Exception {
+        JSONObject result = getToken(command.getUsername(), command.getPassword(), null, httpHeaders);
         return ResultMessage.ok(result);
     }
 
