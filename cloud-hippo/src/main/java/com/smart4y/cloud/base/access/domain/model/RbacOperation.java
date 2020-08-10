@@ -14,7 +14,7 @@ import javax.persistence.Id;
 /**
  * 功能操作表
  *
- * @author Youtao on 2020/08/07 14:58
+ * @author Youtao on 2020/08/10 10:52
  */
 @Data
 @Accessors(chain = true)
@@ -31,16 +31,10 @@ public class RbacOperation extends BaseEntity<RbacOperation> {
     private Long operationId;
 
     /**
-     * 操作父级ID
+     * 操作编码
      */
-    @Column(name = "operation_parent_id")
-    private Long operationParentId;
-
-    /**
-     * 操作拦截的URL前缀
-     */
-    @Column(name = "operation_path")
-    private String operationPath;
+    @Column(name = "operation_code")
+    private String operationCode;
 
     /**
      * 操作名
@@ -49,10 +43,64 @@ public class RbacOperation extends BaseEntity<RbacOperation> {
     private String operationName;
 
     /**
-     * 操作编码
+     * 操作描述
      */
-    @Column(name = "operation_no")
-    private String operationNo;
+    @Column(name = "operation_desc")
+    private String operationDesc;
+
+    /**
+     * 操作拦截的URL前缀
+     */
+    @Column(name = "operation_path")
+    private String operationPath;
+
+    /**
+     * 操作方法类型（GET，POST，PUT，DELETE等）
+     */
+    @Column(name = "operation_method")
+    private String operationMethod;
+
+    /**
+     * 操作是否需要认证（0不需要 1需要）
+     */
+    @Column(name = "operation_auth")
+    private Boolean operationAuth;
+
+    /**
+     * 操作是否对外开放（0不开放 1开放）
+     */
+    @Column(name = "operation_open")
+    private Boolean operationOpen;
+
+    /**
+     * 操作状态（10-启用，20-禁用，30-锁定）
+     */
+    @Column(name = "operation_state")
+    private String operationState;
+
+    /**
+     * 操作所属服务ID
+     */
+    @Column(name = "operation_service_id")
+    private String operationServiceId;
+
+    /**
+     * 操作方法名
+     */
+    @Column(name = "operation_method_name")
+    private String operationMethodName;
+
+    /**
+     * 操作媒体类型
+     */
+    @Column(name = "operation_content_type")
+    private String operationContentType;
+
+    /**
+     * 操作全限定类名
+     */
+    @Column(name = "operation_class_name")
+    private String operationClassName;
 
     /**
      * 创建时间

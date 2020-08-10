@@ -1,6 +1,8 @@
 package com.smart4y.cloud.base.application.eventhandler;
 
 import com.google.common.collect.Lists;
+import com.smart4y.cloud.base.access.domain.model.RbacOperation;
+import com.smart4y.cloud.base.access.domain.service.OperationService;
 import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.application.BaseOperationService;
 import com.smart4y.cloud.base.domain.model.BaseOperation;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Component;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -39,6 +42,8 @@ public class ResourceScannedEventHandler {
     private BaseAuthorityService baseAuthorityService;
     @Autowired
     private BaseOperationService baseOperationService;
+    @Autowired
+    private OperationService operationService;
 
     @RabbitListener(queues = QueueConstants.QUEUE_SCAN_API_RESOURCE)
     public void handle(@Payload ResourceScannedEvent event) {
@@ -85,6 +90,43 @@ public class ResourceScannedEventHandler {
                 } else {
                     api.setApiId(save.getApiId());
                     baseOperationService.updateApi(api);
+                }
+
+                Optional<RbacOperation> operationOptional = operationService.getByCode(api.getApiCode());
+                if (operationOptional.isPresent()) {
+                    RbacOperation operation = operationOptional.get();
+                    operation
+                            .setOperationId(operation.getOperationId())
+                            .setOperationCode(api.getApiCode())
+                            .setOperationName(api.getApiName())
+                            .setOperationDesc(api.getApiDesc())
+                            .setOperationPath(api.getPath())
+                            .setOperationMethod(api.getRequestMethod())
+                            .setOperationContentType(api.getContentType())
+                            .setOperationServiceId(api.getServiceId())
+                            .setOperationClassName(api.getClassName())
+                            .setOperationMethodName(api.getMethodName())
+                            .setOperationAuth(true)
+                            .setOperationOpen(true)
+                            .setOperationState("10")
+                            .setLastModifiedDate(LocalDateTime.now());
+                    operationService.updateSelectiveById(operation);
+                } else {
+                    RbacOperation record = new RbacOperation()
+                            .setOperationCode(api.getApiCode())
+                            .setOperationName(api.getApiName())
+                            .setOperationDesc(api.getApiDesc())
+                            .setOperationPath(api.getPath())
+                            .setOperationMethod(api.getRequestMethod())
+                            .setOperationContentType(api.getContentType())
+                            .setOperationServiceId(api.getServiceId())
+                            .setOperationClassName(api.getClassName())
+                            .setOperationMethodName(api.getMethodName())
+                            .setOperationAuth(true)
+                            .setOperationOpen(true)
+                            .setOperationState("10")
+                            .setCreatedDate(LocalDateTime.now());
+                    operationService.save(record);
                 }
             }
             if (CollectionUtils.isNotEmpty(apis)) {

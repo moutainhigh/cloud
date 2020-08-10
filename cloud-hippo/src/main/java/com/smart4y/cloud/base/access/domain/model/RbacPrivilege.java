@@ -14,7 +14,7 @@ import javax.persistence.Id;
 /**
  * 权限表
  *
- * @author Youtao on 2020/08/07 14:58
+ * @author Youtao on 2020/08/10 10:52
  */
 @Data
 @Accessors(chain = true)
@@ -31,16 +31,16 @@ public class RbacPrivilege extends BaseEntity<RbacPrivilege> {
     private Long privilegeId;
 
     /**
-     * 权限类型（f-文件，m-菜单，e-页面元素，o-功能操作）
-     */
-    @Column(name = "privilege_type")
-    private String privilegeType;
-
-    /**
      * 权限标识
      */
     @Column(name = "privilege")
     private String privilege;
+
+    /**
+     * 权限类型（m-菜单，e-页面元素，o-功能操作）
+     */
+    @Column(name = "privilege_type")
+    private String privilegeType;
 
     /**
      * 创建时间
