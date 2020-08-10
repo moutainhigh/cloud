@@ -26,10 +26,14 @@ import java.util.stream.Collectors;
 @ApplicationService
 public class PrivilegeApplicationServiceImpl extends BaseDomainService<RbacPrivilege> implements PrivilegeApplicationService {
 
+    private final PrivilegeOperationService privilegeOperationService;
+    private final OperationService operationService;
+
     @Autowired
-    private PrivilegeOperationService privilegeOperationService;
-    @Autowired
-    private OperationService operationService;
+    public PrivilegeApplicationServiceImpl(PrivilegeOperationService privilegeOperationService, OperationService operationService) {
+        this.privilegeOperationService = privilegeOperationService;
+        this.operationService = operationService;
+    }
 
     @Override
     public Page<RbacPrivilege> getPrivilegesPage(RbacPrivilegePageQuery query) {

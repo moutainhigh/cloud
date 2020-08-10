@@ -28,14 +28,18 @@ import java.util.stream.Collectors;
 @ApplicationService
 public class GroupApplicationServiceImpl extends BaseDomainService<RbacGroup> implements GroupApplicationService {
 
+    private final GroupUserService groupUserService;
+    private final GroupRoleService groupRoleService;
+    private final UserService userService;
+    private final RoleService roleService;
+
     @Autowired
-    private GroupUserService groupUserService;
-    @Autowired
-    private GroupRoleService groupRoleService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private RoleService roleService;
+    public GroupApplicationServiceImpl(GroupUserService groupUserService, GroupRoleService groupRoleService, UserService userService, RoleService roleService) {
+        this.groupUserService = groupUserService;
+        this.groupRoleService = groupRoleService;
+        this.userService = userService;
+        this.roleService = roleService;
+    }
 
     @Override
     public Page<RbacGroup> getGroupsPage(RbacGroupPageQuery query) {

@@ -19,8 +19,12 @@ import tk.mybatis.mapper.weekend.WeekendCriteria;
 @ApplicationService
 public class RoleApplicationServiceImpl implements RoleApplicationService {
 
+    private final RoleService roleService;
+
     @Autowired
-    private RoleService roleService;
+    public RoleApplicationServiceImpl(RoleService roleService) {
+        this.roleService = roleService;
+    }
 
     @Override
     public Page<RbacRole> getRolesPage(RbacRolePageQuery query) {

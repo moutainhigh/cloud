@@ -23,24 +23,28 @@ import java.util.stream.Collectors;
 @ApplicationService
 public class RbacUserApplicationServiceImpl implements RbacUserApplicationService, UserApplicationService {
 
+    private final UserRoleService userRoleService;
+    private final GroupUserService groupUserService;
+    private final GroupRoleService groupRoleService;
+    private final RoleService roleService;
+    private final RolePrivilegeService rolePrivilegeService;
+    private final PrivilegeService privilegeService;
+    private final PrivilegeMenuService privilegeMenuService;
+    private final MenuService menuService;
+    private final UserService userService;
+
     @Autowired
-    private UserRoleService userRoleService;
-    @Autowired
-    private GroupUserService groupUserService;
-    @Autowired
-    private GroupRoleService groupRoleService;
-    @Autowired
-    private RoleService roleService;
-    @Autowired
-    private RolePrivilegeService rolePrivilegeService;
-    @Autowired
-    private PrivilegeService privilegeService;
-    @Autowired
-    private PrivilegeMenuService privilegeMenuService;
-    @Autowired
-    private MenuService menuService;
-    @Autowired
-    private UserService userService;
+    public RbacUserApplicationServiceImpl(UserRoleService userRoleService, GroupUserService groupUserService, GroupRoleService groupRoleService, RoleService roleService, RolePrivilegeService rolePrivilegeService, PrivilegeService privilegeService, PrivilegeMenuService privilegeMenuService, MenuService menuService, UserService userService) {
+        this.userRoleService = userRoleService;
+        this.groupUserService = groupUserService;
+        this.groupRoleService = groupRoleService;
+        this.roleService = roleService;
+        this.rolePrivilegeService = rolePrivilegeService;
+        this.privilegeService = privilegeService;
+        this.privilegeMenuService = privilegeMenuService;
+        this.menuService = menuService;
+        this.userService = userService;
+    }
 
     @Override
     public Page<RbacUser> getUsersPage(RbacUserPageQuery query) {
