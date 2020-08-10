@@ -1,8 +1,8 @@
 package com.smart4y.cloud.gateway.infrastructure.filter;
 
+import com.smart4y.cloud.core.dto.RemotePrivilegeOperationDTO;
 import com.smart4y.cloud.core.exception.OpenException;
 import com.smart4y.cloud.core.message.enums.AccessDenied403MessageType;
-import com.smart4y.cloud.core.dto.AuthorityResourceDTO;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonAccessDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.security.AccessManager;
 import com.smart4y.cloud.gateway.infrastructure.toolkit.ReactiveWebUtils;
@@ -41,16 +41,16 @@ public class PreCheckFilter implements WebFilter {
         String requestPath = request.getURI().getPath();
         String remoteIpAddress = ReactiveWebUtils.getRemoteAddress(exchange);
         String origin = request.getHeaders().getOrigin();
-        AuthorityResourceDTO resource = accessManager.getResource(requestPath);
+        RemotePrivilegeOperationDTO resource = accessManager.getPrivilegeOperation(requestPath);
         if (resource != null) {
-            if ("0".equals(resource.getIsOpen().toString())) {
+            if (!resource.getOperationOpen()) {
                 // 未公开
                 return accessDeniedHandler.handle(exchange, new AccessDeniedException(OpenException.getBundleMessageText(AccessDenied403MessageType.ACCESS_DENIED_NOT_OPEN)));
             }
-            if ("0".equals(resource.getStatus().toString())) {
+            if ("20".equals(resource.getOperationState())) {
                 // 禁用
                 return accessDeniedHandler.handle(exchange, new AccessDeniedException(OpenException.getBundleMessageText(AccessDenied403MessageType.ACCESS_DENIED_DISABLED)));
-            } else if ("2".equals(resource.getStatus().toString())) {
+            } else if ("30".equals(resource.getOperationState())) {
                 // 维护中
                 return accessDeniedHandler.handle(exchange, new AccessDeniedException(OpenException.getBundleMessageText(AccessDenied403MessageType.ACCESS_DENIED_UPDATING)));
             }
@@ -59,8 +59,7 @@ public class PreCheckFilter implements WebFilter {
         boolean deny = accessManager.matchIpOrOriginBlacklist(requestPath, remoteIpAddress, origin);
         if (deny) {
             // 拒绝
-            return accessDeniedHandler.handle(exchange, new AccessDeniedException(OpenException.getBundleMessageText(AccessDenied403MessageType.ACCESS_DENIED_BLACK_LIMITED)))
-                    ;
+            return accessDeniedHandler.handle(exchange, new AccessDeniedException(OpenException.getBundleMessageText(AccessDenied403MessageType.ACCESS_DENIED_BLACK_LIMITED)));
         }
         // 3 IP白名单检测
         Boolean[] matchIpWhiteListResult = accessManager.matchIpOrOriginWhiteList(requestPath, remoteIpAddress, origin);

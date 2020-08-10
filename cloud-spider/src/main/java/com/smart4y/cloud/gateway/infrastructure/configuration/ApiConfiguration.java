@@ -9,8 +9,8 @@ import com.smart4y.cloud.core.properties.OpenCommonProperties;
 import com.smart4y.cloud.core.spring.SpringContextHolder;
 import com.smart4y.cloud.gateway.application.AccessLogService;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonExceptionHandler;
-import com.smart4y.cloud.gateway.infrastructure.feign.BaseAuthorityFeign;
 import com.smart4y.cloud.gateway.infrastructure.feign.GatewayFeign;
+import com.smart4y.cloud.gateway.infrastructure.feign.RemotePrivilegeFeign;
 import com.smart4y.cloud.gateway.infrastructure.filter.GatewayContextFilter;
 import com.smart4y.cloud.gateway.infrastructure.filter.RemoveGatewayContextFilter;
 import com.smart4y.cloud.gateway.infrastructure.locator.JdbcRouteDefinitionLocator;
@@ -141,8 +141,8 @@ public class ApiConfiguration {
      */
     @Bean
     @Lazy
-    public ResourceLocator resourceLocator(RouteDefinitionLocator routeDefinitionLocator, BaseAuthorityFeign baseAuthorityFeign, GatewayFeign gatewayFeign) {
-        ResourceLocator resourceLocator = new ResourceLocator(routeDefinitionLocator, baseAuthorityFeign, gatewayFeign);
+    public ResourceLocator resourceLocator(RouteDefinitionLocator routeDefinitionLocator, GatewayFeign gatewayFeign, RemotePrivilegeFeign remotePrivilegeFeign) {
+        ResourceLocator resourceLocator = new ResourceLocator(routeDefinitionLocator, gatewayFeign, remotePrivilegeFeign);
         log.info("ResourceLocator [{}]", resourceLocator);
         return resourceLocator;
     }

@@ -50,7 +50,7 @@ public class GroupApplicationServiceImpl extends BaseDomainService<RbacGroup> im
         if (StringUtils.isNotBlank(query.getGroupState())) {
             criteria.andEqualTo(RbacGroup::getGroupState, query.getGroupState());
         }
-        return this.findPage(weekend);
+        return this.findPage(weekend, query.getPage(), query.getLimit());
     }
 
     @Override
@@ -71,7 +71,7 @@ public class GroupApplicationServiceImpl extends BaseDomainService<RbacGroup> im
         List<RbacGroupRole> groupUsers = groupRoleService.getRoles(groupId);
         List<Long> roleIds = groupUsers.stream().map(RbacGroupRole::getRoleId).collect(Collectors.toList());
 
-        return roleService.getUsers(roleIds);
+        return roleService.getRoles(roleIds);
     }
 
     @Override

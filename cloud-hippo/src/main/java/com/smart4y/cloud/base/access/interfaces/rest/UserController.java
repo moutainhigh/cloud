@@ -1,5 +1,6 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
+import com.smart4y.cloud.base.access.application.UserApplicationService;
 import com.smart4y.cloud.base.access.domain.model.RbacUser;
 import com.smart4y.cloud.base.access.interfaces.dtos.user.CreateUserCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.user.GrantUserRoleCommand;
@@ -12,6 +13,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import static com.smart4y.cloud.core.message.ResultMessage.ok;
@@ -25,10 +27,14 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 @Api(tags = {"访问控制 - 用户"})
 public class UserController extends BaseAccessController {
 
+    @Autowired
+    private UserApplicationService userApplicationService;
+
     @GetMapping("/users/page")
     @ApiOperation(value = "用户:分页")
     public ResultMessage<Page<RbacUser>> getUsersPage(RbacUserPageQuery query) {
-        return ok();
+        Page<RbacUser> result = userApplicationService.getUsersPage(query);
+        return ok(result);
     }
 
     @PostMapping("/users")

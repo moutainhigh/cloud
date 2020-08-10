@@ -24,9 +24,6 @@ public interface BaseUserService {
 
     /**
      * 更新系统用户
-     *
-     * @param baseUser
-     * @return
      */
     void updateUser(BaseUser baseUser);
 
@@ -69,9 +66,6 @@ public interface BaseUserService {
 
     /**
      * 依据登录名查询系统用户信息
-     *
-     * @param username
-     * @return
      */
     BaseUser getUserByUsername(String username);
 
@@ -81,7 +75,6 @@ public interface BaseUserService {
      * 其他方式没有规则，无法自动识别。需要单独开发
      *
      * @param account 登陆账号
-     * @return
      */
     UserAccountVO login(String account);
 }

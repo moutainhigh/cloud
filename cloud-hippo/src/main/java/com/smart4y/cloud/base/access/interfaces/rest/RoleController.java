@@ -1,5 +1,6 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
+import com.smart4y.cloud.base.access.application.RoleApplicationService;
 import com.smart4y.cloud.base.access.domain.model.RbacRole;
 import com.smart4y.cloud.base.access.interfaces.dtos.role.CreateRoleCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.role.GrantPrivilegeCommand;
@@ -12,6 +13,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +29,9 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 @Api(tags = {"访问控制 - 角色"})
 public class RoleController extends BaseAccessController {
 
+    @Autowired
+    private RoleApplicationService roleApplicationService;
+
     @GetMapping("/roles")
     @ApiOperation(value = "角色:所有")
     public ResultMessage<List<RbacRole>> getRoles() {
@@ -36,7 +41,8 @@ public class RoleController extends BaseAccessController {
     @GetMapping("/roles/page")
     @ApiOperation(value = "角色:分页")
     public ResultMessage<Page<RbacRole>> getRolesPage(RbacRolePageQuery query) {
-        return ok();
+        Page<RbacRole> result = roleApplicationService.getRolesPage(query);
+        return ok(result);
     }
 
     @PostMapping("/roles")

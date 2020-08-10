@@ -1,12 +1,12 @@
 package com.smart4y.cloud.gateway.infrastructure.security;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
-import com.smart4y.cloud.core.dto.OpenAuthority;
 import com.smart4y.cloud.core.constant.CommonConstants;
+import com.smart4y.cloud.core.dto.OpenAuthority;
+import com.smart4y.cloud.core.dto.RemotePrivilegeOperationDTO;
 import com.smart4y.cloud.core.exception.OpenAlertException;
 import com.smart4y.cloud.core.message.enums.AccessDenied403MessageType;
 import com.smart4y.cloud.core.toolkit.base.StringHelper;
-import com.smart4y.cloud.core.dto.AuthorityResourceDTO;
 import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
 import com.smart4y.cloud.gateway.infrastructure.toolkit.ReactiveIpAddressMatcher;
@@ -95,26 +95,26 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
             return true;
         }
         // 动态权限列表
-        return resourceLocator.getAuthorityResources().stream()
-                .filter(res -> StringUtils.isNotBlank(res.getPath()))
+        return resourceLocator.getPrivilegeOperations().stream()
+                .filter(res -> StringUtils.isNotBlank(res.getOperationPath()))
                 .anyMatch(res -> {
                     // 无需认证，返回true
-                    boolean isAuth = res.getIsAuth() != null && res.getIsAuth() == 1;
-                    return pathMatch.match(res.getPath(), requestPath) && !isAuth;
+                    boolean isAuth = res.getOperationAuth();
+                    return pathMatch.match(res.getOperationPath(), requestPath) && !isAuth;
                 });
     }
 
     /**
-     * 获取资源状态
+     * 获取接口资源状态
      */
-    public AuthorityResourceDTO getResource(String requestPath) {
+    public RemotePrivilegeOperationDTO getPrivilegeOperation(String requestPath) {
         // 动态权限列表
-        return resourceLocator.getAuthorityResources()
+        return resourceLocator.getPrivilegeOperations()
                 .stream()
-                .filter(r -> StringUtils.isNotBlank(r.getPath()))
-                .filter(r -> !"/**".equals(r.getPath()))
-                .filter(r -> pathMatch.match(r.getPath(), requestPath))
-                .filter(r -> !permitAll(r.getPath()))
+                .filter(r -> StringUtils.isNotBlank(r.getOperationPath()))
+                .filter(r -> !"/**".equals(r.getOperationPath()))
+                .filter(r -> pathMatch.match(r.getOperationPath(), requestPath))
+                .filter(r -> !permitAll(r.getOperationPath()))
                 .findFirst().orElse(null);
     }
 
@@ -146,6 +146,9 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
         return false;
     }
 
+    /**
+     * TODO 匹配动态权限（其中取的权限集合是否正确？现在取的是operation）
+     */
     public boolean mathAuthorities(ServerWebExchange exchange, Authentication authentication, String requestPath) {
         Collection<ConfigAttribute> attributes = getAttributes(requestPath);
         int result = 0;

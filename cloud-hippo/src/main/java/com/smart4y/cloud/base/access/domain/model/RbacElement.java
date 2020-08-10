@@ -14,7 +14,7 @@ import javax.persistence.Id;
 /**
  * 页面元素表（对应页面按钮）
  *
- * @author Youtao on 2020/08/10 10:52
+ * @author Youtao on 2020/08/10 15:26
  */
 @Data
 @Accessors(chain = true)
@@ -39,8 +39,8 @@ public class RbacElement extends BaseEntity<RbacElement> {
     /**
      * 页面元素编码
      */
-    @Column(name = "element_no")
-    private String elementNo;
+    @Column(name = "element_code")
+    private String elementCode;
 
     /**
      * 创建时间

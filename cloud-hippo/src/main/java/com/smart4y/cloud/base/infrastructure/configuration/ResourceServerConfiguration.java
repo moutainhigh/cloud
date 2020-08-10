@@ -65,6 +65,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers(
 //                        "/access/**", 测试，访问控制
                         "/v2/api-docs",
+                        "/access/privileges/**",
                         "/authority/access",
                         "/authority/app",
                         "/app/*/info",

@@ -1,17 +1,19 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
+import com.smart4y.cloud.base.access.application.ElementApplicationService;
 import com.smart4y.cloud.base.access.domain.model.RbacElement;
 import com.smart4y.cloud.base.access.interfaces.dtos.element.CreateElementCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.element.ModifyElementCommand;
+import com.smart4y.cloud.base.access.interfaces.dtos.element.RbacElementPageQuery;
 import com.smart4y.cloud.core.message.ResultMessage;
+import com.smart4y.cloud.core.message.page.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static com.smart4y.cloud.core.message.ResultMessage.ok;
 
@@ -24,10 +26,14 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 @RestController
 public class ElementController extends BaseAccessController {
 
-    @GetMapping("/elements")
-    @ApiOperation(value = "元素:所有")
-    public ResultMessage<List<RbacElement>> getElements() {
-        return ok();
+    @Autowired
+    private ElementApplicationService elementApplicationService;
+
+    @GetMapping("/elements/page")
+    @ApiOperation(value = "元素:分页")
+    public ResultMessage<Page<RbacElement>> getElementsPage(RbacElementPageQuery query) {
+        Page<RbacElement> result = elementApplicationService.getElementsPage(query);
+        return ok(result);
     }
 
     @PostMapping("/elements")

@@ -58,11 +58,11 @@ Vue.prototype.hasAuthority = function (authorities) {
     if (!authorities) {
         return false;
     }
-    // return authorities.split(',').some(item => {
-    //   return store.state.user.access.includes("ACTION_" + item);
-    // })
+    return authorities.split(',').some(item => {
+        return store.state.user.access.includes(item);
+    })
     // FIXME 后期需要修改为新逻辑，此处先统一返回验证通过
-    return true;
+    // return true;
 }
 /**
  * 全局过滤器 - 时间格式化

@@ -2,7 +2,6 @@ package com.smart4y.cloud.mapper;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.smart4y.cloud.core.message.page.OpenThreadContext;
 import com.smart4y.cloud.core.message.page.Page;
 import com.smart4y.cloud.core.spring.SpringContextHolder;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,7 @@ import java.util.List;
  * 领域服务基类
  *
  * @author Youtao
- *         Created by youtao on 2019-04-30.
+ * Created by youtao on 2019-04-30.
  */
 @Slf4j
 @Component
@@ -381,18 +380,15 @@ public class BaseDomainService<T extends BaseEntity> {
      * @param weekend  查询类
      * @return 分页信息
      */
-    public PageInfo<T> page(Weekend<T> weekend) {
-        int page = OpenThreadContext.getPage();
-        int limit = OpenThreadContext.getLimit();
-        PageHelper.startPage(page, limit, Boolean.TRUE);
+    public PageInfo<T> page(Weekend<T> weekend, int pageNo, int limit) {
+        PageHelper.startPage(pageNo, limit, Boolean.TRUE);
         List<T> list = list(weekend);
         PageInfo pageInfo = new PageInfo<>(list);
-        OpenThreadContext.removePageLimit();
         return pageInfo;
     }
 
-    public Page<T> findPage(Weekend<T> weekend) {
-        PageInfo<T> pageInfo = this.page(weekend);
+    public Page<T> findPage(Weekend<T> weekend, int pageNo, int limit) {
+        PageInfo<T> pageInfo = this.page(weekend, pageNo, limit);
         Page<T> page = new Page<>();
         page.setRecords(pageInfo.getList());
         page.setTotal(pageInfo.getTotal());

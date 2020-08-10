@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 /**
  * 组织表
  *
- * @author 2020/08/10 10:52 on Youtao
+ * @author 2020/08/10 15:26 on Youtao
  */
 @Mapper
 @Repository

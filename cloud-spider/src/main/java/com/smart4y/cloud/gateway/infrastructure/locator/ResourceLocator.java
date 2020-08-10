@@ -1,12 +1,12 @@
 package com.smart4y.cloud.gateway.infrastructure.locator;
 
 import com.google.common.collect.Lists;
-import com.smart4y.cloud.core.message.ResultMessage;
-import com.smart4y.cloud.core.event.RouteRemoteRefreshedEvent;
-import com.smart4y.cloud.core.dto.AuthorityResourceDTO;
 import com.smart4y.cloud.core.dto.IpLimitApiDTO;
-import com.smart4y.cloud.gateway.infrastructure.feign.BaseAuthorityFeign;
+import com.smart4y.cloud.core.dto.RemotePrivilegeOperationDTO;
+import com.smart4y.cloud.core.event.RouteRemoteRefreshedEvent;
+import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.gateway.infrastructure.feign.GatewayFeign;
+import com.smart4y.cloud.gateway.infrastructure.feign.RemotePrivilegeFeign;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,10 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +28,7 @@ import java.util.concurrent.TimeUnit;
  * <p>
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshedEvent> {
@@ -52,11 +55,11 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
     public static final int PERIOD_DAY_TTL = 2 * 3600 * 24 + 10;
 
     /**
-     * 权限资源
+     * 权限（操作）列表
      */
     @Getter
     @Setter
-    private List<AuthorityResourceDTO> authorityResources;
+    private List<RemotePrivilegeOperationDTO> privilegeOperations;
 
     /**
      * ip黑名单
@@ -73,11 +76,12 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
     private List<IpLimitApiDTO> ipWhites;
 
     /**
-     * 权限列表
+     * （操作）权限列表
      */
     @Getter
     @Setter
     private Map<String, Collection<ConfigAttribute>> configAttributes = new ConcurrentHashMap<>();
+
     /**
      * 缓存
      */
@@ -87,20 +91,20 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
 
 
     private RouteDefinitionLocator routeDefinitionLocator;
-    private BaseAuthorityFeign baseAuthorityFeign;
     private GatewayFeign gatewayFeign;
+    private RemotePrivilegeFeign remotePrivilegeFeign;
 
     public ResourceLocator() {
-        authorityResources = new CopyOnWriteArrayList<>();
+        privilegeOperations = new CopyOnWriteArrayList<>();
         ipBlacks = new CopyOnWriteArrayList<>();
         ipWhites = new CopyOnWriteArrayList<>();
     }
 
-    public ResourceLocator(RouteDefinitionLocator routeDefinitionLocator, BaseAuthorityFeign baseAuthorityFeign, GatewayFeign gatewayFeign) {
+    public ResourceLocator(RouteDefinitionLocator routeDefinitionLocator, GatewayFeign gatewayFeign, RemotePrivilegeFeign remotePrivilegeFeign) {
         this();
-        this.baseAuthorityFeign = baseAuthorityFeign;
         this.gatewayFeign = gatewayFeign;
         this.routeDefinitionLocator = routeDefinitionLocator;
+        this.remotePrivilegeFeign = remotePrivilegeFeign;
     }
 
     /**
@@ -126,7 +130,7 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
     public void refresh() {
         this.configAttributes.clear();
         this.cache.clear();
-        this.authorityResources = loadAuthorityResources();
+        this.privilegeOperations = loadPrivilegeOperations();
         this.ipBlacks = loadIpBlackList();
         this.ipWhites = loadIpWhiteList();
     }
@@ -156,40 +160,43 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
     }
 
     /**
-     * 加载授权列表
+     * 加载授权的操作权限列表
      */
-    public List<AuthorityResourceDTO> loadAuthorityResources() {
-        List<AuthorityResourceDTO> resources = Lists.newArrayList();
+    public List<RemotePrivilegeOperationDTO> loadPrivilegeOperations() {
+        List<RemotePrivilegeOperationDTO> operations = Lists.newArrayList();
         try {
-            // 查询所有接口
-            ResultMessage<List<AuthorityResourceDTO>> authorityResourceResponse = baseAuthorityFeign.findAuthorityResource();
-            resources = authorityResourceResponse.isOk() ? authorityResourceResponse.getData() : Collections.emptyList();
+            // 查询所有操作接口
+            ResultMessage<List<RemotePrivilegeOperationDTO>> listResultMessage = remotePrivilegeFeign.remoteAllOperations();
+            if (listResultMessage.isFail()) {
+                return operations;
+            }
+            operations = listResultMessage.getData();
 
             ConfigAttribute cfg;
             Collection<ConfigAttribute> array;
-            for (AuthorityResourceDTO item : resources) {
-                String path = item.getPath();
+            for (RemotePrivilegeOperationDTO operation : operations) {
+                String path = operation.getOperationPath();
                 if (path == null) {
                     continue;
                 }
-                String fullPath = getFullPath(item.getServiceId(), path);
-                item.setPath(fullPath);
+                String fullPath = getFullPath(operation.getOperationServiceId(), path);
+                operation.setOperationPath(fullPath);
                 array = configAttributes.get(fullPath);
                 if (array == null) {
                     array = new ArrayList<>();
                 }
-                cfg = new SecurityConfig(item.getAuthority());
+                cfg = new SecurityConfig("API_" + operation.getOperationCode());
                 if (!array.contains(cfg)) {
                     array.add(cfg);
                 }
                 configAttributes.put(fullPath, array);
             }
-            log.info("=============加载动态权限:{}==============", resources.size());
+            log.info("=============加载动态操作权限:{}==============", operations.size());
         } catch (Exception e) {
-            log.error("加载动态权限错误：{}", e.getLocalizedMessage(), e);
+            log.error("加载动态操作权限错误：{}", e.getLocalizedMessage(), e);
         }
 
-        return resources;
+        return operations;
     }
 
     /**

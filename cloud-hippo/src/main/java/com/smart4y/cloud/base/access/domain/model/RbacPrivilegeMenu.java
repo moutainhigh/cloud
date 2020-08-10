@@ -11,7 +11,7 @@ import com.smart4y.cloud.mapper.BaseEntity;
 /**
  * 权限菜单关联表
  *
- * @author Youtao on 2020/08/10 10:52
+ * @author Youtao on 2020/08/10 15:26
  */
 @Data
 @Accessors(chain = true)
