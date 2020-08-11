@@ -98,7 +98,7 @@ public class ResourceServerConfiguration {
         });
 
         http
-                .headers().frameOptions().disable().and()// swagger 嵌入用到此配置
+                .headers().frameOptions().disable().and()// swagger 嵌入当前页面用到此配置（iframe）
                 .httpBasic().disable()
                 .csrf().disable()
                 .authorizeExchange()
