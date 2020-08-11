@@ -45,7 +45,8 @@ public class FeignRequestInterceptor implements RequestInterceptor {
 
         template.header(X_REQUEST_ID, xRequestId);
 
-        log.info("{}", template.toString());
+        System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+        System.out.println(template.toString());
     }
 
     private HttpServletRequest getHttpServletRequest() {

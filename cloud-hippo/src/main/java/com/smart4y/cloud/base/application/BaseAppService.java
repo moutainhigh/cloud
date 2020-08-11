@@ -2,7 +2,7 @@ package com.smart4y.cloud.base.application;
 
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.BaseApp;
-import com.smart4y.cloud.base.interfaces.query.BaseAppQuery;
+import com.smart4y.cloud.base.interfaces.dtos.BaseAppQuery;
 import com.smart4y.cloud.core.security.OpenClientDetails;
 
 /**

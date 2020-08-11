@@ -2,7 +2,7 @@ package com.smart4y.cloud.base.interfaces.web;
 
 import com.smart4y.cloud.base.application.BaseUserService;
 import com.smart4y.cloud.base.domain.model.BaseUser;
-import com.smart4y.cloud.base.interfaces.command.profile.UpdateCurrentUserCommand;
+import com.smart4y.cloud.base.interfaces.dtos.UpdateCurrentUserCommand;
 import com.smart4y.cloud.core.dto.UserAccountVO;
 import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.core.security.OpenHelper;

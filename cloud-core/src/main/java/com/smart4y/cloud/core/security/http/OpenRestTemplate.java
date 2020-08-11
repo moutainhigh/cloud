@@ -20,9 +20,9 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class OpenRestTemplate extends RestTemplate {
 
-    private OpenCommonProperties openCommonProperties;
-    private ApplicationEventPublisher publisher;
-    private BusProperties busProperties;
+    private final OpenCommonProperties openCommonProperties;
+    private final ApplicationEventPublisher publisher;
+    private final BusProperties busProperties;
 
     public OpenRestTemplate(OpenCommonProperties openCommonProperties, BusProperties busProperties, ApplicationEventPublisher publisher) {
         this.openCommonProperties = openCommonProperties;
