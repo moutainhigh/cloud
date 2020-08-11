@@ -69,16 +69,16 @@ public class GatewayRouteController {
     @PostMapping("/gateway/route/add")
     public ResultMessage<Long> addRoute(@RequestBody AddRouteCommand command) {
         GatewayRoute route = new GatewayRoute();
-        route.setPath(command.getPath());
-        route.setServiceId(command.getServiceId());
-        route.setUrl(command.getUrl());
-        route.setRetryable(command.getRetryable());
-        route.setStripPrefix(command.getStripPrefix());
-        route.setStatus(command.getStatus());
+        route.setRoutePath(command.getPath());
+        route.setRouteServiceId(command.getServiceId());
+        route.setRouteUrl(command.getUrl());
+        route.setRouteRetryable(command.getRetryable());
+        route.setRouteStripPrefix(command.getStripPrefix());
+        route.setRouteState(1 == command.getStatus() ? "10" : "20");
         route.setRouteName(command.getRouteName());
         route.setRouteDesc(command.getRouteDesc());
-        if (route.getUrl() != null && StringHelper.isNotEmpty(route.getUrl())) {
-            route.setServiceId(null);
+        if (route.getRouteUrl() != null && StringHelper.isNotEmpty(route.getRouteUrl())) {
+            route.setRouteServiceId(null);
         }
         long routeId = gatewayRouteService.addRoute(route);
         // 刷新网关
@@ -96,14 +96,14 @@ public class GatewayRouteController {
         route.setRouteId(command.getRouteId());
         route.setRouteName(command.getRouteName());
         route.setRouteDesc(command.getRouteDesc());
-        route.setPath(command.getPath());
-        route.setServiceId(command.getServiceId());
-        route.setUrl(command.getUrl());
-        route.setStripPrefix(command.getStripPrefix());
-        route.setRetryable(command.getRetryable());
-        route.setStatus(command.getStatus());
-        if (route.getUrl() != null && StringHelper.isNotEmpty(route.getUrl())) {
-            route.setServiceId(null);
+        route.setRoutePath(command.getPath());
+        route.setRouteServiceId(command.getServiceId());
+        route.setRouteUrl(command.getUrl());
+        route.setRouteStripPrefix(command.getStripPrefix());
+        route.setRouteRetryable(command.getRetryable());
+        route.setRouteState(1 == command.getStatus() ? "10" : "20");
+        if (route.getRouteUrl() != null && StringHelper.isNotEmpty(route.getRouteUrl())) {
+            route.setRouteServiceId(null);
         }
         gatewayRouteService.updateRoute(route);
         // 刷新网关

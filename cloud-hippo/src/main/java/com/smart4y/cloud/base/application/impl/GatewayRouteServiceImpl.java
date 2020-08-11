@@ -7,7 +7,6 @@ import com.smart4y.cloud.base.domain.model.GatewayRoute;
 import com.smart4y.cloud.base.infrastructure.mapper.GatewayRouteMapper;
 import com.smart4y.cloud.base.interfaces.query.GatewayRouteQuery;
 import com.smart4y.cloud.core.annotation.ApplicationService;
-import com.smart4y.cloud.core.constant.BaseConstants;
 import com.smart4y.cloud.core.exception.OpenAlertException;
 import com.smart4y.cloud.core.message.enums.MessageType;
 import com.smart4y.cloud.core.toolkit.base.StringHelper;
@@ -19,7 +18,7 @@ import java.util.List;
 
 /**
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @ApplicationService
@@ -39,7 +38,7 @@ public class GatewayRouteServiceImpl implements GatewayRouteService {
     public List<GatewayRoute> findRouteList() {
         Weekend<GatewayRoute> queryWrapper = Weekend.of(GatewayRoute.class);
         queryWrapper.weekendCriteria()
-                .andEqualTo(GatewayRoute::getStatus, BaseConstants.ENABLED);
+                .andEqualTo(GatewayRoute::getRouteState, "10");
         return gatewayRouteMapper.selectByExample(queryWrapper);
     }
 
@@ -50,28 +49,24 @@ public class GatewayRouteServiceImpl implements GatewayRouteService {
 
     @Override
     public long addRoute(GatewayRoute route) {
-        if (StringHelper.isBlank(route.getPath())) {
+        if (StringHelper.isBlank(route.getRoutePath())) {
             throw new OpenAlertException(MessageType.BAD_REQUEST, "path不能为空！");
         }
         if (isExist(route.getRouteName())) {
             throw new OpenAlertException(MessageType.BAD_REQUEST, "路由名称已存在！");
         }
-        route.setIsPersist(0);
         gatewayRouteMapper.insertSelective(route);
         return route.getRouteId();
     }
 
     @Override
     public void updateRoute(GatewayRoute route) {
-        if (StringHelper.isBlank(route.getPath())) {
+        if (StringHelper.isBlank(route.getRoutePath())) {
             throw new OpenAlertException(MessageType.BAD_REQUEST, "path不能为空！");
         }
         GatewayRoute saved = getRoute(route.getRouteId());
         if (saved == null) {
             throw new OpenAlertException(MessageType.BAD_REQUEST, "路由信息不存在!");
-        }
-        if (saved.getIsPersist().equals(BaseConstants.ENABLED)) {
-            throw new OpenAlertException(MessageType.BAD_REQUEST, "保留数据，不允许修改");
         }
         if (!saved.getRouteName().equals(route.getRouteName())) {
             // 和原来不一致重新检查唯一性
@@ -85,9 +80,6 @@ public class GatewayRouteServiceImpl implements GatewayRouteService {
     @Override
     public void removeRoute(Long routeId) {
         GatewayRoute saved = getRoute(routeId);
-        if (saved != null && saved.getIsPersist().equals(BaseConstants.ENABLED)) {
-            throw new OpenAlertException(MessageType.BAD_REQUEST, "保留数据，不允许删除");
-        }
         gatewayRouteMapper.deleteByPrimaryKey(routeId);
     }
 

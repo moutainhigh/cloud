@@ -19,6 +19,7 @@ import org.springframework.cloud.gateway.support.NameUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.context.ApplicationListener;
+import org.springframework.lang.NonNull;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
@@ -49,7 +50,7 @@ public class JdbcRouteDefinitionLocator implements ApplicationListener<RouteRemo
     }
 
     @Override
-    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+    public void setApplicationEventPublisher(@NonNull ApplicationEventPublisher applicationEventPublisher) {
         this.publisher = applicationEventPublisher;
     }
 
@@ -57,7 +58,7 @@ public class JdbcRouteDefinitionLocator implements ApplicationListener<RouteRemo
      * BUS刷新事件
      */
     @Override
-    public void onApplicationEvent(RouteRemoteRefreshedEvent event) {
+    public void onApplicationEvent(@NonNull RouteRemoteRefreshedEvent event) {
         refresh();
     }
 
@@ -94,7 +95,7 @@ public class JdbcRouteDefinitionLocator implements ApplicationListener<RouteRemo
      * #转发去掉前缀,总要否则swagger无法加载
      * - StripPrefix=1
      */
-    private Mono<Void> loadRoutes() {
+    private void loadRoutes() {
         //从数据库拿到路由配置
         try {
             List<GatewayRoute> routeList = gatewayRouteDomainService.findAllByStatusEnable();
@@ -190,6 +191,5 @@ public class JdbcRouteDefinitionLocator implements ApplicationListener<RouteRemo
         } catch (Exception e) {
             log.error("加载动态路由错误:{}", e.getLocalizedMessage(), e);
         }
-        return Mono.empty();
     }
 }
