@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * @author Youtao
- *         Created by youtao on 2019/9/16.
+ * Created by youtao on 2019/9/16.
  */
 @DomainService
 public class GatewayRouteDomainService extends BaseDomainService<GatewayRoute> {
@@ -24,7 +24,7 @@ public class GatewayRouteDomainService extends BaseDomainService<GatewayRoute> {
         Weekend<GatewayRoute> weekend = Weekend.of(GatewayRoute.class);
         weekend
                 .weekendCriteria()
-                .andEqualTo(GatewayRoute::getStatus, BaseConstants.ENABLED);
+                .andEqualTo(GatewayRoute::getRouteState, "10");
         return this.list(weekend);
     }
 }

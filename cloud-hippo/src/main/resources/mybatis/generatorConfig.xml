@@ -71,7 +71,7 @@
             <columnOverride column="user_name" javaType="com.smart4y.cloud.base.gateway.domain.model.GatewayRoute"/>
         </table>-->
         <table tableName="rbac_%">
-            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
         </table>
+        <table catalog="cloud" tableName="gateway_route" domainObjectName="GatewayRoute"/>
     </context>
 </generatorConfiguration>

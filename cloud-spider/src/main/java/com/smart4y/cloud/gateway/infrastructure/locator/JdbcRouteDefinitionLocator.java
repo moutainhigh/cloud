@@ -74,8 +74,8 @@ public class JdbcRouteDefinitionLocator implements ApplicationListener<RouteRemo
         final String[] fullPath = {path.startsWith("/") ? path : "/" + path};
         if (routeList != null) {
             routeList.forEach(route -> {
-                if (route.getServiceId() != null && route.getServiceId().equals(serviceId)) {
-                    fullPath[0] = route.getPath().replace("/**", path.startsWith("/") ? path : "/" + path);
+                if (route.getRouteServiceId() != null && route.getRouteServiceId().equals(serviceId)) {
+                    fullPath[0] = route.getRoutePath().replace("/**", path.startsWith("/") ? path : "/" + path);
                 }
             });
         }
@@ -165,12 +165,12 @@ public class JdbcRouteDefinitionLocator implements ApplicationListener<RouteRemo
                     Map<String, String> predicatePathParams = new HashMap<>(8);
                     predicatePath.setName("Path");
                     predicatePathParams.put("name", StringUtils.isBlank(gatewayRoute.getRouteName()) ? gatewayRoute.getRouteId().toString() : gatewayRoute.getRouteName());
-                    predicatePathParams.put("pattern", gatewayRoute.getPath());
-                    predicatePathParams.put("pathPattern", gatewayRoute.getPath());
+                    predicatePathParams.put("pattern", gatewayRoute.getRoutePath());
+                    predicatePathParams.put("pathPattern", gatewayRoute.getRoutePath());
                     predicatePath.setArgs(predicatePathParams);
                     predicates.add(predicatePath);
                     // 服务地址
-                    URI uri = UriComponentsBuilder.fromUriString(StringUtils.isNotBlank(gatewayRoute.getUrl()) ? gatewayRoute.getUrl() : "lb://" + gatewayRoute.getServiceId()).build().toUri();
+                    URI uri = UriComponentsBuilder.fromUriString(StringUtils.isNotBlank(gatewayRoute.getRouteUrl()) ? gatewayRoute.getRouteUrl() : "lb://" + gatewayRoute.getRouteServiceId()).build().toUri();
 
                     FilterDefinition stripPrefixDefinition = new FilterDefinition();
                     Map<String, String> stripPrefixParams = new HashMap<>(8);

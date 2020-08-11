@@ -74,6 +74,6 @@
             &lt;!&ndash;<generatedKey column="id" sqlStatement="Mysql" identity="true"/>&ndash;&gt;
         </table>-->
 
-        <table tableName="gateway_route" domainObjectName="GatewayRoute"/>
+        <table catalog="cloud" tableName="gateway_route" domainObjectName="GatewayRoute"/>
     </context>
 </generatorConfiguration>
