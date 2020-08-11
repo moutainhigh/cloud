@@ -14,6 +14,7 @@
         </FormItem>
       </Form>
 
+      <Alert show-icon type="info"><code>权限</code>,<code>成员</code></Alert>
       <Table size="small" :columns="columns" :data="data" :loading="loading" border>
         <template slot="createdDate" slot-scope="{ row }">
           <span>{{ row.createdDate | dateFmt('YYYY-MM-DD HH:mm:ss') }}</span>
@@ -43,7 +44,7 @@ export default {
         roleCode: ''
       },
       columns: [
-        {title: '角色ID', key: 'roleId', width: 160},
+        {title: '角色ID', key: 'roleId', width: 170},
         {title: '角色名', key: 'roleName'},
         {title: '角色编码', key: 'roleCode'},
         {title: '创建时间', key: 'createdDate', slot: 'createdDate'}

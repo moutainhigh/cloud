@@ -30,6 +30,10 @@ public class ModifyMenuCommand implements Serializable {
     @ApiModelProperty(value = "菜单名称", required = true)
     private String menuName;
 
+    @NotBlank(message = "菜单标识 必填")
+    @ApiModelProperty(value = "菜单标识", required = true)
+    private String menuCode;
+
     @NotBlank(message = "菜单图标 必填")
     @ApiModelProperty(value = "菜单图标", required = true)
     private String menuIcon;
@@ -48,4 +52,8 @@ public class ModifyMenuCommand implements Serializable {
     @NotBlank(message = "菜单状态 必填")
     @ApiModelProperty(value = "菜单状态（10-启用，20-禁用，30-锁定）", allowableValues = "10,20,30", required = true)
     private String menuState;
+
+    @NotNull(message = "菜单排序 必填")
+    @ApiModelProperty(value = "菜单排序", required = true)
+    private Integer menuSorted;
 }

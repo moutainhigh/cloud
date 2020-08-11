@@ -47,8 +47,8 @@ export default {
         privilegeType: ''
       },
       columns: [
-        {title: '权限ID', key: 'privilegeId', width: 160},
-        {title: '权限', key: 'privilege'},
+        {title: '权限ID', key: 'privilegeId', width: 170},
+        {title: '权限标识（菜单、操作、元素）', key: 'privilege'},
         {title: '权限类别', key: 'privilegeType'},
         {title: '创建时间', key: 'createdDate', slot: 'createdDate'}
       ],

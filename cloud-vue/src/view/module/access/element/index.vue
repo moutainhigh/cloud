@@ -43,9 +43,9 @@ export default {
         elementCode: ''
       },
       columns: [
-        {title: '元素ID', key: 'elementId'},
+        {title: '元素ID', key: 'elementId', width: 170},
+        {title: '元素编码（按钮权限标识）', key: 'elementCode'},
         {title: '元素名', key: 'elementName'},
-        {title: '元素编码', key: 'elementCode'},
         {title: '创建时间', key: 'createdDate', slot: 'createdDate'}
       ],
       data: []

@@ -14,6 +14,7 @@
         </FormItem>
       </Form>
 
+      <Alert show-icon type="info"><code>权限</code>,<code>角色</code></Alert>
       <Table size="small" :columns="columns" :data="data" :loading="loading" border>
         <template slot="createdDate" slot-scope="{ row }">
           <span>{{ row.createdDate | dateFmt('YYYY-MM-DD HH:mm:ss') }}</span>
@@ -43,7 +44,7 @@ export default {
         userName: ''
       },
       columns: [
-        {title: '用户ID', key: 'userId', width: 160},
+        {title: '用户ID', key: 'userId', width: 170},
         {title: '用户名', key: 'userName'},
         {title: '创建时间', key: 'createdDate', slot: 'createdDate'}
       ],

@@ -21,6 +21,8 @@
           </Button>
         </ButtonGroup>
       </div>
+
+      <Alert show-icon type="info"><code>操作接口修改</code></Alert>
       <Table size="small" :columns="columns" :data="data" :loading="loading" border>
         <template slot="policyType" slot-scope="{ row }">
           <Tag color="green" v-if="row.policyType===1">允许-白名单</Tag>

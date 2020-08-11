@@ -47,18 +47,16 @@ export default {
         operationPath: ''
       },
       columns: [
-        // {title: '操作ID', key: 'operationId', width: 160},
-        // {title: '操作编码', key: 'operationCode', width: 260},
+        {title: '操作ID', key: 'operationId', width: 170},
+        {title: '操作编码（操作权限标识）', key: 'operationCode', width: 260},
         {title: '操作URL', key: 'operationPath', width: 200},
         {title: '操作名', key: 'operationName', width: 180},
         {title: '操作描述', key: 'operationDesc', width: 200},
         {title: '操作方法', key: 'operationMethod', width: 90},
-
         {title: '需要认证', key: 'operationAuth', width: 90},
         {title: '是否开放', key: 'operationOpen', width: 90},
         {title: '状态', key: 'operationState', width: 80},
         {title: '所属服务', key: 'operationServiceId', width: 120},
-
         {title: '创建时间', key: 'createdDate', slot: 'createdDate', width: 160}
       ],
       data: []

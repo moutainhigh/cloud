@@ -17,22 +17,26 @@ export const getMenus = () => {
  * <br/>
  * @param menuParentId
  * @param menuName
+ * @param menuCode
  * @param menuIcon
  * @param menuPath
  * @param menuSchema
  * @param menuTarget
  * @param menuState
+ * @param menuSorted
  * @returns {*}
  */
-export const addMenu = ({menuParentId, menuName, menuIcon, menuPath, menuSchema, menuTarget, menuState}) => {
+export const addMenu = ({menuParentId, menuName, menuCode, menuIcon, menuPath, menuSchema, menuTarget, menuState, menuSorted}) => {
     const data = {
         menuParentId: menuParentId,
         menuName: menuName,
+        menuCode: menuCode,
         menuIcon: menuIcon,
         menuPath: menuPath,
         menuSchema: menuSchema,
         menuTarget: menuTarget,
-        menuState: menuState
+        menuState: menuState,
+        menuSorted: menuSorted
     };
     return request({
         url: 'base/access/menus',
@@ -45,22 +49,26 @@ export const addMenu = ({menuParentId, menuName, menuIcon, menuPath, menuSchema,
  * @param menuParentId
  * @param menuId
  * @param menuName
+ * @param menuCode
  * @param menuIcon
  * @param menuPath
  * @param menuSchema
  * @param menuTarget
  * @param menuState
+ * @param menuSorted
  * @returns {*}
  */
-export const updateMenu = ({menuParentId, menuId, menuName, menuIcon, menuPath, menuSchema, menuTarget, menuState}) => {
+export const updateMenu = ({menuParentId, menuId, menuName, menuCode, menuIcon, menuPath, menuSchema, menuTarget, menuState, menuSorted}) => {
     const data = {
         menuParentId: menuParentId,
         menuName: menuName,
+        menuCode: menuCode,
         menuIcon: menuIcon,
         menuPath: menuPath,
         menuSchema: menuSchema,
         menuTarget: menuTarget,
-        menuState: menuState
+        menuState: menuState,
+        menuSorted: menuSorted
     };
     return request({
         url: 'base/access/menus/' + menuId,

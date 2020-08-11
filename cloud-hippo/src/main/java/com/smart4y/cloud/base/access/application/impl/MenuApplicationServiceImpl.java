@@ -28,6 +28,8 @@ public class MenuApplicationServiceImpl extends BaseDomainService<RbacMenu> impl
         weekend
                 .weekendCriteria()
                 .andEqualTo(RbacMenu::getMenuParentId, query.getMenuId());
+        weekend
+                .orderBy("menuSorted").asc();
         return this.list(weekend);
     }
 
@@ -54,11 +56,13 @@ public class MenuApplicationServiceImpl extends BaseDomainService<RbacMenu> impl
                 .setMenuId(menuId)
                 .setMenuParentId(command.getMenuParentId())
                 .setMenuName(command.getMenuName())
+                .setMenuCode(command.getMenuCode())
                 .setMenuIcon(command.getMenuIcon())
                 .setMenuPath(command.getMenuPath())
                 .setMenuSchema(command.getMenuSchema())
                 .setMenuTarget(command.getMenuTarget())
                 .setMenuState(command.getMenuState())
+                .setMenuSorted(command.getMenuSorted())
                 .setLastModifiedDate(LocalDateTime.now());
         this.updateSelectiveById(record);
     }

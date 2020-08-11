@@ -20,11 +20,11 @@
       <Col :lg="18" :md="16" :sm="16" :xs="16">
         <Card>
           <Form :model="menu.viewData" inline ref="viewForm" :label-width="60">
-            <Button @click="handleModal()" :icon="menu.viewData.menuIcon" v-show="menu.viewShow"
+            <Button @click="handleModal('edit')" :icon="menu.viewData.menuIcon" v-show="menu.viewShow"
                     class="search-btn" type="dashed">
               {{ menu.viewData.menuName }}
             </Button>&nbsp;&nbsp;
-            <Button @click="handleModal()" class="search-btn" type="dashed">添加</Button>
+            <Button @click="handleModal('add')" class="search-btn" type="dashed">添加</Button>
           </Form>
         </Card>
         <br/>
@@ -84,6 +84,11 @@
             <Input placeholder="请输入内容" v-model="modal.formItem.menuName"></Input>
           </label>
         </FormItem>
+        <FormItem label="菜单标识" prop="menuCode">
+          <label>
+            <Input placeholder="请输入内容" v-model="modal.formItem.menuCode"></Input>
+          </label>
+        </FormItem>
         <FormItem label="页面地址" prop="menuPath">
           <Input placeholder="请输入内容" v-model="modal.formItem.menuPath">
             <Select slot="prepend" style="width: 80px" v-model="modal.formItem.menuSchema">
@@ -115,6 +120,15 @@
               </div>
             </Poptip>
           </Input>
+        </FormItem>
+        <FormItem label="优先级">
+          <InputNumber v-model="modal.formItem.menuSorted"></InputNumber>
+        </FormItem>
+        <FormItem label="状态">
+          <RadioGroup type="button" v-model="modal.formItem.menuState">
+            <Radio label="10">启用</Radio>
+            <Radio label="20">禁用</Radio>
+          </RadioGroup>
         </FormItem>
         <div class="drawer-footer">
           <Button @click="handleModalCancel" type="default">取消</Button>&nbsp;
@@ -181,14 +195,19 @@ export default {
           menuPath: '',
           menuSchema: '/',
           menuTarget: '_self',
-          menuState: '10'
+          menuState: '10',
+          menuSorted: 0,
+          menuCode: ''
         },
         formItemRules: {
           menuParentId: [
-            {required: true, message: '上级菜单不能为空', trigger: 'blur'}
+            {required: true, message: '上级菜单 必填', trigger: 'blur'}
           ],
           menuName: [
-            {required: true, message: '菜单名称不能为空', trigger: 'blur'}
+            {required: true, message: '菜单名称 必填', trigger: 'blur'}
+          ],
+          menuCode: [
+            {required: true, message: '菜单标识 必填', trigger: 'blur'}
           ]
         },
         visible: false,
@@ -207,7 +226,7 @@ export default {
         },
         data: [],
         columns: [
-          {title: '角色ID', key: 'roleId', width: 160},
+          {title: '角色ID', key: 'roleId', width: 170},
           {title: '角色名', key: 'roleName', width: 200},
           {title: '创建时间', key: 'createdDate', slot: 'createdDate'},
           {title: '操作', slot: 'action', fixed: 'right', align: 'center', width: 160}
@@ -224,7 +243,7 @@ export default {
         },
         data: [],
         columns: [
-          {title: '用户ID', key: 'userId', width: 160},
+          {title: '用户ID', key: 'userId', width: 170},
           {title: '用户名', key: 'userName', width: 200},
           {title: '创建时间', key: 'createdDate', slot: 'createdDate'},
           {title: '操作', slot: 'action', fixed: 'right', align: 'center', width: 160}
@@ -280,9 +299,10 @@ export default {
     },
     /**
      * 弹框
+     * @param type (edit/add)
      */
-    handleModal() {
-      if (this.menu.viewData) {
+    handleModal(type) {
+      if ('edit' === type) {
         this.modal.title = '编辑菜单';
         this.modal.formItem = Object.assign({}, this.modal.formItem, this.menu.viewData);
       } else {
@@ -333,7 +353,9 @@ export default {
         menuPath: '',
         menuSchema: '/',
         menuTarget: '_self',
-        menuState: '10'
+        menuState: '10',
+        menuSorted: 0,
+        menuCode: ''
       };
       this.$refs.modalForm.resetFields();
       this.modal.saving = false;

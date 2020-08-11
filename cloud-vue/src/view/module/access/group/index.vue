@@ -153,7 +153,7 @@ export default {
         },
         data: [],
         columns: [
-          {title: '角色ID', key: 'roleId', width: 160},
+          {title: '角色ID', key: 'roleId', width: 170},
           {title: '角色名', key: 'roleName', width: 200},
           {title: '创建时间', key: 'createdDate', slot: 'createdDate'},
           {title: '操作', slot: 'action', fixed: 'right', align: 'center', width: 160}
@@ -171,7 +171,7 @@ export default {
         },
         data: [],
         columns: [
-          {title: '用户ID', key: 'userId', width: 160},
+          {title: '用户ID', key: 'userId', width: 170},
           {title: '用户名', key: 'userName', width: 200},
           {title: '创建时间', key: 'createdDate', slot: 'createdDate'},
           {title: '操作', slot: 'action', fixed: 'right', align: 'center', width: 160}
