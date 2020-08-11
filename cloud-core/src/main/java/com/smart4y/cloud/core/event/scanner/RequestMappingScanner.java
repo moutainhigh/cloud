@@ -1,7 +1,6 @@
 package com.smart4y.cloud.core.event.scanner;
 
 import com.google.common.collect.Lists;
-import com.smart4y.cloud.core.constant.BaseConstants;
 import com.smart4y.cloud.core.constant.QueueConstants;
 import com.smart4y.cloud.core.event.ResourceScannedEvent;
 import com.smart4y.cloud.core.properties.OpenScanProperties;
@@ -118,7 +117,7 @@ public class RequestMappingScanner implements ApplicationListener<ApplicationRea
             String name = "";
             String desc = "";
             // 是否需要安全认证 默认:1-是 0-否
-            int isAuth = BaseConstants.ENABLED;
+            boolean isAuth = true;
             // 匹配项目中.permitAll()配置
             for (String url : p.getPatterns()) {
                 for (RequestMatcher requestMatcher : permitAll) {
@@ -126,7 +125,7 @@ public class RequestMappingScanner implements ApplicationListener<ApplicationRea
                         AntPathRequestMatcher pathRequestMatcher = (AntPathRequestMatcher) requestMatcher;
                         if (pathMatch.match(pathRequestMatcher.getPattern(), url)) {
                             // 忽略验证
-                            isAuth = BaseConstants.DISABLED;
+                            isAuth = false;
                         }
                     }
                 }
@@ -150,7 +149,7 @@ public class RequestMappingScanner implements ApplicationListener<ApplicationRea
                     .setRequestMethod(methods)
                     .setServiceId(serviceId)
                     .setContentType(mediaTypes)
-                    .setIsAuth(isAuth);
+                    .setOperationAuth(isAuth);
             list.add(mappings);
         }
 

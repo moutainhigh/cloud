@@ -124,7 +124,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- TODO 若要发布新镜像则打开此插件 -->
+            <!-- 若要发布新镜像则打开此插件 -->
             <!--<plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>

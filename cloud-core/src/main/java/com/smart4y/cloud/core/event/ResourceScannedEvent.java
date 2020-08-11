@@ -12,7 +12,7 @@ import java.util.List;
  * 资源扫描事件
  *
  * @author Youtao
- *         Created by youtao on 2019/9/17.
+ * Created by youtao on 2019/9/17.
  */
 @Data
 @NoArgsConstructor
@@ -43,6 +43,6 @@ public class ResourceScannedEvent implements Serializable {
         private String requestMethod;
         private String serviceId;
         private String contentType;
-        private Integer isAuth;
+        private Boolean operationAuth;
     }
 }

@@ -1,11 +1,7 @@
 package com.smart4y.cloud.base.application.eventhandler;
 
-import com.google.common.collect.Lists;
 import com.smart4y.cloud.base.access.domain.model.RbacOperation;
 import com.smart4y.cloud.base.access.domain.service.OperationService;
-import com.smart4y.cloud.base.application.BaseAuthorityService;
-import com.smart4y.cloud.base.application.BaseOperationService;
-import com.smart4y.cloud.base.domain.model.BaseOperation;
 import com.smart4y.cloud.base.infrastructure.constants.RedisConstants;
 import com.smart4y.cloud.core.constant.QueueConstants;
 import com.smart4y.cloud.core.event.ResourceScannedEvent;
@@ -39,10 +35,6 @@ public class ResourceScannedEventHandler {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
     @Autowired
-    private BaseAuthorityService baseAuthorityService;
-    @Autowired
-    private BaseOperationService baseOperationService;
-    @Autowired
     private OperationService operationService;
 
     @RabbitListener(queues = QueueConstants.QUEUE_SCAN_API_RESOURCE)
@@ -58,80 +50,45 @@ public class ResourceScannedEventHandler {
             }
             List<ResourceScannedEvent.Mapping> mappings = event.getMappings();
             LocalDateTime now = LocalDateTime.now();
-            List<BaseOperation> apis = mappings.stream()
-                    .map(x -> new BaseOperation()
-                            //.setApiId()
-                            //.setApiCategory()
-                            //.setPriority()
-                            //.setStatus()
-                            //.setIsPersist()
-                            //.setIsOpen()
-                            .setApiCode(x.getApiCode())
-                            .setApiName(x.getApiName())
-                            .setApiDesc(x.getApiDesc())
-                            .setRequestMethod(x.getRequestMethod())
-                            .setContentType(x.getContentType())
-                            .setServiceId(x.getServiceId())
-                            .setPath(x.getPath())
-                            .setIsAuth(x.getIsAuth())
-                            .setClassName(x.getClassName())
-                            .setMethodName(x.getMethodName())
+            List<RbacOperation> apis = mappings.stream()
+                    .map(x -> new RbacOperation()
+                            .setOperationCode(x.getApiCode())
+                            .setOperationName(x.getApiName())
+                            .setOperationDesc(x.getApiDesc())
+                            .setOperationMethod(x.getRequestMethod())
+                            .setOperationMethodName(x.getMethodName())
+                            .setOperationContentType(x.getContentType())
+                            .setOperationServiceId(x.getServiceId())
+                            .setOperationPath(x.getPath())
+                            .setOperationAuth(x.getOperationAuth())
+                            .setOperationClassName(x.getClassName())
                             .setCreatedDate(now)
                             .setLastModifiedDate(now))
                     .collect(Collectors.toList());
-            List<String> codes = Lists.newArrayList();
-            for (BaseOperation api : apis) {
-                codes.add(api.getApiCode());
-                BaseOperation save = baseOperationService.getApi(api.getApiCode());
-                if (save == null) {
-                    api.setIsOpen(0);
-                    api.setIsPersist(1);
-                    baseOperationService.addApi(api);
-                } else {
-                    api.setApiId(save.getApiId());
-                    baseOperationService.updateApi(api);
-                }
+            List<String> codes = apis.stream().map(RbacOperation::getOperationCode).collect(Collectors.toList());
 
-                Optional<RbacOperation> operationOptional = operationService.getByCode(api.getApiCode());
+            for (RbacOperation api : apis) {
+                codes.add(api.getOperationCode());
+
+                Optional<RbacOperation> operationOptional = operationService.getByCode(api.getOperationCode());
                 if (operationOptional.isPresent()) {
-                    RbacOperation operation = operationOptional.get();
-                    operation
-                            .setOperationId(operation.getOperationId())
-                            .setOperationCode(api.getApiCode())
-                            .setOperationName(api.getApiName())
-                            .setOperationDesc(api.getApiDesc())
-                            .setOperationPath(api.getPath())
-                            .setOperationMethod(api.getRequestMethod())
-                            .setOperationContentType(api.getContentType())
-                            .setOperationServiceId(api.getServiceId())
-                            .setOperationClassName(api.getClassName())
-                            .setOperationMethodName(api.getMethodName())
-                            .setOperationAuth(true)
-                            .setOperationOpen(true)
-                            .setOperationState("10")
+                    api
+                            .setOperationId(operationOptional.get().getOperationId())
                             .setLastModifiedDate(LocalDateTime.now());
-                    operationService.updateSelectiveById(operation);
+                    operationService.updateSelectiveById(api);
                 } else {
-                    RbacOperation record = new RbacOperation()
-                            .setOperationCode(api.getApiCode())
-                            .setOperationName(api.getApiName())
-                            .setOperationDesc(api.getApiDesc())
-                            .setOperationPath(api.getPath())
-                            .setOperationMethod(api.getRequestMethod())
-                            .setOperationContentType(api.getContentType())
-                            .setOperationServiceId(api.getServiceId())
-                            .setOperationClassName(api.getClassName())
-                            .setOperationMethodName(api.getMethodName())
+                    api
                             .setOperationAuth(true)
                             .setOperationOpen(true)
                             .setOperationState("10")
                             .setCreatedDate(LocalDateTime.now());
-                    operationService.save(record);
+                    operationService.save(api);
                 }
             }
             if (CollectionUtils.isNotEmpty(apis)) {
-                // 清理无效权限数据
-                baseAuthorityService.clearInvalidApi(serviceId, codes);
+                // TODO 清理无效权限数据
+                log.info("有效数据：{}", codes.size());
+
                 openRestTemplate.refreshGateway();
                 this.redisTemplate.opsForValue().set(key, String.valueOf(apis.size()), Duration.ofMinutes(3));
             }

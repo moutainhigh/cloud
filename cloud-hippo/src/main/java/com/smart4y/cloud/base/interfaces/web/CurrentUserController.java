@@ -1,15 +1,16 @@
 package com.smart4y.cloud.base.interfaces.web;
 
-import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.application.BaseUserService;
 import com.smart4y.cloud.base.domain.model.BaseUser;
 import com.smart4y.cloud.base.interfaces.command.profile.UpdateCurrentUserCommand;
+import com.smart4y.cloud.core.dto.AuthorityMenuDTO;
+import com.smart4y.cloud.core.dto.UserAccountVO;
 import com.smart4y.cloud.core.message.ResultMessage;
-import com.smart4y.cloud.core.constant.CommonConstants;
 import com.smart4y.cloud.core.security.OpenHelper;
 import com.smart4y.cloud.core.security.OpenUserDetails;
-import com.smart4y.cloud.core.dto.AuthorityMenuDTO;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
@@ -28,14 +29,23 @@ public class CurrentUserController {
     @Autowired
     private BaseUserService baseUserService;
     @Autowired
-    private BaseAuthorityService baseAuthorityService;
-    @Autowired
     private RedisTokenStore redisTokenStore;
 
     /**
+     * 获取登录账号信息
+     */
+    @ApiOperation(value = "获取账号登录信息", notes = "仅限系统内部调用")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", required = true, value = "登录名", paramType = "path"),
+    })
+    @GetMapping("/user/login")
+    public ResultMessage<UserAccountVO> userLogin(@RequestParam(value = "username") String username) {
+        UserAccountVO account = baseUserService.login(username);
+        return ResultMessage.ok(account);
+    }
+
+    /**
      * 修改当前登录用户密码
-     *
-     * @return
      */
     @ApiOperation(value = "修改当前登录用户密码", notes = "修改当前登录用户密码")
     @GetMapping("/current/user/rest/password")
@@ -69,7 +79,6 @@ public class CurrentUserController {
     @ApiOperation(value = "获取当前登录用户已分配菜单权限", notes = "获取当前登录用户已分配菜单权限")
     @GetMapping("/current/user/menu")
     public ResultMessage<List<AuthorityMenuDTO>> findAuthorityMenu() {
-        List<AuthorityMenuDTO> result = baseAuthorityService.findAuthorityMenuByUser(OpenHelper.getUser().getUserId(), CommonConstants.ROOT.equals(OpenHelper.getUser().getUsername()));
-        return ResultMessage.ok(result);
+        return ResultMessage.ok();
     }
 }

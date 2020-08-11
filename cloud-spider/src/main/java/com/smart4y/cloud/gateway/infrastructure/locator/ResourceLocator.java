@@ -205,18 +205,18 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
      */
     private List<IpLimitApiDTO> loadIpBlackList() {
         List<IpLimitApiDTO> list = Lists.newArrayList();
-        try {
-            list = gatewayFeign.getApiBlackList().getData();
-            if (list != null) {
-                for (IpLimitApiDTO item : list) {
-                    item.setPath(getFullPath(item.getServiceId(), item.getPath()));
-                }
-                log.info("=============加载IP黑名单:{}==============", list.size());
-            }
-        } catch (Exception e) {
-            log.error("加载IP黑名单错误：{}", e.getLocalizedMessage(), e);
-        }
-
+        // TODO 加载IP黑名单
+//        try {
+//            list = gatewayFeign.getApiBlackList().getData();
+//            if (list != null) {
+//                for (IpLimitApiDTO item : list) {
+//                    item.setPath(getFullPath(item.getServiceId(), item.getPath()));
+//                }
+//                log.info("=============加载IP黑名单:{}==============", list.size());
+//            }
+//        } catch (Exception e) {
+//            log.error("加载IP黑名单错误：{}", e.getLocalizedMessage(), e);
+//        }
         return list;
     }
 
@@ -225,17 +225,18 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
      */
     private List<IpLimitApiDTO> loadIpWhiteList() {
         List<IpLimitApiDTO> list = Lists.newArrayList();
-        try {
-            list = gatewayFeign.getApiWhiteList().getData();
-            if (list != null) {
-                for (IpLimitApiDTO item : list) {
-                    item.setPath(getFullPath(item.getServiceId(), item.getPath()));
-                }
-                log.info("=============加载IP白名单:{}==============", list.size());
-            }
-        } catch (Exception e) {
-            log.error("加载IP白名单错误：{}", e.getLocalizedMessage(), e);
-        }
+        // TODO 加载IP白名单
+//        try {
+//            list = gatewayFeign.getApiWhiteList().getData();
+//            if (list != null) {
+//                for (IpLimitApiDTO item : list) {
+//                    item.setPath(getFullPath(item.getServiceId(), item.getPath()));
+//                }
+//                log.info("============= 加载IP白名单:{}==============", list.size());
+//            }
+//        } catch (Exception e) {
+//            log.error("加载IP白名单错误：{}", e.getLocalizedMessage(), e);
+//        }
 
         return list;
     }

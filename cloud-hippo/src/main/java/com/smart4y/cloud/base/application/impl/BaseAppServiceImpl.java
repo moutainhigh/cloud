@@ -3,7 +3,6 @@ package com.smart4y.cloud.base.application.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.BaseAppService;
-import com.smart4y.cloud.base.application.BaseAuthorityService;
 import com.smart4y.cloud.base.domain.model.BaseApp;
 import com.smart4y.cloud.base.infrastructure.mapper.BaseAppMapper;
 import com.smart4y.cloud.base.interfaces.query.BaseAppQuery;
@@ -33,7 +32,7 @@ import java.util.Map;
 
 /**
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @ApplicationService
@@ -50,8 +49,6 @@ public class BaseAppServiceImpl implements BaseAppService {
 
     @Autowired
     private BaseAppMapper baseAppMapper;
-    @Autowired
-    private BaseAuthorityService baseAuthorityService;
     @Autowired
     private JdbcClientDetailsService jdbcClientDetailsService;
 
@@ -99,7 +96,8 @@ public class BaseAppServiceImpl implements BaseAppService {
         String appId = baseClientDetails.getAdditionalInformation().get("appId").toString();
         OpenClientDetails openClient = new OpenClientDetails();
         BeanUtils.copyProperties(baseClientDetails, openClient);
-        openClient.setAuthorities(baseAuthorityService.findAuthorityByApp(appId));
+        // TODO 设置应用权限
+//        openClient.setAuthorities(baseAuthorityService.findAuthorityByApp(appId));
         return openClient;
     }
 
@@ -189,8 +187,8 @@ public class BaseAppServiceImpl implements BaseAppService {
         if (appInfo.getIsPersist().equals(BaseConstants.ENABLED)) {
             throw new OpenAlertException(String.format("保留数据,不允许删除"));
         }
-        // 移除应用权限
-        baseAuthorityService.removeAuthorityApp(appId);
+        // TODO 移除应用权限
+//        baseAuthorityService.removeAuthorityApp(appId);
         baseAppMapper.deleteByPrimaryKey(appInfo.getAppId());
         jdbcClientDetailsService.removeClientDetails(appInfo.getApiKey());
     }
