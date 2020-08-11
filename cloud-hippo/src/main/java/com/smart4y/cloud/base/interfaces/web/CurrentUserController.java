@@ -3,7 +3,6 @@ package com.smart4y.cloud.base.interfaces.web;
 import com.smart4y.cloud.base.application.BaseUserService;
 import com.smart4y.cloud.base.domain.model.BaseUser;
 import com.smart4y.cloud.base.interfaces.command.profile.UpdateCurrentUserCommand;
-import com.smart4y.cloud.core.dto.AuthorityMenuDTO;
 import com.smart4y.cloud.core.dto.UserAccountVO;
 import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.core.security.OpenHelper;
@@ -15,8 +14,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author Youtao
@@ -70,15 +67,6 @@ public class CurrentUserController {
         openUserDetails.setNickName(command.getNickName());
         openUserDetails.setAvatar(command.getAvatar());
         OpenHelper.updateOpenUser(redisTokenStore, openUserDetails);
-        return ResultMessage.ok();
-    }
-
-    /**
-     * 获取登陆用户已分配权限
-     */
-    @ApiOperation(value = "获取当前登录用户已分配菜单权限", notes = "获取当前登录用户已分配菜单权限")
-    @GetMapping("/current/user/menu")
-    public ResultMessage<List<AuthorityMenuDTO>> findAuthorityMenu() {
         return ResultMessage.ok();
     }
 }
