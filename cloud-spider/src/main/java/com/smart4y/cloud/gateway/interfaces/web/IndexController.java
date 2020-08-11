@@ -1,10 +1,11 @@
 package com.smart4y.cloud.gateway.interfaces.web;
 
-import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
+import com.smart4y.cloud.core.message.ResultMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import static com.smart4y.cloud.core.message.ResultMessage.ok;
 
 /**
  * @author Youtao
@@ -14,18 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class IndexController {
 
-    private final ApiProperties apiProperties;
-
-    @Autowired
-    public IndexController(ApiProperties apiProperties) {
-        this.apiProperties = apiProperties;
-    }
-
     @GetMapping("/")
-    public String index() {
-        if (apiProperties.isApiDebug()) {
-            return "redirect:doc.html";
-        }
-        return "index";
+    public ResultMessage<String> index() {
+        return ok("ok");
     }
 }

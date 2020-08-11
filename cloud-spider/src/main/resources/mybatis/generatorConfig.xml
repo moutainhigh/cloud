@@ -7,12 +7,12 @@
              defaultModelType="flat">
 
         <!-- Mapper.java Mapper.xml 生成插件 -->
-        <plugin type="MapperClassAndXmlPlugin">
+        <plugin type="com.smart4y.cloud.core.mapper.generator.plugins.MapperClassAndXmlPlugin">
             <property name="mappers" value="com.smart4y.cloud.mapper.CloudMapper"/>
             <property name="author" value="Youtao"/>
         </plugin>
         <!-- Entity 生成插件 使用`javaModelGenerator`的`targetPackage`参数 -->
-        <plugin type="EntityPlugin">
+        <plugin type="com.smart4y.cloud.core.mapper.generator.plugins.EntityPlugin">
             <property name="author" value="Youtao"/>
         </plugin>
 
@@ -46,12 +46,34 @@
         <!--<table tableName="%" mapperName="{0}Mapper">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>-->
-        <!--<table tableName="gateway_route" domainObjectName="GatewayRoute"/>
+        <!--<table tableName="base_account" domainObjectName="BaseAccount"/>
+        <table tableName="base_account_logs" domainObjectName="BaseAccountLogs"/>
+        <table tableName="base_element" domainObjectName="BaseElement"/>
+        <table tableName="base_app" domainObjectName="BaseApp"/>
+        <table tableName="base_authority" domainObjectName="BaseAuthority"/>
+        <table tableName="base_authority_element" domainObjectName="BaseAuthorityElement"/>
+        <table tableName="base_authority_app" domainObjectName="BaseAuthorityApp"/>
+        <table tableName="base_authority_role" domainObjectName="BaseAuthorityRole"/>
+        <table tableName="base_developer" domainObjectName="BaseDeveloper"/>
+        <table tableName="base_menu" domainObjectName="BaseMenu"/>
+        <table tableName="base_operation" domainObjectName="BaseOperation"/>
+        <table tableName="base_role" domainObjectName="BaseRole"/>
+        <table tableName="base_role_user" domainObjectName="BaseRoleUser"/>
+        <table tableName="base_user" domainObjectName="BaseUser"/>
+        <table tableName="gateway_access_logs" domainObjectName="GatewayAccessLogs"/>
+        <table tableName="gateway_ip_limit" domainObjectName="GatewayIpLimit"/>
+        <table tableName="gateway_ip_limit_api" domainObjectName="GatewayIpLimitApi"/>
         <table tableName="gateway_rate_limit" domainObjectName="GatewayRateLimit"/>
         <table tableName="gateway_rate_limit_api" domainObjectName="GatewayRateLimitApi"/>
-        <table tableName="base_operation" domainObjectName="BaseResource"/>-->
-        <table tableName="hello" domainObjectName="Hello">
+        <table tableName="gateway_route" domainObjectName="GatewayRoute"/>-->
+        <!-- 指定数据库表 -->
+        <!--<table tableName="hello" domainObjectName="Hello">
             <columnOverride column="user_name" javaType="com.smart4y.cloud.base.gateway.domain.model.GatewayRoute"/>
-        </table>
+        </table>-->
+        <!--<table tableName="rbac_%">
+            &lt;!&ndash;<generatedKey column="id" sqlStatement="Mysql" identity="true"/>&ndash;&gt;
+        </table>-->
+
+        <table tableName="gateway_route" domainObjectName="GatewayRoute"/>
     </context>
 </generatorConfiguration>

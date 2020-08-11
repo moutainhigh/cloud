@@ -17,13 +17,12 @@ import reactor.core.publisher.Mono;
 /**
  * 日志 过滤器
  *
- * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * @author Youtao on 2019-09-05.
  */
 @Slf4j
 public class AccessLogFilter implements WebFilter {
 
-    private AccessLogService accessLogService;
+    private final AccessLogService accessLogService;
 
     public AccessLogFilter(AccessLogService accessLogService) {
         this.accessLogService = accessLogService;

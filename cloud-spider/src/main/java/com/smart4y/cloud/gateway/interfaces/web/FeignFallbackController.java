@@ -17,7 +17,6 @@ public class FeignFallbackController {
 
     @GetMapping("/fallback")
     public Mono<ResultMessage<Void>> fallback() {
-        return Mono.just(ResultMessage
-                .fail(MessageType.GATEWAY_TIMEOUT.getRtnCode(), "访问超时，请稍后再试!"));
+        return Mono.just(ResultMessage.fail(MessageType.GATEWAY_TIMEOUT.getRtnCode(), "访问超时，请稍后再试!"));
     }
 }
