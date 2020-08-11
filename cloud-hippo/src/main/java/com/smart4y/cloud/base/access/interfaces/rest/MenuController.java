@@ -3,7 +3,9 @@ package com.smart4y.cloud.base.access.interfaces.rest;
 import com.smart4y.cloud.base.access.application.MenuApplicationService;
 import com.smart4y.cloud.base.access.domain.model.RbacMenu;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.CreateMenuCommand;
+import com.smart4y.cloud.base.access.interfaces.dtos.menu.ModifyMenuCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.RbacMenuQuery;
+import com.smart4y.cloud.base.access.interfaces.dtos.user.ModifyUserCommand;
 import com.smart4y.cloud.core.message.ResultMessage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -50,6 +52,13 @@ public class MenuController extends BaseAccessController {
     @ApiOperation(value = "菜单:添加")
     public ResultMessage<Void> createMenu(@RequestBody CreateMenuCommand command) {
         menuApplicationService.createMenu(command);
+        return ok();
+    }
+
+    @PutMapping("/menus/{menuId}")
+    @ApiOperation(value = "菜单:修改")
+    public ResultMessage<Void> modifyMenu(@PathVariable("menuId") Long menuId, @RequestBody ModifyMenuCommand command) {
+        menuApplicationService.modifyMenu(menuId, command);
         return ok();
     }
 

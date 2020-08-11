@@ -3,6 +3,7 @@ package com.smart4y.cloud.base.access.application.impl;
 import com.smart4y.cloud.base.access.application.MenuApplicationService;
 import com.smart4y.cloud.base.access.domain.model.RbacMenu;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.CreateMenuCommand;
+import com.smart4y.cloud.base.access.interfaces.dtos.menu.ModifyMenuCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.RbacMenuQuery;
 import com.smart4y.cloud.core.annotation.ApplicationService;
 import com.smart4y.cloud.mapper.BaseDomainService;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import tk.mybatis.mapper.weekend.Weekend;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -44,5 +46,20 @@ public class MenuApplicationServiceImpl extends BaseDomainService<RbacMenu> impl
         RbacMenu record = new RbacMenu();
         BeanUtils.copyProperties(command, record);
         this.save(record);
+    }
+
+    @Override
+    public void modifyMenu(long menuId, ModifyMenuCommand command) {
+        RbacMenu record = new RbacMenu()
+                .setMenuId(menuId)
+                .setMenuParentId(command.getMenuParentId())
+                .setMenuName(command.getMenuName())
+                .setMenuIcon(command.getMenuIcon())
+                .setMenuPath(command.getMenuPath())
+                .setMenuSchema(command.getMenuSchema())
+                .setMenuTarget(command.getMenuTarget())
+                .setMenuState(command.getMenuState())
+                .setLastModifiedDate(LocalDateTime.now());
+        this.updateSelectiveById(record);
     }
 }

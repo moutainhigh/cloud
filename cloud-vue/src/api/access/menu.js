@@ -16,7 +16,6 @@ export const getMenus = () => {
  * 添加菜单
  * <br/>
  * @param menuParentId
- * @param menuId
  * @param menuName
  * @param menuIcon
  * @param menuPath
@@ -25,10 +24,9 @@ export const getMenus = () => {
  * @param menuState
  * @returns {*}
  */
-export const addMenu = ({menuParentId, menuId, menuName, menuIcon, menuPath, menuSchema, menuTarget, menuState}) => {
+export const addMenu = ({menuParentId, menuName, menuIcon, menuPath, menuSchema, menuTarget, menuState}) => {
     const data = {
         menuParentId: menuParentId,
-        menuId: menuId,
         menuName: menuName,
         menuIcon: menuIcon,
         menuPath: menuPath,
@@ -40,6 +38,34 @@ export const addMenu = ({menuParentId, menuId, menuName, menuIcon, menuPath, men
         url: 'base/access/menus',
         data,
         method: 'post'
+    })
+};
+/**
+ * 编辑菜单
+ * @param menuParentId
+ * @param menuId
+ * @param menuName
+ * @param menuIcon
+ * @param menuPath
+ * @param menuSchema
+ * @param menuTarget
+ * @param menuState
+ * @returns {*}
+ */
+export const updateMenu = ({menuParentId, menuId, menuName, menuIcon, menuPath, menuSchema, menuTarget, menuState}) => {
+    const data = {
+        menuParentId: menuParentId,
+        menuName: menuName,
+        menuIcon: menuIcon,
+        menuPath: menuPath,
+        menuSchema: menuSchema,
+        menuTarget: menuTarget,
+        menuState: menuState
+    };
+    return request({
+        url: 'base/access/menus/' + menuId,
+        data,
+        method: 'put'
     })
 };
 /**

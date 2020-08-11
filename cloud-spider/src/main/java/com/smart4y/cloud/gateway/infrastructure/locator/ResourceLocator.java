@@ -12,6 +12,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import org.springframework.context.ApplicationListener;
+import org.springframework.lang.NonNull;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 
@@ -136,7 +137,7 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
     }
 
     @Override
-    public void onApplicationEvent(RouteRemoteRefreshedEvent event) {
+    public void onApplicationEvent(@NonNull RouteRemoteRefreshedEvent event) {
         refresh();
     }
 

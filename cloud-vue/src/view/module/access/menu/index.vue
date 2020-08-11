@@ -20,41 +20,11 @@
       <Col :lg="18" :md="16" :sm="16" :xs="16">
         <Card>
           <Form :model="menu.viewData" inline ref="viewForm" :label-width="60">
-            <FormItem label="菜单名称" prop="menuName" style="width: 300px;">
-              <label>
-                <Input v-model="menu.viewData.menuName" :disabled="menu.viewDisabled"/>
-              </label>
-            </FormItem>
-            <FormItem label="菜单状态" prop="menuState" style="width: 140px;">
-              <label>
-                <Select v-model="menu.viewData.menuState" :disabled="menu.viewDisabled">
-                  <Option value="10">启用</Option>
-                  <Option value="20">锁定</Option>
-                  <Option value="30">禁用</Option>
-                </Select>
-              </label>
-            </FormItem>
-            <FormItem label="创建时间" style="width: 200px;">
-                <span disabled class="ivu-input ivu-input-default ivu-input-disabled">
-                  {{ menu.viewData.createdDate | dateFmt('YYYY-MM-DD HH:mm:ss') }}
-                </span>
-            </FormItem>
-            <FormItem label="菜单ID" prop="menuId" style="width: 200px;">
-              <label>
-                <Input v-model="menu.viewData.menuId" :disabled="menu.viewDisabled"/>
-              </label>
-            </FormItem>
-            <FormItem label="父级ID" prop="menuParentId" style="width: 200px;">
-              <label>
-                <Input v-model="menu.viewData.menuParentId" :disabled="menu.viewDisabled"/>
-              </label>
-            </FormItem>
-            <FormItem label="下级菜单" prop="existChild" style="width: 140px;">
-              <span disabled
-                    class="ivu-input ivu-input-default ivu-input-disabled">
-                {{ menu.viewData.existChild ? '有' : '无' }}
-              </span>
-            </FormItem>
+            <Button @click="handleModal()" :icon="menu.viewData.menuIcon" v-show="menu.viewShow"
+                    class="search-btn" type="dashed">
+              {{ menu.viewData.menuName }}
+            </Button>&nbsp;&nbsp;
+            <Button @click="handleModal()" class="search-btn" type="dashed">添加</Button>
           </Form>
         </Card>
         <br/>
@@ -62,8 +32,7 @@
           <Form :label-width="80" :model="role.pageInfo" inline ref="handleRoleResetForm">
             <FormItem>
               <Button @click="handleRoleSearch(1)" type="primary">查询</Button>&nbsp;
-              <Button @click="handleRoleResetForm('handleRoleResetForm')">重置</Button>&nbsp;&nbsp;
-              <Button @click="handleModal()" class="search-btn" type="primary">添加</Button>
+              <Button @click="handleRoleResetForm('handleRoleResetForm')">重置</Button>&nbsp;
             </FormItem>
           </Form>
           <Table size="small" max-height="420" stripe :columns="role.columns" :data="role.data"
@@ -156,7 +125,7 @@
   </div>
 </template>
 <script>
-import {addMenu, getMenuChildren, getMenuRoles, getMenus, getMenuUsers, viewMenu} from '@/api/access/menu';
+import {addMenu, updateMenu, getMenuChildren, getMenuRoles, getMenus, getMenuUsers, viewMenu} from '@/api/access/menu';
 import icons from "@/view/module/system/menus/icons";
 import {listConvertTree} from "@/libs/util";
 
@@ -183,9 +152,15 @@ export default {
                     props: {
                       type: 'ios-apps'
                     },
-                    style: {marginRight: '8px'}
+                    style: {marginRight: '5px'}
                   }),
-                  h('span', data.title)
+                  h('span', data.title),
+                  h('Badge', {
+                    props: {
+                      status: 'success'
+                    },
+                    style: {marginLeft: '3px'}
+                  })
                 ]),
                 h('span', {style: {display: 'inline-block', float: 'right', marginRight: '32px'}})
               ]);
@@ -193,7 +168,7 @@ export default {
           }
         ],
         viewData: {},
-        viewDisabled: true,
+        viewShow: false,
         deeply: []
       },
       modal: {
@@ -218,12 +193,8 @@ export default {
         },
         visible: false,
         saving: false,
-        selectTreeData: [{
-          menuId: 0,
-          menuName: '无'
-        }],
-        selectIcons: icons,
-        data: []
+        selectTreeData: [],
+        selectIcons: icons
       },
       role: {
         loading: false,
@@ -310,10 +281,10 @@ export default {
     /**
      * 弹框
      */
-    handleModal(data) {
-      if (data) {
+    handleModal() {
+      if (this.menu.viewData) {
         this.modal.title = '编辑菜单';
-        this.modal.formItem = Object.assign({}, this.modal.formItem, data);
+        this.modal.formItem = Object.assign({}, this.modal.formItem, this.menu.viewData);
       } else {
         this.modal.title = '添加菜单';
       }
@@ -323,17 +294,24 @@ export default {
      * 弹框保持事件
      */
     handleModalSubmit() {
-      console.log(this.modal.formItem);
       this.$refs.modalForm.validate((valid) => {
         if (valid) {
           this.modal.saving = true;
           if (this.modal.formItem.menuId) {
-
+            updateMenu(this.modal.formItem)
+                .then(res => {
+                  // 此处刷新页面等操作
+                  this.$refs.tree.handleSelect(0);
+                })
+                .finally(() => {
+                  this.modal.visible = false;
+                  this.modal.saving = false;
+                });
           } else {
             addMenu(this.modal.formItem)
                 .then(res => {
                   // 此处刷新页面等操作
-                  this.handleModalCancel();
+                  this.$refs.tree.handleSelect(0);
                 })
                 .finally(() => {
                   this.modal.visible = false;
@@ -378,6 +356,8 @@ export default {
      */
     renderChildren(h, {root, node, data}) {
       let menuIcon = data['menuIcon'] ? data['menuIcon'] : 'md-document';
+      // 若非启用状态则设置为禁用
+      let badgeStatus = '10' === data['menuState'] ? 'success' : 'error';
       return h('span', {
         style: {
           display: 'inline-block',
@@ -389,9 +369,15 @@ export default {
             props: {
               type: menuIcon
             },
-            style: {marginRight: '8px'}
+            style: {marginRight: '5px'}
           }),
-          h('span', data.title)
+          h('span', data.title),
+          h('Badge', {
+            props: {
+              status: badgeStatus
+            },
+            style: {marginLeft: '3px'}
+          })
         ]),
         h('span', {style: {display: 'inline-block', float: 'right', marginRight: '32px'}})
       ]);
@@ -455,6 +441,7 @@ export default {
         viewMenu({menuId: node.menuId})
             .then(res => {
               this.menu.viewData = res.data;
+              this.menu.viewShow = node.menuId !== 0;
             })
             .finally(() => {
             });
@@ -462,6 +449,9 @@ export default {
         // this.role.pageInfo.menuId = node.menuId;
         // this.handleRoleSearch(1);
         // this.handleUserSearch(1);
+      } else {
+        this.menu.viewData = {};
+        this.menu.viewShow = false;
       }
     }
   },
@@ -475,8 +465,20 @@ export default {
             parentKey: 'menuParentId',
             startPid: '0'
           }
-          this.modal.data = listConvertTree(res.data, opt);
-          this.setSelectTree(this.modal.data);
+          let xx = res.data;
+          xx.unshift({
+            menuId: 0,
+            menuName: '无',
+            menuCode: "system",
+            menuParentId: "0",
+            menuPath: "",
+            menuSchema: "/",
+            menuTarget: "_self"
+          });
+          let result = listConvertTree(xx, opt);
+          console.info(xx);
+          console.info(result);
+          this.setSelectTree(result);
         });
   }
 }
