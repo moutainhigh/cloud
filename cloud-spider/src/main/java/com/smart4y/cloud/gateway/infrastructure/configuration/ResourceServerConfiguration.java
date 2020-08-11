@@ -38,7 +38,7 @@ import reactor.core.publisher.Mono;
  * Oauth2资源服务器 配置
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @Configuration
@@ -98,6 +98,7 @@ public class ResourceServerConfiguration {
         });
 
         http
+                .headers().frameOptions().disable().and()// swagger 嵌入用到此配置
                 .httpBasic().disable()
                 .csrf().disable()
                 .authorizeExchange()
