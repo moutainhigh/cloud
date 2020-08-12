@@ -16,6 +16,12 @@ import java.util.List;
 @DomainService
 public class PrivilegeOperationService extends BaseDomainService<RbacPrivilegeOperation> {
 
+    /**
+     * 获取权限对应的操作列表
+     *
+     * @param privilegeIds 权限ID列表
+     * @return 操作列表
+     */
     public List<RbacPrivilegeOperation> getOperations(Collection<Long> privilegeIds) {
         if (CollectionUtils.isEmpty(privilegeIds)) {
             return Collections.emptyList();
@@ -25,5 +31,36 @@ public class PrivilegeOperationService extends BaseDomainService<RbacPrivilegeOp
                 .weekendCriteria()
                 .andIn(RbacPrivilegeOperation::getPrivilegeId, privilegeIds);
         return this.list(weekend);
+    }
+
+    /**
+     * 获取操作对应的权限列表
+     *
+     * @param operationIds 操作ID列表
+     * @return 权限列表
+     */
+    public List<RbacPrivilegeOperation> getPrivileges(Collection<Long> operationIds) {
+        if (CollectionUtils.isEmpty(operationIds)) {
+            return Collections.emptyList();
+        }
+        Weekend<RbacPrivilegeOperation> weekend = Weekend.of(RbacPrivilegeOperation.class);
+        weekend
+                .weekendCriteria()
+                .andIn(RbacPrivilegeOperation::getOperationId, operationIds);
+        return this.list(weekend);
+    }
+
+    /**
+     * 移除权限
+     */
+    public void removeByPrivilege(Collection<Long> privilegeIds) {
+        if (CollectionUtils.isEmpty(privilegeIds)) {
+            return;
+        }
+        Weekend<RbacPrivilegeOperation> weekend = Weekend.of(RbacPrivilegeOperation.class);
+        weekend
+                .weekendCriteria()
+                .andIn(RbacPrivilegeOperation::getPrivilegeId, privilegeIds);
+        this.remove(weekend);
     }
 }

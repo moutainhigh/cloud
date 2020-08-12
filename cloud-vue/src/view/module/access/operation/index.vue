@@ -1,7 +1,7 @@
 <template>
   <div>
     <Card shadow>
-      <Form :label-width="80" :model="pageInfo" inline ref="searchForm">
+      <Form :label-width="60" :model="pageInfo" inline ref="searchForm">
         <FormItem label="操作名" prop="operationName">
           <Input placeholder="请输入关键字" type="text" v-model="pageInfo.operationName"/>
         </FormItem>
@@ -10,6 +10,9 @@
         </FormItem>
         <FormItem label="操作URL" prop="operationPath">
           <Input placeholder="请输入关键字" type="text" v-model="pageInfo.operationPath"/>
+        </FormItem>
+        <FormItem label="所属服务" prop="operationServiceId">
+          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.operationServiceId"/>
         </FormItem>
         <FormItem>
           <Button @click="handleSearch(1)" type="primary">查询</Button>&nbsp;
@@ -44,14 +47,15 @@ export default {
         limit: 10,
         operationName: '',
         operationDesc: '',
-        operationPath: ''
+        operationPath: '',
+        operationServiceId: ''
       },
       columns: [
         {title: '操作ID', key: 'operationId', width: 170},
         {title: '操作编码（操作权限标识）', key: 'operationCode', width: 260},
-        {title: '操作URL', key: 'operationPath', width: 200},
+        {title: '操作URL', key: 'operationPath', tooltip: true, width: 180},
         {title: '操作名', key: 'operationName', width: 180},
-        {title: '操作描述', key: 'operationDesc', width: 200},
+        {title: '操作描述', key: 'operationDesc', tooltip: true, width: 180},
         {title: '操作方法', key: 'operationMethod', width: 90},
         {title: '需要认证', key: 'operationAuth', width: 90},
         {title: '是否开放', key: 'operationOpen', width: 90},

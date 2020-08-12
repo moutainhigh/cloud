@@ -36,4 +36,10 @@ public class RbacOperationPageQuery extends BaseQuery {
      */
     @ApiModelProperty(value = "操作URL")
     private String operationPath;
+
+    /**
+     * 所属服务
+     */
+    @ApiModelProperty(value = "所属服务")
+    private String operationServiceId;
 }

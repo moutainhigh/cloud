@@ -9,6 +9,7 @@ import com.smart4y.cloud.core.toolkit.reflection.ReflectionUtils;
 import com.smart4y.cloud.core.toolkit.secret.EncryptUtils;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -20,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -114,12 +116,13 @@ public class RequestMappingScanner implements ApplicationListener<ApplicationRea
                 apiCodes.add(md5);
             }
 
-            String name = "";
-            String desc = "";
             // 是否需要安全认证 默认:1-是 0-否
             boolean isAuth = true;
             // 匹配项目中.permitAll()配置
             for (String url : p.getPatterns()) {
+                if (url.contains("/swagger-resources")) {
+                    System.out.println(url);
+                }
                 for (RequestMatcher requestMatcher : permitAll) {
                     if (requestMatcher instanceof AntPathRequestMatcher) {
                         AntPathRequestMatcher pathRequestMatcher = (AntPathRequestMatcher) requestMatcher;
@@ -131,10 +134,15 @@ public class RequestMappingScanner implements ApplicationListener<ApplicationRea
                 }
             }
 
+            String name = "";
+            String desc = "";
             ApiOperation apiOperation = method.getMethodAnnotation(ApiOperation.class);
             if (apiOperation != null) {
                 name = apiOperation.value();
                 desc = apiOperation.notes();
+                if (StringUtils.isBlank(desc)) {
+                    desc = name;
+                }
             }
             name = StringHelper.isBlank(name) ? methodName : name;
 
@@ -179,6 +187,27 @@ public class RequestMappingScanner implements ApplicationListener<ApplicationRea
             for (Map.Entry<String, WebSecurityConfigurerAdapter> stringWebSecurityConfigurerAdapterEntry : securityConfigurerAdapterMap.entrySet()) {
                 WebSecurityConfigurerAdapter configurer = stringWebSecurityConfigurerAdapterEntry.getValue();
                 HttpSecurity httpSecurity = (HttpSecurity) ReflectionUtils.getFieldValue(configurer, "http");
+                if (null != httpSecurity) {
+                    FilterSecurityInterceptor filterSecurityInterceptor = httpSecurity.getSharedObject(FilterSecurityInterceptor.class);
+                    FilterInvocationSecurityMetadataSource metadataSource = filterSecurityInterceptor.getSecurityMetadataSource();
+                    Map<RequestMatcher, Collection<ConfigAttribute>> requestMap = (Map) ReflectionUtils.getFieldValue(metadataSource, "requestMap");
+                    if (null != requestMap) {
+                        for (Map.Entry<RequestMatcher, Collection<ConfigAttribute>> match : requestMap.entrySet()) {
+                            if (match.getValue().toString().contains("permitAll")) {
+                                permitAll.add(match.getKey());
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.error("error：{}", e.getLocalizedMessage(), e);
+        }
+        try {
+            Map<String, ResourceServerConfigurerAdapter> beansOfType = applicationContext.getBeansOfType(ResourceServerConfigurerAdapter.class);
+            for (Map.Entry<String, ResourceServerConfigurerAdapter> resourceServerConfigurerAdapterEntry : beansOfType.entrySet()) {
+                ResourceServerConfigurerAdapter resourceServerConfigurerAdapter = resourceServerConfigurerAdapterEntry.getValue();
+                HttpSecurity httpSecurity = (HttpSecurity) ReflectionUtils.getFieldValue(resourceServerConfigurerAdapter, "http");
                 if (null != httpSecurity) {
                     FilterSecurityInterceptor filterSecurityInterceptor = httpSecurity.getSharedObject(FilterSecurityInterceptor.class);
                     FilterInvocationSecurityMetadataSource metadataSource = filterSecurityInterceptor.getSecurityMetadataSource();

@@ -31,8 +31,11 @@ public class OperationApplicationServiceImpl extends BaseDomainService<RbacOpera
         if (StringUtils.isNotBlank(query.getOperationPath())) {
             criteria.andLike(RbacOperation::getOperationPath, "%" + query.getOperationPath() + "%");
         }
+        if (StringUtils.isNotBlank(query.getOperationServiceId())) {
+            criteria.andLike(RbacOperation::getOperationServiceId, "%" + query.getOperationServiceId() + "%");
+        }
         weekend
-                .orderBy("createdDate").desc();
+                .orderBy("operationPath").desc();
 
         return this.findPage(weekend, query.getPage(), query.getLimit());
     }

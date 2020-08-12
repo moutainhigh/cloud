@@ -17,5 +17,23 @@ public interface PrivilegeApplicationService {
      */
     List<RbacOperation> getPrivilegesOperations();
 
+    /**
+     * 权限列表分页
+     */
     Page<RbacPrivilege> getPrivilegesPage(RbacPrivilegePageQuery query);
+
+    /**
+     * 清理无效权限
+     *
+     * @param serviceId           权限所属服务ID
+     * @param validOperationCodes 有效的权限编码列表
+     */
+    void removeInvalidPrivileges(String serviceId, List<String> validOperationCodes);
+
+    void addNewRolePrivileges(List<String> validOperationCodes);
+
+    /**
+     * 新增权限、操作权限
+     */
+    void addPrivilegeOperations(String serviceId);
 }

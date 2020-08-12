@@ -4,19 +4,24 @@ import com.smart4y.cloud.base.access.application.PrivilegeApplicationService;
 import com.smart4y.cloud.base.access.domain.model.RbacOperation;
 import com.smart4y.cloud.base.access.domain.model.RbacPrivilege;
 import com.smart4y.cloud.base.access.domain.model.RbacPrivilegeOperation;
+import com.smart4y.cloud.base.access.domain.model.RbacRolePrivilege;
 import com.smart4y.cloud.base.access.domain.service.OperationService;
 import com.smart4y.cloud.base.access.domain.service.PrivilegeOperationService;
+import com.smart4y.cloud.base.access.domain.service.PrivilegeService;
+import com.smart4y.cloud.base.access.domain.service.RolePrivilegeService;
 import com.smart4y.cloud.base.access.interfaces.dtos.privilege.RbacPrivilegePageQuery;
 import com.smart4y.cloud.core.annotation.ApplicationService;
 import com.smart4y.cloud.core.message.page.Page;
-import com.smart4y.cloud.mapper.BaseDomainService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.weekend.Weekend;
 import tk.mybatis.mapper.weekend.WeekendCriteria;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -24,15 +29,19 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @ApplicationService
-public class PrivilegeApplicationServiceImpl extends BaseDomainService<RbacPrivilege> implements PrivilegeApplicationService {
+public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationService {
 
-    private final PrivilegeOperationService privilegeOperationService;
     private final OperationService operationService;
+    private final PrivilegeService privilegeService;
+    private final PrivilegeOperationService privilegeOperationService;
+    private final RolePrivilegeService rolePrivilegeService;
 
     @Autowired
-    public PrivilegeApplicationServiceImpl(PrivilegeOperationService privilegeOperationService, OperationService operationService) {
+    public PrivilegeApplicationServiceImpl(PrivilegeOperationService privilegeOperationService, OperationService operationService, PrivilegeService privilegeService, RolePrivilegeService rolePrivilegeService) {
         this.privilegeOperationService = privilegeOperationService;
         this.operationService = operationService;
+        this.privilegeService = privilegeService;
+        this.rolePrivilegeService = rolePrivilegeService;
     }
 
     @Override
@@ -51,7 +60,79 @@ public class PrivilegeApplicationServiceImpl extends BaseDomainService<RbacPrivi
         weekend
                 .orderBy("createdDate").desc();
 
-        return this.findPage(weekend, query.getPage(), query.getLimit());
+        return privilegeService.findPage(weekend, query.getPage(), query.getLimit());
+    }
+
+    @Override
+    public void removeInvalidPrivileges(String serviceId, List<String> validOperationCodes) {
+        if (CollectionUtils.isEmpty(validOperationCodes)) {
+            return;
+        }
+        // 获取失效操作列表
+        List<RbacOperation> invalidOperations = operationService.getInvalidOperations(serviceId, validOperationCodes);
+        List<Long> operationIds = invalidOperations.stream().map(RbacOperation::getOperationId).collect(Collectors.toList());
+        // 获取权限
+        List<RbacPrivilegeOperation> privilegeOperations = privilegeOperationService.getPrivileges(operationIds);
+        List<Long> privilegeIds = privilegeOperations.stream().map(RbacPrivilegeOperation::getPrivilegeId).collect(Collectors.toList());
+
+        // 清除角色权限，权限操作，权限，操作
+        rolePrivilegeService.removeByPrivilege(privilegeIds);
+        privilegeOperationService.removeByPrivilege(privilegeIds);
+        privilegeService.removeByPrivilege(privilegeIds);
+        operationService.removeByOperations(operationIds);
+    }
+
+    @Override
+    public void addNewRolePrivileges(List<String> validOperationCodes) {
+        // 给角色（超级管理员）添加本次新增的权限
+        List<RbacOperation> rbacOperations = operationService.getByCodes(validOperationCodes);
+        List<Long> operationIds = rbacOperations.stream().map(RbacOperation::getOperationId).collect(Collectors.toList());
+
+        List<RbacPrivilegeOperation> privilegeOperations = privilegeOperationService.getPrivileges(operationIds);
+        List<Long> privilegeIds = privilegeOperations.stream().map(RbacPrivilegeOperation::getPrivilegeId).collect(Collectors.toList());
+
+        // 超级管理员角色对应权限
+        long adminRoleId = 1L;
+        List<RbacRolePrivilege> rolePrivileges = rolePrivilegeService.getRoles(adminRoleId, privilegeIds);
+        List<Long> rolePrivilegeIds = rolePrivileges.stream().map(RbacRolePrivilege::getPrivilegeId).collect(Collectors.toList());
+
+        // 新权限
+        List<Long> newPrivilegeIds = privilegeIds.stream()
+                .filter(privilegeId -> !rolePrivilegeIds.contains(privilegeId))
+                .collect(Collectors.toList());
+        rolePrivilegeService.add(adminRoleId, newPrivilegeIds);
+    }
+
+    @Override
+    public void addPrivilegeOperations(String serviceId) {
+        List<RbacOperation> operations = operationService.getByServiceId(serviceId);
+        List<String> operationCodes = operations.stream().map(RbacOperation::getOperationCode).collect(Collectors.toList());
+        Map<String, Long> operationIdCodeMap = operations.stream()
+                .collect(Collectors.toMap(RbacOperation::getOperationCode, RbacOperation::getOperationId));
+
+
+        List<RbacPrivilege> rbacPrivileges = privilegeService.getByPrivileges("o", operationCodes);
+        List<String> privilegeCodes = rbacPrivileges.stream().map(RbacPrivilege::getPrivilege).collect(Collectors.toList());
+        List<String> newCodes = operationCodes.stream()
+                .filter(code -> !privilegeCodes.contains(code))
+                .collect(Collectors.toList());
+
+        LocalDateTime now = LocalDateTime.now();
+        List<RbacPrivilege> newPrivileges = newCodes.stream()
+                .map(code -> new RbacPrivilege()
+                        .setPrivilege(code)
+                        .setPrivilegeType("o")
+                        .setCreatedDate(now))
+                .collect(Collectors.toList());
+        privilegeService.saveBatch(newPrivileges);
+
+        List<RbacPrivilegeOperation> newPrivilegeOperations = newPrivileges.stream()
+                .map(privilege -> new RbacPrivilegeOperation()
+                        .setPrivilegeId(privilege.getPrivilegeId())
+                        .setOperationId(operationIdCodeMap.get(privilege.getPrivilege()))
+                        .setCreatedDate(now))
+                .collect(Collectors.toList());
+        privilegeOperationService.saveBatch(newPrivilegeOperations);
     }
 
     @Override
@@ -60,7 +141,7 @@ public class PrivilegeApplicationServiceImpl extends BaseDomainService<RbacPrivi
         privilegeWeekend
                 .weekendCriteria()
                 .andEqualTo(RbacPrivilege::getPrivilegeType, "o");
-        List<Long> privilegeIds = this.list(privilegeWeekend).stream()
+        List<Long> privilegeIds = privilegeService.list(privilegeWeekend).stream()
                 .map(RbacPrivilege::getPrivilegeId).collect(Collectors.toList());
 
         List<Long> operationIds = privilegeOperationService.getOperations(privilegeIds).stream()

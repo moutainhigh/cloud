@@ -27,7 +27,7 @@ import java.io.IOException;
  * Oauth2资源服务器配置
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @Configuration
@@ -42,7 +42,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         return new RedisTokenStore(redisConnectionFactory);
     }
 
-    private BearerTokenExtractor tokenExtractor = new BearerTokenExtractor();
+    private final BearerTokenExtractor tokenExtractor = new BearerTokenExtractor();
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -51,6 +51,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .authorizeRequests()
                 .antMatchers(
                         "/v2/api-docs",
+                        "/swagger-resources/**",
                         "/login/**",
                         "/oauth/**")
                 .permitAll()

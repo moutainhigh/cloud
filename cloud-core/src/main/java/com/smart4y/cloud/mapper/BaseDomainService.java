@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.core.message.page.Page;
 import com.smart4y.cloud.core.spring.SpringContextHolder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -145,7 +146,9 @@ public class BaseDomainService<T extends BaseEntity> {
      * @param entityList 实体对象集合
      */
     public void saveBatch(Collection<T> entityList) {
-        saveBatch(entityList, batchSize);
+        if (CollectionUtils.isNotEmpty(entityList)) {
+            saveBatch(entityList, batchSize);
+        }
     }
 
     /**
@@ -158,18 +161,20 @@ public class BaseDomainService<T extends BaseEntity> {
      * @param batchSize  插入批次数量
      */
     public void saveBatch(Collection<T> entityList, int batchSize) {
-        SqlSession sqlSession = batchSqlSession();
-        CloudMapper<T> batchMapper = batchMapper(sqlSession);
-        int i = 0;
-        for (T entity : entityList) {
-            setSaveInfo(entity);
-            batchMapper.insertSelective(entity);
-            if (i >= 1 && i % batchSize == 0) {
-                sqlSession.flushStatements();
+        if (CollectionUtils.isNotEmpty(entityList)) {
+            SqlSession sqlSession = batchSqlSession();
+            CloudMapper<T> batchMapper = batchMapper(sqlSession);
+            int i = 0;
+            for (T entity : entityList) {
+                setSaveInfo(entity);
+                batchMapper.insertSelective(entity);
+                if (i >= 1 && i % batchSize == 0) {
+                    sqlSession.flushStatements();
+                }
+                i++;
             }
-            i++;
+            sqlSession.flushStatements();
         }
-        sqlSession.flushStatements();
     }
 
     /**
@@ -207,7 +212,9 @@ public class BaseDomainService<T extends BaseEntity> {
      * @param entityList 实体对象集合
      */
     public void updateSelectiveBatchById(Collection<T> entityList) {
-        updateSelectiveBatchById(entityList, batchSize);
+        if (CollectionUtils.isNotEmpty(entityList)) {
+            updateSelectiveBatchById(entityList, batchSize);
+        }
     }
 
     /**
@@ -220,18 +227,20 @@ public class BaseDomainService<T extends BaseEntity> {
      * @param batchSize  更新批次数量
      */
     public void updateSelectiveBatchById(Collection<T> entityList, int batchSize) {
-        SqlSession sqlSession = batchSqlSession();
-        CloudMapper<T> batchMapper = batchMapper(sqlSession);
-        int i = 0;
-        for (T entity : entityList) {
-            setUpdateInfo(entity);
-            batchMapper.updateByPrimaryKeySelective(entity);
-            if (i >= 1 && i % batchSize == 0) {
-                sqlSession.flushStatements();
+        if (CollectionUtils.isNotEmpty(entityList)) {
+            SqlSession sqlSession = batchSqlSession();
+            CloudMapper<T> batchMapper = batchMapper(sqlSession);
+            int i = 0;
+            for (T entity : entityList) {
+                setUpdateInfo(entity);
+                batchMapper.updateByPrimaryKeySelective(entity);
+                if (i >= 1 && i % batchSize == 0) {
+                    sqlSession.flushStatements();
+                }
+                i++;
             }
-            i++;
+            sqlSession.flushStatements();
         }
-        sqlSession.flushStatements();
     }
 
     /**
@@ -262,7 +271,9 @@ public class BaseDomainService<T extends BaseEntity> {
      * @param entityList 实体对象集合
      */
     public void saveOrUpdateBatch(Collection<T> entityList) {
-        saveOrUpdateBatch(entityList, batchSize);
+        if (CollectionUtils.isNotEmpty(entityList)) {
+            saveOrUpdateBatch(entityList, batchSize);
+        }
     }
 
     /**
@@ -278,18 +289,20 @@ public class BaseDomainService<T extends BaseEntity> {
      * @param batchSize  更新批次数量
      */
     public void saveOrUpdateBatch(Collection<T> entityList, int batchSize) {
-        SqlSession sqlSession = batchSqlSession();
-        CloudMapper<T> batchMapper = batchMapper(sqlSession);
-        int i = 0;
-        for (T entity : entityList) {
-            setSaveOrUpdateInfo(entity);
-            batchMapper.saveOrUpdate(entity);
-            if (i >= 1 && i % batchSize == 0) {
-                sqlSession.flushStatements();
+        if (CollectionUtils.isNotEmpty(entityList)) {
+            SqlSession sqlSession = batchSqlSession();
+            CloudMapper<T> batchMapper = batchMapper(sqlSession);
+            int i = 0;
+            for (T entity : entityList) {
+                setSaveOrUpdateInfo(entity);
+                batchMapper.saveOrUpdate(entity);
+                if (i >= 1 && i % batchSize == 0) {
+                    sqlSession.flushStatements();
+                }
+                i++;
             }
-            i++;
+            sqlSession.flushStatements();
         }
-        sqlSession.flushStatements();
     }
 
     /**
@@ -358,7 +371,6 @@ public class BaseDomainService<T extends BaseEntity> {
         Weekend<T> weekend = Weekend.of(modelClass());
         weekend
                 .weekendCriteria();
-        //.andEqualTo(BaseEntity::getArchived, Boolean.TRUE);
         return list(weekend);
     }
 
