@@ -1,4 +1,4 @@
-package com.smart4y.cloud.base.gateway.interfaces.dtos;
+package com.smart4y.cloud.base.gateway.interfaces.dtos.log;
 
 import com.smart4y.cloud.core.message.page.BaseQuery;
 import io.swagger.annotations.ApiModel;
@@ -9,24 +9,21 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * 网关日志分页查询
- *
- * @author Youtao
- *         Created by youtao on 2019/10/14.
+ * @author Youtao on 2019/10/14.
  */
 @Data
 @NoArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value = "GatewayAccessLogsQuery", description = "网关日志分页查询")
-public class GatewayAccessLogsQuery extends BaseQuery {
+@ApiModel(value = "LogPageQuery", description = "日志:分页:查询")
+public class LogPageQuery extends BaseQuery {
 
     @ApiModelProperty(value = "访问路径")
-    private String path;
+    private String logPath;
 
     @ApiModelProperty(value = "请求IP")
-    private String ip;
+    private String logIp;
 
     @ApiModelProperty(value = "服务名")
-    private String serviceId;
+    private String logServiceId;
 }

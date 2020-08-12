@@ -119,6 +119,8 @@ public class RbacUserApplicationServiceImpl implements RbacUserApplicationServic
         List<RbacPrivilegeMenu> privilegeMenus = privilegeMenuService.getMenus(privilegeIds);
         List<Long> menuIds = privilegeMenus.stream().map(RbacPrivilegeMenu::getMenuId).collect(Collectors.toList());
 
-        return menuService.getMenus(menuIds);
+        return menuService.getAllStateMenus(menuIds).stream()
+                .filter(x -> "10".equals(x.getMenuState()))
+                .collect(Collectors.toList());
     }
 }

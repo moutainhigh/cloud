@@ -1,10 +1,10 @@
 package com.smart4y.cloud.base.gateway.application.eventhandler;
 
-import com.smart4y.cloud.base.gateway.domain.model.GatewayAccessLogs;
-import com.smart4y.cloud.base.gateway.infrastructure.persistence.mybatis.GatewayAccessLogsMapper;
 import com.smart4y.cloud.base.domain.service.IpHelper;
-import com.smart4y.cloud.core.event.LogAccessedEvent;
+import com.smart4y.cloud.base.gateway.domain.model.GatewayLog;
+import com.smart4y.cloud.base.gateway.domain.service.LogService;
 import com.smart4y.cloud.core.constant.QueueConstants;
+import com.smart4y.cloud.core.event.LogAccessedEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -19,14 +19,14 @@ import java.time.temporal.ChronoUnit;
  * 网关（日志）事件处理器
  *
  * @author Youtao
- *         Created by youtao on 2019/9/17.
+ * Created by youtao on 2019/9/17.
  */
 @Slf4j
 @Component
 public class LogAccessedEventHandler {
 
     @Autowired
-    private GatewayAccessLogsMapper gatewayAccessLogsMapper;
+    private LogService logService;
     @Autowired
     private IpHelper ipHelper;
 
@@ -34,34 +34,34 @@ public class LogAccessedEventHandler {
     public void handle(@Payload LogAccessedEvent event) {
         try {
             log.info("网关（日志）：{}", event);
-            GatewayAccessLogs record = new GatewayAccessLogs()
-                    .setAuthentication(event.getAuthentication())
+            GatewayLog record = new GatewayLog()
+                    .setLogAuthentication(event.getAuthentication())
                     .setCreatedDate(LocalDateTime.now())
-                    .setError(event.getError())
-                    .setHeaders(event.getHeaders())
-                    .setHttpStatus(event.getHttpStatus())
-                    .setIp(event.getIp())
-                    .setMethod(event.getMethod())
-                    .setParams(event.getParams())
-                    .setPath(event.getPath())
-                    .setRequestTime(event.getRequestTime())
-                    .setResponseTime(event.getResponseTime())
-                    .setServiceId(event.getServiceId())
-                    .setUserAgent(event.getUserAgent());
-            String ip = record.getIp();
+                    .setLogError(event.getError())
+                    .setLogHeaders(event.getHeaders())
+                    .setLogHttpStatus(event.getHttpStatus())
+                    .setLogIp(event.getIp())
+                    .setLogMethod(event.getMethod())
+                    .setLogParams(event.getParams())
+                    .setLogPath(event.getPath())
+                    .setLogRequestTime(event.getRequestTime())
+                    .setLogResponseTime(event.getResponseTime())
+                    .setLogServiceId(event.getServiceId())
+                    .setLogUserAgent(event.getUserAgent());
+            String ip = record.getLogIp();
             if (StringUtils.isNotBlank(ip)) {
                 IpHelper.IpInfo info = ipHelper.of(ip);
                 if (null != info) {
-                    record.setRegion(info.getDetail());
+                    record.setLogRegion(info.getDetail());
                 }
             }
-            LocalDateTime responseTime = record.getResponseTime();
-            LocalDateTime requestTime = record.getRequestTime();
+            LocalDateTime responseTime = record.getLogResponseTime();
+            LocalDateTime requestTime = record.getLogRequestTime();
             if (null != requestTime && null != responseTime) {
                 long millis = ChronoUnit.MILLIS.between(requestTime, responseTime);
-                record.setUseTime(millis);
+                record.setLogUseMillis(millis);
             }
-            gatewayAccessLogsMapper.insertSelective(record);
+            logService.save(record);
         } catch (Exception e) {
             log.error("网关（日志）处理异常：{}", e.getLocalizedMessage(), e);
         }

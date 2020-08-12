@@ -28,7 +28,7 @@ public class RouteController extends BaseGatewayController {
     private RouteApplicationService routeApplicationService;
 
     @GetMapping("/routes/page")
-    @ApiOperation(value = "操作:分页")
+    @ApiOperation(value = "路由:分页")
     public ResultMessage<Page<GatewayRoute>> getRoutesPage(RoutePageQuery query) {
         Page<GatewayRoute> result = routeApplicationService.getRoutesPage(query);
         return ok(result);

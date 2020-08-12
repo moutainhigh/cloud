@@ -17,7 +17,7 @@ import java.util.List;
 @DomainService
 public class MenuService extends BaseDomainService<RbacMenu> {
 
-    public List<RbacMenu> getMenus(Collection<Long> menuIds) {
+    public List<RbacMenu> getAllStateMenus(Collection<Long> menuIds) {
         if (CollectionUtils.isEmpty(menuIds)) {
             return Collections.emptyList();
         }
