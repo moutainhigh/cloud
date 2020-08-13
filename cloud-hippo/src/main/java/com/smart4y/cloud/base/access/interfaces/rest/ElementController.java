@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
-import com.smart4y.cloud.base.access.application.ElementApplicationService;
 import com.smart4y.cloud.base.access.domain.entity.RbacElement;
+import com.smart4y.cloud.base.access.domain.service.ElementService;
 import com.smart4y.cloud.base.access.interfaces.dtos.element.CreateElementCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.element.ModifyElementCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.element.RbacElementPageQuery;
@@ -27,12 +27,13 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 public class ElementController extends BaseAccessController {
 
     @Autowired
-    private ElementApplicationService elementApplicationService;
+    private ElementService elementService;
 
     @GetMapping("/elements/page")
     @ApiOperation(value = "元素:分页")
     public ResultMessage<Page<RbacElement>> getElementsPage(RbacElementPageQuery query) {
-        Page<RbacElement> result = elementApplicationService.getElementsPage(query);
+        Page<RbacElement> result = elementService.getPageLike(
+                query.getPage(), query.getLimit(), query.getElementName(), query.getElementCode());
         return ok(result);
     }
 

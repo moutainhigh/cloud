@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
-import com.smart4y.cloud.base.access.application.OperationApplicationService;
 import com.smart4y.cloud.base.access.domain.entity.RbacOperation;
+import com.smart4y.cloud.base.access.domain.service.OperationService;
 import com.smart4y.cloud.base.access.interfaces.dtos.operation.RbacOperationPageQuery;
 import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.core.message.page.Page;
@@ -24,12 +24,15 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 public class OperationController extends BaseAccessController {
 
     @Autowired
-    private OperationApplicationService operationApplicationService;
+    private OperationService operationService;
 
     @GetMapping("/operations/page")
     @ApiOperation(value = "操作:分页")
     public ResultMessage<Page<RbacOperation>> getOperationsPage(RbacOperationPageQuery query) {
-        Page<RbacOperation> result = operationApplicationService.getOperationsPage(query);
+        Page<RbacOperation> result = operationService.getPageLike(
+                query.getPage(), query.getLimit(), query.getOperationName(), query.getOperationPath(),
+                query.getOperationServiceId(), query.getOperationDesc()
+        );
         return ok(result);
     }
 }

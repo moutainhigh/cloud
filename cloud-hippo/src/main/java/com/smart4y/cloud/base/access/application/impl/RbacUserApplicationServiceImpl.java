@@ -1,17 +1,11 @@
 package com.smart4y.cloud.base.access.application.impl;
 
 import com.smart4y.cloud.base.access.application.RbacUserApplicationService;
-import com.smart4y.cloud.base.access.application.UserApplicationService;
 import com.smart4y.cloud.base.access.domain.entity.*;
 import com.smart4y.cloud.base.access.domain.service.*;
-import com.smart4y.cloud.base.access.interfaces.dtos.user.RbacUserPageQuery;
 import com.smart4y.cloud.core.annotation.ApplicationService;
-import com.smart4y.cloud.core.message.page.Page;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import tk.mybatis.mapper.weekend.Weekend;
-import tk.mybatis.mapper.weekend.WeekendCriteria;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,9 +15,8 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @ApplicationService
-public class RbacUserApplicationServiceImpl implements RbacUserApplicationService, UserApplicationService {
+public class RbacUserApplicationServiceImpl implements RbacUserApplicationService {
 
-    private final UserRoleService userRoleService;
     private final GroupUserService groupUserService;
     private final GroupRoleService groupRoleService;
     private final RoleService roleService;
@@ -34,8 +27,7 @@ public class RbacUserApplicationServiceImpl implements RbacUserApplicationServic
     private final UserService userService;
 
     @Autowired
-    public RbacUserApplicationServiceImpl(UserRoleService userRoleService, GroupUserService groupUserService, GroupRoleService groupRoleService, RoleService roleService, RolePrivilegeService rolePrivilegeService, PrivilegeService privilegeService, PrivilegeMenuService privilegeMenuService, MenuService menuService, UserService userService) {
-        this.userRoleService = userRoleService;
+    public RbacUserApplicationServiceImpl(GroupUserService groupUserService, GroupRoleService groupRoleService, RoleService roleService, RolePrivilegeService rolePrivilegeService, PrivilegeService privilegeService, PrivilegeMenuService privilegeMenuService, MenuService menuService, UserService userService) {
         this.groupUserService = groupUserService;
         this.groupRoleService = groupRoleService;
         this.roleService = roleService;
@@ -47,31 +39,6 @@ public class RbacUserApplicationServiceImpl implements RbacUserApplicationServic
     }
 
     @Override
-    public Page<RbacUser> getUsersPage(RbacUserPageQuery query) {
-        Weekend<RbacUser> weekend = Weekend.of(RbacUser.class);
-        WeekendCriteria<RbacUser, Object> criteria = weekend.weekendCriteria();
-        if (null != query.getUserId()) {
-            criteria.andLike(RbacUser::getUserId, "%" + query.getUserId() + "%");
-        }
-        if (StringUtils.isNotBlank(query.getUserName())) {
-            criteria.andLike(RbacUser::getUserName, "%" + query.getUserName() + "%");
-        }
-        weekend
-                .orderBy("createdDate").desc();
-
-        return userService.findPage(weekend, query.getPage(), query.getLimit());
-    }
-
-    @Override
-    public List<RbacRole> getRbacRoles(long userId) {
-        // 获取用户角色
-        List<RbacUserRole> userRoles = userRoleService.getRoles(userId);
-        List<Long> roleIds = userRoles.stream().map(RbacUserRole::getRoleId).collect(Collectors.toList());
-
-        return roleService.getRoles(roleIds);
-    }
-
-    @Override
     public List<RbacRole> getRbacGroupRoles(long userId) {
         // 获取用户所属组织关联角色
         List<RbacGroupUser> groupUsers = groupUserService.getGroups(userId);
@@ -79,21 +46,22 @@ public class RbacUserApplicationServiceImpl implements RbacUserApplicationServic
         List<RbacGroupRole> groupRoles = groupRoleService.getRoles(groupIds);
         List<Long> roleIds = groupRoles.stream().map(RbacGroupRole::getRoleId).collect(Collectors.toList());
 
-        return roleService.getRoles(roleIds);
+        return roleService.getByIds(roleIds);
     }
 
     @Override
     public List<RbacRole> getAllRoles(long userId) {
         // 获取用户角色
-        List<Long> roleIds = this.getRbacRoles(userId).stream()
-                .map(RbacRole::getRoleId).collect(Collectors.toList());
+        List<RbacUserRole> userRoles = userService.getUserRolesByUserId(userId);
+        List<Long> roleIds = userRoles.stream().map(RbacUserRole::getRoleId).collect(Collectors.toList());
+
         // 获取用户所属组织关联角色
         List<Long> groupRoleIds = this.getRbacGroupRoles(userId).stream()
                 .map(RbacRole::getRoleId).collect(Collectors.toList());
 
         roleIds.addAll(groupRoleIds);
 
-        return roleService.getRoles(roleIds);
+        return roleService.getByIds(roleIds);
     }
 
     @Override
@@ -119,7 +87,7 @@ public class RbacUserApplicationServiceImpl implements RbacUserApplicationServic
         List<RbacPrivilegeMenu> privilegeMenus = privilegeMenuService.getMenus(privilegeIds);
         List<Long> menuIds = privilegeMenus.stream().map(RbacPrivilegeMenu::getMenuId).collect(Collectors.toList());
 
-        return menuService.getAllStateMenus(menuIds).stream()
+        return menuService.getByIds(menuIds).stream()
                 .filter(x -> "10".equals(x.getMenuState()))
                 .collect(Collectors.toList());
     }

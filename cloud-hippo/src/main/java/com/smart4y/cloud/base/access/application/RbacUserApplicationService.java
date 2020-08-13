@@ -12,14 +12,6 @@ import java.util.List;
 public interface RbacUserApplicationService {
 
     /**
-     * 获取用户直接授予的角色列表
-     *
-     * @param userId 用户ID
-     * @return 角色列表
-     */
-    List<RbacRole> getRbacRoles(long userId);
-
-    /**
      * 获取用户所属组织授予的角色列表
      *
      * @param userId 用户ID

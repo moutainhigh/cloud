@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
-import com.smart4y.cloud.base.access.application.UserApplicationService;
 import com.smart4y.cloud.base.access.domain.entity.RbacUser;
+import com.smart4y.cloud.base.access.domain.service.UserService;
 import com.smart4y.cloud.base.access.interfaces.dtos.user.CreateUserCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.user.GrantUserRoleCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.user.ModifyUserCommand;
@@ -28,12 +28,14 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 public class UserController extends BaseAccessController {
 
     @Autowired
-    private UserApplicationService userApplicationService;
+    private UserService userService;
 
     @GetMapping("/users/page")
     @ApiOperation(value = "用户:分页")
     public ResultMessage<Page<RbacUser>> getUsersPage(RbacUserPageQuery query) {
-        Page<RbacUser> result = userApplicationService.getUsersPage(query);
+        Page<RbacUser> result = userService.getPageLike(
+                query.getPage(), query.getPage(), query.getUserId(), query.getUserName()
+        );
         return ok(result);
     }
 

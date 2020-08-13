@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
-import com.smart4y.cloud.base.access.application.RoleApplicationService;
 import com.smart4y.cloud.base.access.domain.entity.RbacRole;
+import com.smart4y.cloud.base.access.domain.service.RoleService;
 import com.smart4y.cloud.base.access.interfaces.dtos.role.CreateRoleCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.role.GrantPrivilegeCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.role.ModifyRoleCommand;
@@ -30,7 +30,7 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 public class RoleController extends BaseAccessController {
 
     @Autowired
-    private RoleApplicationService roleApplicationService;
+    private RoleService roleService;
 
     @GetMapping("/roles")
     @ApiOperation(value = "角色:所有")
@@ -41,7 +41,8 @@ public class RoleController extends BaseAccessController {
     @GetMapping("/roles/page")
     @ApiOperation(value = "角色:分页")
     public ResultMessage<Page<RbacRole>> getRolesPage(RbacRolePageQuery query) {
-        Page<RbacRole> result = roleApplicationService.getRolesPage(query);
+        Page<RbacRole> result = roleService.getPageLike(
+                query.getPage(), query.getLimit(), query.getRoleName(), query.getRoleCode());
         return ok(result);
     }
 

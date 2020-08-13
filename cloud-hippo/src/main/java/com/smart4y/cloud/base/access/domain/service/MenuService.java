@@ -18,7 +18,13 @@ import java.util.List;
 @DomainService
 public class MenuService extends BaseDomainService<RbacMenu> {
 
-    public List<RbacMenu> getAllStateMenus(Collection<Long> menuIds) {
+    /**
+     * 获取指定菜单列表
+     *
+     * @param menuIds 菜单ID列表
+     * @return 菜单列表
+     */
+    public List<RbacMenu> getByIds(Collection<Long> menuIds) {
         if (CollectionUtils.isEmpty(menuIds)) {
             return Collections.emptyList();
         }
@@ -31,18 +37,29 @@ public class MenuService extends BaseDomainService<RbacMenu> {
         return this.list(weekend);
     }
 
-    public List<RbacMenu> getByCodes(Collection<String> menuCodes) {
-        if (CollectionUtils.isEmpty(menuCodes)) {
-            return Collections.emptyList();
-        }
+    /**
+     * 获取指定菜单的子节点
+     *
+     * @param parentId 父级ID
+     * @return 子节点菜单列表
+     */
+    public List<RbacMenu> getChildrenByParentId(long parentId) {
         Weekend<RbacMenu> weekend = Weekend.of(RbacMenu.class);
         weekend
                 .weekendCriteria()
-                .andIn(RbacMenu::getMenuCode, menuCodes);
+                .andEqualTo(RbacMenu::getMenuParentId, parentId);
+        weekend
+                .orderBy("menuSorted").asc();
         return this.list(weekend);
     }
 
-    public boolean existMenuCode(String menuCode) {
+    /**
+     * 指定菜单是否存在
+     *
+     * @param menuCode 菜单标识
+     * @return true存在，false不存在
+     */
+    public boolean existByCode(String menuCode) {
         Weekend<RbacMenu> weekend = Weekend.of(RbacMenu.class);
         weekend
                 .weekendCriteria()
@@ -54,8 +71,14 @@ public class MenuService extends BaseDomainService<RbacMenu> {
 
     /**
      * 是否存在子节点
+     *
+     * @param menuId 菜单ID，当传入的值为`0`是返回`true`
+     * @return true存在，false不存在
      */
     public boolean hasChild(long menuId) {
+        if (0 == menuId) {
+            return true;
+        }
         Weekend<RbacMenu> weekend = Weekend.of(RbacMenu.class);
         weekend
                 .weekendCriteria()
@@ -65,21 +88,34 @@ public class MenuService extends BaseDomainService<RbacMenu> {
         return this.exist(weekend);
     }
 
-    public void modifyExistChild(long menuId) {
-        this.updateChild(menuId, true);
-    }
-
-    public void updateNotExistChild(long menuId) {
-        this.updateChild(menuId, false);
-    }
-
-    public void updateChild(long menuId, boolean hasChild) {
+    /**
+     * 更新`子节点状态`为`存在子节点`
+     *
+     * @param menuId 菜单ID
+     */
+    public void modifyChildForExist(long menuId) {
         if (0 == menuId) {
             return;
         }
         RbacMenu record = new RbacMenu()
                 .setMenuId(menuId)
-                .setExistChild(hasChild)
+                .setExistChild(true)
+                .setLastModifiedDate(LocalDateTime.now());
+        this.updateSelectiveById(record);
+    }
+
+    /**
+     * 更新`子节点状态`为`不存在子节点`
+     *
+     * @param menuId 菜单ID
+     */
+    public void modifyChildForNotExist(long menuId) {
+        if (0 == menuId) {
+            return;
+        }
+        RbacMenu record = new RbacMenu()
+                .setMenuId(menuId)
+                .setExistChild(false)
                 .setLastModifiedDate(LocalDateTime.now());
         this.updateSelectiveById(record);
     }

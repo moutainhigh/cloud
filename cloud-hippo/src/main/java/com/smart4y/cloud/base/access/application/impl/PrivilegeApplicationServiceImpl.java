@@ -2,14 +2,24 @@ package com.smart4y.cloud.base.access.application.impl;
 
 import com.smart4y.cloud.base.access.application.PrivilegeApplicationService;
 import com.smart4y.cloud.base.access.domain.entity.*;
+import com.smart4y.cloud.base.access.domain.event.MenuCodeChangedEvent;
+import com.smart4y.cloud.base.access.domain.event.MenuCreatedEvent;
+import com.smart4y.cloud.base.access.domain.event.MenuParentChangedEvent;
+import com.smart4y.cloud.base.access.domain.event.MenuRemovedEvent;
 import com.smart4y.cloud.base.access.domain.service.*;
+import com.smart4y.cloud.base.access.interfaces.dtos.menu.CreateMenuCommand;
+import com.smart4y.cloud.base.access.interfaces.dtos.menu.ModifyMenuCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.privilege.RbacPrivilegePageQuery;
 import com.smart4y.cloud.core.annotation.ApplicationService;
+import com.smart4y.cloud.core.exception.OpenAlertException;
+import com.smart4y.cloud.core.message.enums.MessageType;
 import com.smart4y.cloud.core.message.page.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import tk.mybatis.mapper.weekend.Weekend;
 import tk.mybatis.mapper.weekend.WeekendCriteria;
 
@@ -34,6 +44,10 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
     private final PrivilegeOperationService privilegeOperationService;
     private final PrivilegeMenuService privilegeMenuService;
     private final RolePrivilegeService rolePrivilegeService;
+    @Autowired
+    private MenuService menuService;
+    @Autowired
+    private ApplicationEventPublisher publisher;
 
     @Autowired
     public PrivilegeApplicationServiceImpl(PrivilegeOperationService privilegeOperationService, OperationService operationService, PrivilegeService privilegeService, RolePrivilegeService rolePrivilegeService, PrivilegeMenuService privilegeMenuService) {
@@ -42,6 +56,75 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
         this.privilegeService = privilegeService;
         this.rolePrivilegeService = rolePrivilegeService;
         this.privilegeMenuService = privilegeMenuService;
+    }
+
+    @Override
+    public void createMenu(CreateMenuCommand command) {
+        String menuCode = command.getMenuCode();
+        boolean existMenuCode = menuService.existByCode(menuCode);
+        if (existMenuCode) {
+            throw new OpenAlertException(MessageType.BAD_REQUEST, "菜单编码已存在：" + menuCode);
+        }
+
+        RbacMenu record = new RbacMenu();
+        BeanUtils.copyProperties(command, record);
+        record.setCreatedDate(LocalDateTime.now());
+        menuService.save(record);
+
+        long menuParentId = record.getMenuParentId();
+        menuService.modifyChildForExist(menuParentId);
+
+        publisher.publishEvent(new MenuCreatedEvent(record.getMenuId(), record.getMenuCode()));
+    }
+
+    @Override
+    public void modifyMenu(long menuId, ModifyMenuCommand command) {
+        if (menuId == command.getMenuParentId()) {
+            throw new OpenAlertException(MessageType.BAD_REQUEST, "父菜单不能为自身");
+        }
+
+        RbacMenu oldMenu = menuService.getById(menuId);
+        String oldMenuCode = oldMenu.getMenuCode();
+        long oldMenuParentId = oldMenu.getMenuParentId();
+
+        RbacMenu record = new RbacMenu();
+        BeanUtils.copyProperties(command, record);
+        record.setMenuId(menuId);
+        record.setLastModifiedDate(LocalDateTime.now());
+        menuService.updateSelectiveById(record);
+
+        // 父级改变
+        if (oldMenuParentId != record.getMenuParentId()) {
+            boolean hasChild = menuService.hasChild(oldMenuParentId);
+            if (!hasChild) {
+                menuService.modifyChildForNotExist(oldMenuParentId);
+            }
+            menuService.modifyChildForExist(record.getMenuParentId());
+
+            publisher.publishEvent(new MenuParentChangedEvent(menuId, command.getMenuParentId(), oldMenuParentId));
+        }
+        // 菜单编码改变
+        if (!oldMenuCode.equals(record.getMenuCode())) {
+            publisher.publishEvent(new MenuCodeChangedEvent(menuId, command.getMenuCode(), oldMenuCode));
+        }
+    }
+
+    @Override
+    public void removeMenu(long menuId) {
+        RbacMenu rbacMenu = menuService.getById(menuId);
+        if (null == rbacMenu || rbacMenu.getExistChild()) {
+            throw new OpenAlertException(MessageType.BAD_REQUEST, "当前菜单存在子节点，禁止删除");
+        }
+
+        menuService.removeById(menuId);
+
+        // 当前菜单父级是否还有子节点（即当前菜单是否有同级）
+        boolean hasChild = menuService.hasChild(rbacMenu.getMenuParentId());
+        if (!hasChild) {
+            menuService.modifyChildForNotExist(rbacMenu.getMenuParentId());
+        }
+
+        publisher.publishEvent(new MenuRemovedEvent(menuId));
     }
 
     @Override
@@ -69,7 +152,7 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
             return;
         }
         // 获取失效操作列表
-        List<RbacOperation> invalidOperations = operationService.getInvalidOperations(serviceId, validOperationCodes);
+        List<RbacOperation> invalidOperations = operationService.getOutSideByCodes(serviceId, validOperationCodes);
         List<Long> operationIds = invalidOperations.stream().map(RbacOperation::getOperationId).collect(Collectors.toList());
         // 获取权限
         List<RbacPrivilegeOperation> privilegeOperations = privilegeOperationService.getPrivileges(operationIds);
@@ -79,7 +162,7 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
         rolePrivilegeService.removeByPrivilege(privilegeIds);
         privilegeOperationService.removeByPrivilege(privilegeIds);
         privilegeService.removeByPrivilege(privilegeIds);
-        operationService.removeByOperations(operationIds);
+        operationService.removeByIds(operationIds);
     }
 
     @Override
@@ -219,6 +302,6 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
         List<Long> operationIds = privilegeOperationService.getOperations(privilegeIds).stream()
                 .map(RbacPrivilegeOperation::getOperationId).collect(Collectors.toList());
 
-        return operationService.getOperations(operationIds);
+        return operationService.getByIds(operationIds);
     }
 }

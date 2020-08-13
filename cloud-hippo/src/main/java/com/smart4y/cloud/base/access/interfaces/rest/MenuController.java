@@ -1,7 +1,8 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
-import com.smart4y.cloud.base.access.application.MenuApplicationService;
+import com.smart4y.cloud.base.access.application.PrivilegeApplicationService;
 import com.smart4y.cloud.base.access.domain.entity.RbacMenu;
+import com.smart4y.cloud.base.access.domain.service.MenuService;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.CreateMenuCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.ModifyMenuCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.RbacMenuQuery;
@@ -28,12 +29,14 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 public class MenuController extends BaseAccessController {
 
     @Autowired
-    private MenuApplicationService menuApplicationService;
+    private MenuService menuService;
+    @Autowired
+    private PrivilegeApplicationService privilegeApplicationService;
 
     @GetMapping("/menus")
     @ApiOperation(value = "菜单:查询")
     public ResultMessage<List<RbacMenu>> getMenus() {
-        List<RbacMenu> result = menuApplicationService.getMenus();
+        List<RbacMenu> result = menuService.list();
         return ok(result);
     }
 
@@ -43,28 +46,28 @@ public class MenuController extends BaseAccessController {
             @ApiImplicitParam(name = "menuId", value = "菜单ID", defaultValue = "0", required = true, paramType = "query", dataType = "long", example = "122367153805459456")
     })
     public ResultMessage<List<RbacMenu>> getMenuChildren(RbacMenuQuery query) {
-        List<RbacMenu> result = menuApplicationService.getMenuChildren(query);
+        List<RbacMenu> result = menuService.getChildrenByParentId(query.getMenuId());
         return ok(result);
     }
 
     @PostMapping("/menus")
     @ApiOperation(value = "菜单:添加")
     public ResultMessage<Void> createMenu(@RequestBody CreateMenuCommand command) {
-        menuApplicationService.createMenu(command);
+        privilegeApplicationService.createMenu(command);
         return ok();
     }
 
     @PutMapping("/menus/{menuId}")
     @ApiOperation(value = "菜单:修改")
     public ResultMessage<Void> modifyMenu(@PathVariable("menuId") Long menuId, @RequestBody ModifyMenuCommand command) {
-        menuApplicationService.modifyMenu(menuId, command);
+        privilegeApplicationService.modifyMenu(menuId, command);
         return ok();
     }
 
     @DeleteMapping("/menus/{menuId}")
     @ApiOperation(value = "菜单:移除")
     public ResultMessage<Void> removeMenu(@PathVariable("menuId") Long menuId) {
-        menuApplicationService.removeMenu(menuId);
+        privilegeApplicationService.removeMenu(menuId);
         return ok();
     }
 
@@ -74,7 +77,7 @@ public class MenuController extends BaseAccessController {
             @ApiImplicitParam(name = "menuId", value = "菜单ID", required = true, paramType = "path", dataType = "long", example = "122367153805459456")
     })
     public ResultMessage<RbacMenu> viewMenu(@PathVariable("menuId") Long menuId) {
-        RbacMenu result = menuApplicationService.viewMenu(menuId);
+        RbacMenu result = menuService.getById(menuId);
         return ok(result);
     }
 }

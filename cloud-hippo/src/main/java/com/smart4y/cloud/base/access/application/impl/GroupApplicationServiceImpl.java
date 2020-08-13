@@ -67,7 +67,7 @@ public class GroupApplicationServiceImpl extends BaseDomainService<RbacGroup> im
         List<RbacGroupUser> groupUsers = groupUserService.getUsers(groupId);
         List<Long> userIds = groupUsers.stream().map(RbacGroupUser::getUserId).collect(Collectors.toList());
 
-        return userService.getUsers(userIds);
+        return userService.getByIds(userIds);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class GroupApplicationServiceImpl extends BaseDomainService<RbacGroup> im
         List<RbacGroupRole> groupUsers = groupRoleService.getRoles(groupId);
         List<Long> roleIds = groupUsers.stream().map(RbacGroupRole::getRoleId).collect(Collectors.toList());
 
-        return roleService.getRoles(roleIds);
+        return roleService.getByIds(roleIds);
     }
 
     @Override
