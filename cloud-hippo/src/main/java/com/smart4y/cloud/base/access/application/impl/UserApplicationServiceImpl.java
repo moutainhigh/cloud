@@ -52,7 +52,9 @@ public class UserApplicationServiceImpl implements UserApplicationService {
 
         // 获取权限菜单
         List<RbacPrivilegeMenu> privilegeMenus = privilegeMenuService.getMenus(privilegeIds);
-        List<Long> menuIds = privilegeMenus.stream().map(RbacPrivilegeMenu::getMenuId).collect(Collectors.toList());
+        List<Long> menuIds = privilegeMenus.stream()
+                .map(RbacPrivilegeMenu::getMenuId)
+                .collect(Collectors.toList());
 
         return menuService.getByIds(menuIds).stream()
                 .filter(x -> "10".equals(x.getMenuState()))
