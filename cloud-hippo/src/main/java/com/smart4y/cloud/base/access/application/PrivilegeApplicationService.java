@@ -14,11 +14,28 @@ import java.util.List;
  */
 public interface PrivilegeApplicationService {
 
+    /**
+     * 添加菜单
+     *
+     * @param command 菜单信息
+     */
     void createMenu(CreateMenuCommand command);
 
+    /**
+     * 更新菜单
+     *
+     * @param menuId  菜单ID
+     * @param command 菜单信息
+     */
     void modifyMenu(long menuId, ModifyMenuCommand command);
 
+    /**
+     * 移除菜单
+     *
+     * @param menuId 菜单ID
+     */
     void removeMenu(long menuId);
+
     /**
      * 系统所有操作权限
      */

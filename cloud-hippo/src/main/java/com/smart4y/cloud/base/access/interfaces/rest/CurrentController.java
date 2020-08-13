@@ -1,6 +1,6 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
-import com.smart4y.cloud.base.access.application.RbacUserApplicationService;
+import com.smart4y.cloud.base.access.application.UserApplicationService;
 import com.smart4y.cloud.base.access.domain.entity.RbacMenu;
 import com.smart4y.cloud.core.exception.OpenAlertException;
 import com.smart4y.cloud.core.message.ResultMessage;
@@ -27,14 +27,14 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 public class CurrentController extends BaseAccessController {
 
     @Autowired
-    private RbacUserApplicationService rbacUserApplicationService;
+    private UserApplicationService userApplicationService;
 
     @GetMapping("/current/menus")
     @ApiOperation(value = "用户:菜单")
     public ResultMessage<List<RbacMenu>> currentUserMenus() {
         long userId = OpenHelper.getUserIdOptional()
                 .orElseThrow(() -> new OpenAlertException(MessageType.UNAUTHORIZED));
-        List<RbacMenu> result = rbacUserApplicationService.getAllMenus(userId);
+        List<RbacMenu> result = userApplicationService.getMenus(userId);
         return ok(result);
     }
 }

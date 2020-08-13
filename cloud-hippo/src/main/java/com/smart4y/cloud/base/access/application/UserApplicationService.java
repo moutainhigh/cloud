@@ -9,15 +9,7 @@ import java.util.List;
 /**
  * @author Youtao on 2020/8/10 14:38
  */
-public interface RbacUserApplicationService {
-
-    /**
-     * 获取用户所属组织授予的角色列表
-     *
-     * @param userId 用户ID
-     * @return 角色列表
-     */
-    List<RbacRole> getRbacGroupRoles(long userId);
+public interface UserApplicationService {
 
     /**
      * 获取用户所有角色
@@ -25,7 +17,7 @@ public interface RbacUserApplicationService {
      * @param userId 用户ID
      * @return 角色列表
      */
-    List<RbacRole> getAllRoles(long userId);
+    List<RbacRole> getRoles(long userId);
 
     /**
      * 获取用户所有权限
@@ -33,7 +25,7 @@ public interface RbacUserApplicationService {
      * @param userId 用户ID
      * @return 权限列表
      */
-    List<RbacPrivilege> getAllPrivileges(long userId);
+    List<RbacPrivilege> getPrivileges(long userId);
 
     /**
      * 获取用户所有菜单
@@ -41,5 +33,5 @@ public interface RbacUserApplicationService {
      * @param userId 用户ID
      * @return 菜单列表
      */
-    List<RbacMenu> getAllMenus(long userId);
+    List<RbacMenu> getMenus(long userId);
 }

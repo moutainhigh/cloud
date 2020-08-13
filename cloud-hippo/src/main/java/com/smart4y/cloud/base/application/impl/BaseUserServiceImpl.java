@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.smart4y.cloud.base.access.application.RbacUserApplicationService;
+import com.smart4y.cloud.base.access.application.UserApplicationService;
 import com.smart4y.cloud.base.access.domain.entity.RbacPrivilege;
 import com.smart4y.cloud.base.access.domain.entity.RbacRole;
 import com.smart4y.cloud.base.application.BaseAccountService;
@@ -51,7 +51,7 @@ public class BaseUserServiceImpl implements BaseUserService {
     @Autowired
     private BaseAccountService baseAccountService;
     @Autowired
-    private RbacUserApplicationService rbacUserApplicationService;
+    private UserApplicationService userApplicationService;
 
     @Override
     public long addUser(AddUserCommand command) {
@@ -161,7 +161,7 @@ public class BaseUserServiceImpl implements BaseUserService {
         List<OpenAuthority> authorities = Lists.newArrayList();
         // 用户角色列表
         List<Map<String, Object>> roles = Lists.newArrayList();
-        List<RbacRole> allRoles = rbacUserApplicationService.getAllRoles(userId);
+        List<RbacRole> allRoles = userApplicationService.getRoles(userId);
         if (allRoles != null) {
             for (RbacRole role : allRoles) {
                 Map<String, Object> roleMap = Maps.newHashMap();
@@ -180,7 +180,7 @@ public class BaseUserServiceImpl implements BaseUserService {
         BaseUser baseUser = getUserById(userId);
 
         // 加入用户权限
-        List<RbacPrivilege> allPrivileges = rbacUserApplicationService.getAllPrivileges(userId);
+        List<RbacPrivilege> allPrivileges = userApplicationService.getPrivileges(userId);
         if (allPrivileges != null && allPrivileges.size() > 0) {
             List<OpenAuthority> openAuthorities = allPrivileges.stream()
                     .map(x -> new OpenAuthority(x.getPrivilegeId().toString(), x.getPrivilege(), null, "role"))
