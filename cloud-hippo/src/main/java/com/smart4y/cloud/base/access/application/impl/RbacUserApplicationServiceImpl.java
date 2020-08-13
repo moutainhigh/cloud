@@ -17,33 +17,29 @@ import java.util.stream.Collectors;
 @ApplicationService
 public class RbacUserApplicationServiceImpl implements RbacUserApplicationService {
 
-    private final GroupUserService groupUserService;
-    private final GroupRoleService groupRoleService;
+    private final GroupService groupService;
     private final RoleService roleService;
-    private final RolePrivilegeService rolePrivilegeService;
     private final PrivilegeService privilegeService;
     private final PrivilegeMenuService privilegeMenuService;
     private final MenuService menuService;
     private final UserService userService;
 
     @Autowired
-    public RbacUserApplicationServiceImpl(GroupUserService groupUserService, GroupRoleService groupRoleService, RoleService roleService, RolePrivilegeService rolePrivilegeService, PrivilegeService privilegeService, PrivilegeMenuService privilegeMenuService, MenuService menuService, UserService userService) {
-        this.groupUserService = groupUserService;
-        this.groupRoleService = groupRoleService;
+    public RbacUserApplicationServiceImpl(RoleService roleService, PrivilegeService privilegeService, PrivilegeMenuService privilegeMenuService, MenuService menuService, UserService userService, GroupService groupService) {
         this.roleService = roleService;
-        this.rolePrivilegeService = rolePrivilegeService;
         this.privilegeService = privilegeService;
         this.privilegeMenuService = privilegeMenuService;
         this.menuService = menuService;
         this.userService = userService;
+        this.groupService = groupService;
     }
 
     @Override
     public List<RbacRole> getRbacGroupRoles(long userId) {
         // 获取用户所属组织关联角色
-        List<RbacGroupUser> groupUsers = groupUserService.getGroups(userId);
+        List<RbacGroupUser> groupUsers = groupService.getUserGroupsByUserId(userId);
         List<Long> groupIds = groupUsers.stream().map(RbacGroupUser::getGroupId).collect(Collectors.toList());
-        List<RbacGroupRole> groupRoles = groupRoleService.getRoles(groupIds);
+        List<RbacGroupRole> groupRoles = groupService.getGroupRolesByGroupIds(groupIds);
         List<Long> roleIds = groupRoles.stream().map(RbacGroupRole::getRoleId).collect(Collectors.toList());
 
         return roleService.getByIds(roleIds);
@@ -71,7 +67,7 @@ public class RbacUserApplicationServiceImpl implements RbacUserApplicationServic
         List<Long> roleIds = allRoles.stream().map(RbacRole::getRoleId).collect(Collectors.toList());
 
         // 获取角色关联的权限
-        List<RbacRolePrivilege> rolePrivileges = rolePrivilegeService.getPrivileges(roleIds);
+        List<RbacRolePrivilege> rolePrivileges = roleService.getRolePrivilegesByRoleIds(roleIds);
         List<Long> privilegeIds = rolePrivileges.stream().map(RbacRolePrivilege::getPrivilegeId).collect(Collectors.toList());
 
         return privilegeService.getPrivileges(privilegeIds);

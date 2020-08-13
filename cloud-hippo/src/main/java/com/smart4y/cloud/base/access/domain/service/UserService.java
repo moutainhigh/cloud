@@ -79,18 +79,4 @@ public class UserService extends BaseDomainService<RbacUser> {
                 .andEqualTo(RbacUserRole::getUserId, userId);
         return rbacUserRoleMapper.selectByExample(weekend);
     }
-
-    /**
-     * 获取指定角色的用户关联列表
-     *
-     * @param roleId 角色ID
-     * @return 用户关联列表
-     */
-    public List<RbacUserRole> getRoleUsersByRoleId(long roleId) {
-        Weekend<RbacUserRole> weekend = Weekend.of(RbacUserRole.class);
-        weekend
-                .weekendCriteria()
-                .andEqualTo(RbacUserRole::getRoleId, roleId);
-        return rbacUserRoleMapper.selectByExample(weekend);
-    }
 }

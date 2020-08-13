@@ -2,6 +2,7 @@ package com.smart4y.cloud.mapper;
 
 import com.smart4y.cloud.mapper.additional.PageMapper;
 import com.smart4y.cloud.mapper.additional.SaveOrUpdateMapper;
+import tk.mybatis.mapper.additional.insert.InsertListMapper;
 import tk.mybatis.mapper.common.Mapper;
 
 /**
@@ -13,5 +14,6 @@ import tk.mybatis.mapper.common.Mapper;
 public interface CloudMapper<T> extends
         Mapper<T>,
         SaveOrUpdateMapper<T>,
+        InsertListMapper<T>,
         PageMapper<T> {
 }

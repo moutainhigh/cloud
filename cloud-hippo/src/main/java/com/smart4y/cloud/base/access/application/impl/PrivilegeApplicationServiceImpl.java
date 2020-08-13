@@ -43,18 +43,18 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
     private final PrivilegeService privilegeService;
     private final PrivilegeOperationService privilegeOperationService;
     private final PrivilegeMenuService privilegeMenuService;
-    private final RolePrivilegeService rolePrivilegeService;
     @Autowired
     private MenuService menuService;
+    @Autowired
+    private RoleService roleService;
     @Autowired
     private ApplicationEventPublisher publisher;
 
     @Autowired
-    public PrivilegeApplicationServiceImpl(PrivilegeOperationService privilegeOperationService, OperationService operationService, PrivilegeService privilegeService, RolePrivilegeService rolePrivilegeService, PrivilegeMenuService privilegeMenuService) {
+    public PrivilegeApplicationServiceImpl(PrivilegeOperationService privilegeOperationService, OperationService operationService, PrivilegeService privilegeService, PrivilegeMenuService privilegeMenuService) {
         this.privilegeOperationService = privilegeOperationService;
         this.operationService = operationService;
         this.privilegeService = privilegeService;
-        this.rolePrivilegeService = rolePrivilegeService;
         this.privilegeMenuService = privilegeMenuService;
     }
 
@@ -159,7 +159,7 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
         List<Long> privilegeIds = privilegeOperations.stream().map(RbacPrivilegeOperation::getPrivilegeId).collect(Collectors.toList());
 
         // 清除角色权限，权限操作，权限，操作
-        rolePrivilegeService.removeByPrivilege(privilegeIds);
+        roleService.removePrivileges(privilegeIds);
         privilegeOperationService.removeByPrivilege(privilegeIds);
         privilegeService.removeByPrivilege(privilegeIds);
         operationService.removeByIds(operationIds);
@@ -172,7 +172,7 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
         }
         // 清除角色权限，菜单权限，权限
         List<Long> privilegeIds = this.getPrivilegesByMenuCodes(menuCodes);
-        rolePrivilegeService.removeByPrivilege(privilegeIds);
+        roleService.removePrivileges(privilegeIds);
         privilegeMenuService.removeByPrivilege(privilegeIds);
         privilegeService.removeByPrivilege(privilegeIds);
     }
@@ -187,13 +187,13 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
         List<Long> privilegeIds = privilegeOperations.stream().map(RbacPrivilegeOperation::getPrivilegeId).collect(Collectors.toList());
 
         // 超级管理员角色对应权限
-        List<RbacRolePrivilege> rolePrivileges = rolePrivilegeService.getRoles(ADMIN_ROLE_ID, privilegeIds);
+        List<RbacRolePrivilege> rolePrivileges = roleService.getRolePrivilegesByRoleId(ADMIN_ROLE_ID);
         List<Long> rolePrivilegeIds = rolePrivileges.stream().map(RbacRolePrivilege::getPrivilegeId).collect(Collectors.toList());
         // 新权限
         List<Long> newPrivilegeIds = privilegeIds.stream()
                 .filter(privilegeId -> !rolePrivilegeIds.contains(privilegeId))
                 .collect(Collectors.toList());
-        rolePrivilegeService.add(ADMIN_ROLE_ID, newPrivilegeIds);
+        roleService.grantPrivileges(ADMIN_ROLE_ID, newPrivilegeIds);
     }
 
     @Override
@@ -202,13 +202,13 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
         List<Long> privilegeIds = getPrivilegesByMenuCodes(menuCodes);
 
         // 超级管理员角色对应权限
-        List<RbacRolePrivilege> rolePrivileges = rolePrivilegeService.getRoles(ADMIN_ROLE_ID, privilegeIds);
+        List<RbacRolePrivilege> rolePrivileges = roleService.getRolePrivilegesByRoleId(ADMIN_ROLE_ID);
         List<Long> rolePrivilegeIds = rolePrivileges.stream().map(RbacRolePrivilege::getPrivilegeId).collect(Collectors.toList());
         // 新权限
         List<Long> newPrivilegeIds = privilegeIds.stream()
                 .filter(privilegeId -> !rolePrivilegeIds.contains(privilegeId))
                 .collect(Collectors.toList());
-        rolePrivilegeService.add(ADMIN_ROLE_ID, newPrivilegeIds);
+        roleService.grantPrivileges(ADMIN_ROLE_ID, newPrivilegeIds);
     }
 
     /**
@@ -284,7 +284,7 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
         privilegeMenuOptional.ifPresent(x -> {
             long privilegeId = x.getPrivilegeId();
             List<Long> privilegeIds = Collections.singletonList(privilegeId);
-            rolePrivilegeService.removeByPrivilege(privilegeIds);
+            roleService.removePrivileges(privilegeIds);
             privilegeMenuService.removeByPrivilege(privilegeIds);
             privilegeService.removeByPrivilege(privilegeIds);
         });
