@@ -1,35 +1,46 @@
-package com.smart4y.cloud.base.access.domain.model;
+package com.smart4y.cloud.base.access.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
 import lombok.experimental.Accessors;
+import tk.mybatis.mapper.annotation.KeySql;
 import java.time.LocalDateTime;
 import lombok.Data;
+import com.smart4y.cloud.core.toolkit.gen.SnowflakeId;
 import lombok.EqualsAndHashCode;
 import com.smart4y.cloud.mapper.BaseEntity;
+import javax.persistence.Id;
 
 /**
- * 角色权限关联表
+ * 页面元素表（对应页面按钮）
  *
  * @author Youtao on 2020/08/11 15:58
  */
 @Data
 @Accessors(chain = true)
-@Table(name = "rbac_role_privilege")
+@Table(name = "rbac_element")
 @EqualsAndHashCode(callSuper = true)
-public class RbacRolePrivilege extends BaseEntity<RbacRolePrivilege> {
+public class RbacElement extends BaseEntity<RbacElement> {
 
     /**
-     * 角色ID
+     * 页面元素ID
      */
-    @Column(name = "role_id")
-    private Long roleId;
+    @Id
+    @KeySql(genId = SnowflakeId.class)
+    @Column(name = "element_id")
+    private Long elementId;
 
     /**
-     * 权限ID
+     * 页面元素名
      */
-    @Column(name = "privilege_id")
-    private Long privilegeId;
+    @Column(name = "element_name")
+    private String elementName;
+
+    /**
+     * 页面元素编码
+     */
+    @Column(name = "element_code")
+    private String elementCode;
 
     /**
      * 创建时间
@@ -47,7 +58,7 @@ public class RbacRolePrivilege extends BaseEntity<RbacRolePrivilege> {
     /**
      * 构造器
      */
-    public RbacRolePrivilege() {
+    public RbacElement() {
         super();
     }
 }

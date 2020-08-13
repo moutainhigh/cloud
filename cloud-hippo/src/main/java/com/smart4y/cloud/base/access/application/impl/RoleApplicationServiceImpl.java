@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.access.application.impl;
 
 import com.smart4y.cloud.base.access.application.RoleApplicationService;
-import com.smart4y.cloud.base.access.domain.model.RbacRole;
+import com.smart4y.cloud.base.access.domain.entity.RbacRole;
 import com.smart4y.cloud.base.access.domain.service.RoleService;
 import com.smart4y.cloud.base.access.interfaces.dtos.role.RbacRolePageQuery;
 import com.smart4y.cloud.core.annotation.ApplicationService;

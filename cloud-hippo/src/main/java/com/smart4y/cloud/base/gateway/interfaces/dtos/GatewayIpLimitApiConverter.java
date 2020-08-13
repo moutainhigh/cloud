@@ -1,6 +1,6 @@
 package com.smart4y.cloud.base.gateway.interfaces.dtos;
 
-import com.smart4y.cloud.base.gateway.domain.model.GatewayIpLimitApi;
+import com.smart4y.cloud.base.gateway.domain.entity.GatewayIpLimitApi;
 import com.smart4y.cloud.mapper.base.AbstractConverter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;

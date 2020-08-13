@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.access.application.impl;
 
 import com.smart4y.cloud.base.access.application.GroupApplicationService;
-import com.smart4y.cloud.base.access.domain.model.*;
+import com.smart4y.cloud.base.access.domain.entity.*;
 import com.smart4y.cloud.base.access.domain.service.GroupRoleService;
 import com.smart4y.cloud.base.access.domain.service.GroupUserService;
 import com.smart4y.cloud.base.access.domain.service.RoleService;

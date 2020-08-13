@@ -2,7 +2,7 @@ package com.smart4y.cloud.base.gateway.interfaces.rest;
 
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.gateway.application.GatewayRouteService;
-import com.smart4y.cloud.base.gateway.domain.model.GatewayRoute;
+import com.smart4y.cloud.base.gateway.domain.entity.GatewayRoute;
 import com.smart4y.cloud.base.gateway.interfaces.dtos.AddRouteCommand;
 import com.smart4y.cloud.base.gateway.interfaces.dtos.DeleteRouteCommand;
 import com.smart4y.cloud.base.gateway.interfaces.dtos.UpdateRouteCommand;

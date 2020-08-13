@@ -1,8 +1,8 @@
 package com.smart4y.cloud.base.access.application;
 
-import com.smart4y.cloud.base.access.domain.model.RbacMenu;
-import com.smart4y.cloud.base.access.domain.model.RbacPrivilege;
-import com.smart4y.cloud.base.access.domain.model.RbacRole;
+import com.smart4y.cloud.base.access.domain.entity.RbacMenu;
+import com.smart4y.cloud.base.access.domain.entity.RbacPrivilege;
+import com.smart4y.cloud.base.access.domain.entity.RbacRole;
 
 import java.util.List;
 

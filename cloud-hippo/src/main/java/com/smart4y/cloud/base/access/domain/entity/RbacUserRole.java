@@ -1,4 +1,4 @@
-package com.smart4y.cloud.base.access.domain.model;
+package com.smart4y.cloud.base.access.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -9,27 +9,27 @@ import lombok.EqualsAndHashCode;
 import com.smart4y.cloud.mapper.BaseEntity;
 
 /**
- * 组织用户关联表
+ * 用户角色关联表
  *
  * @author Youtao on 2020/08/11 15:58
  */
 @Data
 @Accessors(chain = true)
-@Table(name = "rbac_group_user")
+@Table(name = "rbac_user_role")
 @EqualsAndHashCode(callSuper = true)
-public class RbacGroupUser extends BaseEntity<RbacGroupUser> {
-
-    /**
-     * 组织ID
-     */
-    @Column(name = "group_id")
-    private Long groupId;
+public class RbacUserRole extends BaseEntity<RbacUserRole> {
 
     /**
      * 用户ID
      */
     @Column(name = "user_id")
     private Long userId;
+
+    /**
+     * 角色ID
+     */
+    @Column(name = "role_id")
+    private Long roleId;
 
     /**
      * 创建时间
@@ -47,7 +47,7 @@ public class RbacGroupUser extends BaseEntity<RbacGroupUser> {
     /**
      * 构造器
      */
-    public RbacGroupUser() {
+    public RbacUserRole() {
         super();
     }
 }

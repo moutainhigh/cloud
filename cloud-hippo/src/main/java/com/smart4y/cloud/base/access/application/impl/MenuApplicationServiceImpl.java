@@ -5,7 +5,7 @@ import com.smart4y.cloud.base.access.domain.event.MenuCodeChangedEvent;
 import com.smart4y.cloud.base.access.domain.event.MenuCreatedEvent;
 import com.smart4y.cloud.base.access.domain.event.MenuParentChangedEvent;
 import com.smart4y.cloud.base.access.domain.event.MenuRemovedEvent;
-import com.smart4y.cloud.base.access.domain.model.RbacMenu;
+import com.smart4y.cloud.base.access.domain.entity.RbacMenu;
 import com.smart4y.cloud.base.access.domain.service.MenuService;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.CreateMenuCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.ModifyMenuCommand;

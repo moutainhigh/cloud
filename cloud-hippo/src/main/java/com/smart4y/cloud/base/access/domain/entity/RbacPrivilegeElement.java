@@ -1,40 +1,35 @@
-package com.smart4y.cloud.base.access.domain.model;
+package com.smart4y.cloud.base.access.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
 import lombok.experimental.Accessors;
-import tk.mybatis.mapper.annotation.KeySql;
 import java.time.LocalDateTime;
 import lombok.Data;
-import com.smart4y.cloud.core.toolkit.gen.SnowflakeId;
 import lombok.EqualsAndHashCode;
 import com.smart4y.cloud.mapper.BaseEntity;
-import javax.persistence.Id;
 
 /**
- * 用户表
+ * 权限页面元素关联表
  *
  * @author Youtao on 2020/08/11 15:58
  */
 @Data
 @Accessors(chain = true)
-@Table(name = "rbac_user")
+@Table(name = "rbac_privilege_element")
 @EqualsAndHashCode(callSuper = true)
-public class RbacUser extends BaseEntity<RbacUser> {
+public class RbacPrivilegeElement extends BaseEntity<RbacPrivilegeElement> {
 
     /**
-     * 用户ID
+     * 权限ID
      */
-    @Id
-    @KeySql(genId = SnowflakeId.class)
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "privilege_id")
+    private Long privilegeId;
 
     /**
-     * 用户名
+     * 页面元素ID
      */
-    @Column(name = "user_name")
-    private String userName;
+    @Column(name = "element_id")
+    private Long elementId;
 
     /**
      * 创建时间
@@ -52,7 +47,7 @@ public class RbacUser extends BaseEntity<RbacUser> {
     /**
      * 构造器
      */
-    public RbacUser() {
+    public RbacPrivilegeElement() {
         super();
     }
 }

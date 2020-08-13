@@ -1,8 +1,8 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
 import com.smart4y.cloud.base.access.application.PrivilegeApplicationService;
-import com.smart4y.cloud.base.access.domain.model.RbacOperation;
-import com.smart4y.cloud.base.access.domain.model.RbacPrivilege;
+import com.smart4y.cloud.base.access.domain.entity.RbacOperation;
+import com.smart4y.cloud.base.access.domain.entity.RbacPrivilege;
 import com.smart4y.cloud.base.access.interfaces.dtos.privilege.RbacPrivilegePageQuery;
 import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.core.message.page.Page;

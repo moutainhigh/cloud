@@ -1,9 +1,7 @@
 package com.smart4y.cloud.base.gateway.interfaces.rest;
 
-import com.smart4y.cloud.base.access.domain.model.RbacOperation;
-import com.smart4y.cloud.base.access.interfaces.dtos.operation.RbacOperationPageQuery;
 import com.smart4y.cloud.base.gateway.application.RouteApplicationService;
-import com.smart4y.cloud.base.gateway.domain.model.GatewayRoute;
+import com.smart4y.cloud.base.gateway.domain.entity.GatewayRoute;
 import com.smart4y.cloud.base.gateway.interfaces.dtos.route.RoutePageQuery;
 import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.core.message.page.Page;

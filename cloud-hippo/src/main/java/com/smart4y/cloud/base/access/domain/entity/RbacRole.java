@@ -1,4 +1,4 @@
-package com.smart4y.cloud.base.access.domain.model;
+package com.smart4y.cloud.base.access.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -12,35 +12,35 @@ import com.smart4y.cloud.mapper.BaseEntity;
 import javax.persistence.Id;
 
 /**
- * 权限表
+ * 角色表
  *
  * @author Youtao on 2020/08/11 15:58
  */
 @Data
 @Accessors(chain = true)
-@Table(name = "rbac_privilege")
+@Table(name = "rbac_role")
 @EqualsAndHashCode(callSuper = true)
-public class RbacPrivilege extends BaseEntity<RbacPrivilege> {
+public class RbacRole extends BaseEntity<RbacRole> {
 
     /**
-     * 权限ID
+     * 角色ID
      */
     @Id
     @KeySql(genId = SnowflakeId.class)
-    @Column(name = "privilege_id")
-    private Long privilegeId;
+    @Column(name = "role_id")
+    private Long roleId;
 
     /**
-     * 权限标识
+     * 角色名
      */
-    @Column(name = "privilege")
-    private String privilege;
+    @Column(name = "role_name")
+    private String roleName;
 
     /**
-     * 权限类型（m-菜单，e-页面元素，o-功能操作）
+     * 角色编码
      */
-    @Column(name = "privilege_type")
-    private String privilegeType;
+    @Column(name = "role_code")
+    private String roleCode;
 
     /**
      * 创建时间
@@ -58,7 +58,7 @@ public class RbacPrivilege extends BaseEntity<RbacPrivilege> {
     /**
      * 构造器
      */
-    public RbacPrivilege() {
+    public RbacRole() {
         super();
     }
 }

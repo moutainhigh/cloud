@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.gateway.application;
 
 import com.github.pagehelper.PageInfo;
-import com.smart4y.cloud.base.gateway.domain.model.GatewayRoute;
+import com.smart4y.cloud.base.gateway.domain.entity.GatewayRoute;
 import com.smart4y.cloud.base.gateway.interfaces.dtos.GatewayRouteQuery;
 
 import java.util.List;

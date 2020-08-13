@@ -2,8 +2,8 @@ package com.smart4y.cloud.base.gateway.interfaces.rest;
 
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.gateway.application.GatewayRateLimitService;
-import com.smart4y.cloud.base.gateway.domain.model.GatewayRateLimit;
-import com.smart4y.cloud.base.gateway.domain.model.GatewayRateLimitApi;
+import com.smart4y.cloud.base.gateway.domain.entity.GatewayRateLimit;
+import com.smart4y.cloud.base.gateway.domain.entity.GatewayRateLimitApi;
 import com.smart4y.cloud.base.gateway.interfaces.dtos.AddRateLimitApiCommand;
 import com.smart4y.cloud.base.gateway.interfaces.dtos.AddRateLimitCommand;
 import com.smart4y.cloud.base.gateway.interfaces.dtos.DeleteRateLimitCommand;

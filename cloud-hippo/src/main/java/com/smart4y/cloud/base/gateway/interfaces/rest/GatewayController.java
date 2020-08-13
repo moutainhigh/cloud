@@ -3,7 +3,7 @@ package com.smart4y.cloud.base.gateway.interfaces.rest;
 import com.smart4y.cloud.base.gateway.application.GatewayIpLimitService;
 import com.smart4y.cloud.base.gateway.application.GatewayRateLimitService;
 import com.smart4y.cloud.base.gateway.application.GatewayRouteService;
-import com.smart4y.cloud.base.gateway.domain.model.GatewayRoute;
+import com.smart4y.cloud.base.gateway.domain.entity.GatewayRoute;
 import com.smart4y.cloud.base.gateway.interfaces.dtos.GatewayRouteConverter;
 import com.smart4y.cloud.base.gateway.interfaces.dtos.GatewayRouteVO;
 import com.smart4y.cloud.base.interfaces.dtos.ServiceVO;

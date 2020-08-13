@@ -1,4 +1,4 @@
-package com.smart4y.cloud.base.access.domain.model;
+package com.smart4y.cloud.base.access.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -9,27 +9,27 @@ import lombok.EqualsAndHashCode;
 import com.smart4y.cloud.mapper.BaseEntity;
 
 /**
- * 权限操作关联表
+ * 组织角色关联表
  *
  * @author Youtao on 2020/08/11 15:58
  */
 @Data
 @Accessors(chain = true)
-@Table(name = "rbac_privilege_operation")
+@Table(name = "rbac_group_role")
 @EqualsAndHashCode(callSuper = true)
-public class RbacPrivilegeOperation extends BaseEntity<RbacPrivilegeOperation> {
+public class RbacGroupRole extends BaseEntity<RbacGroupRole> {
 
     /**
-     * 权限ID
+     * 组织ID
      */
-    @Column(name = "privilege_id")
-    private Long privilegeId;
+    @Column(name = "group_id")
+    private Long groupId;
 
     /**
-     * 操作ID
+     * 角色ID
      */
-    @Column(name = "operation_id")
-    private Long operationId;
+    @Column(name = "role_id")
+    private Long roleId;
 
     /**
      * 创建时间
@@ -47,7 +47,7 @@ public class RbacPrivilegeOperation extends BaseEntity<RbacPrivilegeOperation> {
     /**
      * 构造器
      */
-    public RbacPrivilegeOperation() {
+    public RbacGroupRole() {
         super();
     }
 }

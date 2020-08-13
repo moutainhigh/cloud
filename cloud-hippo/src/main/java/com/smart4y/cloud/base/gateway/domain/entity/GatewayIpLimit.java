@@ -1,4 +1,4 @@
-package com.smart4y.cloud.base.gateway.domain.model;
+package com.smart4y.cloud.base.gateway.domain.entity;
 
 import com.smart4y.cloud.mapper.BaseEntity;
 import com.smart4y.cloud.core.toolkit.gen.SnowflakeId;

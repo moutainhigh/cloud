@@ -1,4 +1,4 @@
-package com.smart4y.cloud.base.gateway.domain.model;
+package com.smart4y.cloud.base.gateway.domain.entity;
 
 import com.smart4y.cloud.mapper.BaseEntity;
 import lombok.Data;
@@ -10,25 +10,25 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 /**
- * 网关（IP访问控制API接口映射）
+ * 网关（流量控制API接口映射）
  *
  * @author Youtao
  *         Created by youtao on 2019/09/17.
  */
 @Data
-@Table(name = "gateway_ip_limit_api")
+@Table(name = "gateway_rate_limit_api")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class GatewayIpLimitApi extends BaseEntity<GatewayIpLimitApi> {
+public class GatewayRateLimitApi extends BaseEntity<GatewayRateLimitApi> {
 
     /**
-     * 策略ID
+     * 限制数量
      */
     @Column(name = "policy_id")
     private Long policyId;
 
     /**
-     * 接口资源ID
+     * 时间间隔(秒)
      */
     @Column(name = "api_id")
     private Long apiId;
@@ -48,7 +48,7 @@ public class GatewayIpLimitApi extends BaseEntity<GatewayIpLimitApi> {
     /**
      * 构造器
      */
-    public GatewayIpLimitApi() {
+    public GatewayRateLimitApi() {
         super();
     }
 }

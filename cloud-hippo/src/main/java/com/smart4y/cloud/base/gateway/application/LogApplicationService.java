@@ -1,6 +1,6 @@
 package com.smart4y.cloud.base.gateway.application;
 
-import com.smart4y.cloud.base.gateway.domain.model.GatewayLog;
+import com.smart4y.cloud.base.gateway.domain.entity.GatewayLog;
 import com.smart4y.cloud.base.gateway.interfaces.dtos.log.LogPageQuery;
 import com.smart4y.cloud.core.message.page.Page;
 

@@ -2,8 +2,8 @@ package com.smart4y.cloud.base.gateway.interfaces.rest;
 
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.gateway.application.GatewayIpLimitService;
-import com.smart4y.cloud.base.gateway.domain.model.GatewayIpLimit;
-import com.smart4y.cloud.base.gateway.domain.model.GatewayIpLimitApi;
+import com.smart4y.cloud.base.gateway.domain.entity.GatewayIpLimit;
+import com.smart4y.cloud.base.gateway.domain.entity.GatewayIpLimitApi;
 import com.smart4y.cloud.base.gateway.interfaces.dtos.AddIpLimitApiCommand;
 import com.smart4y.cloud.base.gateway.interfaces.dtos.AddIpLimitCommand;
 import com.smart4y.cloud.base.gateway.interfaces.dtos.DeleteIpLimitCommand;

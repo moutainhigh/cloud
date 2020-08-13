@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
 import com.smart4y.cloud.base.access.application.MenuApplicationService;
-import com.smart4y.cloud.base.access.domain.model.RbacMenu;
+import com.smart4y.cloud.base.access.domain.entity.RbacMenu;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.CreateMenuCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.ModifyMenuCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.RbacMenuQuery;

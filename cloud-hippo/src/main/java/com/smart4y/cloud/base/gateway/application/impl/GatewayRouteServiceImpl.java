@@ -3,7 +3,7 @@ package com.smart4y.cloud.base.gateway.application.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.gateway.application.GatewayRouteService;
-import com.smart4y.cloud.base.gateway.domain.model.GatewayRoute;
+import com.smart4y.cloud.base.gateway.domain.entity.GatewayRoute;
 import com.smart4y.cloud.base.gateway.infrastructure.persistence.mybatis.GatewayRouteMapper;
 import com.smart4y.cloud.base.gateway.interfaces.dtos.GatewayRouteQuery;
 import com.smart4y.cloud.core.annotation.ApplicationService;

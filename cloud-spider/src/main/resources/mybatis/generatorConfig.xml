@@ -67,12 +67,6 @@
         <table tableName="gateway_rate_limit_api" domainObjectName="GatewayRateLimitApi"/>
         <table tableName="gateway_route" domainObjectName="GatewayRoute"/>-->
         <!-- 指定数据库表 -->
-        <!--<table tableName="hello" domainObjectName="Hello">
-            <columnOverride column="user_name" javaType="com.smart4y.cloud.base.gateway.domain.model.GatewayRoute"/>
-        </table>-->
-        <!--<table tableName="rbac_%">
-            &lt;!&ndash;<generatedKey column="id" sqlStatement="Mysql" identity="true"/>&ndash;&gt;
-        </table>-->
 
         <table catalog="cloud" tableName="gateway_route" domainObjectName="GatewayRoute"/>
     </context>

@@ -1,6 +1,6 @@
 package com.smart4y.cloud.base.access.application;
 
-import com.smart4y.cloud.base.access.domain.model.RbacOperation;
+import com.smart4y.cloud.base.access.domain.entity.RbacOperation;
 import com.smart4y.cloud.base.access.interfaces.dtos.operation.RbacOperationPageQuery;
 import com.smart4y.cloud.core.message.page.Page;
 

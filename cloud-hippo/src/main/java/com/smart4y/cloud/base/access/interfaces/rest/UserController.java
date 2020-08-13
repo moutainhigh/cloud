@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
 import com.smart4y.cloud.base.access.application.UserApplicationService;
-import com.smart4y.cloud.base.access.domain.model.RbacUser;
+import com.smart4y.cloud.base.access.domain.entity.RbacUser;
 import com.smart4y.cloud.base.access.interfaces.dtos.user.CreateUserCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.user.GrantUserRoleCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.user.ModifyUserCommand;

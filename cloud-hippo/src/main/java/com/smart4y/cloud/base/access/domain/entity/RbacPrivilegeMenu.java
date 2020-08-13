@@ -1,4 +1,4 @@
-package com.smart4y.cloud.base.access.domain.model;
+package com.smart4y.cloud.base.access.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -9,15 +9,15 @@ import lombok.EqualsAndHashCode;
 import com.smart4y.cloud.mapper.BaseEntity;
 
 /**
- * 权限页面元素关联表
+ * 权限菜单关联表
  *
  * @author Youtao on 2020/08/11 15:58
  */
 @Data
 @Accessors(chain = true)
-@Table(name = "rbac_privilege_element")
+@Table(name = "rbac_privilege_menu")
 @EqualsAndHashCode(callSuper = true)
-public class RbacPrivilegeElement extends BaseEntity<RbacPrivilegeElement> {
+public class RbacPrivilegeMenu extends BaseEntity<RbacPrivilegeMenu> {
 
     /**
      * 权限ID
@@ -26,10 +26,10 @@ public class RbacPrivilegeElement extends BaseEntity<RbacPrivilegeElement> {
     private Long privilegeId;
 
     /**
-     * 页面元素ID
+     * 菜单ID
      */
-    @Column(name = "element_id")
-    private Long elementId;
+    @Column(name = "menu_id")
+    private Long menuId;
 
     /**
      * 创建时间
@@ -47,7 +47,7 @@ public class RbacPrivilegeElement extends BaseEntity<RbacPrivilegeElement> {
     /**
      * 构造器
      */
-    public RbacPrivilegeElement() {
+    public RbacPrivilegeMenu() {
         super();
     }
 }

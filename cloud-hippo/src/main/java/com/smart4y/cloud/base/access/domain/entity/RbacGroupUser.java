@@ -1,46 +1,35 @@
-package com.smart4y.cloud.base.access.domain.model;
+package com.smart4y.cloud.base.access.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
 import lombok.experimental.Accessors;
-import tk.mybatis.mapper.annotation.KeySql;
 import java.time.LocalDateTime;
 import lombok.Data;
-import com.smart4y.cloud.core.toolkit.gen.SnowflakeId;
 import lombok.EqualsAndHashCode;
 import com.smart4y.cloud.mapper.BaseEntity;
-import javax.persistence.Id;
 
 /**
- * 页面元素表（对应页面按钮）
+ * 组织用户关联表
  *
  * @author Youtao on 2020/08/11 15:58
  */
 @Data
 @Accessors(chain = true)
-@Table(name = "rbac_element")
+@Table(name = "rbac_group_user")
 @EqualsAndHashCode(callSuper = true)
-public class RbacElement extends BaseEntity<RbacElement> {
+public class RbacGroupUser extends BaseEntity<RbacGroupUser> {
 
     /**
-     * 页面元素ID
+     * 组织ID
      */
-    @Id
-    @KeySql(genId = SnowflakeId.class)
-    @Column(name = "element_id")
-    private Long elementId;
+    @Column(name = "group_id")
+    private Long groupId;
 
     /**
-     * 页面元素名
+     * 用户ID
      */
-    @Column(name = "element_name")
-    private String elementName;
-
-    /**
-     * 页面元素编码
-     */
-    @Column(name = "element_code")
-    private String elementCode;
+    @Column(name = "user_id")
+    private Long userId;
 
     /**
      * 创建时间
@@ -58,7 +47,7 @@ public class RbacElement extends BaseEntity<RbacElement> {
     /**
      * 构造器
      */
-    public RbacElement() {
+    public RbacGroupUser() {
         super();
     }
 }

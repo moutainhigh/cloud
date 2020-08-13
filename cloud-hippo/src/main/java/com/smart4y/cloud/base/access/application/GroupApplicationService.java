@@ -1,8 +1,8 @@
 package com.smart4y.cloud.base.access.application;
 
-import com.smart4y.cloud.base.access.domain.model.RbacGroup;
-import com.smart4y.cloud.base.access.domain.model.RbacRole;
-import com.smart4y.cloud.base.access.domain.model.RbacUser;
+import com.smart4y.cloud.base.access.domain.entity.RbacGroup;
+import com.smart4y.cloud.base.access.domain.entity.RbacRole;
+import com.smart4y.cloud.base.access.domain.entity.RbacUser;
 import com.smart4y.cloud.base.access.interfaces.dtos.group.RbacGroupPageQuery;
 import com.smart4y.cloud.base.access.interfaces.dtos.group.RbacGroupQuery;
 import com.smart4y.cloud.core.message.page.Page;

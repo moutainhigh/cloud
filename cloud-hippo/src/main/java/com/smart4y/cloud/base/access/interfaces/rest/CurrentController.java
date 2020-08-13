@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
 import com.smart4y.cloud.base.access.application.RbacUserApplicationService;
-import com.smart4y.cloud.base.access.domain.model.RbacMenu;
+import com.smart4y.cloud.base.access.domain.entity.RbacMenu;
 import com.smart4y.cloud.core.exception.OpenAlertException;
 import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.core.message.enums.MessageType;

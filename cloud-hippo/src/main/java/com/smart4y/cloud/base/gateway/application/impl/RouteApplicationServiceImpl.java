@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.gateway.application.impl;
 
 import com.smart4y.cloud.base.gateway.application.RouteApplicationService;
-import com.smart4y.cloud.base.gateway.domain.model.GatewayRoute;
+import com.smart4y.cloud.base.gateway.domain.entity.GatewayRoute;
 import com.smart4y.cloud.base.gateway.interfaces.dtos.route.RoutePageQuery;
 import com.smart4y.cloud.core.annotation.ApplicationService;
 import com.smart4y.cloud.core.message.page.Page;

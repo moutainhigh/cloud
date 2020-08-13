@@ -1,35 +1,40 @@
-package com.smart4y.cloud.base.access.domain.model;
+package com.smart4y.cloud.base.access.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
 import lombok.experimental.Accessors;
+import tk.mybatis.mapper.annotation.KeySql;
 import java.time.LocalDateTime;
 import lombok.Data;
+import com.smart4y.cloud.core.toolkit.gen.SnowflakeId;
 import lombok.EqualsAndHashCode;
 import com.smart4y.cloud.mapper.BaseEntity;
+import javax.persistence.Id;
 
 /**
- * 权限菜单关联表
+ * 用户表
  *
  * @author Youtao on 2020/08/11 15:58
  */
 @Data
 @Accessors(chain = true)
-@Table(name = "rbac_privilege_menu")
+@Table(name = "rbac_user")
 @EqualsAndHashCode(callSuper = true)
-public class RbacPrivilegeMenu extends BaseEntity<RbacPrivilegeMenu> {
+public class RbacUser extends BaseEntity<RbacUser> {
 
     /**
-     * 权限ID
+     * 用户ID
      */
-    @Column(name = "privilege_id")
-    private Long privilegeId;
+    @Id
+    @KeySql(genId = SnowflakeId.class)
+    @Column(name = "user_id")
+    private Long userId;
 
     /**
-     * 菜单ID
+     * 用户名
      */
-    @Column(name = "menu_id")
-    private Long menuId;
+    @Column(name = "user_name")
+    private String userName;
 
     /**
      * 创建时间
@@ -47,7 +52,7 @@ public class RbacPrivilegeMenu extends BaseEntity<RbacPrivilegeMenu> {
     /**
      * 构造器
      */
-    public RbacPrivilegeMenu() {
+    public RbacUser() {
         super();
     }
 }

@@ -1,6 +1,6 @@
 package com.smart4y.cloud.base.access.domain.service;
 
-import com.smart4y.cloud.base.access.domain.model.RbacRole;
+import com.smart4y.cloud.base.access.domain.entity.RbacRole;
 import com.smart4y.cloud.core.annotation.DomainService;
 import com.smart4y.cloud.mapper.BaseDomainService;
 import org.apache.commons.collections4.CollectionUtils;

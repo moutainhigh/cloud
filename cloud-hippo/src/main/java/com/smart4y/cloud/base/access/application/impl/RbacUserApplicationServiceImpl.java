@@ -2,7 +2,7 @@ package com.smart4y.cloud.base.access.application.impl;
 
 import com.smart4y.cloud.base.access.application.RbacUserApplicationService;
 import com.smart4y.cloud.base.access.application.UserApplicationService;
-import com.smart4y.cloud.base.access.domain.model.*;
+import com.smart4y.cloud.base.access.domain.entity.*;
 import com.smart4y.cloud.base.access.domain.service.*;
 import com.smart4y.cloud.base.access.interfaces.dtos.user.RbacUserPageQuery;
 import com.smart4y.cloud.core.annotation.ApplicationService;

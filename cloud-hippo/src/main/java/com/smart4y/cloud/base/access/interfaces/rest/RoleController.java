@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
 import com.smart4y.cloud.base.access.application.RoleApplicationService;
-import com.smart4y.cloud.base.access.domain.model.RbacRole;
+import com.smart4y.cloud.base.access.domain.entity.RbacRole;
 import com.smart4y.cloud.base.access.interfaces.dtos.role.CreateRoleCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.role.GrantPrivilegeCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.role.ModifyRoleCommand;
