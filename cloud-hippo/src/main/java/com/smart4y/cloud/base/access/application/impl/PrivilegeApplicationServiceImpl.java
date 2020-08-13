@@ -34,16 +34,14 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
     private final PrivilegeOperationService privilegeOperationService;
     private final PrivilegeMenuService privilegeMenuService;
     private final RolePrivilegeService rolePrivilegeService;
-    private final MenuService menuService;
 
     @Autowired
-    public PrivilegeApplicationServiceImpl(PrivilegeOperationService privilegeOperationService, OperationService operationService, PrivilegeService privilegeService, RolePrivilegeService rolePrivilegeService, PrivilegeMenuService privilegeMenuService, MenuService menuService) {
+    public PrivilegeApplicationServiceImpl(PrivilegeOperationService privilegeOperationService, OperationService operationService, PrivilegeService privilegeService, RolePrivilegeService rolePrivilegeService, PrivilegeMenuService privilegeMenuService) {
         this.privilegeOperationService = privilegeOperationService;
         this.operationService = operationService;
         this.privilegeService = privilegeService;
         this.rolePrivilegeService = rolePrivilegeService;
         this.privilegeMenuService = privilegeMenuService;
-        this.menuService = menuService;
     }
 
     @Override
