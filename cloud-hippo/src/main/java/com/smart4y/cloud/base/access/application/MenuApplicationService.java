@@ -22,4 +22,6 @@ public interface MenuApplicationService {
     void createMenu(CreateMenuCommand command);
 
     void modifyMenu(long menuId, ModifyMenuCommand command);
+
+    void removeMenu(long menuId);
 }

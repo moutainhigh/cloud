@@ -26,14 +26,44 @@ public interface PrivilegeApplicationService {
      * 清理无效权限
      *
      * @param serviceId           权限所属服务ID
-     * @param validOperationCodes 有效的权限编码列表
+     * @param validOperationCodes 有效的操作权限编码列表
      */
-    void removeInvalidPrivileges(String serviceId, List<String> validOperationCodes);
+    void removeInvalidPrivilegesByOperations(String serviceId, List<String> validOperationCodes);
 
-    void addNewRolePrivileges(List<String> validOperationCodes);
+    /**
+     * 删除无效权限
+     *
+     * @param menuCodes 待删除的菜单
+     */
+    void removePrivilegesByMenus(List<String> menuCodes);
+
+    /**
+     * 新增角色权限
+     */
+    void addRolePrivilegesByOperations(List<String> validOperationCodes);
+
+    /**
+     * 新增角色权限
+     */
+    void addRolePrivilegesByMenus(List<String> menuCodes);
 
     /**
      * 新增权限、操作权限
      */
     void addPrivilegeOperations(String serviceId);
+
+    /**
+     * 新增权限、菜单权限
+     */
+    void addPrivilegeMenus(long menuId, String menuCode);
+
+    /**
+     * 修改权限、菜单权限
+     */
+    void modifyPrivilegeMenus(long menuId, String menuCode, String oldMenuCode);
+
+    /**
+     * 删除权限、菜单权限
+     */
+    void removePrivilegesByMenus(long menuId);
 }

@@ -125,6 +125,11 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
         }
     }
 
+    @Override
+    public void onApplicationEvent(@NonNull RouteRemoteRefreshedEvent event) {
+        refresh();
+    }
+
     /**
      * 清空缓存并刷新
      */
@@ -134,11 +139,6 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
         this.privilegeOperations = loadPrivilegeOperations();
         this.ipBlacks = loadIpBlackList();
         this.ipWhites = loadIpWhiteList();
-    }
-
-    @Override
-    public void onApplicationEvent(@NonNull RouteRemoteRefreshedEvent event) {
-        refresh();
     }
 
     /**

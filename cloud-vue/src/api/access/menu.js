@@ -76,6 +76,12 @@ export const updateMenu = ({menuParentId, menuId, menuName, menuCode, menuIcon, 
         method: 'put'
     })
 };
+export const removeMenu = (menuId) => {
+    return request({
+        url: 'base/access/menus/' + menuId,
+        method: 'delete'
+    })
+};
 /**
  * 根据{menuId}查询组织列表
  *

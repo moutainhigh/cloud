@@ -1,14 +1,8 @@
 package com.smart4y.cloud.base.access.application.impl;
 
 import com.smart4y.cloud.base.access.application.PrivilegeApplicationService;
-import com.smart4y.cloud.base.access.domain.model.RbacOperation;
-import com.smart4y.cloud.base.access.domain.model.RbacPrivilege;
-import com.smart4y.cloud.base.access.domain.model.RbacPrivilegeOperation;
-import com.smart4y.cloud.base.access.domain.model.RbacRolePrivilege;
-import com.smart4y.cloud.base.access.domain.service.OperationService;
-import com.smart4y.cloud.base.access.domain.service.PrivilegeOperationService;
-import com.smart4y.cloud.base.access.domain.service.PrivilegeService;
-import com.smart4y.cloud.base.access.domain.service.RolePrivilegeService;
+import com.smart4y.cloud.base.access.domain.model.*;
+import com.smart4y.cloud.base.access.domain.service.*;
 import com.smart4y.cloud.base.access.interfaces.dtos.privilege.RbacPrivilegePageQuery;
 import com.smart4y.cloud.core.annotation.ApplicationService;
 import com.smart4y.cloud.core.message.page.Page;
@@ -20,9 +14,13 @@ import tk.mybatis.mapper.weekend.Weekend;
 import tk.mybatis.mapper.weekend.WeekendCriteria;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.smart4y.cloud.base.access.domain.service.RoleService.ADMIN_ROLE_ID;
 
 /**
  * @author Youtao on 2020/8/10 12:47
@@ -34,14 +32,18 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
     private final OperationService operationService;
     private final PrivilegeService privilegeService;
     private final PrivilegeOperationService privilegeOperationService;
+    private final PrivilegeMenuService privilegeMenuService;
     private final RolePrivilegeService rolePrivilegeService;
+    private final MenuService menuService;
 
     @Autowired
-    public PrivilegeApplicationServiceImpl(PrivilegeOperationService privilegeOperationService, OperationService operationService, PrivilegeService privilegeService, RolePrivilegeService rolePrivilegeService) {
+    public PrivilegeApplicationServiceImpl(PrivilegeOperationService privilegeOperationService, OperationService operationService, PrivilegeService privilegeService, RolePrivilegeService rolePrivilegeService, PrivilegeMenuService privilegeMenuService, MenuService menuService) {
         this.privilegeOperationService = privilegeOperationService;
         this.operationService = operationService;
         this.privilegeService = privilegeService;
         this.rolePrivilegeService = rolePrivilegeService;
+        this.privilegeMenuService = privilegeMenuService;
+        this.menuService = menuService;
     }
 
     @Override
@@ -64,7 +66,7 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
     }
 
     @Override
-    public void removeInvalidPrivileges(String serviceId, List<String> validOperationCodes) {
+    public void removeInvalidPrivilegesByOperations(String serviceId, List<String> validOperationCodes) {
         if (CollectionUtils.isEmpty(validOperationCodes)) {
             return;
         }
@@ -83,7 +85,19 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
     }
 
     @Override
-    public void addNewRolePrivileges(List<String> validOperationCodes) {
+    public void removePrivilegesByMenus(List<String> menuCodes) {
+        if (CollectionUtils.isEmpty(menuCodes)) {
+            return;
+        }
+        // 清除角色权限，菜单权限，权限
+        List<Long> privilegeIds = this.getPrivilegesByMenuCodes(menuCodes);
+        rolePrivilegeService.removeByPrivilege(privilegeIds);
+        privilegeMenuService.removeByPrivilege(privilegeIds);
+        privilegeService.removeByPrivilege(privilegeIds);
+    }
+
+    @Override
+    public void addRolePrivilegesByOperations(List<String> validOperationCodes) {
         // 给角色（超级管理员）添加本次新增的权限
         List<RbacOperation> rbacOperations = operationService.getByCodes(validOperationCodes);
         List<Long> operationIds = rbacOperations.stream().map(RbacOperation::getOperationId).collect(Collectors.toList());
@@ -92,15 +106,37 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
         List<Long> privilegeIds = privilegeOperations.stream().map(RbacPrivilegeOperation::getPrivilegeId).collect(Collectors.toList());
 
         // 超级管理员角色对应权限
-        long adminRoleId = 1L;
-        List<RbacRolePrivilege> rolePrivileges = rolePrivilegeService.getRoles(adminRoleId, privilegeIds);
+        List<RbacRolePrivilege> rolePrivileges = rolePrivilegeService.getRoles(ADMIN_ROLE_ID, privilegeIds);
         List<Long> rolePrivilegeIds = rolePrivileges.stream().map(RbacRolePrivilege::getPrivilegeId).collect(Collectors.toList());
-
         // 新权限
         List<Long> newPrivilegeIds = privilegeIds.stream()
                 .filter(privilegeId -> !rolePrivilegeIds.contains(privilegeId))
                 .collect(Collectors.toList());
-        rolePrivilegeService.add(adminRoleId, newPrivilegeIds);
+        rolePrivilegeService.add(ADMIN_ROLE_ID, newPrivilegeIds);
+    }
+
+    @Override
+    public void addRolePrivilegesByMenus(List<String> menuCodes) {
+        // 给角色（超级管理员）添加本次新增的权限
+        List<Long> privilegeIds = getPrivilegesByMenuCodes(menuCodes);
+
+        // 超级管理员角色对应权限
+        List<RbacRolePrivilege> rolePrivileges = rolePrivilegeService.getRoles(ADMIN_ROLE_ID, privilegeIds);
+        List<Long> rolePrivilegeIds = rolePrivileges.stream().map(RbacRolePrivilege::getPrivilegeId).collect(Collectors.toList());
+        // 新权限
+        List<Long> newPrivilegeIds = privilegeIds.stream()
+                .filter(privilegeId -> !rolePrivilegeIds.contains(privilegeId))
+                .collect(Collectors.toList());
+        rolePrivilegeService.add(ADMIN_ROLE_ID, newPrivilegeIds);
+    }
+
+    /**
+     * 获取菜单标识对应的权限
+     */
+    private List<Long> getPrivilegesByMenuCodes(List<String> menuCodes) {
+        return privilegeService.getByPrivileges("m", menuCodes).stream()
+                .map(RbacPrivilege::getPrivilegeId)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -133,6 +169,44 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
                         .setCreatedDate(now))
                 .collect(Collectors.toList());
         privilegeOperationService.saveBatch(newPrivilegeOperations);
+    }
+
+    @Override
+    public void addPrivilegeMenus(long menuId, String menuCode) {
+        RbacPrivilege privilege = new RbacPrivilege()
+                .setPrivilege(menuCode)
+                .setPrivilegeType("m")
+                .setCreatedDate(LocalDateTime.now());
+        privilegeService.save(privilege);
+
+        RbacPrivilegeMenu privilegeMenu = new RbacPrivilegeMenu()
+                .setPrivilegeId(privilege.getPrivilegeId())
+                .setMenuId(menuId)
+                .setCreatedDate(LocalDateTime.now());
+        privilegeMenuService.save(privilegeMenu);
+
+        this.addRolePrivilegesByMenus(Collections.singletonList(menuCode));
+    }
+
+    @Override
+    public void modifyPrivilegeMenus(long menuId, String menuCode, String oldMenuCode) {
+        // 删除老菜单权限
+        this.removePrivilegesByMenus(Collections.singletonList(oldMenuCode));
+
+        this.addPrivilegeMenus(menuId, menuCode);
+    }
+
+    @Override
+    public void removePrivilegesByMenus(long menuId) {
+        // 移除角色权限、菜单权限、权限、菜单
+        Optional<RbacPrivilegeMenu> privilegeMenuOptional = privilegeMenuService.getPrivilege(menuId);
+        privilegeMenuOptional.ifPresent(x -> {
+            long privilegeId = x.getPrivilegeId();
+            List<Long> privilegeIds = Collections.singletonList(privilegeId);
+            rolePrivilegeService.removeByPrivilege(privilegeIds);
+            privilegeMenuService.removeByPrivilege(privilegeIds);
+            privilegeService.removeByPrivilege(privilegeIds);
+        });
     }
 
     @Override

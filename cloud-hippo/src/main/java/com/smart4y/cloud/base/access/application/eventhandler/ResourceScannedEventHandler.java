@@ -86,7 +86,7 @@ public class ResourceScannedEventHandler {
     private void addRolePrivileges(Collection<RbacOperation> operations) {
         List<String> validOperationCodes = Objects.requireNonNull(operations).stream()
                 .map(RbacOperation::getOperationCode).collect(Collectors.toList());
-        privilegeApplicationService.addNewRolePrivileges(validOperationCodes);
+        privilegeApplicationService.addRolePrivilegesByOperations(validOperationCodes);
     }
 
     /**
@@ -95,7 +95,7 @@ public class ResourceScannedEventHandler {
     private void removeInvalidPrivileges(String serviceId, List<RbacOperation> operations) {
         List<String> validOperationCodes = Objects.requireNonNull(operations).stream()
                 .map(RbacOperation::getOperationCode).collect(Collectors.toList());
-        privilegeApplicationService.removeInvalidPrivileges(serviceId, validOperationCodes);
+        privilegeApplicationService.removeInvalidPrivilegesByOperations(serviceId, validOperationCodes);
     }
 
     /**

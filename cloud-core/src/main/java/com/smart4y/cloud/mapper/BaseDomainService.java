@@ -6,6 +6,7 @@ import com.smart4y.cloud.core.message.page.Page;
 import com.smart4y.cloud.core.spring.SpringContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -360,6 +361,25 @@ public class BaseDomainService<T extends BaseEntity> {
      */
     public int count(Weekend<T> weekend) {
         return mapper.selectCountByExample(weekend);
+    }
+
+    /**
+     * 记录是否存在
+     *
+     * @param weekend 查询类
+     * @return true存在，false不存在
+     */
+    public boolean exist(Weekend<T> weekend) {
+        String orderByClause = weekend.getOrderByClause();
+        if (StringUtils.isBlank(orderByClause)) {
+            orderByClause = " LIMIT 1";
+        } else {
+            if (!orderByClause.toUpperCase().contains("LIMIT")) {
+                orderByClause += " LIMIT 1";
+            }
+        }
+        weekend.setOrderByClause(orderByClause);
+        return mapper.selectCountByExample(weekend) > 0;
     }
 
     /**

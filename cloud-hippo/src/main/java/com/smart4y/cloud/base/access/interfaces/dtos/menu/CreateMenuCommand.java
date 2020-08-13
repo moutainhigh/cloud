@@ -30,6 +30,10 @@ public class CreateMenuCommand implements Serializable {
     @ApiModelProperty(value = "菜单名称", required = true)
     private String menuName;
 
+    @NotBlank(message = "菜单标识 必填")
+    @ApiModelProperty(value = "菜单标识", required = true)
+    private String menuCode;
+
     @NotBlank(message = "菜单图标 必填")
     @ApiModelProperty(value = "菜单图标", required = true)
     private String menuIcon;

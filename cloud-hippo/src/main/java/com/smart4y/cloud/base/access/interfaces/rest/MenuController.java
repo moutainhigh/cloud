@@ -62,6 +62,13 @@ public class MenuController extends BaseAccessController {
         return ok();
     }
 
+    @DeleteMapping("/menus/{menuId}")
+    @ApiOperation(value = "菜单:移除")
+    public ResultMessage<Void> removeMenu(@PathVariable("menuId") Long menuId) {
+        menuApplicationService.removeMenu(menuId);
+        return ok();
+    }
+
     @GetMapping("/menus/{menuId}")
     @ApiOperation(value = "菜单:详情")
     @ApiImplicitParams({

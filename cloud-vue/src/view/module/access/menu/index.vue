@@ -24,7 +24,10 @@
                     class="search-btn" type="dashed">
               {{ menu.viewData.menuName }}
             </Button>&nbsp;&nbsp;
-            <Button @click="handleModal('add')" class="search-btn" type="dashed">添加</Button>
+            <Button @click="handleModal('add')" class="search-btn" type="dashed">添加</Button>&nbsp;
+            <Button @click="handleRemove(menu.viewData.menuId)" v-show="menu.viewShow" class="search-btn" type="dashed">
+              移除
+            </Button>
           </Form>
         </Card>
         <br/>
@@ -139,7 +142,16 @@
   </div>
 </template>
 <script>
-import {addMenu, updateMenu, getMenuChildren, getMenuRoles, getMenus, getMenuUsers, viewMenu} from '@/api/access/menu';
+import {
+  addMenu,
+  removeMenu,
+  updateMenu,
+  getMenuChildren,
+  getMenuRoles,
+  getMenus,
+  getMenuUsers,
+  viewMenu
+} from '@/api/access/menu';
 import icons from "@/view/module/system/menus/icons";
 import {listConvertTree} from "@/libs/util";
 
@@ -360,6 +372,24 @@ export default {
       this.$refs.modalForm.resetFields();
       this.modal.saving = false;
       this.modal.visible = false;
+    },
+    /**
+     * 移除
+     * @param menuId 菜单ID
+     */
+    handleRemove(menuId) {
+      this.$Modal.confirm({
+        title: '确定删除吗？',
+        onOk: () => {
+          removeMenu(menuId)
+              .then(res => {
+                console.log(res);
+                this.$Message.success('删除成功')
+                // 此处刷新页面等操作
+                this.$refs.tree.handleSelect(0);
+              })
+        }
+      })
     },
     /**
      * 加载子节点

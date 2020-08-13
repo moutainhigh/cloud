@@ -18,6 +18,11 @@ import java.util.List;
 public class RoleService extends BaseDomainService<RbacRole> {
 
     /**
+     * 超级管理员角色ID
+     */
+    public static final long ADMIN_ROLE_ID = 1L;
+
+    /**
      * 获取角色列表
      *
      * @param roleIds 角色ID列表
