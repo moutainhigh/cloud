@@ -13,6 +13,10 @@ public interface UserApplicationService {
 
     /**
      * 获取用户所有角色
+     * <p>
+     * 用户角色
+     * 用户所属组织关联角色
+     * </p>
      *
      * @param userId 用户ID
      * @return 角色列表
@@ -21,6 +25,10 @@ public interface UserApplicationService {
 
     /**
      * 获取用户所有权限
+     * <p>
+     * 用户角色 对应权限
+     * 用户所属组织关联角色 对应权限
+     * </p>
      *
      * @param userId 用户ID
      * @return 权限列表

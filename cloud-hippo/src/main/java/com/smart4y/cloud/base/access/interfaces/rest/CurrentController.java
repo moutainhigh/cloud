@@ -26,8 +26,12 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 @Api(tags = {"访问控制 - 账户"})
 public class CurrentController extends BaseAccessController {
 
+    private final UserApplicationService userApplicationService;
+
     @Autowired
-    private UserApplicationService userApplicationService;
+    public CurrentController(UserApplicationService userApplicationService) {
+        this.userApplicationService = userApplicationService;
+    }
 
     @GetMapping("/current/menus")
     @ApiOperation(value = "用户:菜单")

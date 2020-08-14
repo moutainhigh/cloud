@@ -43,7 +43,7 @@ public class UserApplicationServiceImpl implements UserApplicationService {
     @Override
     public List<RbacPrivilege> getPrivileges(long userId) {
         List<Long> privilegeIds = getPrivilegeIds(userId);
-        return privilegeService.getPrivileges(privilegeIds);
+        return privilegeService.getByIds(privilegeIds);
     }
 
     @Override

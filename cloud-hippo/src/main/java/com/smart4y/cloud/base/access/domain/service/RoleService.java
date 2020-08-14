@@ -25,13 +25,17 @@ import java.util.stream.Collectors;
 @DomainService
 public class RoleService extends BaseDomainService<RbacRole> {
 
-    @Autowired
-    private RbacRolePrivilegeMapper rbacRolePrivilegeMapper;
-
     /**
      * 超级管理员角色ID
      */
     public static final long ADMIN_ROLE_ID = 1L;
+
+    private final RbacRolePrivilegeMapper rbacRolePrivilegeMapper;
+
+    @Autowired
+    public RoleService(RbacRolePrivilegeMapper rbacRolePrivilegeMapper) {
+        this.rbacRolePrivilegeMapper = rbacRolePrivilegeMapper;
+    }
 
     /**
      * 获取指定角色列表

@@ -27,8 +27,12 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 @Api(tags = {"访问控制 - 用户"})
 public class UserController extends BaseAccessController {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/users/page")
     @ApiOperation(value = "用户:分页")

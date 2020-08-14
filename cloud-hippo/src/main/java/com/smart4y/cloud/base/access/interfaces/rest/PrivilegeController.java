@@ -1,8 +1,8 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
 import com.smart4y.cloud.base.access.application.PrivilegeApplicationService;
-import com.smart4y.cloud.base.access.domain.entity.RbacOperation;
 import com.smart4y.cloud.base.access.domain.entity.RbacPrivilege;
+import com.smart4y.cloud.base.access.domain.service.PrivilegeService;
 import com.smart4y.cloud.base.access.interfaces.dtos.privilege.RbacPrivilegePageQuery;
 import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.core.message.page.Page;
@@ -12,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 import static com.smart4y.cloud.core.message.ResultMessage.ok;
 
@@ -26,20 +24,19 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 @RestController
 public class PrivilegeController extends BaseAccessController {
 
+    private final PrivilegeService privilegeService;
+
     @Autowired
-    private PrivilegeApplicationService privilegeApplicationService;
+    public PrivilegeController(PrivilegeService privilegeService) {
+        this.privilegeService = privilegeService;
+    }
 
     @GetMapping("/privileges/page")
     @ApiOperation(value = "权限:分页")
     public ResultMessage<Page<RbacPrivilege>> getPrivilegesPage(RbacPrivilegePageQuery query) {
-        Page<RbacPrivilege> result = privilegeApplicationService.getPrivilegesPage(query);
-        return ok(result);
-    }
-
-    @GetMapping("/privileges/operations")
-    @ApiOperation(value = "权限:操作:所有")
-    public ResultMessage<List<RbacOperation>> getPrivilegesOperations() {
-        List<RbacOperation> result = privilegeApplicationService.getPrivilegesOperations();
+        Page<RbacPrivilege> result = privilegeService.getPageLike(
+                query.getPage(), query.getLimit(), query.getPrivilegeId(),
+                query.getPrivilege(), query.getPrivilegeType());
         return ok(result);
     }
 }

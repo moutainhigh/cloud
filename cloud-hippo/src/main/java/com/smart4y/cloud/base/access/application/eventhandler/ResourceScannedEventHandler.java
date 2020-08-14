@@ -59,11 +59,17 @@ public class ResourceScannedEventHandler {
             // 新增或更新操作
             saveOrUpdateOperations(operations);
 
-            // 清理无效权限数据
-            removeInvalidPrivileges(serviceId, operations);
+            // 移除无效操作
+            // 获取失效操作列表（同一个服务中，有效操作之外的示为无效操作）
+            List<String> validOperationCodes = Objects.requireNonNull(operations).stream()
+                    .map(RbacOperation::getOperationCode).collect(Collectors.toList());
+            List<RbacOperation> invalidOperations = operationService.getOutSideByCodes(serviceId, validOperationCodes);
+            List<Long> operationIds = invalidOperations.stream()
+                    .map(RbacOperation::getOperationId).collect(Collectors.toList());
+            privilegeApplicationService.removeOperation(operationIds);
 
             // 新增权限、操作权限
-            addPrivilegesAndPrivilegeOperations(serviceId);
+            privilegeApplicationService.addPrivilegeOperations(serviceId);
 
             // 给角色（超级管理员）添加本次新增的权限
             addRolePrivileges(operations);
@@ -76,26 +82,10 @@ public class ResourceScannedEventHandler {
         }
     }
 
-    /**
-     * 新增权限、操作权限
-     */
-    private void addPrivilegesAndPrivilegeOperations(String serviceId) {
-        privilegeApplicationService.addPrivilegeOperations(serviceId);
-    }
-
     private void addRolePrivileges(Collection<RbacOperation> operations) {
         List<String> validOperationCodes = Objects.requireNonNull(operations).stream()
                 .map(RbacOperation::getOperationCode).collect(Collectors.toList());
         privilegeApplicationService.addRolePrivilegesByOperations(validOperationCodes);
-    }
-
-    /**
-     * 清理无效权限
-     */
-    private void removeInvalidPrivileges(String serviceId, List<RbacOperation> operations) {
-        List<String> validOperationCodes = Objects.requireNonNull(operations).stream()
-                .map(RbacOperation::getOperationCode).collect(Collectors.toList());
-        privilegeApplicationService.removeInvalidPrivilegesByOperations(serviceId, validOperationCodes);
     }
 
     /**

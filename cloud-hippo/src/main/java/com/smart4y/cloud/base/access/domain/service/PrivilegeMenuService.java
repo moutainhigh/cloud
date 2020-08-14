@@ -47,15 +47,4 @@ public class PrivilegeMenuService extends BaseDomainService<RbacPrivilegeMenu> {
                 .andIn(RbacPrivilegeMenu::getMenuId, menuIds);
         return this.list(weekend);
     }
-
-    public void removeByPrivilege(Collection<Long> privilegeIds) {
-        if (CollectionUtils.isEmpty(privilegeIds)) {
-            return;
-        }
-        Weekend<RbacPrivilegeMenu> weekend = Weekend.of(RbacPrivilegeMenu.class);
-        weekend
-                .weekendCriteria()
-                .andIn(RbacPrivilegeMenu::getPrivilegeId, privilegeIds);
-        this.remove(weekend);
-    }
 }

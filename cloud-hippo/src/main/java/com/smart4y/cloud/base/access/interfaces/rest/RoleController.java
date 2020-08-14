@@ -29,8 +29,12 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 @Api(tags = {"访问控制 - 角色"})
 public class RoleController extends BaseAccessController {
 
+    private final RoleService roleService;
+
     @Autowired
-    private RoleService roleService;
+    public RoleController(RoleService roleService) {
+        this.roleService = roleService;
+    }
 
     @GetMapping("/roles")
     @ApiOperation(value = "角色:所有")

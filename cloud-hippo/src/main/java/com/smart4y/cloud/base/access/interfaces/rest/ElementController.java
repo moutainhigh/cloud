@@ -26,8 +26,12 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 @RestController
 public class ElementController extends BaseAccessController {
 
+    private final ElementService elementService;
+
     @Autowired
-    private ElementService elementService;
+    public ElementController(ElementService elementService) {
+        this.elementService = elementService;
+    }
 
     @GetMapping("/elements/page")
     @ApiOperation(value = "元素:分页")

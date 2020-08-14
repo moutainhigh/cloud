@@ -23,8 +23,12 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 @RestController
 public class OperationController extends BaseAccessController {
 
+    private final OperationService operationService;
+
     @Autowired
-    private OperationService operationService;
+    public OperationController(OperationService operationService) {
+        this.operationService = operationService;
+    }
 
     @GetMapping("/operations/page")
     @ApiOperation(value = "操作:分页")

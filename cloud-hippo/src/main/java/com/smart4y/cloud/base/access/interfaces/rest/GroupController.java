@@ -28,12 +28,16 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 @RestController
 public class GroupController extends BaseAccessController {
 
+    private final GroupService groupService;
+    private final RoleService roleService;
+    private final UserService userService;
+
     @Autowired
-    private GroupService groupService;
-    @Autowired
-    private RoleService roleService;
-    @Autowired
-    private UserService userService;
+    public GroupController(GroupService groupService, RoleService roleService, UserService userService) {
+        this.groupService = groupService;
+        this.roleService = roleService;
+        this.userService = userService;
+    }
 
     @GetMapping("/groups/children")
     @ApiOperation(value = "组织:子级:查询")

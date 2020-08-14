@@ -23,8 +23,12 @@ import java.util.List;
 @DomainService
 public class UserService extends BaseDomainService<RbacUser> {
 
+    private final RbacUserRoleMapper rbacUserRoleMapper;
+
     @Autowired
-    private RbacUserRoleMapper rbacUserRoleMapper;
+    public UserService(RbacUserRoleMapper rbacUserRoleMapper) {
+        this.rbacUserRoleMapper = rbacUserRoleMapper;
+    }
 
     /**
      * 获取指定用户列表

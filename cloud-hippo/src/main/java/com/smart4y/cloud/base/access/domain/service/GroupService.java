@@ -19,10 +19,14 @@ import java.util.List;
 @DomainService
 public class GroupService extends BaseDomainService<RbacGroup> {
 
+    private final RbacGroupUserMapper rbacGroupUserMapper;
+    private final RbacGroupRoleMapper rbacGroupRoleMapper;
+
     @Autowired
-    private RbacGroupUserMapper rbacGroupUserMapper;
-    @Autowired
-    private RbacGroupRoleMapper rbacGroupRoleMapper;
+    public GroupService(RbacGroupUserMapper rbacGroupUserMapper, RbacGroupRoleMapper rbacGroupRoleMapper) {
+        this.rbacGroupUserMapper = rbacGroupUserMapper;
+        this.rbacGroupRoleMapper = rbacGroupRoleMapper;
+    }
 
     /**
      * 获取指定组织的子节点
