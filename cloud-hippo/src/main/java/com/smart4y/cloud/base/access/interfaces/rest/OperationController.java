@@ -39,4 +39,6 @@ public class OperationController extends BaseAccessController {
         );
         return ok(result);
     }
+
+    // TODO 删除、修改状态、修改公开访问、修改身份认证
 }
