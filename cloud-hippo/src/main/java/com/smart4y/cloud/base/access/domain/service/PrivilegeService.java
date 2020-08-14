@@ -1,9 +1,6 @@
 package com.smart4y.cloud.base.access.domain.service;
 
-import com.smart4y.cloud.base.access.domain.entity.RbacPrivilege;
-import com.smart4y.cloud.base.access.domain.entity.RbacPrivilegeElement;
-import com.smart4y.cloud.base.access.domain.entity.RbacPrivilegeMenu;
-import com.smart4y.cloud.base.access.domain.entity.RbacPrivilegeOperation;
+import com.smart4y.cloud.base.access.domain.entity.*;
 import com.smart4y.cloud.base.access.infrastructure.persistence.mybatis.RbacPrivilegeElementMapper;
 import com.smart4y.cloud.base.access.infrastructure.persistence.mybatis.RbacPrivilegeMenuMapper;
 import com.smart4y.cloud.base.access.infrastructure.persistence.mybatis.RbacPrivilegeOperationMapper;
@@ -16,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.weekend.Weekend;
 import tk.mybatis.mapper.weekend.WeekendCriteria;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Youtao
@@ -125,7 +122,91 @@ public class PrivilegeService extends BaseDomainService<RbacPrivilege> {
     }
 
     /**
+     * 获取指定菜单权限
+     *
+     * @param menuId 菜单ID
+     * @return 菜单权限
+     */
+    public Optional<RbacPrivilegeMenu> getPrivilegeMenuByMenuId(long menuId) {
+        Weekend<RbacPrivilegeMenu> weekend = Weekend.of(RbacPrivilegeMenu.class);
+        weekend
+                .weekendCriteria()
+                .andEqualTo(RbacPrivilegeMenu::getMenuId, menuId);
+        return Optional.ofNullable(rbacPrivilegeMenuMapper.selectOneByExample(weekend));
+    }
+
+    /**
+     * 获取指定菜单权限列表
+     *
+     * @param privilegeIds 权限ID列表
+     * @return 菜单权限列表
+     */
+    public List<RbacPrivilegeMenu> getPrivilegeMenusByPrivilegeIds(Collection<Long> privilegeIds) {
+        if (CollectionUtils.isEmpty(privilegeIds)) {
+            return Collections.emptyList();
+        }
+        Weekend<RbacPrivilegeMenu> weekend = Weekend.of(RbacPrivilegeMenu.class);
+        weekend
+                .weekendCriteria()
+                .andIn(RbacPrivilegeMenu::getPrivilegeId, privilegeIds);
+        return rbacPrivilegeMenuMapper.selectByExample(weekend);
+    }
+
+    /**
+     * 添加菜单权限
+     *
+     * @param menuId   菜单ID
+     * @param menuCode 菜单标识
+     */
+    public void savePrivilegeMenu(long menuId, String menuCode) {
+        RbacPrivilege privilege = new RbacPrivilege()
+                .setPrivilege(menuCode)
+                .setPrivilegeType("m")
+                .setCreatedDate(LocalDateTime.now());
+        this.save(privilege);
+        RbacPrivilegeMenu privilegeMenu = new RbacPrivilegeMenu()
+                .setPrivilegeId(privilege.getPrivilegeId())
+                .setMenuId(menuId)
+                .setCreatedDate(LocalDateTime.now());
+        rbacPrivilegeMenuMapper.insertSelective(privilegeMenu);
+    }
+
+    /**
+     * 添加操作权限
+     *
+     * @param operations 操作列表
+     */
+    public void savePrivilegeOperation(Collection<RbacOperation> operations) {
+        if (CollectionUtils.isEmpty(operations)) {
+            return;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        List<RbacPrivilege> newPrivileges = operations.stream()
+                .map(o -> new RbacPrivilege()
+                        .setPrivilege(o.getOperationCode())
+                        .setPrivilegeType("o")
+                        .setCreatedDate(now))
+                .collect(Collectors.toList());
+        this.saveBatch(newPrivileges);
+
+        Map<String, Long> operationIdCodeMap = operations.stream()
+                .collect(Collectors.toMap(RbacOperation::getOperationCode, RbacOperation::getOperationId));
+        List<RbacPrivilegeOperation> newPrivilegeOperations = newPrivileges.stream()
+                .map(privilege -> new RbacPrivilegeOperation()
+                        .setPrivilegeId(privilege.getPrivilegeId())
+                        .setOperationId(operationIdCodeMap.get(privilege.getPrivilege()))
+                        .setCreatedDate(now))
+                .collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(newPrivilegeOperations)) {
+            rbacPrivilegeOperationMapper.insertList(newPrivilegeOperations);
+        }
+    }
+
+    /**
      * 移除权限
+     *
+     * @param privilegeType 权限类型
+     * @param privilegeIds  权限ID列表
      */
     public void removeByPrivilege(String privilegeType, Collection<Long> privilegeIds) {
         if (CollectionUtils.isEmpty(privilegeIds)) {

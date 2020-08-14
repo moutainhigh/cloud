@@ -20,15 +20,13 @@ public class UserApplicationServiceImpl implements UserApplicationService {
     private final GroupService groupService;
     private final RoleService roleService;
     private final PrivilegeService privilegeService;
-    private final PrivilegeMenuService privilegeMenuService;
     private final MenuService menuService;
     private final UserService userService;
 
     @Autowired
-    public UserApplicationServiceImpl(RoleService roleService, PrivilegeService privilegeService, PrivilegeMenuService privilegeMenuService, MenuService menuService, UserService userService, GroupService groupService) {
+    public UserApplicationServiceImpl(RoleService roleService, PrivilegeService privilegeService, MenuService menuService, UserService userService, GroupService groupService) {
         this.roleService = roleService;
         this.privilegeService = privilegeService;
-        this.privilegeMenuService = privilegeMenuService;
         this.menuService = menuService;
         this.userService = userService;
         this.groupService = groupService;
@@ -51,7 +49,7 @@ public class UserApplicationServiceImpl implements UserApplicationService {
         List<Long> privilegeIds = this.getPrivilegeIds(userId);
 
         // 获取权限菜单
-        List<RbacPrivilegeMenu> privilegeMenus = privilegeMenuService.getMenus(privilegeIds);
+        List<RbacPrivilegeMenu> privilegeMenus = privilegeService.getPrivilegeMenusByPrivilegeIds(privilegeIds);
         List<Long> menuIds = privilegeMenus.stream()
                 .map(RbacPrivilegeMenu::getMenuId)
                 .collect(Collectors.toList());

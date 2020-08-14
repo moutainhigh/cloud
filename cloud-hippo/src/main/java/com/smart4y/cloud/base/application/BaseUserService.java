@@ -50,17 +50,11 @@ public interface BaseUserService {
 
     /**
      * 依据系统用户Id查询系统用户信息
-     *
-     * @param userId
-     * @return
      */
     BaseUser getUserById(long userId);
 
     /**
      * 获取用户权限
-     *
-     * @param userId
-     * @return
      */
     UserAccountVO getUserAccount(long userId);
 

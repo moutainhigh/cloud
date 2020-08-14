@@ -4,12 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.lang.NonNull;
 
 /**
  * Spring 上下文容器
  *
  * @author Youtao
- *         Created by youtao on 2019-04-30.
+ * Created by youtao on 2019-04-30.
  */
 @Slf4j
 public class SpringContextHolder implements ApplicationContextAware {
@@ -24,7 +25,7 @@ public class SpringContextHolder implements ApplicationContextAware {
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(@NonNull ApplicationContext applicationContext) throws BeansException {
         if (null == SpringContextHolder.applicationContext) {
             SpringContextHolder.applicationContext = applicationContext;
         }

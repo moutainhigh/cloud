@@ -145,6 +145,8 @@ public class RoleService extends BaseDomainService<RbacRole> {
                         .setRoleId(roleId)
                         .setPrivilegeId(privilegeId)
                         .setCreatedDate(now)).collect(Collectors.toList());
-        rbacRolePrivilegeMapper.insertList(items);
+        if (CollectionUtils.isNotEmpty(items)) {
+            rbacRolePrivilegeMapper.insertList(items);
+        }
     }
 }

@@ -7,10 +7,12 @@ import com.smart4y.cloud.base.access.infrastructure.persistence.mybatis.RbacGrou
 import com.smart4y.cloud.base.access.infrastructure.persistence.mybatis.RbacGroupUserMapper;
 import com.smart4y.cloud.core.annotation.DomainService;
 import com.smart4y.cloud.mapper.BaseDomainService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.weekend.Weekend;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -79,6 +81,9 @@ public class GroupService extends BaseDomainService<RbacGroup> {
      * @return 角色列表
      */
     public List<RbacGroupRole> getGroupRolesByGroupIds(Collection<Long> groupIds) {
+        if (CollectionUtils.isEmpty(groupIds)) {
+            return Collections.emptyList();
+        }
         Weekend<RbacGroupRole> weekend = Weekend.of(RbacGroupRole.class);
         weekend
                 .weekendCriteria()

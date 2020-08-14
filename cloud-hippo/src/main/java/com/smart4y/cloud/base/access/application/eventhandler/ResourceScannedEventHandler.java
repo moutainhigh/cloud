@@ -2,11 +2,9 @@ package com.smart4y.cloud.base.access.application.eventhandler;
 
 import com.smart4y.cloud.base.access.application.PrivilegeApplicationService;
 import com.smart4y.cloud.base.access.domain.entity.RbacOperation;
-import com.smart4y.cloud.base.access.domain.service.OperationService;
 import com.smart4y.cloud.base.infrastructure.constants.RedisConstants;
 import com.smart4y.cloud.core.constant.QueueConstants;
 import com.smart4y.cloud.core.event.ResourceScannedEvent;
-import com.smart4y.cloud.core.security.http.OpenRestTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -17,9 +15,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.function.Function;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -33,18 +30,18 @@ import java.util.stream.Collectors;
 @Transactional(rollbackFor = Exception.class)
 public class ResourceScannedEventHandler {
 
+    private final RedisTemplate<String, String> redisTemplate;
+    private final PrivilegeApplicationService privilegeApplicationService;
+
     @Autowired
-    private OpenRestTemplate openRestTemplate;
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
-    @Autowired
-    private OperationService operationService;
-    @Autowired
-    private PrivilegeApplicationService privilegeApplicationService;
+    public ResourceScannedEventHandler(RedisTemplate<String, String> redisTemplate, PrivilegeApplicationService privilegeApplicationService) {
+        this.redisTemplate = redisTemplate;
+        this.privilegeApplicationService = privilegeApplicationService;
+    }
 
     @RabbitListener(queues = QueueConstants.QUEUE_SCAN_API_RESOURCE)
     public void handle(@Payload ResourceScannedEvent event) {
-        log.info("资源扫描：{}", event);
+        log.info("资源扫描......");
         try {
             String serviceId = event.getApplication();
             String key = RedisConstants.SCAN_API_RESOURCE_KEY_PREFIX + serviceId;
@@ -53,28 +50,13 @@ public class ResourceScannedEventHandler {
                 // 未失效，不再更新资源
                 return;
             }
-            // 事件数据转为操作数据
-            List<RbacOperation> operations = convertOperations(event);
+            // 转换数据
+            List<RbacOperation> operations = convertForOperations(event);
 
-            // 新增或更新操作
-            saveOrUpdateOperations(operations);
+            // 同步数据
+            privilegeApplicationService.syncServiceOperation(serviceId, operations);
 
-            // 移除无效操作
-            // 获取失效操作列表（同一个服务中，有效操作之外的示为无效操作）
-            List<String> validOperationCodes = Objects.requireNonNull(operations).stream()
-                    .map(RbacOperation::getOperationCode).collect(Collectors.toList());
-            List<RbacOperation> invalidOperations = operationService.getOutSideByCodes(serviceId, validOperationCodes);
-            List<Long> operationIds = invalidOperations.stream()
-                    .map(RbacOperation::getOperationId).collect(Collectors.toList());
-            privilegeApplicationService.removeOperation(operationIds);
-
-            // 新增权限、操作权限
-            privilegeApplicationService.addPrivilegeOperations(serviceId);
-
-            // 给角色（超级管理员）添加本次新增的权限
-            addRolePrivileges(operations);
-
-            openRestTemplate.refreshGateway();
+            // 缓存状态
             this.redisTemplate.opsForValue().set(key, String.valueOf(operations.size()), Duration.ofMinutes(3));
             log.info("资源扫描完成 - 服务名：{}，资源数量：{}", event.getApplication(), event.getMappings().size());
         } catch (Exception e) {
@@ -82,49 +64,10 @@ public class ResourceScannedEventHandler {
         }
     }
 
-    private void addRolePrivileges(Collection<RbacOperation> operations) {
-        List<String> validOperationCodes = Objects.requireNonNull(operations).stream()
-                .map(RbacOperation::getOperationCode).collect(Collectors.toList());
-        privilegeApplicationService.addRolePrivilegesByOperations(validOperationCodes);
-    }
-
-    /**
-     * 新增或更新操作表数据
-     */
-    private void saveOrUpdateOperations(List<RbacOperation> operations) {
-        // 若有资源操作数据则新增或更新操作表
-        if (CollectionUtils.isEmpty(operations)) {
-            return;
-        }
-        List<String> validOperationCodes = Objects.requireNonNull(operations).stream()
-                .map(RbacOperation::getOperationCode).collect(Collectors.toList());
-        Map<String, RbacOperation> operationMap = operationService.getByCodes(validOperationCodes).stream()
-                .collect(Collectors.toMap(RbacOperation::getOperationCode, Function.identity()));
-
-        LocalDateTime now = LocalDateTime.now();
-        List<RbacOperation> updateItems = operations.stream()
-                .filter(x -> operationMap.containsKey(x.getOperationCode()))
-                .peek(x -> x
-                        .setOperationId(operationMap.get(x.getOperationCode()).getOperationId())
-                        .setLastModifiedDate(now))
-                .collect(Collectors.toList());
-        operationService.updateSelectiveBatchById(updateItems);
-
-        List<RbacOperation> saveItems = operations.stream()
-                .filter(x -> !operationMap.containsKey(x.getOperationCode()))
-                .peek(x -> x
-                        .setOperationAuth(true)
-                        .setOperationOpen(true)
-                        .setOperationState("10")
-                        .setCreatedDate(now))
-                .collect(Collectors.toList());
-        operationService.saveBatch(saveItems);
-    }
-
     /**
      * 事件数据转为操作数据
      */
-    private List<RbacOperation> convertOperations(ResourceScannedEvent event) {
+    private List<RbacOperation> convertForOperations(ResourceScannedEvent event) {
         if (CollectionUtils.isEmpty(event.getMappings())) {
             return Collections.emptyList();
         }

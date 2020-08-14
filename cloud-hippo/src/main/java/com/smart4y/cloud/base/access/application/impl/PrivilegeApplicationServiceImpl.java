@@ -2,22 +2,23 @@ package com.smart4y.cloud.base.access.application.impl;
 
 import com.smart4y.cloud.base.access.application.PrivilegeApplicationService;
 import com.smart4y.cloud.base.access.domain.entity.*;
-import com.smart4y.cloud.base.access.domain.service.*;
+import com.smart4y.cloud.base.access.domain.service.MenuService;
+import com.smart4y.cloud.base.access.domain.service.OperationService;
+import com.smart4y.cloud.base.access.domain.service.PrivilegeService;
+import com.smart4y.cloud.base.access.domain.service.RoleService;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.CreateMenuCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.ModifyMenuCommand;
 import com.smart4y.cloud.core.annotation.ApplicationService;
 import com.smart4y.cloud.core.exception.OpenAlertException;
 import com.smart4y.cloud.core.message.enums.MessageType;
+import com.smart4y.cloud.core.security.http.OpenRestTemplate;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.smart4y.cloud.base.access.domain.service.RoleService.ADMIN_ROLE_ID;
@@ -31,19 +32,17 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
 
     private final OperationService operationService;
     private final PrivilegeService privilegeService;
-    private final PrivilegeOperationService privilegeOperationService;
-    private final PrivilegeMenuService privilegeMenuService;
     private final MenuService menuService;
     private final RoleService roleService;
+    private final OpenRestTemplate openRestTemplate;
 
     @Autowired
-    public PrivilegeApplicationServiceImpl(PrivilegeOperationService privilegeOperationService, OperationService operationService, PrivilegeService privilegeService, PrivilegeMenuService privilegeMenuService, MenuService menuService, RoleService roleService) {
-        this.privilegeOperationService = privilegeOperationService;
+    public PrivilegeApplicationServiceImpl(OperationService operationService, PrivilegeService privilegeService, MenuService menuService, RoleService roleService, OpenRestTemplate openRestTemplate) {
         this.operationService = operationService;
         this.privilegeService = privilegeService;
-        this.privilegeMenuService = privilegeMenuService;
         this.menuService = menuService;
         this.roleService = roleService;
+        this.openRestTemplate = openRestTemplate;
     }
 
     @Override
@@ -64,16 +63,7 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
         menuService.modifyChildForExist(menuParentId);
 
         // #3 添加菜单权限
-        RbacPrivilege privilege = new RbacPrivilege()
-                .setPrivilege(menuCode)
-                .setPrivilegeType("m")
-                .setCreatedDate(LocalDateTime.now());
-        privilegeService.save(privilege);
-        RbacPrivilegeMenu privilegeMenu = new RbacPrivilegeMenu()
-                .setPrivilegeId(privilege.getPrivilegeId())
-                .setMenuId(record.getMenuId())
-                .setCreatedDate(LocalDateTime.now());
-        privilegeMenuService.save(privilegeMenu);
+        privilegeService.savePrivilegeMenu(record.getMenuId(), menuCode);
 
         // #4 添加角色（超级管理员）对应的权限
         List<Long> privilegeIds = privilegeService
@@ -87,6 +77,8 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
                 .filter(privilegeId -> !rolePrivilegeIds.contains(privilegeId))
                 .collect(Collectors.toList());
         roleService.grantPrivileges(ADMIN_ROLE_ID, newPrivilegeIds);
+
+        openRestTemplate.refreshGateway();
     }
 
     @Override
@@ -118,21 +110,15 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
         // #3 修改菜单编码引起的权限变化
         if (!oldMenuCode.equals(newMenuCode)) {
             // #3.1 删除老菜单：角色权限，菜单权限，权限
-            List<Long> privilegeIds = this.getPrivilegesByMenuCodes(Collections.singletonList(oldMenuCode));
+            List<Long> privilegeIds = privilegeService
+                    .getByType("m", Collections.singletonList(oldMenuCode)).stream()
+                    .map(RbacPrivilege::getPrivilegeId)
+                    .collect(Collectors.toList());
             roleService.removePrivileges(privilegeIds);
             privilegeService.removeByPrivilege("m", privilegeIds);
 
             // #3.2 添加菜单权限
-            RbacPrivilege privilege = new RbacPrivilege()
-                    .setPrivilege(newMenuCode)
-                    .setPrivilegeType("m")
-                    .setCreatedDate(LocalDateTime.now());
-            privilegeService.save(privilege);
-            RbacPrivilegeMenu privilegeMenu = new RbacPrivilegeMenu()
-                    .setPrivilegeId(privilege.getPrivilegeId())
-                    .setMenuId(menuId)
-                    .setCreatedDate(LocalDateTime.now());
-            privilegeMenuService.save(privilegeMenu);
+            privilegeService.savePrivilegeMenu(menuId, newMenuCode);
 
             // #3.3 添加角色（超级管理员）对应的权限
             List<Long> menuPrivilegeIds = privilegeService
@@ -146,6 +132,8 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
                     .collect(Collectors.toList());
             roleService.grantPrivileges(ADMIN_ROLE_ID, newPrivilegeIds);
         }
+
+        openRestTemplate.refreshGateway();
     }
 
     @Override
@@ -164,90 +152,71 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
         }
 
         // #3 移除角色权限、菜单权限、权限、菜单
-        privilegeMenuService.getPrivilege(menuId)
+        privilegeService
+                .getPrivilegeMenuByMenuId(menuId)
                 .ifPresent(x -> {
                     List<Long> privilegeIds = Collections.singletonList(x.getPrivilegeId());
                     roleService.removePrivileges(privilegeIds);
                     privilegeService.removeByPrivilege("m", privilegeIds);
                 });
+
+        openRestTemplate.refreshGateway();
     }
 
     @Override
-    public void createOperation(String serviceId, Collection<String> operationCodes) {
-        // TODO
-    }
+    public void syncServiceOperation(String serviceId, Collection<RbacOperation> operations) {
+        // 此服务的所有操作
+        List<String> validOperationCodes = Objects.requireNonNull(operations).stream()
+                .map(RbacOperation::getOperationCode).collect(Collectors.toList());
+        // 数据库中已存在的操作
+        List<RbacOperation> existOperations = operationService.getByCodes(validOperationCodes);
+        Map<String, RbacOperation> existOperationMap = existOperations.stream()
+                .collect(Collectors.toMap(RbacOperation::getOperationCode, Function.identity()));
 
-    @Override
-    public void removeOperation(Collection<Long> operationIds) {
-        if (CollectionUtils.isEmpty(operationIds)) {
-            return;
-        }
-        // 获取权限
-        List<RbacPrivilegeOperation> privilegeOperations = privilegeService.getPrivilegeOperationsByOperationIds(operationIds);
-        List<Long> privilegeIds = privilegeOperations.stream().map(RbacPrivilegeOperation::getPrivilegeId).collect(Collectors.toList());
+        // #1 移除失效权限
+        // 获取失效操作（同一个服务中，有效操作之外的示为无效操作）
+        List<RbacOperation> invalidOperations = operationService
+                .getOutSideByCodes(serviceId, validOperationCodes);
+        List<Long> invalidOperationIds = invalidOperations.stream()
+                .map(RbacOperation::getOperationId).collect(Collectors.toList());
 
-        // 清除角色权限，权限操作，权限，操作
-        roleService.removePrivileges(privilegeIds);
-        privilegeService.removeByPrivilege("o", privilegeIds);
-        operationService.removeByIds(operationIds);
-    }
+        // 获取失效权限
+        List<Long> invalidPrivilegeIds = privilegeService
+                .getPrivilegeOperationsByOperationIds(invalidOperationIds).stream()
+                .map(RbacPrivilegeOperation::getPrivilegeId).collect(Collectors.toList());
+        // 清除角色权限，权限（含权限操作），操作
+        roleService.removePrivileges(invalidPrivilegeIds);
+        privilegeService.removeByPrivilege("o", invalidPrivilegeIds);
+        operationService.removeByIds(invalidOperationIds);
 
-    @Override
-    public void addRolePrivilegesByOperations(List<String> validOperationCodes) {
-        // 给角色（超级管理员）添加本次新增的权限
-        List<RbacOperation> rbacOperations = operationService.getByCodes(validOperationCodes);
-        List<Long> operationIds = rbacOperations.stream().map(RbacOperation::getOperationId).collect(Collectors.toList());
-
-        List<RbacPrivilegeOperation> privilegeOperations = privilegeService.getPrivilegeOperationsByOperationIds(operationIds);
-        List<Long> privilegeIds = privilegeOperations.stream().map(RbacPrivilegeOperation::getPrivilegeId).collect(Collectors.toList());
-
-        // 超级管理员角色对应权限
-        List<RbacRolePrivilege> rolePrivileges = roleService.getRolePrivilegesByRoleId(ADMIN_ROLE_ID);
-        List<Long> rolePrivilegeIds = rolePrivileges.stream().map(RbacRolePrivilege::getPrivilegeId).collect(Collectors.toList());
-        // 新权限
-        List<Long> newPrivilegeIds = privilegeIds.stream()
-                .filter(privilegeId -> !rolePrivilegeIds.contains(privilegeId))
+        // #2 更新已存在的操作
+        List<RbacOperation> modifyOperations = operations.stream()
+                .filter(o -> existOperationMap.containsKey(o.getOperationCode()))
+                .peek(o -> o.setOperationId(existOperationMap.get(o.getOperationCode()).getOperationId())
+                        .setLastModifiedDate(LocalDateTime.now()))
                 .collect(Collectors.toList());
+        operationService.updateSelectiveBatchById(modifyOperations);
+
+        // #3 添加新操作权限
+        List<RbacOperation> newOperations = operations.stream()
+                .filter(o -> !existOperationMap.containsKey(o.getOperationCode()))
+                .peek(x -> x
+                        .setOperationAuth(true)
+                        .setOperationOpen(true)
+                        .setOperationState("10")
+                        .setCreatedDate(LocalDateTime.now()))
+                .collect(Collectors.toList());
+        operationService.saveBatch(newOperations);
+        privilegeService.savePrivilegeOperation(newOperations);
+
+        // #4 给角色（超级管理员）添加本次新增的权限
+        List<Long> newOperationIds = newOperations.stream()
+                .map(RbacOperation::getOperationId).collect(Collectors.toList());
+        List<Long> newPrivilegeIds = privilegeService
+                .getPrivilegeOperationsByOperationIds(newOperationIds).stream()
+                .map(RbacPrivilegeOperation::getPrivilegeId).collect(Collectors.toList());
         roleService.grantPrivileges(ADMIN_ROLE_ID, newPrivilegeIds);
-    }
 
-    /**
-     * 获取菜单标识对应的权限
-     */
-    private List<Long> getPrivilegesByMenuCodes(List<String> menuCodes) {
-        return privilegeService.getByType("m", menuCodes).stream()
-                .map(RbacPrivilege::getPrivilegeId)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void addPrivilegeOperations(String serviceId) {
-        List<RbacOperation> operations = operationService.getByServiceId(serviceId);
-        List<String> operationCodes = operations.stream().map(RbacOperation::getOperationCode).collect(Collectors.toList());
-        Map<String, Long> operationIdCodeMap = operations.stream()
-                .collect(Collectors.toMap(RbacOperation::getOperationCode, RbacOperation::getOperationId));
-
-        List<RbacPrivilege> rbacPrivileges = privilegeService.getByType("o", operationCodes);
-        List<String> privilegeCodes = rbacPrivileges.stream().map(RbacPrivilege::getPrivilege).collect(Collectors.toList());
-        List<String> newCodes = operationCodes.stream()
-                .filter(code -> !privilegeCodes.contains(code))
-                .collect(Collectors.toList());
-
-        LocalDateTime now = LocalDateTime.now();
-        List<RbacPrivilege> newPrivileges = newCodes.stream()
-                .map(code -> new RbacPrivilege()
-                        .setPrivilege(code)
-                        .setPrivilegeType("o")
-                        .setCreatedDate(now))
-                .collect(Collectors.toList());
-        privilegeService.saveBatch(newPrivileges);
-
-        List<RbacPrivilegeOperation> newPrivilegeOperations = newPrivileges.stream()
-                .map(privilege -> new RbacPrivilegeOperation()
-                        .setPrivilegeId(privilege.getPrivilegeId())
-                        .setOperationId(operationIdCodeMap.get(privilege.getPrivilege()))
-                        .setCreatedDate(now))
-                .collect(Collectors.toList());
-        privilegeOperationService.saveBatch(newPrivilegeOperations);
+        openRestTemplate.refreshGateway();
     }
 }

@@ -1,10 +1,10 @@
 package com.smart4y.cloud.base.access.application;
 
+import com.smart4y.cloud.base.access.domain.entity.RbacOperation;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.CreateMenuCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.ModifyMenuCommand;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * @author Youtao on 2020/8/10 12:47
@@ -34,28 +34,13 @@ public interface PrivilegeApplicationService {
     void removeMenu(long menuId);
 
     /**
-     * 添加操作
+     * 同步服务的操作
+     * <p>
+     * 此方法为服务启动时同步操作时调用
+     * </p>
      *
-     * @param serviceId      所属服务ID
-     * @param operationCodes 菜单标识列表
+     * @param serviceId  所属服务ID
+     * @param operations 服务所属全部菜单数据列表
      */
-    void createOperation(String serviceId, Collection<String> operationCodes);
-
-    /**
-     * 新增权限、操作权限
-     */
-    void addPrivilegeOperations(String serviceId);
-
-    /**
-     * 移除操作
-     *
-     * @param operationIds 操作ID列表
-     */
-    void removeOperation(Collection<Long> operationIds);
-
-
-    /**
-     * 新增角色权限
-     */
-    void addRolePrivilegesByOperations(List<String> validOperationCodes);
+    void syncServiceOperation(String serviceId, Collection<RbacOperation> operations);
 }
