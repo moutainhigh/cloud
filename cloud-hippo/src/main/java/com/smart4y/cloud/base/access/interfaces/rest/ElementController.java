@@ -1,5 +1,6 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
+import com.smart4y.cloud.base.access.application.PrivilegeApplicationService;
 import com.smart4y.cloud.base.access.domain.entity.RbacElement;
 import com.smart4y.cloud.base.access.domain.service.ElementService;
 import com.smart4y.cloud.base.access.interfaces.dtos.element.CreateElementCommand;
@@ -27,10 +28,12 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 public class ElementController extends BaseAccessController {
 
     private final ElementService elementService;
+    private final PrivilegeApplicationService privilegeApplicationService;
 
     @Autowired
-    public ElementController(ElementService elementService) {
+    public ElementController(ElementService elementService, PrivilegeApplicationService privilegeApplicationService) {
         this.elementService = elementService;
+        this.privilegeApplicationService = privilegeApplicationService;
     }
 
     @GetMapping("/elements/page")
@@ -44,12 +47,14 @@ public class ElementController extends BaseAccessController {
     @PostMapping("/elements")
     @ApiOperation(value = "元素:添加")
     public ResultMessage<Void> createElement(@RequestBody CreateElementCommand command) {
+        privilegeApplicationService.createElement(command);
         return ok();
     }
 
     @PutMapping("/elements/{elementId}")
     @ApiOperation(value = "元素:修改")
     public ResultMessage<Void> modifyElement(@PathVariable("elementId") Long elementId, @RequestBody ModifyElementCommand command) {
+        privilegeApplicationService.modifyElement(elementId, command);
         return ok();
     }
 
@@ -59,6 +64,7 @@ public class ElementController extends BaseAccessController {
             @ApiImplicitParam(name = "elementId", value = "元素ID", required = true, paramType = "path", dataType = "long", example = "122367153805459456")
     })
     public ResultMessage<Void> removeElement(@PathVariable("elementId") Long elementId) {
+        privilegeApplicationService.removeElement(elementId);
         return ok();
     }
 

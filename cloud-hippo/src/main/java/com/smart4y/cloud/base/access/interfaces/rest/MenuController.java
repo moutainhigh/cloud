@@ -28,10 +28,14 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 @RestController
 public class MenuController extends BaseAccessController {
 
+    private final MenuService menuService;
+    private final PrivilegeApplicationService privilegeApplicationService;
+
     @Autowired
-    private MenuService menuService;
-    @Autowired
-    private PrivilegeApplicationService privilegeApplicationService;
+    public MenuController(MenuService menuService, PrivilegeApplicationService privilegeApplicationService) {
+        this.menuService = menuService;
+        this.privilegeApplicationService = privilegeApplicationService;
+    }
 
     @GetMapping("/menus")
     @ApiOperation(value = "菜单:查询")

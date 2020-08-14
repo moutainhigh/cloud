@@ -323,7 +323,7 @@ export default {
       this.modal.visible = true;
     },
     /**
-     * 弹框保持事件
+     * 弹框保存事件
      */
     handleModalSubmit() {
       this.$refs.modalForm.validate((valid) => {
