@@ -82,6 +82,25 @@ public class PrivilegeService extends BaseDomainService<RbacPrivilege> {
     }
 
     /**
+     * 获取指定元素的权限列表
+     *
+     * @param elementIds 元素ID列表
+     * @return 权限列表
+     */
+    public List<RbacPrivilegeElement> getPrivilegeElementsByElementIds(Collection<Long> elementIds) {
+        if (CollectionUtils.isEmpty(elementIds)) {
+            return Collections.emptyList();
+        }
+        Weekend<RbacPrivilegeElement> weekend = Weekend.of(RbacPrivilegeElement.class);
+        weekend
+                .weekendCriteria()
+                .andIn(RbacPrivilegeElement::getElementId, elementIds);
+        weekend
+                .orderBy("createdDate").desc();
+        return rbacPrivilegeElementMapper.selectByExample(weekend);
+    }
+
+    /**
      * 获取指定的权限列表
      *
      * @param privilegeIds 权限ID列表
@@ -164,11 +183,32 @@ public class PrivilegeService extends BaseDomainService<RbacPrivilege> {
                 .setPrivilegeType("m")
                 .setCreatedDate(LocalDateTime.now());
         this.save(privilege);
+
         RbacPrivilegeMenu privilegeMenu = new RbacPrivilegeMenu()
                 .setPrivilegeId(privilege.getPrivilegeId())
                 .setMenuId(menuId)
                 .setCreatedDate(LocalDateTime.now());
         rbacPrivilegeMenuMapper.insertSelective(privilegeMenu);
+    }
+
+    /**
+     * 添加元素权限
+     *
+     * @param elementId   元素ID
+     * @param elementCode 元素标识
+     */
+    public void savePrivilegeElement(long elementId, String elementCode) {
+        RbacPrivilege privilege = new RbacPrivilege()
+                .setPrivilege(elementCode)
+                .setPrivilegeType("e")
+                .setCreatedDate(LocalDateTime.now());
+        this.save(privilege);
+
+        RbacPrivilegeElement privilegeElement = new RbacPrivilegeElement()
+                .setPrivilegeId(privilege.getPrivilegeId())
+                .setElementId(elementId)
+                .setCreatedDate(LocalDateTime.now());
+        rbacPrivilegeElementMapper.insertSelective(privilegeElement);
     }
 
     /**

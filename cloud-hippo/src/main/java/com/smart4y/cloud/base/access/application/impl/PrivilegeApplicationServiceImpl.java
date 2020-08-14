@@ -2,10 +2,7 @@ package com.smart4y.cloud.base.access.application.impl;
 
 import com.smart4y.cloud.base.access.application.PrivilegeApplicationService;
 import com.smart4y.cloud.base.access.domain.entity.*;
-import com.smart4y.cloud.base.access.domain.service.MenuService;
-import com.smart4y.cloud.base.access.domain.service.OperationService;
-import com.smart4y.cloud.base.access.domain.service.PrivilegeService;
-import com.smart4y.cloud.base.access.domain.service.RoleService;
+import com.smart4y.cloud.base.access.domain.service.*;
 import com.smart4y.cloud.base.access.interfaces.dtos.element.CreateElementCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.element.ModifyElementCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.CreateMenuCommand;
@@ -35,16 +32,18 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
     private final OperationService operationService;
     private final PrivilegeService privilegeService;
     private final MenuService menuService;
+    private final ElementService elementService;
     private final RoleService roleService;
     private final OpenRestTemplate openRestTemplate;
 
     @Autowired
-    public PrivilegeApplicationServiceImpl(OperationService operationService, PrivilegeService privilegeService, MenuService menuService, RoleService roleService, OpenRestTemplate openRestTemplate) {
+    public PrivilegeApplicationServiceImpl(OperationService operationService, PrivilegeService privilegeService, MenuService menuService, RoleService roleService, OpenRestTemplate openRestTemplate, ElementService elementService) {
         this.operationService = operationService;
         this.privilegeService = privilegeService;
         this.menuService = menuService;
         this.roleService = roleService;
         this.openRestTemplate = openRestTemplate;
+        this.elementService = elementService;
     }
 
     @Override
@@ -166,7 +165,7 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
             }
             menuService.modifyChildForExist(menuParentId);
         }
-        // #3 修改菜单编码引起的权限变化
+        // #3 修改菜单标识引起的权限变化
         if (!oldMenuCode.equals(newMenuCode)) {
             // #3.1 删除老菜单：角色权限，菜单权限，权限
             List<Long> privilegeIds = privilegeService
@@ -185,7 +184,8 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
                     .map(RbacPrivilege::getPrivilegeId)
                     .collect(Collectors.toList());
             List<RbacRolePrivilege> rolePrivileges = roleService.getRolePrivilegesByRoleId(ADMIN_ROLE_ID);
-            List<Long> rolePrivilegeIds = rolePrivileges.stream().map(RbacRolePrivilege::getPrivilegeId).collect(Collectors.toList());
+            List<Long> rolePrivilegeIds = rolePrivileges.stream()
+                    .map(RbacRolePrivilege::getPrivilegeId).collect(Collectors.toList());
             List<Long> newPrivilegeIds = menuPrivilegeIds.stream()
                     .filter(privilegeId -> !rolePrivilegeIds.contains(privilegeId))
                     .collect(Collectors.toList());
@@ -210,7 +210,7 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
             menuService.modifyChildForNotExist(rbacMenu.getMenuParentId());
         }
 
-        // #3 移除角色权限、菜单权限、权限、菜单
+        // #3 移除权限（权限、角色权限、菜单权限）
         privilegeService
                 .getPrivilegeMenuByMenuId(menuId)
                 .ifPresent(x -> {
@@ -224,16 +224,97 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
 
     @Override
     public void createElement(CreateElementCommand command) {
-        // TODO
+        String elementCode = command.getElementCode();
+        boolean existCode = elementService.existByCode(elementCode);
+        if (existCode) {
+            throw new OpenAlertException(MessageType.BAD_REQUEST, "编码已存在：" + elementCode);
+        }
+        // #1 添加记录
+        RbacElement record = new RbacElement();
+        BeanUtils.copyProperties(command, record);
+        record.setCreatedDate(LocalDateTime.now());
+        elementService.save(record);
+
+        // #2 添加权限
+        privilegeService.savePrivilegeElement(record.getElementId(), elementCode);
+
+        // #3 添加角色（超级管理员）对应的权限
+        List<Long> privilegeIds = privilegeService
+                .getByType("e", Collections.singletonList(elementCode)).stream()
+                .map(RbacPrivilege::getPrivilegeId)
+                .collect(Collectors.toList());
+        List<RbacRolePrivilege> rolePrivileges = roleService.getRolePrivilegesByRoleId(ADMIN_ROLE_ID);
+        List<Long> rolePrivilegeIds = rolePrivileges.stream()
+                .map(RbacRolePrivilege::getPrivilegeId).collect(Collectors.toList());
+        List<Long> newPrivilegeIds = privilegeIds.stream()
+                .filter(privilegeId -> !rolePrivilegeIds.contains(privilegeId))
+                .collect(Collectors.toList());
+        roleService.grantPrivileges(ADMIN_ROLE_ID, newPrivilegeIds);
+
+        openRestTemplate.refreshGateway();
     }
 
     @Override
     public void modifyElement(long elementId, ModifyElementCommand command) {
-        // TODO
+        RbacElement oldElement = elementService.getById(elementId);
+        String oldElementCode = oldElement.getElementCode();
+        String newElementCode = command.getElementCode();
+
+        // #1 更新元素
+        RbacElement record = new RbacElement();
+        BeanUtils.copyProperties(command, record);
+        record.setElementId(elementId);
+        record.setLastModifiedDate(LocalDateTime.now());
+        elementService.updateSelectiveById(record);
+
+        // #2 修改元素标识引起的权限变化
+        if (!oldElementCode.equals(newElementCode)) {
+            // #2.1 删除老元素：角色权限，元素权限，权限
+            List<Long> privilegeIds = privilegeService
+                    .getByType("e", Collections.singletonList(oldElementCode)).stream()
+                    .map(RbacPrivilege::getPrivilegeId)
+                    .collect(Collectors.toList());
+            roleService.removePrivileges(privilegeIds);
+            privilegeService.removeByPrivilege("e", privilegeIds);
+
+            // #2.2 添加元素权限
+            privilegeService.savePrivilegeElement(elementId, newElementCode);
+
+            // #2.3 添加角色（超级管理员）对应的权限
+            List<Long> elementPrivilegeIds = privilegeService
+                    .getByType("e", Collections.singletonList(newElementCode)).stream()
+                    .map(RbacPrivilege::getPrivilegeId)
+                    .collect(Collectors.toList());
+            List<RbacRolePrivilege> rolePrivileges = roleService.getRolePrivilegesByRoleId(ADMIN_ROLE_ID);
+            List<Long> rolePrivilegeIds = rolePrivileges.stream()
+                    .map(RbacRolePrivilege::getPrivilegeId).collect(Collectors.toList());
+            List<Long> newPrivilegeIds = elementPrivilegeIds.stream()
+                    .filter(privilegeId -> !rolePrivilegeIds.contains(privilegeId))
+                    .collect(Collectors.toList());
+            roleService.grantPrivileges(ADMIN_ROLE_ID, newPrivilegeIds);
+
+            openRestTemplate.refreshGateway();
+        }
     }
 
     @Override
     public void removeElement(long elementId) {
-        // TODO
+        RbacElement rbacMenu = elementService.getById(elementId);
+        if (null == rbacMenu) {
+            throw new OpenAlertException(MessageType.NOT_FOUND, "当前记录不存在");
+        }
+        // #1 删除元素
+        elementService.removeById(elementId);
+
+        // #2 移除权限（权限、角色权限、元素权限）
+        List<Long> privilegeIds = privilegeService
+                .getPrivilegeElementsByElementIds(Collections.singletonList(elementId))
+                .stream()
+                .map(RbacPrivilegeElement::getPrivilegeId)
+                .collect(Collectors.toList());
+        roleService.removePrivileges(privilegeIds);
+        privilegeService.removeByPrivilege("e", privilegeIds);
+
+        openRestTemplate.refreshGateway();
     }
 }

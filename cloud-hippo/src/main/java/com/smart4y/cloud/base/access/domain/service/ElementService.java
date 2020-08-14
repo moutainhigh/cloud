@@ -36,4 +36,20 @@ public class ElementService extends BaseDomainService<RbacElement> {
                 .orderBy("createdDate").desc();
         return this.findPage(weekend, pageNo, pageSize);
     }
+
+    /**
+     * 指定元素是否存在
+     *
+     * @param elementCode 元素标识
+     * @return true存在，false不存在
+     */
+    public boolean existByCode(String elementCode) {
+        Weekend<RbacElement> weekend = Weekend.of(RbacElement.class);
+        weekend
+                .weekendCriteria()
+                .andEqualTo(RbacElement::getElementCode, elementCode);
+        weekend
+                .setOrderByClause("element_id DESC LIMIT 1");
+        return this.exist(weekend);
+    }
 }
