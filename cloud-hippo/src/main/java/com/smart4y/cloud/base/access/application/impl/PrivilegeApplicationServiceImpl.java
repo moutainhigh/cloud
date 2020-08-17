@@ -15,6 +15,7 @@ import com.smart4y.cloud.core.exception.OpenAlertException;
 import com.smart4y.cloud.core.message.enums.MessageType;
 import com.smart4y.cloud.core.security.http.OpenRestTemplate;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -323,25 +324,65 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
 
     @Override
     public void modifyOperationState(Collection<Long> operationIds, ModifyOperationStateCommand command) {
-        // TODO
-        System.out.println(".");
+        if (CollectionUtils.isEmpty(operationIds)) {
+            return;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        List<RbacOperation> items = operationIds.stream()
+                .map(operationId -> new RbacOperation()
+                        .setOperationId(operationId)
+                        .setOperationState(command.getOperationState())
+                        .setLastModifiedDate(now))
+                .collect(Collectors.toList());
+        operationService.updateSelectiveBatchById(items);
+
+        openRestTemplate.refreshGateway();
     }
 
     @Override
     public void modifyOperationOpen(Collection<Long> operationIds, ModifyOperationOpenCommand command) {
-        // TODO
-        System.out.println(".");
+        if (CollectionUtils.isEmpty(operationIds)) {
+            return;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        List<RbacOperation> items = operationIds.stream()
+                .map(operationId -> new RbacOperation()
+                        .setOperationId(operationId)
+                        .setOperationOpen(command.getOperationOpen())
+                        .setLastModifiedDate(now))
+                .collect(Collectors.toList());
+        operationService.updateSelectiveBatchById(items);
+
+        openRestTemplate.refreshGateway();
     }
 
     @Override
     public void modifyOperationAuth(Collection<Long> operationIds, ModifyOperationAuthCommand command) {
-        // TODO
-        System.out.println(".");
+        if (CollectionUtils.isEmpty(operationIds)) {
+            return;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        List<RbacOperation> items = operationIds.stream()
+                .map(operationId -> new RbacOperation()
+                        .setOperationId(operationId)
+                        .setOperationAuth(command.getOperationAuth())
+                        .setLastModifiedDate(now))
+                .collect(Collectors.toList());
+        operationService.updateSelectiveBatchById(items);
+
+        openRestTemplate.refreshGateway();
     }
 
     @Override
     public void removeOperation(Collection<Long> operationIds) {
-        // TODO
-        System.out.println(".");
+        // 移除失效权限（清除角色权限，权限（含权限操作），操作）
+        List<Long> privilegeIds = privilegeService
+                .getPrivilegeOperationsByOperationIds(operationIds).stream()
+                .map(RbacPrivilegeOperation::getPrivilegeId).collect(Collectors.toList());
+        roleService.removePrivileges(privilegeIds);
+        privilegeService.removeByPrivilege("o", privilegeIds);
+        operationService.removeByIds(operationIds);
+
+        openRestTemplate.refreshGateway();
     }
 }

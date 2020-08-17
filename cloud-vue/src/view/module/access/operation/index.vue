@@ -67,6 +67,22 @@
         <template slot="createdDate" slot-scope="{ row }">
           <span>{{ row.createdDate | dateFmt('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
+        <template slot="operationState" slot-scope="{ row }">
+          <Badge status="green" v-if="row.operationState==='10'" text="启用"/>
+          <Badge status="orange" v-else-if="row.operationState==='20'" text="禁用"/>
+          <Badge status="red" v-else-if="row.operationState==='30'" text="锁定"/>
+        </template>
+        <template slot="operationAuth" slot-scope="{ row }">
+          <Badge status="green" v-if="row.operationAuth===true" text="开启"/>
+          <Badge status="orange" v-else-if="row.operationAuth===false" text="关闭"/>
+        </template>
+        <template slot="operationOpen" slot-scope="{ row }">
+          <Badge status="green" v-if="row.operationOpen===true" text="允许"/>
+          <Badge status="orange" v-else-if="row.operationOpen===false" text="拒绝"/>
+        </template>
+        <template slot="action" slot-scope="{ row }">
+          <a @click="handleRemove(row)">删除</a>
+        </template>
       </Table>
       <Page :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total" @on-change="handlePage"
             @on-page-size-change='handlePageSize'
@@ -85,6 +101,7 @@ import {
   updateOperationOpen,
   updateOperationState
 } from '@/api/access/operation'
+import {removeElement} from "@/api/access/element";
 
 export default {
   data() {
@@ -101,17 +118,18 @@ export default {
       },
       columns: [
         {type: 'selection', width: 50, align: 'center'},
-        {title: '操作ID', key: 'operationId', width: 170},
-        {title: '操作编码（操作权限标识）', key: 'operationCode', width: 260},
         {title: '操作URL', key: 'operationPath', tooltip: true, width: 180},
         {title: '操作名', key: 'operationName', width: 180},
-        {title: '操作描述', key: 'operationDesc', tooltip: true, width: 180},
         {title: '操作方法', key: 'operationMethod', width: 90},
-        {title: '需要认证', key: 'operationAuth', width: 90},
-        {title: '是否开放', key: 'operationOpen', width: 90},
-        {title: '状态', key: 'operationState', width: 80},
+        {title: '公开访问', key: 'operationOpen', slot: "operationOpen", width: 90},
+        {title: '身份认证', key: 'operationAuth', slot: "operationAuth", width: 90},
+        {title: '状态', key: 'operationState', slot: "operationState", width: 80},
+        {title: '操作描述', key: 'operationDesc', tooltip: true, width: 180},
         {title: '所属服务', key: 'operationServiceId', width: 120},
-        {title: '创建时间', key: 'createdDate', slot: 'createdDate', width: 160}
+        {title: '操作ID', key: 'operationId', width: 170},
+        {title: '操作编码（操作权限标识）', key: 'operationCode', width: 260},
+        {title: '创建时间', key: 'createdDate', slot: 'createdDate', width: 160},
+        {title: '操作', slot: 'action', fixed: 'right', align: 'center', width: 120}
       ],
       data: []
     }
@@ -181,7 +199,7 @@ export default {
               case'authTrue':
                 updateOperationAuth({operationIds: operationIds, operationAuth: true})
                   .then(res => {
-                    this.$Message.success('批量开放身份认证成功')
+                    this.$Message.success('批量开启身份认证成功')
                     this.handleSearch()
                   });
                 break;
@@ -195,14 +213,14 @@ export default {
               case'openTrue':
                 updateOperationOpen({operationIds: operationIds, operationOpen: true})
                   .then(res => {
-                    this.$Message.success('批量打开公开访问成功')
+                    this.$Message.success('批量允许公开访问成功')
                     this.handleSearch()
                   });
                 break;
               case'openFalse':
                 updateOperationOpen({operationIds: operationIds, operationOpen: false})
                   .then(res => {
-                    this.$Message.success('批量关闭公开访问成功')
+                    this.$Message.success('批量拒绝公开访问成功')
                     this.handleSearch()
                   });
                 break;
@@ -210,6 +228,18 @@ export default {
           }
         })
       }
+    },
+    handleRemove(data) {
+      this.$Modal.confirm({
+        title: '确定删除吗？',
+        onOk: () => {
+          removeOperation(data.operationId)
+            .then(res => {
+              this.$Message.success('移除成功')
+              this.handleSearch()
+            })
+        }
+      });
     },
     handleResetForm(form) {
       this.$refs[form].resetFields();
