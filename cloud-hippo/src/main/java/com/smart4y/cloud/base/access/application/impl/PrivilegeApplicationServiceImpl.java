@@ -7,6 +7,9 @@ import com.smart4y.cloud.base.access.interfaces.dtos.element.CreateElementComman
 import com.smart4y.cloud.base.access.interfaces.dtos.element.ModifyElementCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.CreateMenuCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.menu.ModifyMenuCommand;
+import com.smart4y.cloud.base.access.interfaces.dtos.operation.ModifyOperationAuthCommand;
+import com.smart4y.cloud.base.access.interfaces.dtos.operation.ModifyOperationOpenCommand;
+import com.smart4y.cloud.base.access.interfaces.dtos.operation.ModifyOperationStateCommand;
 import com.smart4y.cloud.core.annotation.ApplicationService;
 import com.smart4y.cloud.core.exception.OpenAlertException;
 import com.smart4y.cloud.core.message.enums.MessageType;
@@ -44,63 +47,6 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
         this.roleService = roleService;
         this.openRestTemplate = openRestTemplate;
         this.elementService = elementService;
-    }
-
-    @Override
-    public void syncServiceOperation(String serviceId, Collection<RbacOperation> operations) {
-        // 此服务的所有操作
-        List<String> validOperationCodes = Objects.requireNonNull(operations).stream()
-                .map(RbacOperation::getOperationCode).collect(Collectors.toList());
-        // 数据库中已存在的操作
-        List<RbacOperation> existOperations = operationService.getByCodes(validOperationCodes);
-        Map<String, RbacOperation> existOperationMap = existOperations.stream()
-                .collect(Collectors.toMap(RbacOperation::getOperationCode, Function.identity()));
-
-        // #1 移除失效权限
-        // 获取失效操作（同一个服务中，有效操作之外的示为无效操作）
-        List<RbacOperation> invalidOperations = operationService
-                .getOutSideByCodes(serviceId, validOperationCodes);
-        List<Long> invalidOperationIds = invalidOperations.stream()
-                .map(RbacOperation::getOperationId).collect(Collectors.toList());
-
-        // 获取失效权限
-        List<Long> invalidPrivilegeIds = privilegeService
-                .getPrivilegeOperationsByOperationIds(invalidOperationIds).stream()
-                .map(RbacPrivilegeOperation::getPrivilegeId).collect(Collectors.toList());
-        // 清除角色权限，权限（含权限操作），操作
-        roleService.removePrivileges(invalidPrivilegeIds);
-        privilegeService.removeByPrivilege("o", invalidPrivilegeIds);
-        operationService.removeByIds(invalidOperationIds);
-
-        // #2 更新已存在的操作
-        List<RbacOperation> modifyOperations = operations.stream()
-                .filter(o -> existOperationMap.containsKey(o.getOperationCode()))
-                .peek(o -> o.setOperationId(existOperationMap.get(o.getOperationCode()).getOperationId())
-                        .setLastModifiedDate(LocalDateTime.now()))
-                .collect(Collectors.toList());
-        operationService.updateSelectiveBatchById(modifyOperations);
-
-        // #3 添加新操作权限
-        List<RbacOperation> newOperations = operations.stream()
-                .filter(o -> !existOperationMap.containsKey(o.getOperationCode()))
-                .peek(x -> x
-                        .setOperationAuth(true)
-                        .setOperationOpen(true)
-                        .setOperationState("10")
-                        .setCreatedDate(LocalDateTime.now()))
-                .collect(Collectors.toList());
-        operationService.saveBatch(newOperations);
-        privilegeService.savePrivilegeOperation(newOperations);
-
-        // #4 给角色（超级管理员）添加本次新增的权限
-        List<Long> newOperationIds = newOperations.stream()
-                .map(RbacOperation::getOperationId).collect(Collectors.toList());
-        List<Long> newPrivilegeIds = privilegeService
-                .getPrivilegeOperationsByOperationIds(newOperationIds).stream()
-                .map(RbacPrivilegeOperation::getPrivilegeId).collect(Collectors.toList());
-        roleService.grantPrivileges(ADMIN_ROLE_ID, newPrivilegeIds);
-
-        openRestTemplate.refreshGateway();
     }
 
     @Override
@@ -316,5 +262,86 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
         privilegeService.removeByPrivilege("e", privilegeIds);
 
         openRestTemplate.refreshGateway();
+    }
+
+    @Override
+    public void syncServiceOperation(String serviceId, Collection<RbacOperation> operations) {
+        // 此服务的所有操作
+        List<String> validOperationCodes = Objects.requireNonNull(operations).stream()
+                .map(RbacOperation::getOperationCode).collect(Collectors.toList());
+        // 数据库中已存在的操作
+        List<RbacOperation> existOperations = operationService.getByCodes(validOperationCodes);
+        Map<String, RbacOperation> existOperationMap = existOperations.stream()
+                .collect(Collectors.toMap(RbacOperation::getOperationCode, Function.identity()));
+
+        // #1 移除失效权限
+        // 获取失效操作（同一个服务中，有效操作之外的示为无效操作）
+        List<RbacOperation> invalidOperations = operationService
+                .getOutSideByCodes(serviceId, validOperationCodes);
+        List<Long> invalidOperationIds = invalidOperations.stream()
+                .map(RbacOperation::getOperationId).collect(Collectors.toList());
+
+        // 获取失效权限
+        List<Long> invalidPrivilegeIds = privilegeService
+                .getPrivilegeOperationsByOperationIds(invalidOperationIds).stream()
+                .map(RbacPrivilegeOperation::getPrivilegeId).collect(Collectors.toList());
+        // 清除角色权限，权限（含权限操作），操作
+        roleService.removePrivileges(invalidPrivilegeIds);
+        privilegeService.removeByPrivilege("o", invalidPrivilegeIds);
+        operationService.removeByIds(invalidOperationIds);
+
+        // #2 更新已存在的操作
+        List<RbacOperation> modifyOperations = operations.stream()
+                .filter(o -> existOperationMap.containsKey(o.getOperationCode()))
+                .peek(o -> o.setOperationId(existOperationMap.get(o.getOperationCode()).getOperationId())
+                        .setLastModifiedDate(LocalDateTime.now()))
+                .collect(Collectors.toList());
+        operationService.updateSelectiveBatchById(modifyOperations);
+
+        // #3 添加新操作权限
+        List<RbacOperation> newOperations = operations.stream()
+                .filter(o -> !existOperationMap.containsKey(o.getOperationCode()))
+                .peek(x -> x
+                        .setOperationAuth(true)
+                        .setOperationOpen(true)
+                        .setOperationState("10")
+                        .setCreatedDate(LocalDateTime.now()))
+                .collect(Collectors.toList());
+        operationService.saveBatch(newOperations);
+        privilegeService.savePrivilegeOperation(newOperations);
+
+        // #4 给角色（超级管理员）添加本次新增的权限
+        List<Long> newOperationIds = newOperations.stream()
+                .map(RbacOperation::getOperationId).collect(Collectors.toList());
+        List<Long> newPrivilegeIds = privilegeService
+                .getPrivilegeOperationsByOperationIds(newOperationIds).stream()
+                .map(RbacPrivilegeOperation::getPrivilegeId).collect(Collectors.toList());
+        roleService.grantPrivileges(ADMIN_ROLE_ID, newPrivilegeIds);
+
+        openRestTemplate.refreshGateway();
+    }
+
+    @Override
+    public void modifyOperationState(Collection<Long> operationIds, ModifyOperationStateCommand command) {
+        // TODO
+        System.out.println(".");
+    }
+
+    @Override
+    public void modifyOperationOpen(Collection<Long> operationIds, ModifyOperationOpenCommand command) {
+        // TODO
+        System.out.println(".");
+    }
+
+    @Override
+    public void modifyOperationAuth(Collection<Long> operationIds, ModifyOperationAuthCommand command) {
+        // TODO
+        System.out.println(".");
+    }
+
+    @Override
+    public void removeOperation(Collection<Long> operationIds) {
+        // TODO
+        System.out.println(".");
     }
 }
