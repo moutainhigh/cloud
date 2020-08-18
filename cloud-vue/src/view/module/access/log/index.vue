@@ -25,7 +25,8 @@
           <a @click="openDrawer(row)">详情</a>
         </template>
       </Table>
-      <Page size="small" :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total" @on-change="handlePage"
+      <Page size="small" :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total"
+            @on-change="handlePage"
             @on-page-size-change='handlePageSize'
             show-elevator
             show-sizer
@@ -77,10 +78,9 @@ export default {
         logServiceId: ''
       },
       columns: [
-        {title: '日志ID', key: 'logId', width: 170},
-        {title: '地址', key: 'logPath', width: 200},
-        {title: '方式', key: 'logMethod', width: 80},
-        {title: 'IP', key: 'logIp', width: 120},
+        {title: '地址', key: 'logPath', tooltip: true, width: 180},
+        {title: '方式', key: 'logMethod', width: 70},
+        {title: 'IP', key: 'logIp', width: 125},
         {title: '区域', key: 'logRegion', width: 200},
         {
           title: '终端', key: 'operationMethod', width: 80, render: (h, params) => {
@@ -95,6 +95,7 @@ export default {
         {title: '服务名', key: 'logServiceId', width: 120},
         {title: '响应状态', key: 'logHttpStatus', width: 100},
         {title: '耗时(ms)', key: 'logUseMillis', width: 100},
+        {title: '日志ID', key: 'logId', width: 170},
         {title: '请求时间', key: 'logRequestTime', slot: 'logRequestTime', width: 160},
         {title: '详情', slot: 'detail', fixed: 'right', align: 'center', width: 100}
       ],
@@ -112,13 +113,13 @@ export default {
       }
       this.loading = true
       getLogsPage(this.pageInfo)
-          .then(res => {
-            this.data = res.data.records
-            this.pageInfo.total = parseInt(res.data.total)
-          })
-          .finally(() => {
-            this.loading = false
-          })
+        .then(res => {
+          this.data = res.data.records
+          this.pageInfo.total = parseInt(res.data.total)
+        })
+        .finally(() => {
+          this.loading = false
+        })
     },
     handleResetForm(form) {
       this.$refs[form].resetFields();

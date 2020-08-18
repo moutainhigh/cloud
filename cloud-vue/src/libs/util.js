@@ -562,7 +562,7 @@ export const filterRouter = (menuTreeArray, access, routers) => {
                             }
                         } else {
                             // 传递iframe路径参数
-                            router.path = `/iframe?src=${encodeURIComponent(url)}`
+                            router.path = `/iframe?src=${encodeURIComponent(url)}&scrolling=auto`
                             // frame组件
                             router.component = (resolve) => {
                                 require([`_c/iframe-view`], resolve)
