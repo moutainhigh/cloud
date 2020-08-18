@@ -38,11 +38,11 @@ public class AddRouteCommand implements Serializable {
     private String url;
 
 
-    @ApiModelProperty(value = "是否忽略前缀（0-不忽略，1-忽略）", allowableValues = "0,1")
-    private Integer stripPrefix = 1;
+    @ApiModelProperty(value = "是否忽略前缀（0-不忽略，1-忽略）")
+    private Boolean stripPrefix = true;
 
-    @ApiModelProperty(value = "是否支持重试（0-不支持，1-支持）", allowableValues = "0,1")
-    private Integer retryable = 0;
+    @ApiModelProperty(value = "是否支持重试（0-不支持，1-支持）")
+    private Boolean retryable = false;
 
     @ApiModelProperty(value = "是否启用（0-禁用，1-启用）", allowableValues = "0,1")
     private Integer status = 1;

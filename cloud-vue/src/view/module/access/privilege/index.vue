@@ -9,7 +9,14 @@
           <Input placeholder="请输入关键字" type="text" v-model="pageInfo.privilege"/>
         </FormItem>
         <FormItem label="权限类别" prop="privilegeType">
-          <Input placeholder="请输入关键字" type="text" v-model="pageInfo.privilegeType"/>
+          <label>
+            <Select v-model="pageInfo.privilegeType">
+              <Option value="">请选择</Option>
+              <Option value="m">菜单</Option>
+              <Option value="o">操作</Option>
+              <Option value="e">元素</Option>
+            </Select>
+          </label>
         </FormItem>
         <FormItem>
           <Button @click="handleSearch(1)" type="primary">查询</Button>&nbsp;
@@ -18,6 +25,11 @@
       </Form>
 
       <Table size="small" :columns="columns" :data="data" :loading="loading" border>
+        <template slot="privilegeType" slot-scope="{ row }">
+          <Tag color="magenta" v-if="row.privilegeType==='m'">菜单</Tag>
+          <Tag color="cyan" v-else-if="row.privilegeType==='o'">操作</Tag>
+          <Tag color="purple" v-else-if="row.privilegeType==='e'">元素</Tag>
+        </template>
         <template slot="createdDate" slot-scope="{ row }">
           <span>{{ row.createdDate | dateFmt('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
@@ -49,7 +61,7 @@ export default {
       columns: [
         {title: '权限ID', key: 'privilegeId', width: 170},
         {title: '权限标识（菜单、操作、元素）', key: 'privilege'},
-        {title: '权限类别', key: 'privilegeType'},
+        {title: '类别', key: 'privilegeType', slot: 'privilegeType', width: 100},
         {title: '创建时间', key: 'createdDate', slot: 'createdDate'}
       ],
       data: []
@@ -62,13 +74,13 @@ export default {
       }
       this.loading = true
       getPrivilegesPage(this.pageInfo)
-          .then(res => {
-            this.data = res.data.records
-            this.pageInfo.total = parseInt(res.data.total)
-          })
-          .finally(() => {
-            this.loading = false
-          })
+        .then(res => {
+          this.data = res.data.records
+          this.pageInfo.total = parseInt(res.data.total)
+        })
+        .finally(() => {
+          this.loading = false
+        })
     },
     handleResetForm(form) {
       this.$refs[form].resetFields();

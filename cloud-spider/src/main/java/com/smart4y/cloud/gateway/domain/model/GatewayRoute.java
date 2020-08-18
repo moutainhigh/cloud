@@ -14,7 +14,7 @@ import javax.persistence.Id;
 /**
  * 网关（路由）
  *
- * @author Youtao on 2020/08/11 15:50
+ * @author Youtao on 2020/08/18 15:29
  */
 @Data
 @Accessors(chain = true)
@@ -64,13 +64,13 @@ public class GatewayRoute extends BaseEntity<GatewayRoute> {
      * 路由忽略前缀（0不忽略 1忽略）
      */
     @Column(name = "route_strip_prefix")
-    private Integer routeStripPrefix;
+    private Boolean routeStripPrefix;
 
     /**
      * 路由重试（0不重试 1重试）
      */
     @Column(name = "route_retryable")
-    private Integer routeRetryable;
+    private Boolean routeRetryable;
 
     /**
      * 路由状态（10启用 20禁用 30锁定）

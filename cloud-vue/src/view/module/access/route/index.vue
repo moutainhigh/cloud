@@ -16,6 +16,19 @@
 
       <Alert show-icon>谨慎添加或修改路由,如果修改不当,将影响正常访问！&nbsp;<a @click="handleRefreshGateway">手动刷新网关</a></Alert>
       <Table size="small" :columns="columns" :data="data" :loading="loading" border>
+        <template slot="routeStripPrefix" slot-scope="{ row }">
+          <Badge status="success" v-if="row.routeStripPrefix===true" text="是"/>
+          <Badge status="orange" v-else-if="row.routeStripPrefix===false" text="否"/>
+        </template>
+        <template slot="routeRetryable" slot-scope="{ row }">
+          <Badge status="success" v-if="row.routeRetryable===true" text="是"/>
+          <Badge status="orange" v-else-if="row.routeRetryable===false" text="否"/>
+        </template>
+        <template slot="routeState" slot-scope="{ row }">
+          <Badge status="green" v-if="row.routeState==='10'" text="启用"/>
+          <Badge status="orange" v-else-if="row.routeState==='20'" text="禁用"/>
+          <Badge status="red" v-else-if="row.routeState==='30'" text="锁定"/>
+        </template>
         <template slot="createdDate" slot-scope="{ row }">
           <span>{{ row.createdDate | dateFmt('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
@@ -53,9 +66,9 @@ export default {
         {title: '路由前缀', key: 'routePath', width: 90},
         {title: '路由服务', key: 'routeServiceId', width: 110},
         {title: '路由URL', key: 'routeUrl', width: 150},
-        {title: '忽略前缀', key: 'routeStripPrefix', width: 90},
-        {title: '错误重试', key: 'routeRetryable', width: 90},
-        {title: '状态', key: 'routeState', width: 70},
+        {title: '忽略前缀', key: 'routeStripPrefix', slot: 'routeStripPrefix', width: 90},
+        {title: '错误重试', key: 'routeRetryable', slot: 'routeRetryable', width: 90},
+        {title: '状态', key: 'routeState', slot: 'routeState', width: 80},
         {title: '路由描述', key: 'routeDesc', width: 120},
         {title: '创建时间', key: 'createdDate', slot: 'createdDate', width: 160},
         {title: '操作', slot: 'action', fixed: 'right', align: 'center', width: 120}

@@ -14,7 +14,7 @@ import javax.persistence.Id;
 /**
  * 网关（访问日志）
  *
- * @author Youtao on 2020/08/12 09:36
+ * @author Youtao on 2020/08/18 15:27
  */
 @Data
 @Accessors(chain = true)

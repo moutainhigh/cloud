@@ -33,6 +33,13 @@ html, body {
   padding: 0;
 }
 
+/**
+ * 表头居中样式
+ */
+.ivu-table-header table thead tr th {
+  text-align: center;
+}
+
 #app {
   .size;
 }

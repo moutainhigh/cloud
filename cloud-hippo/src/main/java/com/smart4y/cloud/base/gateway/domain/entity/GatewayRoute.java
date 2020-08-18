@@ -2,23 +2,19 @@ package com.smart4y.cloud.base.gateway.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
-
 import lombok.experimental.Accessors;
 import tk.mybatis.mapper.annotation.KeySql;
-
 import java.time.LocalDateTime;
-
 import lombok.Data;
 import com.smart4y.cloud.core.toolkit.gen.SnowflakeId;
 import lombok.EqualsAndHashCode;
 import com.smart4y.cloud.mapper.BaseEntity;
-
 import javax.persistence.Id;
 
 /**
  * 网关（路由）
  *
- * @author Youtao on 2020/08/11 16:00
+ * @author Youtao on 2020/08/18 15:27
  */
 @Data
 @Accessors(chain = true)
@@ -68,13 +64,13 @@ public class GatewayRoute extends BaseEntity<GatewayRoute> {
      * 路由忽略前缀（0不忽略 1忽略）
      */
     @Column(name = "route_strip_prefix")
-    private Integer routeStripPrefix;
+    private Boolean routeStripPrefix;
 
     /**
      * 路由重试（0不重试 1重试）
      */
     @Column(name = "route_retryable")
-    private Integer routeRetryable;
+    private Boolean routeRetryable;
 
     /**
      * 路由状态（10启用 20禁用 30锁定）

@@ -33,7 +33,7 @@
             <property name="forceBigDecimals" value="true"/>
         </javaTypeResolver>
         <!-- Entity 路径 -->
-        <javaModelGenerator targetPackage="com.smart4y.cloud.base.gateway.domain.model"
+        <javaModelGenerator targetPackage="com.smart4y.cloud.base.gateway.domain.entity"
                             targetProject="src/main/java"/>
         <!-- Mapper.xml 路径 -->
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
@@ -63,7 +63,8 @@
         </table>-->
 
 <!--        <table tableName="rbac_%"/>-->
-        <table tableName="gateway_log" domainObjectName="GatewayLog"/>
+        <table catalog="cloud" tableName="gateway_route" domainObjectName="GatewayRoute"/>
+        <table catalog="cloud" tableName="gateway_log" domainObjectName="GatewayLog"/>
 
     </context>
 </generatorConfiguration>

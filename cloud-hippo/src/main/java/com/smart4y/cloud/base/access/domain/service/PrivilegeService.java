@@ -29,10 +29,10 @@ public class PrivilegeService extends BaseDomainService<RbacPrivilege> {
     private final RbacPrivilegeMenuMapper rbacPrivilegeMenuMapper;
 
     @Autowired
-    public PrivilegeService(RbacPrivilegeOperationMapper rbacPrivilegeOperationMapper, RbacPrivilegeMenuMapper rbacPrivilegeMenuMapper, RbacPrivilegeElementMapper rbacPrivilegeElementMapper) {
+    public PrivilegeService(RbacPrivilegeElementMapper rbacPrivilegeElementMapper, RbacPrivilegeOperationMapper rbacPrivilegeOperationMapper, RbacPrivilegeMenuMapper rbacPrivilegeMenuMapper) {
+        this.rbacPrivilegeElementMapper = rbacPrivilegeElementMapper;
         this.rbacPrivilegeOperationMapper = rbacPrivilegeOperationMapper;
         this.rbacPrivilegeMenuMapper = rbacPrivilegeMenuMapper;
-        this.rbacPrivilegeElementMapper = rbacPrivilegeElementMapper;
     }
 
     /**
