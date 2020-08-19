@@ -28,7 +28,7 @@ public class RouteRefreshEndpoint extends AbstractBusEndpoint {
      * 支持灰度发布
      * /actuator/open/refresh?destination = customers：**
      */
-    @PostMapping("/refresh")
+    @PostMapping("/routes/refresh")
     public ResultMessage<Void> busRefresh(@RequestBody RefreshRouteCommand command) {
         this.publish(new RouteRemoteRefreshedEvent(this, this.getInstanceId(), command.getDestination()));
         return ResultMessage.ok();

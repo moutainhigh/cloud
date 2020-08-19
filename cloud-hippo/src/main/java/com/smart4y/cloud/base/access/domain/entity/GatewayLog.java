@@ -1,4 +1,4 @@
-package com.smart4y.cloud.base.gateway.domain.entity;
+package com.smart4y.cloud.base.access.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Table;

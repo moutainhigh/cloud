@@ -1,4 +1,4 @@
-package com.smart4y.cloud.base.gateway.interfaces.dtos.log;
+package com.smart4y.cloud.base.access.interfaces.dtos.log;
 
 import com.smart4y.cloud.core.message.page.BaseQuery;
 import io.swagger.annotations.ApiModel;

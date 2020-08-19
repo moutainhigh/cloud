@@ -1,8 +1,9 @@
-package com.smart4y.cloud.base.gateway.interfaces.rest;
+package com.smart4y.cloud.base.access.interfaces.rest;
 
-import com.smart4y.cloud.base.gateway.application.LogApplicationService;
-import com.smart4y.cloud.base.gateway.domain.entity.GatewayLog;
-import com.smart4y.cloud.base.gateway.interfaces.dtos.log.LogPageQuery;
+import com.smart4y.cloud.base.access.domain.entity.GatewayLog;
+import com.smart4y.cloud.base.access.domain.service.LogService;
+import com.smart4y.cloud.base.access.interfaces.dtos.log.LogPageQuery;
+import com.smart4y.cloud.base.gateway.interfaces.rest.BaseGatewayController;
 import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.core.message.page.Page;
 import io.swagger.annotations.Api;
@@ -23,12 +24,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class LogController extends BaseGatewayController {
 
     @Autowired
-    private LogApplicationService logApplicationService;
+    private LogService logService;
 
     @GetMapping("/logs/page")
     @ApiOperation(value = "日志:分页")
     public ResultMessage<Page<GatewayLog>> getLogsPage(LogPageQuery query) {
-        Page<GatewayLog> result = logApplicationService.getLogsPage(query);
+        Page<GatewayLog> result = logService.getPageLike(
+                query.getPage(), query.getLimit(), query.getLogPath(), query.getLogIp(), query.getLogServiceId());
         return ResultMessage.ok(result);
     }
 }

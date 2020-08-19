@@ -20,8 +20,60 @@ export const getRoutesPage = ({page, limit, routeName, routePath}) => {
 export const refreshGateway = () => {
   const data = {}
   return request({
-    url: 'actuator/gateways/refresh',
+    url: 'actuator/gateways/routes/refresh',
     data,
     method: 'post'
   })
 }
+
+/**
+ * 添加路由
+ */
+export const addRoute = ({routeDesc, routeName, routeServiceId, routeUrl, routePath, routeStripPrefix, routeRetryable, routeState}) => {
+  const data = {
+    routeDesc: routeDesc,
+    routeName: routeName,
+    routeServiceId: routeServiceId,
+    routeUrl: routeUrl,
+    routePath: routePath,
+    routeStripPrefix: routeStripPrefix,
+    routeRetryable: routeRetryable,
+    routeState: routeState
+  };
+  return request({
+    url: 'base/gateways/routes',
+    data,
+    method: 'post'
+  })
+};
+/**
+ * 编辑路由
+ */
+export const updateRoute = ({routeId, routeDesc, routeName, routeServiceId, routeUrl, routePath, routeStripPrefix, routeRetryable, routeState}) => {
+  const data = {
+    routeDesc: routeDesc,
+    routeName: routeName,
+    routeServiceId: routeServiceId,
+    routeUrl: routeUrl,
+    routePath: routePath,
+    routeStripPrefix: routeStripPrefix,
+    routeRetryable: routeRetryable,
+    routeState: routeState
+  };
+  return request({
+    url: 'base/gateways/routes/' + routeId,
+    data,
+    method: 'put'
+  })
+};
+/**
+ * 移除路由
+ * @param routeId
+ * @returns {*}
+ */
+export const removeRoute = (routeId) => {
+  return request({
+    url: 'base/gateways/routes/' + routeId,
+    method: 'delete'
+  })
+};

@@ -1,4 +1,4 @@
-package com.smart4y.cloud.base.gateway.interfaces.dtos.route;
+package com.smart4y.cloud.base.access.interfaces.dtos.route;
 
 import com.smart4y.cloud.core.message.page.BaseQuery;
 import io.swagger.annotations.ApiModel;

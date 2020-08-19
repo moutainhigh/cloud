@@ -62,8 +62,12 @@
           </DropdownMenu>
         </Dropdown>
       </div>
-      <Table size="small" :columns="columns" :data="data" :loading="loading"
-             @on-selection-change="handleTableSelectChange" border>
+      <Table size="small"
+             :columns="columns"
+             :data="data"
+             :loading="loading"
+             @on-selection-change="handleTableSelectChange"
+             border>
         <template slot="createdDate" slot-scope="{ row }">
           <span>{{ row.createdDate | dateFmt('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
@@ -101,7 +105,6 @@ import {
   updateOperationOpen,
   updateOperationState
 } from '@/api/access/operation'
-import {removeElement} from "@/api/access/element";
 
 export default {
   data() {
