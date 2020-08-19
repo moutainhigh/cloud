@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * Created by youtao on 2019-09-05.
  */
 @RestControllerEndpoint(
-        id = "open"
+        id = "gateways"
 )
 public class RouteRefreshEndpoint extends AbstractBusEndpoint {
 

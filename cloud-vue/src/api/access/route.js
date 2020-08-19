@@ -13,3 +13,15 @@ export const getRoutesPage = ({page, limit, routeName, routePath}) => {
     method: 'get'
   })
 };
+/**
+ * 刷新网关
+ * @returns {*}
+ */
+export const refreshGateway = () => {
+  const data = {}
+  return request({
+    url: 'actuator/gateways/refresh',
+    data,
+    method: 'post'
+  })
+}

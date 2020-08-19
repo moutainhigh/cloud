@@ -107,8 +107,8 @@ import siderTrigger from './components/header-bar/sider-trigger'
 import customBreadCrumb from './components/header-bar/custom-bread-crumb'
 import {mapActions, mapGetters, mapMutations} from 'vuex'
 import {getNewTagList, getNextRoute, routeEqual} from '@/libs/util'
-import maxLogo from '@/assets/images/logo3.png'
-import minLogo from '@/assets/images/logo3-min.png'
+import maxLogo from '@/assets/images/logo4.png'
+import minLogo from '@/assets/images/logo4-min.png'
 import './main.less'
 import Layout from "../../../node_modules/iview/src/components/layout/layout";
 

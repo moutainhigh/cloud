@@ -14,7 +14,7 @@
         </FormItem>
       </Form>
 
-      <Alert show-icon>谨慎添加或修改路由,如果修改不当,将影响正常访问！&nbsp;<a @click="handleRefreshGateway">手动刷新网关</a></Alert>
+      <Alert show-icon>谨慎添加或修改路由，如果修改不当，将影响正常访问！&nbsp;<a @click="handleRefreshGateway">手动刷新网关</a></Alert>
       <Table size="small" :columns="columns" :data="data" :loading="loading" border>
         <template slot="routeStripPrefix" slot-scope="{ row }">
           <Badge status="success" v-if="row.routeStripPrefix===true" text="是"/>
@@ -46,8 +46,7 @@
 </template>
 
 <script>
-import {getRoutesPage} from '@/api/access/route';
-import {refreshGateway} from "@/api/gateway";
+import {getRoutesPage, refreshGateway} from '@/api/access/route';
 
 export default {
   data() {
