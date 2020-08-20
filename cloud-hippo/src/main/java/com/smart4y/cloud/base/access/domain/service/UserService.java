@@ -83,4 +83,20 @@ public class UserService extends BaseDomainService<RbacUser> {
                 .andEqualTo(RbacUserRole::getUserId, userId);
         return rbacUserRoleMapper.selectByExample(weekend);
     }
+
+    /**
+     * 移除用户关联的角色
+     *
+     * @param roleIds 角色ID列表
+     */
+    public void removeRoleIds(Collection<Long> roleIds) {
+        if (CollectionUtils.isEmpty(roleIds)) {
+            return;
+        }
+        Weekend<RbacUserRole> weekend = Weekend.of(RbacUserRole.class);
+        weekend
+                .weekendCriteria()
+                .andIn(RbacUserRole::getRoleId, roleIds);
+        rbacUserRoleMapper.deleteByExample(weekend);
+    }
 }

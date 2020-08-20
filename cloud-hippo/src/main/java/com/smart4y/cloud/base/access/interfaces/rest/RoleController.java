@@ -1,5 +1,6 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
+import com.smart4y.cloud.base.access.application.PrivilegeApplicationService;
 import com.smart4y.cloud.base.access.domain.entity.RbacRole;
 import com.smart4y.cloud.base.access.domain.service.RoleService;
 import com.smart4y.cloud.base.access.interfaces.dtos.role.CreateRoleCommand;
@@ -13,9 +14,12 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import static com.smart4y.cloud.core.message.ResultMessage.ok;
@@ -30,10 +34,12 @@ import static com.smart4y.cloud.core.message.ResultMessage.ok;
 public class RoleController extends BaseAccessController {
 
     private final RoleService roleService;
+    private final PrivilegeApplicationService privilegeApplicationService;
 
     @Autowired
-    public RoleController(RoleService roleService) {
+    public RoleController(RoleService roleService, PrivilegeApplicationService privilegeApplicationService) {
         this.roleService = roleService;
+        this.privilegeApplicationService = privilegeApplicationService;
     }
 
     @GetMapping("/roles")
@@ -53,12 +59,21 @@ public class RoleController extends BaseAccessController {
     @PostMapping("/roles")
     @ApiOperation(value = "角色:添加")
     public ResultMessage<Void> createRole(@RequestBody CreateRoleCommand command) {
+        RbacRole record = new RbacRole();
+        BeanUtils.copyProperties(command, record);
+        record.setCreatedDate(LocalDateTime.now());
+        roleService.save(record);
         return ok();
     }
 
     @PutMapping("/roles/{roleId}")
     @ApiOperation(value = "角色:修改")
     public ResultMessage<Void> modifyRole(@PathVariable("roleId") Long roleId, @RequestBody ModifyRoleCommand command) {
+        RbacRole record = new RbacRole();
+        BeanUtils.copyProperties(command, record);
+        record.setRoleId(roleId);
+        record.setLastModifiedDate(LocalDateTime.now());
+        roleService.updateSelectiveById(record);
         return ok();
     }
 
@@ -68,8 +83,10 @@ public class RoleController extends BaseAccessController {
             @ApiImplicitParam(name = "roleId", value = "角色ID", required = true, paramType = "path", dataType = "long", example = "122367153805459456")
     })
     public ResultMessage<Void> removeRole(@PathVariable("roleId") Long roleId) {
+        privilegeApplicationService.removeRole(Collections.singletonList(roleId));
         return ok();
     }
+
 
     @GetMapping("/roles/{roleId}")
     @ApiOperation(value = "角色:详情")

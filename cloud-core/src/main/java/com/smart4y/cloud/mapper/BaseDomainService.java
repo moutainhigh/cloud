@@ -307,6 +307,27 @@ public class BaseDomainService<T extends BaseEntity> {
     }
 
     /**
+     * 批量删除记录
+     *
+     * @param ids 主键ID列表
+     */
+    public void removeBatchById(Collection<Object> ids) {
+        if (CollectionUtils.isNotEmpty(ids)) {
+            SqlSession sqlSession = batchSqlSession();
+            CloudMapper<T> batchMapper = batchMapper(sqlSession);
+            int i = 0;
+            for (Object id : ids) {
+                batchMapper.deleteByPrimaryKey(id);
+                if (i >= 1 && i % batchSize == 0) {
+                    sqlSession.flushStatements();
+                }
+                i++;
+            }
+            sqlSession.flushStatements();
+        }
+    }
+
+    /**
      * 根据Id 逻辑删除
      *
      * @param id 主键ID

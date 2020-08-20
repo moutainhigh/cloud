@@ -38,16 +38,20 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
     private final MenuService menuService;
     private final ElementService elementService;
     private final RoleService roleService;
+    private final UserService userService;
+    private final GroupService groupService;
     private final OpenRestTemplate openRestTemplate;
 
     @Autowired
-    public PrivilegeApplicationServiceImpl(OperationService operationService, PrivilegeService privilegeService, MenuService menuService, RoleService roleService, OpenRestTemplate openRestTemplate, ElementService elementService) {
+    public PrivilegeApplicationServiceImpl(OperationService operationService, PrivilegeService privilegeService, MenuService menuService, RoleService roleService, OpenRestTemplate openRestTemplate, ElementService elementService, UserService userService, GroupService groupService) {
         this.operationService = operationService;
         this.privilegeService = privilegeService;
         this.menuService = menuService;
         this.roleService = roleService;
         this.openRestTemplate = openRestTemplate;
         this.elementService = elementService;
+        this.userService = userService;
+        this.groupService = groupService;
     }
 
     @Override
@@ -382,6 +386,32 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
         roleService.removePrivileges(privilegeIds);
         privilegeService.removeByPrivilege("o", privilegeIds);
         operationService.removeByIds(operationIds);
+
+        openRestTemplate.refreshGateway();
+    }
+
+    @Override
+    public void removeRole(Collection<Long> roleIds) {
+        if (CollectionUtils.isEmpty(roleIds)) {
+            return;
+        }
+        // #1 移除角色关联权限
+        List<Long> rolePrivilegeIds = roleService.getRolePrivilegesByRoleIds(roleIds).stream()
+                .map(RbacRolePrivilege::getPrivilegeId)
+                .collect(Collectors.toList());
+        roleService.removePrivileges(rolePrivilegeIds);
+
+        // #2 移除用户关联的角色
+        userService.removeRoleIds(roleIds);
+
+        // #3 移除组织关联的角色
+        groupService.removeRoleIds(roleIds);
+
+        // #3 移除角色
+        List<Object> collect = roleIds.stream()
+                .map(Objects::requireNonNull)
+                .collect(Collectors.toList());
+        roleService.removeBatchById(collect);
 
         openRestTemplate.refreshGateway();
     }

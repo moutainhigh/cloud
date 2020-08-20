@@ -118,4 +118,20 @@ public class GroupService extends BaseDomainService<RbacGroup> {
                 .andEqualTo(RbacGroupRole::getRoleId, roleId);
         return rbacGroupRoleMapper.selectByExample(weekend);
     }
+
+    /**
+     * 移除组织关联的角色
+     *
+     * @param roleIds 角色ID列表
+     */
+    public void removeRoleIds(Collection<Long> roleIds) {
+        if (CollectionUtils.isEmpty(roleIds)) {
+            return;
+        }
+        Weekend<RbacGroupRole> weekend = Weekend.of(RbacGroupRole.class);
+        weekend
+                .weekendCriteria()
+                .andIn(RbacGroupRole::getRoleId, roleIds);
+        rbacGroupRoleMapper.deleteByExample(weekend);
+    }
 }

@@ -14,7 +14,7 @@ import javax.persistence.Id;
 /**
  * 角色表
  *
- * @author Youtao on 2020/08/11 15:58
+ * @author Youtao on 2020/08/20 14:47
  */
 @Data
 @Accessors(chain = true)
@@ -41,6 +41,12 @@ public class RbacRole extends BaseEntity<RbacRole> {
      */
     @Column(name = "role_code")
     private String roleCode;
+
+    /**
+     * 角色描述
+     */
+    @Column(name = "role_desc")
+    private String roleDesc;
 
     /**
      * 创建时间

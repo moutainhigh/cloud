@@ -101,4 +101,11 @@ public interface PrivilegeApplicationService {
      * @param operationIds 操作ID列表
      */
     void removeOperation(Collection<Long> operationIds);
+
+    /**
+     * 移除角色
+     *
+     * @param roleIds 角色ID列表
+     */
+    void removeRole(Collection<Long> roleIds);
 }
