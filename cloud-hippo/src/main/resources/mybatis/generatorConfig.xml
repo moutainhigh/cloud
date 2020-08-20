@@ -33,13 +33,13 @@
             <property name="forceBigDecimals" value="true"/>
         </javaTypeResolver>
         <!-- Entity 路径 -->
-        <javaModelGenerator targetPackage="com.smart4y.cloud.base.gateway.domain.entity"
+        <javaModelGenerator targetPackage="com.smart4y.cloud.base.access.domain.entity"
                             targetProject="src/main/java"/>
         <!-- Mapper.xml 路径 -->
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
         <!-- Mapper.java 路径 -->
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="com.smart4y.cloud.base.gateway.infrastructure.persistence.mybatis"
+                             targetPackage="com.smart4y.cloud.base.access.infrastructure.persistence.mybatis"
                              targetProject="src/main/java"/>
 
         <!-- 使用"%"匹配所有表或者单独定义表 -->
@@ -62,9 +62,9 @@
             <columnOverride column="user_name" javaType="com.smart4y.cloud.base.gateway.domain.entity.GatewayRoute"/>
         </table>-->
 
-<!--        <table tableName="rbac_%"/>-->
-        <table catalog="cloud" tableName="gateway_route" domainObjectName="GatewayRoute"/>
-        <table catalog="cloud" tableName="gateway_log" domainObjectName="GatewayLog"/>
+        <table tableName="rbac_%"/>
+        <!--        <table catalog="cloud" tableName="gateway_route" domainObjectName="GatewayRoute"/>-->
+        <!--        <table catalog="cloud" tableName="gateway_log" domainObjectName="GatewayLog"/>-->
 
     </context>
 </generatorConfiguration>
