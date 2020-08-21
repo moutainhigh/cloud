@@ -1,0 +1,27 @@
+version: '3.2'
+services:
+  redis:
+    image: neo4j:4.1.1
+    container_name: "neo4j"
+    labels:
+      NAME: "neo4j"
+    hostname: "neo4j"
+    networks:
+      - cloud
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - TZ=Asia/Shanghai
+      - NEO4J_dbms_memory_heap_maxSize=4G
+      - NEO4J_AUTH=neo4j/123456  #修改默认用户密码
+    volumes:
+      - ${DOCKER_VOL_DIR}/neo4j/conf:/var/lib/neo4j/conf
+      - ${DOCKER_VOL_DIR}/neo4j/mnt:/var/lib/neo4j/import
+      - ${DOCKER_VOL_DIR}/neo4j/plugins:/plugins
+      - ${DOCKER_VOL_DIR}/neo4j/data:/data
+      - ${DOCKER_VOL_DIR}/neo4j/logs:/var/lib/neo4j/logs
+
+networks:
+  cloud:
+    driver: bridge

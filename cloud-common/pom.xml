@@ -15,6 +15,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>cloud-common-neo4j</module>
     </modules>
 
     <properties>

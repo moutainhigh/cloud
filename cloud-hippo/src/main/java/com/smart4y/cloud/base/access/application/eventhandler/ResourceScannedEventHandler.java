@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +25,6 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
-@Transactional(rollbackFor = Exception.class)
 public class ResourceScannedEventHandler {
 
     private final RedisTemplate<String, String> redisTemplate;
@@ -56,8 +53,6 @@ public class ResourceScannedEventHandler {
             // 同步数据
             privilegeApplicationService.syncServiceOperation(serviceId, operations);
 
-            // 缓存状态
-            this.redisTemplate.opsForValue().set(key, String.valueOf(operations.size()), Duration.ofMinutes(3));
             log.info("资源扫描完成 - 服务名：{}，资源数量：{}", event.getApplication(), event.getMappings().size());
         } catch (Exception e) {
             log.error("资源扫描处理异常：{}", e.getLocalizedMessage(), e);

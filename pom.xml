@@ -49,6 +49,11 @@
 
             <dependency>
                 <groupId>com.smart4y</groupId>
+                <artifactId>cloud-common-neo4j</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.smart4y</groupId>
                 <artifactId>cloud-core</artifactId>
                 <version>${project.version}</version>
             </dependency>

@@ -10,6 +10,7 @@ import com.smart4y.cloud.base.access.interfaces.dtos.menu.ModifyMenuCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.operation.ModifyOperationAuthCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.operation.ModifyOperationOpenCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.operation.ModifyOperationStateCommand;
+import com.smart4y.cloud.base.infrastructure.constants.RedisConstants;
 import com.smart4y.cloud.core.annotation.ApplicationService;
 import com.smart4y.cloud.core.exception.OpenAlertException;
 import com.smart4y.cloud.core.message.enums.MessageType;
@@ -18,7 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
@@ -41,6 +44,8 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
     private final UserService userService;
     private final GroupService groupService;
     private final OpenRestTemplate openRestTemplate;
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Autowired
     public PrivilegeApplicationServiceImpl(OperationService operationService, PrivilegeService privilegeService, MenuService menuService, RoleService roleService, OpenRestTemplate openRestTemplate, ElementService elementService, UserService userService, GroupService groupService) {
@@ -322,6 +327,12 @@ public class PrivilegeApplicationServiceImpl implements PrivilegeApplicationServ
                 .getPrivilegeOperationsByOperationIds(newOperationIds).stream()
                 .map(RbacPrivilegeOperation::getPrivilegeId).collect(Collectors.toList());
         roleService.grantPrivileges(ADMIN_ROLE_ID, newPrivilegeIds);
+
+        // 缓存状态
+        String key = RedisConstants.SCAN_API_RESOURCE_KEY_PREFIX + serviceId;
+        redisTemplate.opsForValue()
+                .set(key, String.valueOf(operations.size()), Duration.ofMinutes(3));
+
 
         openRestTemplate.refreshGateway();
     }
