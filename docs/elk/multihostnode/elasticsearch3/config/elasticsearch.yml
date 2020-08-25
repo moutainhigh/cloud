@@ -1,0 +1,11 @@
+network.host: 0.0.0.0
+cluster.name: "elasticsearch-cluster"
+node.name: elasticsearch3
+discovery.zen.ping.unicast.hosts:   
+   - 172.16.238.11
+   - 172.16.238.12
+   - 172.16.238.13
+path:  
+  logs: /usr/share/elasticsearch/logs
+  data: /usr/share/elasticsearch/data
+discovery.zen.minimum_master_nodes: 2

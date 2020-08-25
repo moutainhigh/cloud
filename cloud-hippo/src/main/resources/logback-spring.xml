@@ -57,7 +57,6 @@
         <discardingThreshold>0</discardingThreshold>
         <appender-ref ref="FILE_LOG"/>
     </appender>
-
     <!-- 埋点日志 -->
     <appender name="POINT_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_POINT_FILE}/point.log</file>
@@ -80,6 +79,33 @@
         <appender-ref ref="POINT_LOG"/>
     </appender>
 
+    <!-- ELK - Redis -->
+    <appender name="LOG_STASH" class="com.cwbase.logback.RedisAppender">
+        <!--宿主机IP-->
+        <host>127.0.0.1</host>
+        <!--映射容器的端口-->
+        <port>6379</port>
+        <password>123456</password>
+        <key>logstash</key>
+        <additionalField>
+            <key>AppName</key>
+            <value>${APP_NAME}</value>
+        </additionalField>
+        <additionalField>
+            <key>SpanId</key>
+            <value>@{spanId}</value>
+        </additionalField>
+        <additionalField>
+            <key>TraceId</key>
+            <value>@{traceId}</value>
+        </additionalField>
+    </appender>
+    <appender name="LOG_STASH_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="LOG_STASH"/>
+    </appender>
+
     <!-- 开发环境 -->
     <springProfile name="default,dev,test">
         <logger name="com.smart4y.cloud" level="info"/>
@@ -89,13 +115,10 @@
         <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="info"/>
         <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="info"/>
 
-        <!--<logger name="com.smart4y.pomelo.common.core.logger.LogHelper" level="debug" addtivity="false">
-            <appender-ref ref="POINT_LOG_ASYNC"/>
-        </logger>-->
-
         <root level="INFO">
             <appender-ref ref="STDOUT_APPENDER"/>
             <appender-ref ref="FILE_LOG_ASYNC"/>
+            <appender-ref ref="LOG_STASH_ASYNC"/>
         </root>
     </springProfile>
     <!-- 生产环境 -->

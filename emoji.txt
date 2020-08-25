@@ -15,9 +15,9 @@ emoji   | emoji代码  |  commit 说明
 ⬇️ (下降箭头)	:arrow_down:	降级依赖
 ⚡️ (闪电)    :zap: 提升性能
 🐎 (赛马)	:racehorse:	提升性能
-📈 (上升趋势图)	:chart_with_upwards_trend:	添加分析或跟踪代码
+📈 (趋势图)	:chart_with_upwards_trend:	添加分析或跟踪代码
 🚀 (火箭)	:rocket:	部署功能
-✅ (白色复选框)	:white_check_mark:	增加测试
+✅ (复选框)	:white_check_mark:	增加测试
 📝 (备忘录)	:memo:	撰写文档
 🔨 (锤子)	:hammer:	重大重构
 🎨 (调色板)	:art:	改进代码结构/代码格式
