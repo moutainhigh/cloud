@@ -30,6 +30,7 @@
                   <Option value="c">公司</Option>
                   <Option value="d">部门</Option>
                   <Option value="t">小组</Option>
+                  <Option value="p">岗位</Option>
                 </Select>
               </label>
             </FormItem>
@@ -60,9 +61,9 @@
               </span>
             </FormItem>
 
-            <Button class="search-btn" type="dashed">编辑</Button>&nbsp;&nbsp;
             <Button class="search-btn" type="dashed">添加</Button>&nbsp;
-            <Button class="search-btn" type="dashed">移除</Button>
+            <Button class="search-btn" type="dashed" v-show="group.viewShow">编辑</Button>&nbsp;
+            <Button class="search-btn" type="dashed" v-show="group.viewShow">移除</Button>
           </Form>
         </Card>
         <br/>
@@ -250,6 +251,20 @@ export default {
           iconType = 'md-person';
           break;
       }
+      // 若非启用状态则设置为禁用
+      let badgeStatus;
+      switch (data['groupState']) {
+        case '10':
+          badgeStatus = 'green';
+          break;
+        case '20':
+          badgeStatus = 'orange';
+          break;
+        case '30':
+          badgeStatus = 'red';
+          break;
+      }
+
       return h('span', {
         style: {
           display: 'inline-block',
@@ -263,7 +278,13 @@ export default {
             },
             style: {marginRight: '8px'}
           }),
-          h('span', data.title)
+          h('span', data.title),
+          h('Badge', {
+            props: {
+              status: badgeStatus
+            },
+            style: {marginLeft: '3px'}
+          })
         ]),
         h('span', {style: {display: 'inline-block', float: 'right', marginRight: '32px'}})
       ]);
@@ -286,8 +307,10 @@ export default {
           let array = [];
           res.data.map(item => {
             item.title = item.groupName;
-            item.loading = false;
-            item.children = [];
+            if (item['existChild']) {
+              item.loading = false;
+              item.children = [];
+            }
             item.parent = node;
             array.push(item);
           });
@@ -314,26 +337,30 @@ export default {
           let array = [];
           response.forEach(item => {
             array.push(item);
-            // this._loadData(item.groupId, () => {
-            // });
           });
           // 挂载子节点
           node.children = array;
           // 展开子节点树
           node.expand = true;
         });
+        // 展开箭头
+        node.expand = true;
 
-        // viewData 组织详情
+        // 组织详情
         viewGroup({groupId: node.groupId})
           .then(res => {
             this.group.viewData = res.data;
+            this.group.viewShow = node.groupId !== 0;
           })
           .finally(() => {
           });
-        this.user.pageInfo.groupId = node.groupId;
-        this.role.pageInfo.groupId = node.groupId;
-        this.handleRoleSearch(1);
-        this.handleUserSearch(1);
+        // this.user.pageInfo.groupId = node.groupId;
+        // this.role.pageInfo.groupId = node.groupId;
+        // this.handleRoleSearch(1);
+        // this.handleUserSearch(1);
+      } else {
+        this.group.viewData = {};
+        this.group.viewShow = false;
       }
     }
   },

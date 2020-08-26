@@ -77,10 +77,10 @@
       <Form :label-width="80" :model="modal.formItem" :rules="modal.formItemRules" ref="modalForm">
         <FormItem label="上级菜单" prop="menuParentId">
           <treeselect
-              :default-expand-level="1"
-              :normalizer="treeSelectNormalizer"
-              :options="modal.selectTreeData"
-              v-model="modal.formItem.menuParentId"/>
+            :default-expand-level="1"
+            :normalizer="treeSelectNormalizer"
+            :options="modal.selectTreeData"
+            v-model="modal.formItem.menuParentId"/>
         </FormItem>
         <FormItem label="菜单名称" prop="menuName">
           <label>
@@ -180,13 +180,7 @@ export default {
                     },
                     style: {marginRight: '5px'}
                   }),
-                  h('span', data.title),
-                  h('Badge', {
-                    props: {
-                      status: 'success'
-                    },
-                    style: {marginLeft: '3px'}
-                  })
+                  h('span', data.title)
                 ]),
                 h('span', {style: {display: 'inline-block', float: 'right', marginRight: '32px'}})
               ]);
@@ -276,12 +270,12 @@ export default {
       }
       this.role.loading = true;
       getMenuRoles(this.role.pageInfo)
-          .then(res => {
-            this.role.data = res.data;
-          })
-          .finally(() => {
-            this.role.loading = false;
-          })
+        .then(res => {
+          this.role.data = res.data;
+        })
+        .finally(() => {
+          this.role.loading = false;
+        })
     },
     handleUserSearch(page) {
       if (page) {
@@ -289,12 +283,12 @@ export default {
       }
       this.user.loading = true;
       getMenuUsers(this.user.pageInfo)
-          .then(res => {
-            this.user.data = res.data;
-          })
-          .finally(() => {
-            this.user.loading = false;
-          })
+        .then(res => {
+          this.user.data = res.data;
+        })
+        .finally(() => {
+          this.user.loading = false;
+        })
     },
     treeSelectNormalizer(node) {
       return {
@@ -331,24 +325,24 @@ export default {
           this.modal.saving = true;
           if (this.modal.formItem.menuId) {
             updateMenu(this.modal.formItem)
-                .then(res => {
-                  // 此处刷新页面等操作
-                  this.$refs.tree.handleSelect(0);
-                })
-                .finally(() => {
-                  this.modal.visible = false;
-                  this.modal.saving = false;
-                });
+              .then(res => {
+                // 此处刷新页面等操作
+                this.$refs.tree.handleSelect(0);
+              })
+              .finally(() => {
+                this.modal.visible = false;
+                this.modal.saving = false;
+              });
           } else {
             addMenu(this.modal.formItem)
-                .then(res => {
-                  // 此处刷新页面等操作
-                  this.$refs.tree.handleSelect(0);
-                })
-                .finally(() => {
-                  this.modal.visible = false;
-                  this.modal.saving = false;
-                });
+              .then(res => {
+                // 此处刷新页面等操作
+                this.$refs.tree.handleSelect(0);
+              })
+              .finally(() => {
+                this.modal.visible = false;
+                this.modal.saving = false;
+              });
           }
         }
       });
@@ -382,12 +376,12 @@ export default {
         title: '确定删除吗？',
         onOk: () => {
           removeMenu(menuId)
-              .then(res => {
-                console.log(res);
-                this.$Message.success('删除成功')
-                // 此处刷新页面等操作
-                this.$refs.tree.handleSelect(0);
-              })
+            .then(res => {
+              console.log(res);
+              this.$Message.success('删除成功')
+              // 此处刷新页面等操作
+              this.$refs.tree.handleSelect(0);
+            })
         }
       })
     },
@@ -409,7 +403,19 @@ export default {
     renderChildren(h, {root, node, data}) {
       let menuIcon = data['menuIcon'] ? data['menuIcon'] : 'md-document';
       // 若非启用状态则设置为禁用
-      let badgeStatus = '10' === data['menuState'] ? 'success' : 'error';
+      let badgeStatus;
+      switch (data['menuState']) {
+        case '10':
+          badgeStatus = 'green';
+          break;
+        case '20':
+          badgeStatus = 'orange';
+          break;
+        case '30':
+          badgeStatus = 'red';
+          break;
+      }
+
       return h('span', {
         style: {
           display: 'inline-block',
@@ -448,19 +454,21 @@ export default {
       this.menu.deeply = items.reverse();
 
       getMenuChildren({menuId: node.menuId})
-          .then(res => {
-            let array = [];
-            res.data.map(item => {
-              item.title = item.menuName;
+        .then(res => {
+          let array = [];
+          res.data.map(item => {
+            item.title = item.menuName;
+            if (item['existChild']) {
               item.loading = false;
               item.children = [];
-              item.parent = node;
-              array.push(item);
-            });
-            callback(array);
-          })
-          .finally(() => {
+            }
+            item.parent = node;
+            array.push(item);
           });
+          callback(array);
+        })
+        .finally(() => {
+        });
     },
     /**
      * 点击选中节点文字
@@ -480,23 +488,23 @@ export default {
           let array = [];
           response.forEach(item => {
             array.push(item);
-            // this._loadData(item.menuId, () => {
-            // });
           });
           // 挂载子节点
           node.children = array;
           // 展开子节点树
           node.expand = true;
         });
+        // 展开箭头
+        node.expand = true;
 
         // 详情
         viewMenu({menuId: node.menuId})
-            .then(res => {
-              this.menu.viewData = res.data;
-              this.menu.viewShow = node.menuId !== 0;
-            })
-            .finally(() => {
-            });
+          .then(res => {
+            this.menu.viewData = res.data;
+            this.menu.viewShow = node.menuId !== 0;
+          })
+          .finally(() => {
+          });
         // this.user.pageInfo.menuId = node.menuId;
         // this.role.pageInfo.menuId = node.menuId;
         // this.handleRoleSearch(1);
@@ -511,27 +519,25 @@ export default {
     this.$refs.tree.handleSelect(0);
 
     getMenus()
-        .then(res => {
-          let opt = {
-            primaryKey: 'menuId',
-            parentKey: 'menuParentId',
-            startPid: '0'
-          }
-          let xx = res.data;
-          xx.unshift({
-            menuId: 0,
-            menuName: '无',
-            menuCode: "system",
-            menuParentId: "0",
-            menuPath: "",
-            menuSchema: "/",
-            menuTarget: "_self"
-          });
-          let result = listConvertTree(xx, opt);
-          console.info(xx);
-          console.info(result);
-          this.setSelectTree(result);
+      .then(res => {
+        let opt = {
+          primaryKey: 'menuId',
+          parentKey: 'menuParentId',
+          startPid: '0'
+        }
+        let xx = res.data;
+        xx.unshift({
+          menuId: 0,
+          menuName: '无',
+          menuCode: "system",
+          menuParentId: "0",
+          menuPath: "",
+          menuSchema: "/",
+          menuTarget: "_self"
         });
+        let result = listConvertTree(xx, opt);
+        this.setSelectTree(result);
+      });
   }
 }
 </script>
