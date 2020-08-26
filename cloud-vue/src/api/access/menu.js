@@ -2,7 +2,7 @@ import request from '@/libs/request'
 
 
 /**
- * 组织列表
+ * 菜单列表
 
  * @returns {*}
  */

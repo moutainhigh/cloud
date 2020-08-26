@@ -46,12 +46,14 @@ public class UserController extends BaseAccessController {
     @PostMapping("/users")
     @ApiOperation(value = "用户:添加")
     public ResultMessage<Void> createUser(@RequestBody CreateUserCommand command) {
+        // TODO 用户:添加
         return ok();
     }
 
     @PutMapping("/users/{userId}")
     @ApiOperation(value = "用户:修改")
     public ResultMessage<Void> modifyUser(@PathVariable("userId") Long userId, @RequestBody ModifyUserCommand command) {
+        // TODO 用户:修改
         return ok();
     }
 
@@ -61,6 +63,7 @@ public class UserController extends BaseAccessController {
             @ApiImplicitParam(name = "userId", value = "用户ID", required = true, paramType = "path", dataType = "long", example = "122367153805459456")
     })
     public ResultMessage<Void> removeUser(@PathVariable("userId") Long userId) {
+        // TODO 用户:删除
         return ok();
     }
 
@@ -70,6 +73,7 @@ public class UserController extends BaseAccessController {
             @ApiImplicitParam(name = "userId", value = "用户ID", required = true, paramType = "path", dataType = "long", example = "122367153805459456")
     })
     public ResultMessage<RbacUser> viewUser(@PathVariable("userId") Long userId) {
+        // TODO 用户:详情
         return ok();
     }
 
@@ -79,6 +83,7 @@ public class UserController extends BaseAccessController {
             @ApiImplicitParam(name = "userId", value = "用户ID", required = true, paramType = "path", dataType = "long", example = "122367153805459456")
     })
     public ResultMessage<Void> grantRole(@PathVariable("userId") Long userId, @RequestBody GrantUserRoleCommand command) {
+        // TODO 用户:角色:分配 - 为用户{userId}分配角色
         return ok();
     }
 
@@ -89,6 +94,7 @@ public class UserController extends BaseAccessController {
             @ApiImplicitParam(name = "roleIds", value = "角色ID列表", required = true, paramType = "path", example = "222367153805459456;222367153805459457")
     })
     public ResultMessage<Void> removeUserRole(@PathVariable("userId") Long userId, @PathVariable("roleIds") String roleIds) {
+        // TODO 用户:角色:删除 - 移除用户{userId}已分配的角色{roleIds}
         return ok();
     }
 }

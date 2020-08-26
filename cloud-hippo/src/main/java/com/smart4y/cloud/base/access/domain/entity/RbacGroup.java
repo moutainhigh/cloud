@@ -12,9 +12,9 @@ import com.smart4y.cloud.mapper.BaseEntity;
 import javax.persistence.Id;
 
 /**
- * 组织表
+ * 组织结构表
  *
- * @author Youtao on 2020/08/26 14:32
+ * @author Youtao on 2020/08/26 16:31
  */
 @Data
 @Accessors(chain = true)
@@ -31,19 +31,13 @@ public class RbacGroup extends BaseEntity<RbacGroup> {
     private Long groupId;
 
     /**
-     * 组织父级ID
-     */
-    @Column(name = "group_parent_id")
-    private Long groupParentId;
-
-    /**
      * 组织名
      */
     @Column(name = "group_name")
     private String groupName;
 
     /**
-     * 组织类型（g-集团，c-公司，d-部门，t-小组）
+     * 组织类型（g-集团，c-公司，d-部门，t-小组，p-岗位，u-人员）
      */
     @Column(name = "group_type")
     private String groupType;
@@ -59,6 +53,30 @@ public class RbacGroup extends BaseEntity<RbacGroup> {
      */
     @Column(name = "exist_child")
     private Boolean existChild;
+
+    /**
+     * 组织父级ID
+     */
+    @Column(name = "group_parent_id")
+    private Long groupParentId;
+
+    /**
+     * 组织所属机构ID
+     */
+    @Column(name = "group_org_id")
+    private Long groupOrgId;
+
+    /**
+     * 当前组织领导ID
+     */
+    @Column(name = "current_group_leader_id")
+    private Long currentGroupLeaderId;
+
+    /**
+     * 组织层级ID（例如：冒险元素<谛听<技术部<技术研发中心）
+     */
+    @Column(name = "group_hierarchy_id")
+    private String groupHierarchyId;
 
     /**
      * 创建时间

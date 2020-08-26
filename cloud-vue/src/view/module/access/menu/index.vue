@@ -328,6 +328,8 @@ export default {
               .then(res => {
                 // 此处刷新页面等操作
                 this.$refs.tree.handleSelect(0);
+                this.handleModalCancel();
+                this._refreshAllMenus();
               })
               .finally(() => {
                 this.modal.visible = false;
@@ -338,6 +340,8 @@ export default {
               .then(res => {
                 // 此处刷新页面等操作
                 this.$refs.tree.handleSelect(0);
+                this.handleModalCancel();
+                this._refreshAllMenus();
               })
               .finally(() => {
                 this.modal.visible = false;
@@ -441,6 +445,31 @@ export default {
       ]);
     },
     /**
+     * 刷新下拉选择列表
+     */
+    _refreshAllMenus() {
+      getMenus()
+        .then(res => {
+          let opt = {
+            primaryKey: 'menuId',
+            parentKey: 'menuParentId',
+            startPid: '0'
+          }
+          let xx = res.data;
+          xx.unshift({
+            menuId: 0,
+            menuName: '无',
+            menuCode: "system",
+            menuParentId: "0",
+            menuPath: "",
+            menuSchema: "/",
+            menuTarget: "_self"
+          });
+          let result = listConvertTree(xx, opt);
+          this.setSelectTree(result);
+        });
+    },
+    /**
      * @param node
      * @param callback
      */
@@ -517,27 +546,7 @@ export default {
   },
   mounted: function () {
     this.$refs.tree.handleSelect(0);
-
-    getMenus()
-      .then(res => {
-        let opt = {
-          primaryKey: 'menuId',
-          parentKey: 'menuParentId',
-          startPid: '0'
-        }
-        let xx = res.data;
-        xx.unshift({
-          menuId: 0,
-          menuName: '无',
-          menuCode: "system",
-          menuParentId: "0",
-          menuPath: "",
-          menuSchema: "/",
-          menuTarget: "_self"
-        });
-        let result = listConvertTree(xx, opt);
-        this.setSelectTree(result);
-      });
+    this._refreshAllMenus();
   }
 }
 </script>

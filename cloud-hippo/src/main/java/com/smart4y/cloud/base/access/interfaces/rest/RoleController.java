@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.List;
 
 import static com.smart4y.cloud.core.message.ResultMessage.ok;
 
@@ -40,12 +39,6 @@ public class RoleController extends BaseAccessController {
     public RoleController(RoleService roleService, PrivilegeApplicationService privilegeApplicationService) {
         this.roleService = roleService;
         this.privilegeApplicationService = privilegeApplicationService;
-    }
-
-    @GetMapping("/roles")
-    @ApiOperation(value = "角色:所有")
-    public ResultMessage<List<RbacRole>> getRoles() {
-        return ok();
     }
 
     @GetMapping("/roles/page")
@@ -94,7 +87,8 @@ public class RoleController extends BaseAccessController {
             @ApiImplicitParam(name = "roleId", value = "角色ID", required = true, paramType = "path", dataType = "long", example = "122367153805459456")
     })
     public ResultMessage<RbacRole> viewRole(@PathVariable("roleId") Long roleId) {
-        return ok();
+        RbacRole result = roleService.getById(roleId);
+        return ok(result);
     }
 
     @PostMapping("/roles/{roleId}/privileges")
@@ -103,6 +97,7 @@ public class RoleController extends BaseAccessController {
             @ApiImplicitParam(name = "roleId", value = "角色ID", required = true, paramType = "path", dataType = "long", example = "122367153805459456")
     })
     public ResultMessage<Void> grantPrivilege(@PathVariable("roleId") Long roleId, @RequestBody GrantPrivilegeCommand command) {
+        // TODO 角色:权限:分配 - 为角色{roleId}授予权限
         return ok();
     }
 
@@ -113,6 +108,7 @@ public class RoleController extends BaseAccessController {
             @ApiImplicitParam(name = "privilegeIds", value = "权限ID列表", required = true, paramType = "path", example = "222367153805459456;222367153805459457")
     })
     public ResultMessage<Void> removeRolePrivilege(@PathVariable("roleId") Long roleId, @PathVariable("privilegeIds") String privilegeIds) {
+        // TODO 角色:权限:删除 - 移除角色{roleId}已授权的权限{privilegeIds}
         return ok();
     }
 }

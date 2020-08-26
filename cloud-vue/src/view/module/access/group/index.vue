@@ -61,7 +61,7 @@
               </span>
             </FormItem>
 
-            <Button class="search-btn" type="dashed">添加</Button>&nbsp;
+            <Button @click="handleModal('add')" class="search-btn" type="dashed">添加</Button>&nbsp;
             <Button class="search-btn" type="dashed" v-show="group.viewShow">编辑</Button>&nbsp;
             <Button class="search-btn" type="dashed" v-show="group.viewShow">移除</Button>
           </Form>
@@ -105,10 +105,63 @@
         </Card>
       </Col>
     </Row>
+    <!-- 添加/编辑组织 -->
+    <Modal :title="modal.title"
+           v-model="modal.visible"
+           @on-cancel="handleModalCancel"
+           width="40">
+      <Form :label-width="80" :model="modal.formItem" :rules="modal.formItemRules" ref="modalForm">
+        <FormItem label="上级组织" prop="groupParentId">
+          <treeselect
+            :default-expand-level="1"
+            :normalizer="treeSelectNormalizer"
+            :options="modal.selectTreeData"
+            v-model="modal.formItem.groupParentId"/>
+        </FormItem>
+        <FormItem label="组织名称" prop="groupName">
+          <label>
+            <Input placeholder="请输入内容" v-model="modal.formItem.groupName"></Input>
+          </label>
+        </FormItem>
+        <FormItem label="组织类型" prop="groupType">
+          <label>
+            <Select v-model="modal.formItem.groupType">
+              <Option value="g">集团</Option>
+              <Option value="c">公司</Option>
+              <Option value="d">部门</Option>
+              <Option value="t">小组</Option>
+              <Option value="p">岗位</Option>
+              <Option value="u">人员</Option>
+            </Select>
+          </label>
+        </FormItem>
+        <FormItem label="状态" prop="groupState">
+          <RadioGroup type="button" v-model="modal.formItem.groupState">
+            <Radio label="10">启用</Radio>
+            <Radio label="20">禁用</Radio>
+            <Radio label="30">锁定</Radio>
+          </RadioGroup>
+        </FormItem>
+        <div class="drawer-footer">
+          <Button @click="handleModalCancel" type="default">取消</Button>&nbsp;
+          <Button :loading="modal.saving" @click="handleModalSubmit" type="primary">保存</Button>
+        </div>
+      </Form>
+    </Modal>
   </div>
 </template>
 <script>
-import {getGroupChildren, getGroupRoles, getGroupUsers, viewGroup} from '@/api/access/group';
+import {
+  addGroup,
+  getGroupChildren,
+  getGroupRoles,
+  getGroups,
+  getGroupUsers,
+  updateGroup,
+  viewGroup
+} from '@/api/access/group';
+import icons from "@/view/module/system/menus/icons";
+import {listConvertTree} from "@/libs/util";
 
 export default {
   data() {
@@ -145,6 +198,31 @@ export default {
         viewData: {},
         viewDisabled: true,
         deeply: []
+      },
+      modal: {
+        title: '',
+        formItem: {
+          groupId: '',
+          groupParentId: '0',
+          groupName: '',
+          groupState: '10',
+          groupType: ''
+        },
+        formItemRules: {
+          groupParentId: [
+            {required: true, message: '上级组织 必填', trigger: 'blur'}
+          ],
+          groupName: [
+            {required: true, message: '组织名称 必填', trigger: 'blur'}
+          ],
+          groupType: [
+            {required: true, message: '组织类型 必填', trigger: 'blur'}
+          ]
+        },
+        visible: false,
+        saving: false,
+        selectTreeData: [],
+        selectIcons: icons
       },
       role: {
         loading: false,
@@ -217,6 +295,79 @@ export default {
           this.user.loading = false;
         })
     },
+    treeSelectNormalizer(node) {
+      return {
+        id: node.groupId,
+        label: node.groupName,
+        children: node.children
+      }
+    },
+    setSelectTree(data) {
+      this.modal.selectTreeData = data;
+    },
+    /**
+     * 弹框
+     * @param type (edit/add)
+     */
+    handleModal(type) {
+      if ('edit' === type) {
+        this.modal.title = '编辑组织';
+        this.modal.formItem = Object.assign({}, this.modal.formItem, this.group.viewData);
+      } else {
+        this.modal.title = '添加组织';
+      }
+      this.modal.visible = true;
+    },
+    /**
+     * 弹框取消事件
+     */
+    handleModalCancel() {
+      this.modal.formItem = {
+        groupId: '',
+        groupParentId: '0',
+        groupName: '',
+        groupState: '10',
+        groupType: ''
+      };
+      this.$refs.modalForm.resetFields();
+      this.modal.saving = false;
+      this.modal.visible = false;
+    },
+    /**
+     * 弹框保存事件
+     */
+    handleModalSubmit() {
+      this.$refs.modalForm.validate((valid) => {
+        if (valid) {
+          this.modal.saving = true;
+          if (this.modal.formItem.groupId) {
+            updateGroup(this.modal.formItem)
+              .then(res => {
+                // 此处刷新页面等操作
+                this.$refs.tree.handleSelect(0);
+                this.handleModalCancel();
+                this._refreshAllGroups();
+              })
+              .finally(() => {
+                this.modal.visible = false;
+                this.modal.saving = false;
+              });
+          } else {
+            addGroup(this.modal.formItem)
+              .then(res => {
+                // 此处刷新页面等操作
+                this.$refs.tree.handleSelect(0);
+                this.handleModalCancel();
+                this._refreshAllGroups();
+              })
+              .finally(() => {
+                this.modal.visible = false;
+                this.modal.saving = false;
+              });
+          }
+        }
+      });
+    },
     /**
      * 加载子节点
      * @param item
@@ -288,6 +439,29 @@ export default {
         ]),
         h('span', {style: {display: 'inline-block', float: 'right', marginRight: '32px'}})
       ]);
+    },
+    /**
+     * 刷新下拉选择列表
+     */
+    _refreshAllGroups() {
+      getGroups({groupTypes: 'g,c,d,t'})
+        .then(res => {
+          let opt = {
+            primaryKey: 'groupId',
+            parentKey: 'groupParentId',
+            startPid: '0'
+          }
+          let xx = res.data;
+          xx.unshift({
+            groupId: 0,
+            groupName: '无',
+            groupParentId: "0",
+            groupState: "10",
+            groupType: ""
+          });
+          let result = listConvertTree(xx, opt);
+          this.setSelectTree(result);
+        });
     },
     /**
      * @param node
@@ -366,6 +540,7 @@ export default {
   },
   mounted: function () {
     this.$refs.tree.handleSelect(0);
+    this._refreshAllGroups();
   }
 }
 </script>

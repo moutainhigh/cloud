@@ -6,9 +6,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 /**
- * 组织表
+ * 组织结构表
  *
- * @author 2020/08/26 14:32 on Youtao
+ * @author 2020/08/26 16:31 on Youtao
  */
 @Mapper
 @Repository

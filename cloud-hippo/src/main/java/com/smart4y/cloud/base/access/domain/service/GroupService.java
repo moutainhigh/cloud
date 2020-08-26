@@ -9,8 +9,10 @@ import com.smart4y.cloud.core.annotation.DomainService;
 import com.smart4y.cloud.mapper.BaseDomainService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import tk.mybatis.mapper.weekend.Weekend;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +30,23 @@ public class GroupService extends BaseDomainService<RbacGroup> {
     public GroupService(RbacGroupUserMapper rbacGroupUserMapper, RbacGroupRoleMapper rbacGroupRoleMapper) {
         this.rbacGroupUserMapper = rbacGroupUserMapper;
         this.rbacGroupRoleMapper = rbacGroupRoleMapper;
+    }
+
+    /**
+     * 获取指定组织列表
+     *
+     * @param groupTypes 组织类型列表
+     * @return 组织列表
+     */
+    public List<RbacGroup> getGroupsByTypes(@NonNull Collection<String> groupTypes) {
+        if (CollectionUtils.isEmpty(groupTypes)) {
+            return Collections.emptyList();
+        }
+        Weekend<RbacGroup> weekend = Weekend.of(RbacGroup.class);
+        weekend
+                .weekendCriteria()
+                .andIn(RbacGroup::getGroupType, groupTypes);
+        return this.list(weekend);
     }
 
     /**
@@ -133,5 +152,37 @@ public class GroupService extends BaseDomainService<RbacGroup> {
                 .weekendCriteria()
                 .andIn(RbacGroupRole::getRoleId, roleIds);
         rbacGroupRoleMapper.deleteByExample(weekend);
+    }
+
+    /**
+     * 更新`子节点状态`为`存在子节点`
+     *
+     * @param menuId 菜单ID
+     */
+    public void modifyChildForExist(long groupId) {
+        if (0 == groupId) {
+            return;
+        }
+        RbacGroup record = new RbacGroup()
+                .setGroupId(groupId)
+                .setExistChild(true)
+                .setLastModifiedDate(LocalDateTime.now());
+        this.updateSelectiveById(record);
+    }
+
+    /**
+     * 更新`子节点状态`为`不存在子节点`
+     *
+     * @param menuId 菜单ID
+     */
+    public void modifyChildForNotExist(long groupId) {
+        if (0 == groupId) {
+            return;
+        }
+        RbacGroup record = new RbacGroup()
+                .setGroupId(groupId)
+                .setExistChild(false)
+                .setLastModifiedDate(LocalDateTime.now());
+        this.updateSelectiveById(record);
     }
 }

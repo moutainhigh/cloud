@@ -1,5 +1,6 @@
 package com.smart4y.cloud.base.access.interfaces.rest;
 
+import com.smart4y.cloud.base.access.application.GroupApplicationService;
 import com.smart4y.cloud.base.access.domain.entity.*;
 import com.smart4y.cloud.base.access.domain.service.GroupService;
 import com.smart4y.cloud.base.access.domain.service.RoleService;
@@ -31,12 +32,21 @@ public class GroupController extends BaseAccessController {
     private final GroupService groupService;
     private final RoleService roleService;
     private final UserService userService;
+    private final GroupApplicationService groupApplicationService;
 
     @Autowired
-    public GroupController(GroupService groupService, RoleService roleService, UserService userService) {
+    public GroupController(GroupService groupService, RoleService roleService, UserService userService, GroupApplicationService groupApplicationService) {
         this.groupService = groupService;
         this.roleService = roleService;
         this.userService = userService;
+        this.groupApplicationService = groupApplicationService;
+    }
+
+    @GetMapping("/groups")
+    @ApiOperation(value = "组织:查询")
+    public ResultMessage<List<RbacGroup>> getGroups(@RequestParam("groupTypes") List<String> groupTypes) {
+        List<RbacGroup> result = groupService.getGroupsByTypes(groupTypes);
+        return ok(result);
     }
 
     @GetMapping("/groups/children")
@@ -52,12 +62,14 @@ public class GroupController extends BaseAccessController {
     @PostMapping("/groups")
     @ApiOperation(value = "组织:添加")
     public ResultMessage<Void> createGroup(@RequestBody CreateGroupCommand command) {
+        groupApplicationService.createGroup(command);
         return ok();
     }
 
     @PutMapping("/groups/{groupId}")
     @ApiOperation(value = "组织:修改")
     public ResultMessage<Void> modifyGroup(@PathVariable("groupId") Long groupId, @RequestBody ModifyGroupCommand command) {
+        // TODO 组织:修改
         return ok();
     }
 
@@ -67,6 +79,7 @@ public class GroupController extends BaseAccessController {
             @ApiImplicitParam(name = "groupId", value = "组织ID", required = true, paramType = "path", dataType = "long", example = "122367153805459456")
     })
     public ResultMessage<Void> removeGroup(@PathVariable("groupId") Long groupId) {
+        // TODO 组织:删除
         return ok();
     }
 
@@ -99,6 +112,7 @@ public class GroupController extends BaseAccessController {
             @ApiImplicitParam(name = "groupId", value = "组织ID", required = true, paramType = "path", dataType = "long", example = "122367153805459456")
     })
     public ResultMessage<Void> grantRole(@PathVariable("groupId") Long groupId, @RequestBody GrantGroupRoleCommand command) {
+        // TODO 组织:角色:分配 - 为组织{groupId}分配角色
         return ok();
     }
 
@@ -109,6 +123,7 @@ public class GroupController extends BaseAccessController {
             @ApiImplicitParam(name = "roleIds", value = "角色ID列表", required = true, paramType = "path", example = "222367153805459456;222367153805459457")
     })
     public ResultMessage<Void> removeGroupRole(@PathVariable("groupId") Long groupId, @PathVariable("roleIds") String roleIds) {
+        // TODO 组织:角色:删除 - 移除组织{groupId}已分配的角色{roleIds}
         return ok();
     }
 
@@ -131,6 +146,7 @@ public class GroupController extends BaseAccessController {
             @ApiImplicitParam(name = "groupId", value = "组织ID", required = true, paramType = "path", dataType = "long", example = "122367153805459456")
     })
     public ResultMessage<Void> grantUser(@PathVariable("groupId") Long groupId, @RequestBody GrantGroupUserCommand command) {
+        // TODO 组织:用户:分配 - 为组织{groupId}分配用户
         return ok();
     }
 
@@ -141,6 +157,7 @@ public class GroupController extends BaseAccessController {
             @ApiImplicitParam(name = "userIds", value = "用户ID列表", required = true, paramType = "path", example = "222367153805459456;222367153805459457")
     })
     public ResultMessage<Void> removeGroupUser(@PathVariable("groupId") Long groupId, @PathVariable("userIds") String userIds) {
+        // TODO 组织:用户:删除 - 移除组织{groupId}已分配的用户{userIds}
         return ok();
     }
 }
