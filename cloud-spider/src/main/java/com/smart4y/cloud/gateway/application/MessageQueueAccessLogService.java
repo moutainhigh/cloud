@@ -2,15 +2,12 @@ package com.smart4y.cloud.gateway.application;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
-import com.smart4y.cloud.core.event.LogAccessedEvent;
-import com.smart4y.cloud.core.constant.QueueConstants;
 import com.smart4y.cloud.core.interceptor.FeignRequestInterceptor;
 import com.smart4y.cloud.core.security.OpenUserDetails;
+import com.smart4y.cloud.core.toolkit.Kit;
 import com.smart4y.cloud.gateway.domain.GatewayContext;
 import com.smart4y.cloud.gateway.infrastructure.toolkit.ReactiveWebUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.route.Route;
 import org.springframework.http.HttpHeaders;
@@ -23,10 +20,9 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR;
 
@@ -40,30 +36,18 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.G
 @Component
 public class MessageQueueAccessLogService implements AccessLogService {
 
-    private final AmqpTemplate amqpTemplate;
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
+
     @Value("${spring.application.name}")
     private String defaultServiceId;
+
     /**
      * 不记录日志的请求列表
      */
-    private List<String> ignores = Arrays.asList(
+    private final List<String> ignores = Arrays.asList(
             "/**/oauth/check_token/**",
             "/**/gateway/access/logs/**",
             "/webjars/**");
-
-    @Autowired
-    public MessageQueueAccessLogService(AmqpTemplate amqpTemplate) {
-        this.amqpTemplate = amqpTemplate;
-    }
-
-    /**
-     * 是否忽略记录日志
-     */
-    private boolean ignore(String requestPath) {
-        return ignores.stream()
-                .anyMatch(path -> antPathMatcher.match(path, requestPath));
-    }
 
     @Override
     public void sendLog(ServerWebExchange exchange, Exception ex) {
@@ -74,49 +58,46 @@ public class MessageQueueAccessLogService implements AccessLogService {
             return;
         }
 
-        String method = request.getMethodValue();
+        String serviceId = getServiceId(exchange);
         Map<String, String> headers = request.getHeaders().toSingleValueMap();
         String userAgent = headers.get(HttpHeaders.USER_AGENT);
         String ip = ReactiveWebUtils.getRemoteAddress(exchange);
         LocalDateTime requestTime = exchange.getAttribute(FeignRequestInterceptor.X_REQUEST_TIME);
-        String serviceId = getServiceId(exchange);
-        Map data = getParams(exchange);
+        if (null == requestTime) {
+            requestTime = LocalDateTime.now();
+        }
+        String method = request.getMethodValue();
+        Map<String, String> data = getParams(exchange);
         String error = getErrorMessage(ex);
+        // String authentication = getAuthentication(exchange);
         int httpStatus = Objects.requireNonNull(response.getStatusCode()).value();
-        String authentication = getAuthentication(exchange);
+        LocalDateTime responseTime = LocalDateTime.now();
 
-        LogAccessedEvent event = new LogAccessedEvent()
-                .setRequestTime(requestTime)
-                .setServiceId(serviceId)
-                .setHttpStatus(String.valueOf(httpStatus))
-                .setHeaders(JSONObject.toJSONString(headers))
-                .setPath(requestPath)
-                .setParams(JSONObject.toJSONString(data))
-                .setIp(ip)
-                .setMethod(method)
-                .setUserAgent(userAgent)
-                .setResponseTime(LocalDateTime.now())
-                .setError(error)
-                .setAuthentication(authentication);
         try {
-            amqpTemplate.convertAndSend(QueueConstants.QUEUE_ACCESS_LOGS, event);
+            Map<String, Object> logs = new HashMap<>();
+            logs.put("serviceId", serviceId);
+            logs.put("ip", ip);
+            logs.put("userAgent", Kit.help().json().toJson(userAgent));
+            logs.put("headers", headers);
+            logs.put("requestTime", requestTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            logs.put("method", method);
+            logs.put("data", Kit.help().json().toJson(data));
+            logs.put("error", error);
+            logs.put("httpStatus", httpStatus);
+            logs.put("responseTime", responseTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            logs.put("useMillis", ChronoUnit.MILLIS.between(requestTime, responseTime));
+            log.info(Kit.help().json().toJson(logs));
         } catch (Exception e) {
             log.error("Access log save error {}", e.getMessage(), e);
         }
     }
 
     /**
-     * 获取认证用户信息
+     * 是否忽略记录日志
      */
-    private String getAuthentication(ServerWebExchange exchange) {
-        String key = "authentication";
-        Mono<Authentication> authenticationMono = exchange.getPrincipal();
-        Mono<OpenUserDetails> authentication = authenticationMono
-                .map(Authentication::getPrincipal)
-                .cast(OpenUserDetails.class);
-        Map<String, String> map = Maps.newHashMap();
-        authentication.subscribe(user -> map.put(key, JSONObject.toJSONString(user)));
-        return map.get(key);
+    private boolean ignore(String requestPath) {
+        return ignores.stream()
+                .anyMatch(path -> antPathMatcher.match(path, requestPath));
     }
 
     /**
@@ -148,12 +129,26 @@ public class MessageQueueAccessLogService implements AccessLogService {
     /**
      * 获取所有请求参数
      */
-    private Map getParams(ServerWebExchange exchange) {
-        Map data = Maps.newHashMap();
+    private Map<String, String> getParams(ServerWebExchange exchange) {
+        Map<String, String> data = Maps.newHashMap();
         GatewayContext gatewayContext = exchange.getAttribute(GatewayContext.CACHE_GATEWAY_CONTEXT);
         if (gatewayContext != null) {
             data = gatewayContext.getAllRequestData().toSingleValueMap();
         }
         return data;
+    }
+
+    /**
+     * 获取认证用户信息
+     */
+    private String getAuthentication(ServerWebExchange exchange) {
+        String key = "authentication";
+        Mono<Authentication> authenticationMono = exchange.getPrincipal();
+        Mono<OpenUserDetails> authentication = authenticationMono
+                .map(Authentication::getPrincipal)
+                .cast(OpenUserDetails.class);
+        Map<String, String> map = Maps.newHashMap();
+        authentication.subscribe(user -> map.put(key, JSONObject.toJSONString(user)));
+        return map.get(key);
     }
 }

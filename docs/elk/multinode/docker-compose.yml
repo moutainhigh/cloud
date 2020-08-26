@@ -20,6 +20,7 @@ services:
       - "discovery.seed_hosts=es2"
       - "cluster.initial_master_nodes=es1,es2"
     volumes:
+      - ./elasticsearch/config:/usr/share/elasticsearch/config
       - local-es-cluster-1-data:/usr/share/elasticsearch/data
   es2:
     image: local-es-cluster:latest
@@ -37,6 +38,7 @@ services:
       - "discovery.seed_hosts=es1"
       - "cluster.initial_master_nodes=es1,es2"
     volumes:
+      - ./elasticsearch/config:/usr/share/elasticsearch/config
       - local-es-cluster-2-data:/usr/share/elasticsearch/data
   logstash:
     image: local-elk-logstash:latest

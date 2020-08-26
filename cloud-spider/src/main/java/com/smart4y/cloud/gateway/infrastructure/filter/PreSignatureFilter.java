@@ -2,15 +2,17 @@ package com.smart4y.cloud.gateway.infrastructure.filter;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
 import com.google.common.collect.Maps;
-import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.core.constant.CommonConstants;
 import com.smart4y.cloud.core.exception.OpenSignatureException;
+import com.smart4y.cloud.core.interceptor.FeignRequestInterceptor;
+import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.core.toolkit.secret.SignatureUtils;
 import com.smart4y.cloud.gateway.domain.GatewayContext;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonSignatureDeniedHandler;
 import com.smart4y.cloud.gateway.infrastructure.feign.AppDTO;
 import com.smart4y.cloud.gateway.infrastructure.feign.BaseAppFeign;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.server.ServerWebExchange;
@@ -30,6 +32,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Youtao
  * Created by youtao on 2019-09-05.
  */
+@Slf4j
 public class PreSignatureFilter implements WebFilter {
 
     private static final AntPathMatcher pathMatch = new AntPathMatcher();
@@ -69,6 +72,12 @@ public class PreSignatureFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+
+        List<String> traceId = exchange.getRequest().getHeaders().get(FeignRequestInterceptor.X_REQUEST_ID);
+        String format = String.format(">>>>> >>>>> >>>>> %s, traceId=%s, path=%s",
+                this.getClass().getSimpleName(), traceId, (exchange.getRequest().getPath() + exchange.getRequest().getMethodValue()));
+        log.info(format);
+
         String requestPath = request.getURI().getPath();
         if (apiProperties.isCheckSign() && !notSign(requestPath)) {
             try {

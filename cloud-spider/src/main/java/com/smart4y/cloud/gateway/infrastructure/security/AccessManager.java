@@ -5,6 +5,7 @@ import com.smart4y.cloud.core.constant.CommonConstants;
 import com.smart4y.cloud.core.dto.OpenAuthority;
 import com.smart4y.cloud.core.dto.RemotePrivilegeOperationDTO;
 import com.smart4y.cloud.core.exception.OpenAlertException;
+import com.smart4y.cloud.core.interceptor.FeignRequestInterceptor;
 import com.smart4y.cloud.core.message.enums.AccessDenied403MessageType;
 import com.smart4y.cloud.core.toolkit.base.StringHelper;
 import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
@@ -26,6 +27,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -72,6 +74,12 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> authentication, AuthorizationContext authorizationContext) {
         ServerWebExchange exchange = authorizationContext.getExchange();
+
+        List<String> traceId = exchange.getRequest().getHeaders().get(FeignRequestInterceptor.X_REQUEST_ID);
+        String format = String.format(">>>>> >>>>> >>>>> %s, traceId=%s, path=%s",
+                this.getClass().getSimpleName(), traceId, (exchange.getRequest().getPath() + exchange.getRequest().getMethodValue()));
+        log.info(format);
+
         String requestPath = exchange.getRequest().getURI().getPath();
         if (!apiProperties.isAccessControl()) {
             return Mono.just(new AuthorizationDecision(true));

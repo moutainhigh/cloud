@@ -1,22 +1,26 @@
 package com.smart4y.cloud.core.configuration;
 
 import com.smart4y.cloud.core.interceptor.FeignRequestInterceptor;
+import com.smart4y.cloud.core.interceptor.TraceFilter;
 import feign.Request;
 import feign.RequestInterceptor;
 import feign.Retryer;
 import feign.codec.Encoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
 
+import javax.servlet.Filter;
+
 /**
  * Feign OAuth2 request interceptor.
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class FeignAutoConfiguration {
@@ -37,6 +41,14 @@ public class FeignAutoConfiguration {
         FeignRequestInterceptor interceptor = new FeignRequestInterceptor();
         log.info("FeignRequestInterceptor [{}]", interceptor);
         return interceptor;
+    }
+
+    @Bean
+    @ConditionalOnClass(Filter.class)
+    public TraceFilter traceFilter() {
+        TraceFilter traceFilter = new TraceFilter();
+        log.info("TraceFilter [{}]", traceFilter);
+        return traceFilter;
     }
 
     @Bean

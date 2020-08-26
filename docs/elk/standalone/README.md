@@ -12,7 +12,7 @@
 
 ## redis日志测试
 - 保证[http://localhost:5601](http://localhost:5601)可以正常访问
-- 登录Redis： `redis-cli -h localhost -p 6379 -a 123456`
+- 登录Redis
 - 在Redis中随便打点内容(需要json格式)：`lpush redis-log '{"msg":"hello world"}'`
 - 在Kibana上创建名为`logstash-*`的Index
 - 在Kibana上切换到`discovery`页面便可以看到`hello world`了。

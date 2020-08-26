@@ -1,6 +1,7 @@
 package com.smart4y.cloud.gateway.infrastructure.filter;
 
 import com.alibaba.fastjson.JSONObject;
+import com.smart4y.cloud.core.interceptor.FeignRequestInterceptor;
 import com.smart4y.cloud.gateway.domain.CachedBodyOutputMessage;
 import com.smart4y.cloud.gateway.domain.GatewayContext;
 import lombok.AllArgsConstructor;
@@ -56,6 +57,12 @@ public class GatewayContextFilter implements WebFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, @NonNull WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+
+        List<String> traceId = exchange.getRequest().getHeaders().get(FeignRequestInterceptor.X_REQUEST_ID);
+        String format = String.format(">>>>> >>>>> >>>>> %s, traceId=%s, path=%s",
+                this.getClass().getSimpleName(), traceId, (exchange.getRequest().getPath()  + exchange.getRequest().getMethodValue()));
+        log.info(format);
+
         GatewayContext gatewayContext = new GatewayContext();
         HttpHeaders headers = request.getHeaders();
         gatewayContext.setRequestHeaders(headers);

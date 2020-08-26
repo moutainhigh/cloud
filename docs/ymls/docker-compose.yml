@@ -70,67 +70,67 @@ services:
   #      - ${DOCKER_VOL_DIR}/redis/conf:/usr/local/etc/redis
   #      - ${DOCKER_VOL_DIR}/redis/data:/data
 
-  zookeeper:
-    image: wurstmeister/zookeeper:3.4.6
-    container_name: "zookeeper"
-    labels:
-      NAME: "zookeeper"
-    hostname: "zookeeper"
-    networks:
-      - cloud
-    ports:
-      - "2181:2181"
-    restart: always
+#  zookeeper:
+#    image: wurstmeister/zookeeper:3.4.6
+#    container_name: "zookeeper"
+#    labels:
+#      NAME: "zookeeper"
+#    hostname: "zookeeper"
+#    networks:
+#      - cloud
+#    ports:
+#      - "2181:2181"
+#    restart: always
 
-  elasticsearch:
-    image: elasticsearch:5.5.2
-    container_name: "elasticsearch"
-    labels:
-      NAME: "elasticsearch"
-    hostname: "elasticsearch"
-    networks:
-      - cloud
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    environment:
-      - ES_JAVA_OPTS=-Xms256m -Xmx256m
-    volumes:
-      - /Users/anve/docker/es/data:/usr/share/elasticsearch/data
-  #      - /Users/anve/docker/es/logs:/usr/share/elasticsearch/logs
-  #      - /Users/anve/docker/es/plugins/ik:/usr/share/elasticsearch/plugins/ik
-  #      - /Users/anve/docker/es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+#  elasticsearch:
+#    image: elasticsearch:5.5.2
+#    container_name: "elasticsearch"
+#    labels:
+#      NAME: "elasticsearch"
+#    hostname: "elasticsearch"
+#    networks:
+#      - cloud
+#    ports:
+#      - "9200:9200"
+#      - "9300:9300"
+#    environment:
+#      - ES_JAVA_OPTS=-Xms256m -Xmx256m
+#    volumes:
+#      - /Users/anve/docker/es/data:/usr/share/elasticsearch/data
+#  #      - /Users/anve/docker/es/logs:/usr/share/elasticsearch/logs
+#  #      - /Users/anve/docker/es/plugins/ik:/usr/share/elasticsearch/plugins/ik
+#  #      - /Users/anve/docker/es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
 
-  kafka:
-    image: wurstmeister/kafka:2.12-2.5.0
-    container_name: "kafka"
-    labels:
-      NAME: "kafka"
-    hostname: "kafka"
-    networks:
-      - cloud
-    ports:
-      - "9092:9092"
-    environment:
-      - TZ=CST-8
-      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      # 非必须，设置自动创建Topic
-      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
-      - KAFKA_ADVERTISED_HOST_NAME=127.0.0.1
-      - KAFKA_ADVERTISED_PORT=9092
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
-      - KAFKA_LISTENERS=PLAINTEXT://:9092
-      # 非必须，设置堆内存
-      - KAFKA_HEAP_OPTS=-Xmx1G -Xms1G
-      # 非必须，设置保存7天数据（默认值7天）
-      - KAFKA_LOG_RETENTION_HOURS=168
-    volumes:
-      # 将 kafka 的数据文件映射出来
-      - /Users/anve/docker/kafka:/kafka
-      - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - zookeeper
-    restart: always
+#  kafka:
+#    image: wurstmeister/kafka:2.12-2.5.0
+#    container_name: "kafka"
+#    labels:
+#      NAME: "kafka"
+#    hostname: "kafka"
+#    networks:
+#      - cloud
+#    ports:
+#      - "9092:9092"
+#    environment:
+#      - TZ=CST-8
+#      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+#      # 非必须，设置自动创建Topic
+#      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+#      - KAFKA_ADVERTISED_HOST_NAME=127.0.0.1
+#      - KAFKA_ADVERTISED_PORT=9092
+#      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
+#      - KAFKA_LISTENERS=PLAINTEXT://:9092
+#      # 非必须，设置堆内存
+#      - KAFKA_HEAP_OPTS=-Xmx1G -Xms1G
+#      # 非必须，设置保存7天数据（默认值7天）
+#      - KAFKA_LOG_RETENTION_HOURS=168
+#    volumes:
+#      # 将 kafka 的数据文件映射出来
+#      - /Users/anve/docker/kafka:/kafka
+#      - /var/run/docker.sock:/var/run/docker.sock
+#    depends_on:
+#      - zookeeper
+#    restart: always
 
   rabbitmq:
     image: rabbitmq:3.7-management
