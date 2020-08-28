@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Youtao on 2020/8/13 17:23
@@ -51,6 +52,9 @@ public class GroupService extends BaseDomainService<RbacGroup> {
 
     /**
      * 获取指定组织的子节点
+     * <p>
+     * 不包含`人员`
+     * </p>
      *
      * @param parentId 父级ID
      * @return 子节点组织列表
@@ -59,7 +63,8 @@ public class GroupService extends BaseDomainService<RbacGroup> {
         Weekend<RbacGroup> weekend = Weekend.of(RbacGroup.class);
         weekend
                 .weekendCriteria()
-                .andEqualTo(RbacGroup::getGroupParentId, parentId);
+                .andEqualTo(RbacGroup::getGroupParentId, parentId)
+                .andNotEqualTo(RbacGroup::getGroupType, "u");
         weekend
                 .orderBy("createdDate").asc();
         return this.list(weekend);
@@ -157,7 +162,7 @@ public class GroupService extends BaseDomainService<RbacGroup> {
     /**
      * 更新`子节点状态`为`存在子节点`
      *
-     * @param menuId 菜单ID
+     * @param groupId 组织ID
      */
     public void modifyChildForExist(long groupId) {
         if (0 == groupId) {
@@ -173,7 +178,7 @@ public class GroupService extends BaseDomainService<RbacGroup> {
     /**
      * 更新`子节点状态`为`不存在子节点`
      *
-     * @param menuId 菜单ID
+     * @param groupId 组织ID
      */
     public void modifyChildForNotExist(long groupId) {
         if (0 == groupId) {
@@ -184,5 +189,26 @@ public class GroupService extends BaseDomainService<RbacGroup> {
                 .setExistChild(false)
                 .setLastModifiedDate(LocalDateTime.now());
         this.updateSelectiveById(record);
+    }
+
+
+    /**
+     * 添加组织用户关联信息
+     *
+     * @param groupId 组织ID
+     * @param userIds 用户ID列表
+     */
+    public void saveGroupUser(long groupId, Collection<Long> userIds) {
+        if (0 == groupId || CollectionUtils.isEmpty(userIds)) {
+            return;
+        }
+        LocalDateTime now = LocalDateTime.now();
+        List<RbacGroupUser> items = userIds.stream()
+                .map(userId -> new RbacGroupUser()
+                        .setGroupId(groupId)
+                        .setUserId(userId)
+                        .setCreatedDate(now))
+                .collect(Collectors.toList());
+        rbacGroupUserMapper.insertList(items);
     }
 }

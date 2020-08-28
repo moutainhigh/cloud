@@ -111,18 +111,6 @@
            @on-cancel="handleModalCancel"
            width="40">
       <Form :label-width="80" :model="modal.formItem" :rules="modal.formItemRules" ref="modalForm">
-        <FormItem label="上级组织" prop="groupParentId">
-          <treeselect
-            :default-expand-level="1"
-            :normalizer="treeSelectNormalizer"
-            :options="modal.selectTreeData"
-            v-model="modal.formItem.groupParentId"/>
-        </FormItem>
-        <FormItem label="组织名称" prop="groupName">
-          <label>
-            <Input placeholder="请输入内容" v-model="modal.formItem.groupName"></Input>
-          </label>
-        </FormItem>
         <FormItem label="组织类型" prop="groupType">
           <label>
             <Select v-model="modal.formItem.groupType">
@@ -133,6 +121,18 @@
               <Option value="p">岗位</Option>
               <Option value="u">人员</Option>
             </Select>
+          </label>
+        </FormItem>
+        <FormItem label="上级组织" prop="groupParentId">
+          <treeselect
+            :default-expand-level="1"
+            :normalizer="treeSelectNormalizer"
+            :options="modal.selectTreeData"
+            v-model="modal.formItem.groupParentId"/>
+        </FormItem>
+        <FormItem label="组织名称" prop="groupName">
+          <label>
+            <Input placeholder="请输入内容" v-model="modal.formItem.groupName"></Input>
           </label>
         </FormItem>
         <FormItem label="状态" prop="groupState">
@@ -322,14 +322,14 @@ export default {
      * 弹框取消事件
      */
     handleModalCancel() {
-      this.modal.formItem = {
-        groupId: '',
-        groupParentId: '0',
-        groupName: '',
-        groupState: '10',
-        groupType: ''
-      };
-      this.$refs.modalForm.resetFields();
+      // this.modal.formItem = {
+      //   groupId: '',
+      //   groupParentId: '0',
+      //   groupName: '',
+      //   groupState: '10',
+      //   groupType: ''
+      // };
+      // this.$refs.modalForm.resetFields();
       this.modal.saving = false;
       this.modal.visible = false;
     },
