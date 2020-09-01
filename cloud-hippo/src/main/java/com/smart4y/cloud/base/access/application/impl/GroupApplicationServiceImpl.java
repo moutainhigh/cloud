@@ -8,7 +8,6 @@ import com.smart4y.cloud.base.access.domain.service.GroupService;
 import com.smart4y.cloud.base.access.domain.service.UserService;
 import com.smart4y.cloud.base.access.interfaces.dtos.group.CreateGroupCommand;
 import com.smart4y.cloud.core.annotation.ApplicationService;
-import com.smart4y.cloud.core.toolkit.gen.SnowflakeIdWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,65 +21,54 @@ import java.util.Collections;
 @ApplicationService
 public class GroupApplicationServiceImpl implements GroupApplicationService {
 
+    private final GroupService groupService;
+    private final UserService userService;
+
     @Autowired
-    private SnowflakeIdWorker snowflakeIdWorker;
-    @Autowired
-    private GroupService groupService;
-    @Autowired
-    private UserService userService;
+    public GroupApplicationServiceImpl(GroupService groupService, UserService userService) {
+        this.groupService = groupService;
+        this.userService = userService;
+    }
 
     @Override
     public void createGroup(CreateGroupCommand command) {
         String groupType = command.getGroupType();
         switch (groupType) {
             case "g":
-                createGroupGroup(command);
+                newGroup(command);
                 break;
             case "c":
-                createGroupCompany(command);
+                newCompany(command);
                 break;
             case "d":
-                createGroupDept(command);
+                newDepartment(command);
                 break;
             case "t":
-                createGroupTeam(command);
+                newTeam(command);
                 break;
             case "p":
-                createGroupPost(command);
+                newPost(command);
                 break;
             case "u":
-                createGroupUser(command);
+                newUser(command);
                 break;
         }
     }
 
-    private void createGroupUser(CreateGroupCommand command) {
+    private void newUser(CreateGroupCommand command) {
         Long groupParentId = command.getGroupParentId();
-        RbacGroup parentGroup = groupService.getById(groupParentId);
-        if (!parentGroup.getExistChild()) {
+        RbacGroup parent = groupService.getById(groupParentId);
+        if (!parent.getExistChild()) {
             // 更新父级子节点状态
-            groupService.modifyChildForExist(parentGroup.getGroupId());
+            groupService.modifyChildForExist(parent.getGroupId());
         }
 
         // 添加人员信息
-        // 所属机构ID
-        long groupOrgId = parentGroup.getGroupOrgId() == 0 ?
-                parentGroup.getGroupId() : parentGroup.getGroupOrgId();
-        long groupId = snowflakeIdWorker.nextId();
-        RbacGroup record = new RbacGroup()
-                .setGroupId(groupId)
-                .setGroupParentId(groupParentId)
-                .setGroupName(command.getGroupName())
-                .setGroupType(command.getGroupType())
-                .setGroupState(command.getGroupState())
-                .setExistChild(false)
-                .setGroupHierarchyId(parentGroup.getGroupHierarchyId() + groupId + "<")
-                .setCurrentGroupLeaderId(null)
-                .setGroupOrgId(groupOrgId)
-                .setCreatedDate(LocalDateTime.now());
-        groupService.save(record);
+        RbacGroup person = GroupFactory.newUser(parent, command);
+        groupService.save(person);
 
         // 添加组织-人员关联表信息
+        long groupId = person.getGroupId();
         groupService.saveGroupUser(groupParentId, Collections.singletonList(groupId));
 
         // 添加人员表信息
@@ -91,101 +79,48 @@ public class GroupApplicationServiceImpl implements GroupApplicationService {
         userService.save(user);
     }
 
-    private void createGroupPost(CreateGroupCommand command) {
-        RbacGroup parentGroup = groupService.getById(command.getGroupParentId());
-        if (!parentGroup.getExistChild()) {
+    private void newPost(CreateGroupCommand command) {
+        RbacGroup parent = groupService.getById(command.getGroupParentId());
+        if (!parent.getExistChild()) {
             // 更新父级子节点状态
-            groupService.modifyChildForExist(parentGroup.getGroupId());
+            groupService.modifyChildForExist(parent.getGroupId());
         }
 
         // 添加岗位信息
-        // 所属机构ID
-        long groupOrgId = parentGroup.getGroupOrgId() == 0 ?
-                parentGroup.getGroupId() : parentGroup.getGroupOrgId();
-        long groupId = snowflakeIdWorker.nextId();
-        RbacGroup record = new RbacGroup()
-                .setGroupId(groupId)
-                .setGroupParentId(command.getGroupParentId())
-                .setGroupName(command.getGroupName())
-                .setGroupType(command.getGroupType())
-                .setGroupState(command.getGroupState())
-                .setExistChild(false)
-                .setGroupHierarchyId(parentGroup.getGroupHierarchyId() + groupId + "<")
-                .setCurrentGroupLeaderId(null)
-                .setGroupOrgId(groupOrgId)
-                .setCreatedDate(LocalDateTime.now());
-        groupService.save(record);
+        RbacGroup post = GroupFactory.newPost(parent, command);
+        groupService.save(post);
     }
 
-    private void createGroupTeam(CreateGroupCommand command) {
-        RbacGroup parentGroup = groupService.getById(command.getGroupParentId());
-        if (!parentGroup.getExistChild()) {
+    private void newTeam(CreateGroupCommand command) {
+        RbacGroup parent = groupService.getById(command.getGroupParentId());
+        if (!parent.getExistChild()) {
             // 更新父级子节点状态
-            groupService.modifyChildForExist(parentGroup.getGroupId());
+            groupService.modifyChildForExist(parent.getGroupId());
         }
 
         // 添加小组信息
-        // 组织所属机构ID
-        long groupOrgId = parentGroup.getGroupOrgId() == 0 ?
-                parentGroup.getGroupId() : parentGroup.getGroupOrgId();
-        long groupId = snowflakeIdWorker.nextId();
-        RbacGroup record = new RbacGroup()
-                .setGroupId(groupId)
-                .setGroupParentId(command.getGroupParentId())
-                .setGroupName(command.getGroupName())
-                .setGroupType(command.getGroupType())
-                .setGroupState(command.getGroupState())
-                .setExistChild(false)
-                .setGroupHierarchyId(parentGroup.getGroupHierarchyId() + groupId + "<")
-                .setCurrentGroupLeaderId(null)
-                .setGroupOrgId(groupOrgId)
-                .setCreatedDate(LocalDateTime.now());
-        groupService.save(record);
+        RbacGroup team = GroupFactory.newTeam(parent, command);
+        groupService.save(team);
     }
 
-    private void createGroupDept(CreateGroupCommand command) {
-        RbacGroup parentGroup = groupService.getById(command.getGroupParentId());
-        if (!parentGroup.getExistChild()) {
+    private void newDepartment(CreateGroupCommand command) {
+        RbacGroup parent = groupService.getById(command.getGroupParentId());
+        if (!parent.getExistChild()) {
             // 更新父级子节点状态
-            groupService.modifyChildForExist(parentGroup.getGroupId());
+            groupService.modifyChildForExist(parent.getGroupId());
         }
 
         // 添加部门信息
-        // 组织所属机构ID
-        long groupOrgId = parentGroup.getGroupOrgId() == 0 ?
-                parentGroup.getGroupId() : parentGroup.getGroupOrgId();
-        long groupId = snowflakeIdWorker.nextId();
-        RbacGroup record = new RbacGroup()
-                .setGroupId(groupId)
-                .setGroupParentId(command.getGroupParentId())
-                .setGroupName(command.getGroupName())
-                .setGroupType(command.getGroupType())
-                .setGroupState(command.getGroupState())
-                .setExistChild(false)
-                .setGroupHierarchyId(parentGroup.getGroupHierarchyId() + groupId + "<")
-                .setCurrentGroupLeaderId(null)
-                .setGroupOrgId(groupOrgId)
-                .setCreatedDate(LocalDateTime.now());
-        groupService.save(record);
+        RbacGroup department = GroupFactory.newDepartment(parent, command);
+        groupService.save(department);
     }
 
-    private void createGroupCompany(CreateGroupCommand command) {
+    private void newCompany(CreateGroupCommand command) {
         long groupParentId = command.getGroupParentId();
         if (0 == groupParentId) {
             // 公司为顶级
-            long groupId = snowflakeIdWorker.nextId();
-            RbacGroup record = new RbacGroup()
-                    .setGroupId(groupId)
-                    .setGroupParentId(command.getGroupParentId())
-                    .setGroupName(command.getGroupName())
-                    .setGroupType(command.getGroupType())
-                    .setGroupState(command.getGroupState())
-                    .setExistChild(false)
-                    .setGroupHierarchyId("<" + groupId + "<")
-                    .setCurrentGroupLeaderId(null)
-                    .setGroupOrgId(0L)
-                    .setCreatedDate(LocalDateTime.now());
-            groupService.save(record);
+            RbacGroup company = GroupFactory.newCompany(null, command);
+            groupService.save(company);
         } else {
             // 集团下的公司
             RbacGroup parentGroup = groupService.getById(groupParentId);
@@ -193,26 +128,13 @@ public class GroupApplicationServiceImpl implements GroupApplicationService {
                 // 更新父级子节点状态
                 groupService.modifyChildForExist(parentGroup.getGroupId());
             }
-
-            // 添加公司信息
-            long groupId = snowflakeIdWorker.nextId();
-            RbacGroup record = new RbacGroup()
-                    .setGroupId(groupId)
-                    .setGroupParentId(command.getGroupParentId())
-                    .setGroupName(command.getGroupName())
-                    .setGroupType(command.getGroupType())
-                    .setGroupState(command.getGroupState())
-                    .setExistChild(false)
-                    .setGroupHierarchyId(parentGroup.getGroupHierarchyId() + groupId + "<")
-                    .setCurrentGroupLeaderId(null)
-                    .setGroupOrgId(parentGroup.getGroupId())
-                    .setCreatedDate(LocalDateTime.now());
-            groupService.save(record);
+            RbacGroup company = GroupFactory.newCompany(parentGroup, command);
+            groupService.save(company);
         }
     }
 
-    private void createGroupGroup(CreateGroupCommand command) {
-        RbacGroup group = GroupFactory.newGroup(command.getGroupName(), command.getGroupState());
+    private void newGroup(CreateGroupCommand command) {
+        RbacGroup group = GroupFactory.newGroup(command);
         groupService.save(group);
     }
 }
