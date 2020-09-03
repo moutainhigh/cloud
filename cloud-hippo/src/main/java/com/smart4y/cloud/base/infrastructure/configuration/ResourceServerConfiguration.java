@@ -1,8 +1,8 @@
 package com.smart4y.cloud.base.infrastructure.configuration;
 
-import com.smart4y.cloud.core.infrastructure.exception.handler.OpenAccessDeniedHandler;
-import com.smart4y.cloud.core.infrastructure.exception.handler.OpenAuthenticationEntryPoint;
-import com.smart4y.cloud.core.infrastructure.security.OpenHelper;
+import com.smart4y.cloud.core.exception.handler.OpenAccessDeniedHandler;
+import com.smart4y.cloud.core.exception.handler.OpenAuthenticationEntryPoint;
+import com.smart4y.cloud.core.security.OpenHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +23,7 @@ import javax.sql.DataSource;
  * Oauth2资源服务器配置
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Configuration
 @EnableResourceServer
@@ -63,8 +63,10 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
                 // feign访问或无需身份认证
                 .antMatchers(
-                        "/cloud/health",
+//                        "/access/**", 测试，访问控制
                         "/v2/api-docs",
+                        "/swagger-resources/**",
+                        "/access/privileges/**",
                         "/authority/access",
                         "/authority/app",
                         "/app/*/info",

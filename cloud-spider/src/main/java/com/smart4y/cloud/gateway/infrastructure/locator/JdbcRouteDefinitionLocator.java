@@ -1,7 +1,7 @@
 package com.smart4y.cloud.gateway.infrastructure.locator;
 
 import com.google.common.collect.Lists;
-import com.smart4y.cloud.core.domain.event.RouteRemoteRefreshedEvent;
+import com.smart4y.cloud.core.event.RouteRemoteRefreshedEvent;
 import com.smart4y.cloud.gateway.domain.RateLimitApiObj;
 import com.smart4y.cloud.gateway.domain.model.GatewayRoute;
 import com.smart4y.cloud.gateway.domain.service.GatewayRateLimitApiDomainService;
@@ -15,13 +15,12 @@ import org.springframework.cloud.gateway.filter.FilterDefinition;
 import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
 import org.springframework.cloud.gateway.route.InMemoryRouteDefinitionRepository;
 import org.springframework.cloud.gateway.route.RouteDefinition;
-import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import org.springframework.cloud.gateway.support.NameUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.context.ApplicationListener;
+import org.springframework.lang.NonNull;
 import org.springframework.web.util.UriComponentsBuilder;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
@@ -34,10 +33,10 @@ import java.util.Map;
  * <p>
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
-public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, ApplicationListener<RouteRemoteRefreshedEvent>, ApplicationEventPublisherAware {
+public class JdbcRouteDefinitionLocator implements ApplicationListener<RouteRemoteRefreshedEvent>, ApplicationEventPublisherAware {
 
     @Autowired
     private GatewayRouteDomainService gatewayRouteDomainService;
@@ -51,39 +50,33 @@ public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, Appli
     }
 
     @Override
-    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+    public void setApplicationEventPublisher(@NonNull ApplicationEventPublisher applicationEventPublisher) {
         this.publisher = applicationEventPublisher;
-    }
-
-    @Override
-    public Flux<RouteDefinition> getRouteDefinitions() {
-        return repository.getRouteDefinitions();
     }
 
     /**
      * BUS刷新事件
      */
     @Override
-    public void onApplicationEvent(RouteRemoteRefreshedEvent event) {
+    public void onApplicationEvent(@NonNull RouteRemoteRefreshedEvent event) {
         refresh();
     }
 
     /**
      * 刷新路由
      */
-    public Mono<Void> refresh() {
+    public void refresh() {
         this.loadRoutes();
         // 触发默认路由刷新事件,刷新缓存路由
         this.publisher.publishEvent(new RefreshRoutesEvent(this));
-        return Mono.empty();
     }
 
     private String getFullPath(List<GatewayRoute> routeList, String serviceId, String path) {
         final String[] fullPath = {path.startsWith("/") ? path : "/" + path};
         if (routeList != null) {
             routeList.forEach(route -> {
-                if (route.getServiceId() != null && route.getServiceId().equals(serviceId)) {
-                    fullPath[0] = route.getPath().replace("/**", path.startsWith("/") ? path : "/" + path);
+                if (route.getRouteServiceId() != null && route.getRouteServiceId().equals(serviceId)) {
+                    fullPath[0] = route.getRoutePath().replace("/**", path.startsWith("/") ? path : "/" + path);
                 }
             });
         }
@@ -102,7 +95,7 @@ public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, Appli
      * #转发去掉前缀,总要否则swagger无法加载
      * - StripPrefix=1
      */
-    private Mono<Void> loadRoutes() {
+    private void loadRoutes() {
         //从数据库拿到路由配置
         try {
             List<GatewayRoute> routeList = gatewayRouteDomainService.findAllByStatusEnable();
@@ -173,12 +166,12 @@ public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, Appli
                     Map<String, String> predicatePathParams = new HashMap<>(8);
                     predicatePath.setName("Path");
                     predicatePathParams.put("name", StringUtils.isBlank(gatewayRoute.getRouteName()) ? gatewayRoute.getRouteId().toString() : gatewayRoute.getRouteName());
-                    predicatePathParams.put("pattern", gatewayRoute.getPath());
-                    predicatePathParams.put("pathPattern", gatewayRoute.getPath());
+                    predicatePathParams.put("pattern", gatewayRoute.getRoutePath());
+                    predicatePathParams.put("pathPattern", gatewayRoute.getRoutePath());
                     predicatePath.setArgs(predicatePathParams);
                     predicates.add(predicatePath);
                     // 服务地址
-                    URI uri = UriComponentsBuilder.fromUriString(StringUtils.isNotBlank(gatewayRoute.getUrl()) ? gatewayRoute.getUrl() : "lb://" + gatewayRoute.getServiceId()).build().toUri();
+                    URI uri = UriComponentsBuilder.fromUriString(StringUtils.isNotBlank(gatewayRoute.getRouteUrl()) ? gatewayRoute.getRouteUrl() : "lb://" + gatewayRoute.getRouteServiceId()).build().toUri();
 
                     FilterDefinition stripPrefixDefinition = new FilterDefinition();
                     Map<String, String> stripPrefixParams = new HashMap<>(8);
@@ -198,6 +191,5 @@ public class JdbcRouteDefinitionLocator implements RouteDefinitionLocator, Appli
         } catch (Exception e) {
             log.error("加载动态路由错误:{}", e.getLocalizedMessage(), e);
         }
-        return Mono.empty();
     }
 }

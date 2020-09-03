@@ -1,6 +1,6 @@
 package com.smart4y.cloud.gateway.domain.model;
 
-import com.smart4y.cloud.core.infrastructure.mapper.BaseEntity;
+import com.smart4y.cloud.mapper.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Table(name = "gateway_rate_limit_api")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class GatewayRateLimitApi extends BaseEntity {
+public class GatewayRateLimitApi extends BaseEntity<GatewayRateLimitApi> {
 
     /**
      * 限制数量

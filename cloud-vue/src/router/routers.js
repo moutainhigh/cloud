@@ -1,4 +1,5 @@
 import Main from '@/components/main'
+
 /**
  * iview-admin中meta除了原生参数外可配置的参数:
  * meta: {
@@ -16,101 +17,101 @@ import Main from '@/components/main'
  */
 
 export default [
-  {
-    path: '/login',
-    name: 'login',
-    meta: {
-      title: 'Login - 登录',
-      hideInMenu: true
-    },
-    component: () => import('@/view/login/login.vue')
-  },
-  {
-    path: '/',
-    name: '_home',
-    redirect: '/home',
-    component: Main,
-    meta: {
-      hideInMenu: true,
-      notCache: true
-    },
-    children: [
-      {
-        path: '/home',
-        name: 'home',
+    {
+        path: '/login',
+        name: 'login',
         meta: {
-          hideInMenu: true,
-          title: '首页',
-          notCache: true,
-          icon: 'md-home'
+            title: 'Login - 登录',
+            hideInMenu: true
         },
-        component: () => import('@/view/home')
-      }
-    ]
-  },
-  {
-    path: '/account',
-    name: 'account',
-    component: Main,
-    meta: {
-      notCache: true,
-      hideInBread: true,
-      hideInMenu: true
+        component: () => import('@/view/login/login.vue')
     },
-    children: [
-      {
-        path: 'setting',
-        name: 'setting',
+    {
+        path: '/',
+        name: '_home',
+        redirect: '/home',
+        component: Main,
         meta: {
-          icon: 'md-notifications',
-          title: '个人设置'
+            hideInMenu: true,
+            notCache: true
         },
-        component: () => import('@/view/module/account/setting.vue')
-      }
-    ]
-  },
-  {
-    path: '/error_logger',
-    name: 'error_logger',
-    meta: {
-      hideInBread: true,
-      hideInMenu: true
+        children: [
+            {
+                path: '/home',
+                name: 'home',
+                meta: {
+                    hideInMenu: true,
+                    title: '首页',
+                    notCache: true,
+                    icon: 'md-home'
+                },
+                component: () => import('@/view/home')
+            }
+        ]
     },
-    component: Main,
-    children: [
-      {
-        path: 'error_logger_page',
-        name: 'error_logger_page',
+    {
+        path: '/account',
+        name: 'account',
+        component: Main,
         meta: {
-          icon: 'ios-bug',
-          title: '错误收集'
+            notCache: true,
+            hideInBread: true,
+            hideInMenu: true
         },
-        component: () => import('@/view/error-page/error-logger.vue')
-      }
-    ]
-  },
-  {
-    path: '/login/success',
-    name: 'loginSuccess',
-    meta: {
-      hideInMenu: true
+        children: [
+            {
+                path: 'setting',
+                name: 'setting',
+                meta: {
+                    icon: 'md-notifications',
+                    title: '个人设置'
+                },
+                component: () => import('@/view/module/account/setting.vue')
+            }
+        ]
     },
-    component: () => import('@/view/login/login-success.vue')
-  },
-  {
-    path: '/401',
-    name: 'error_401',
-    meta: {
-      hideInMenu: true
+    {
+        path: '/error_logger',
+        name: 'error_logger',
+        meta: {
+            hideInBread: true,
+            hideInMenu: true
+        },
+        component: Main,
+        children: [
+            {
+                path: 'error_logger_page',
+                name: 'error_logger_page',
+                meta: {
+                    icon: 'ios-bug',
+                    title: '错误收集'
+                },
+                component: () => import('@/view/error-page/error-logger.vue')
+            }
+        ]
     },
-    component: () => import('@/view/error-page/401.vue')
-  },
-  {
-    path: '/500',
-    name: 'error_500',
-    meta: {
-      hideInMenu: true
+    {
+        path: '/login/success',
+        name: 'loginSuccess',
+        meta: {
+            hideInMenu: true
+        },
+        component: () => import('@/view/login/login-success.vue')
     },
-    component: () => import('@/view/error-page/500.vue')
-  }
+    {
+        path: '/401',
+        name: 'error_401',
+        meta: {
+            hideInMenu: true
+        },
+        component: () => import('@/view/error-page/401.vue')
+    },
+    {
+        path: '/500',
+        name: 'error_500',
+        meta: {
+            hideInMenu: true
+        },
+        component: () => import('@/view/error-page/500.vue')
+    }
 ]

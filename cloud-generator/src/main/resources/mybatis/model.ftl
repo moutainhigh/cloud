@@ -1,53 +1,21 @@
-package ${targetPackage};
+package ${tableClass.packageName};
 
-import com.smart4y.cloud.core.infrastructure.mapper.BaseEntity;
-<#if tableClass.allFields??>
-    <#list tableClass.allFields as field>
-        <#if field.identity==true??>
-import com.smart4y.cloud.core.infrastructure.toolkit.gen.SnowflakeId;
-        </#if>
-    </#list>
-</#if>
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
-<#if tableClass.allFields??>
-    <#list tableClass.allFields as field>
-        <#if field.identity==true??>
-import tk.mybatis.mapper.annotation.KeySql;
-        </#if>
-    </#list>
-</#if>
-
-import javax.persistence.Column;
-<#if tableClass.allFields??>
-    <#list tableClass.allFields as field>
-        <#if field.identity==true??>
-import javax.persistence.Id;
-        </#if>
-    </#list>
-</#if>
-import javax.persistence.Table;
-<#if fullyQualifiedJavaTypes??>
-    <#list fullyQualifiedJavaTypes as fullyQualifiedJavaType>
+<#list tableClass.javaTypes as fullyQualifiedJavaType>
 import ${fullyQualifiedJavaType};
-    </#list>
-</#if>
+</#list>
 
 /**
- * ${tableRemarks}
+ * ${tableClass.tableRemarks}
  *
- * @author Youtao
- *         Created by ${author} on ${createdAt}.
+ * @author ${tableClass.tableAuthor} on ${tableClass.createdAt}
  */
 @Data
-@Table(name = "${tableClass.tableName}")
 @Accessors(chain = true)
+@Table(name = "${tableClass.tableName}")
 @EqualsAndHashCode(callSuper = true)
-public class ${tableClass.shortClassName} extends BaseEntity {
+public class ${tableClass.shortClassName} extends BaseEntity<${tableClass.shortClassName}> {
 
-<#if tableClass.allFields??>
-    <#list tableClass.allFields as field>
+<#list tableClass.allFields as field>
     /**
      * ${field.remarks}
      */
@@ -58,8 +26,8 @@ public class ${tableClass.shortClassName} extends BaseEntity {
     @Column(name = "${field.columnName}")
     private ${field.shortTypeName} ${field.fieldName};
 
-    </#list>
-</#if>
+</#list>
+
     /**
      * 构造器
      */

@@ -5,13 +5,11 @@
 
     <groupId>com.smart4y</groupId>
     <artifactId>cloud</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>#0 微服务的平台</name>
-    <description>Cloud project for Spring Boot</description>
 
     <modules>
-        <module>cloud-dependencies</module>
+        <module>cloud-common</module>
         <module>cloud-core</module>
         <module>cloud-generator</module>
         <module>cloud-hippo</module>
@@ -22,66 +20,129 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <!-- Spring Cloud -->
-        <spring-cloud.version>Greenwich.SR2</spring-cloud.version>
-        <spring-cloud-alibaba.version>0.9.0.RELEASE</spring-cloud-alibaba.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <main.basedir>${project.basedir}</main.basedir>
+        <!-- Spring Boot/Cloud -->
+        <spring.boot.version>2.2.8.RELEASE</spring.boot.version>
+        <spring.cloud.version>Hoxton.SR6</spring.cloud.version>
         <!-- 镜像前缀 -->
         <docker.image.prefix>cloud</docker.image.prefix>
         <maven-dockerfile-plugin.version>1.4.10</maven-dockerfile-plugin.version>
     </properties>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.6.RELEASE</version>
-        <relativePath/>
-    </parent>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
+                <version>${spring.cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${spring-cloud-alibaba.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <!-- 内部依赖管理 -->
+
             <dependency>
                 <groupId>com.smart4y</groupId>
-                <artifactId>cloud-dependencies</artifactId>
+                <artifactId>cloud-common-neo4j</artifactId>
                 <version>${project.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.smart4y</groupId>
+                <artifactId>cloud-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.smart4y</groupId>
+                <artifactId>cloud-generator</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
     <build>
-        <resources>
-            <resource>
-                <!-- 先指定 src/main/resources下所有文件及文件夹为资源文件 -->
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
         <pluginManagement>
             <plugins>
-                <!-- MyBatis 生成插件 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.22.2</version>
+                    <configuration>
+                        <skipTests>true</skipTests>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.1.0</version>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                        <nonFilteredFileExtensions>
+                            <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>eot</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>woff</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>woff2</nonFilteredFileExtension>
+                        </nonFilteredFileExtensions>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.1.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.1.0</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring.boot.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
                 <plugin>
                     <groupId>org.mybatis.generator</groupId>
                     <artifactId>mybatis-generator-maven-plugin</artifactId>
-                    <version>1.3.7</version>
+                    <version>1.4.0</version>
                     <configuration>
                         <configurationFile>${basedir}/src/main/resources/mybatis/generatorConfig.xml
                         </configurationFile>
@@ -95,71 +156,47 @@
                             <version>${project.version}</version>
                             <type>jar</type>
                         </dependency>
-                        <!-- 依赖业务模块 version:${project.version} type:jar -->
+                        <!-- 引入业务模块依赖 groupId:artifactId:version:${version} type:jar -->
                     </dependencies>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-deploy-plugin</artifactId>
                 </plugin>
                 <!-- Docker镜像插件 -->
                 <plugin>
                     <groupId>com.spotify</groupId>
                     <artifactId>dockerfile-maven-plugin</artifactId>
                     <version>${maven-dockerfile-plugin.version}</version>
-                    <configuration>
-                        <!-- Docker私服地址 -->
-                        <repository>${docker.image.prefix}/${project.artifactId}</repository>
-                        <tag>${project.version}</tag>
-                        <buildArgs>
-                            <!-- 提供参数向Dockerfile传递 -->
-                            <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
-                            <!-- 提供参数向Dockerfile传递 -->
-                            <IP_DB_FILE>src/main/resources/ip/ip2region.db</IP_DB_FILE>
-                        </buildArgs>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>build-image</id>
-                            <!-- 将插件绑定在package这个phase上（也就是说，用户只需执行mvn package ，就会自动执行mvn docker:build） -->
-                            <phase>package</phase>
-                            <goals>
-                                <goal>build</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <!-- 以下插件自动继承，子模块可以不引入 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 
-    <!--<profiles>
-        <profile>
-            <id>dev</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <profile.name>dev</profile.name>
-                &lt;!&ndash; Nacos配置中心命名空间，用于支持多环境。这里必须使用ID，不能使用名称，默认为空 &ndash;&gt;
-                <config.namespace/>
-                <config.server-addr>127.0.0.1:8848</config.server-addr>
-                <discovery.server-addr>127.0.0.1:8848</discovery.server-addr>
-                &lt;!&ndash; Docker私有镜像仓库 &ndash;&gt;
-                <docker.registry>10.0.3.80:2375</docker.registry>
-            </properties>
-        </profile>
-        <profile>
-            <id>docker</id>
-            <properties>
-                <profile.name>docker</profile.name>
-                &lt;!&ndash; Nacos配置中心命名空间，用于支持多环境。这里必须使用ID，不能使用名称，默认为空 &ndash;&gt;
-                <config.namespace/>
-                <config.server-addr>127.0.0.1:8848</config.server-addr>
-                <discovery.server-addr>127.0.0.1:8848</discovery.server-addr>
-                &lt;!&ndash; Docker私有镜像仓库 &ndash;&gt;
-                <docker.registry>10.0.3.80:2375</docker.registry>
-            </properties>
-        </profile>
-    </profiles>-->
+    <repositories>
+        <repository>
+            <id>aliYun</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>jCenter-snapshots</id>
+            <name>jCenter</name>
+            <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
+        </repository>
+    </repositories>
 </project>

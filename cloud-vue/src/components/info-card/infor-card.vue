@@ -15,6 +15,7 @@
 
 <script>
 import CommonIcon from '_c/common-icon'
+
 export default {
   name: 'InforCard',
   components: {
@@ -43,10 +44,10 @@ export default {
     }
   },
   computed: {
-    leftWidth () {
+    leftWidth() {
       return `${this.left}%`
     },
-    rightWidth () {
+    rightWidth() {
       return `${100 - this.left}%`
     }
   }
@@ -54,38 +55,47 @@ export default {
 </script>
 
 <style lang="less">
-.common{
+.common {
   float: left;
   height: 100%;
   display: table;
   text-align: center;
 }
-.size{
+
+.size {
   width: 100%;
   height: 100%;
 }
-.middle-center{
+
+.middle-center {
   display: table-cell;
   vertical-align: middle;
 }
-.info-card-wrapper{
+
+.info-card-wrapper {
   .size;
   overflow: hidden;
-  .ivu-card-body{
+
+  .ivu-card-body {
     .size;
   }
-  .content-con{
+
+  .content-con {
     .size;
     position: relative;
-    .left-area{
+
+    .left-area {
       .common;
-      & > .icon{
+
+      & > .icon {
         .middle-center;
       }
     }
-    .right-area{
+
+    .right-area {
       .common;
-      & > div{
+
+      & > div {
         .middle-center;
       }
     }

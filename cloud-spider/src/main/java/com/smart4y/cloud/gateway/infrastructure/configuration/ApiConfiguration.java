@@ -5,18 +5,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.smart4y.cloud.core.infrastructure.properties.OpenCommonProperties;
-import com.smart4y.cloud.core.infrastructure.spring.SpringContextHolder;
+import com.smart4y.cloud.core.properties.OpenCommonProperties;
+import com.smart4y.cloud.core.spring.SpringContextHolder;
 import com.smart4y.cloud.gateway.application.AccessLogService;
 import com.smart4y.cloud.gateway.infrastructure.exception.JsonExceptionHandler;
-import com.smart4y.cloud.gateway.infrastructure.feign.BaseAuthorityFeign;
 import com.smart4y.cloud.gateway.infrastructure.feign.GatewayFeign;
+import com.smart4y.cloud.gateway.infrastructure.feign.RemotePrivilegeFeign;
 import com.smart4y.cloud.gateway.infrastructure.filter.GatewayContextFilter;
 import com.smart4y.cloud.gateway.infrastructure.filter.RemoveGatewayContextFilter;
 import com.smart4y.cloud.gateway.infrastructure.locator.JdbcRouteDefinitionLocator;
 import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
-import com.smart4y.cloud.gateway.interfaces.actuator.ApiEndpoint;
+import com.smart4y.cloud.gateway.interfaces.web.RouteRefreshEndpoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnEnabledEndpoint;
@@ -54,7 +54,7 @@ import java.util.TimeZone;
  * 网关配置类
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @Configuration
@@ -126,12 +126,6 @@ public class ApiConfiguration {
         return new HttpMessageConverters(jackson2HttpMessageConverter);
     }
 
-    @Bean
-    @Primary
-    public SwaggerProvider swaggerProvider(RouteDefinitionLocator routeDefinitionLocator) {
-        return new SwaggerProvider(routeDefinitionLocator);
-    }
-
     /**
      * 动态路由加载
      */
@@ -147,8 +141,8 @@ public class ApiConfiguration {
      */
     @Bean
     @Lazy
-    public ResourceLocator resourceLocator(RouteDefinitionLocator routeDefinitionLocator, BaseAuthorityFeign baseAuthorityFeign, GatewayFeign gatewayFeign) {
-        ResourceLocator resourceLocator = new ResourceLocator(routeDefinitionLocator, baseAuthorityFeign, gatewayFeign);
+    public ResourceLocator resourceLocator(RouteDefinitionLocator routeDefinitionLocator, GatewayFeign gatewayFeign, RemotePrivilegeFeign remotePrivilegeFeign) {
+        ResourceLocator resourceLocator = new ResourceLocator(routeDefinitionLocator, gatewayFeign, remotePrivilegeFeign);
         log.info("ResourceLocator [{}]", resourceLocator);
         return resourceLocator;
     }
@@ -159,8 +153,8 @@ public class ApiConfiguration {
     @Bean
     @ConditionalOnEnabledEndpoint
     @ConditionalOnClass({Endpoint.class})
-    public ApiEndpoint apiEndpoint(ApplicationContext context, BusProperties bus) {
-        ApiEndpoint endpoint = new ApiEndpoint(context, bus.getId());
+    public RouteRefreshEndpoint apiEndpoint(ApplicationContext context, BusProperties bus) {
+        RouteRefreshEndpoint endpoint = new RouteRefreshEndpoint(context, bus.getId());
         log.info("ApiEndpoint [{}]", endpoint);
         return endpoint;
     }

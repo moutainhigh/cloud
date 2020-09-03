@@ -13,15 +13,11 @@ import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
 import com.smart4y.cloud.gateway.infrastructure.properties.ApiProperties;
 import com.smart4y.cloud.gateway.infrastructure.security.AccessManager;
 import com.smart4y.cloud.gateway.infrastructure.security.RedisAuthenticationManager;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
@@ -32,22 +28,21 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.authentication.ServerAuthenticationEntryPointFailureHandler;
 import org.springframework.security.web.server.context.SecurityContextServerWebExchange;
-import org.springframework.web.cors.reactive.CorsUtils;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.server.ServerWebExchange;
-import org.springframework.web.server.WebFilter;
-import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 /**
  * Oauth2资源服务器 配置
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
+@Slf4j
 @Configuration
 public class ResourceServerConfiguration {
-
-    private static final String CORS_MAX_AGE = "18000L";
 
     private final BaseAppFeign baseAppFeign;
     private final ApiProperties apiProperties;
@@ -56,7 +51,6 @@ public class ResourceServerConfiguration {
     private final RedisConnectionFactory redisConnectionFactory;
 
     @Autowired
-    @SuppressWarnings("all")
     public ResourceServerConfiguration(MessageQueueAccessLogService messageQueueAccessLogService, ApiProperties apiProperties, ResourceLocator resourceLocator, RedisConnectionFactory redisConnectionFactory, BaseAppFeign baseAppFeign) {
         this.messageQueueAccessLogService = messageQueueAccessLogService;
         this.apiProperties = apiProperties;
@@ -65,32 +59,20 @@ public class ResourceServerConfiguration {
         this.baseAppFeign = baseAppFeign;
     }
 
-    /**
-     * CORS跨域 配置
-     */
-    private WebFilter corsFilter() {
-        return (ServerWebExchange ctx, WebFilterChain chain) -> {
-            ServerHttpRequest request = ctx.getRequest();
-            if (CorsUtils.isCorsRequest(request)) {
-                HttpHeaders requestHeaders = request.getHeaders();
-                ServerHttpResponse response = ctx.getResponse();
-                HttpMethod requestMethod = requestHeaders.getAccessControlRequestMethod();
-                HttpHeaders headers = response.getHeaders();
-                headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, requestHeaders.getOrigin());
-                headers.addAll(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, requestHeaders.getAccessControlRequestHeaders());
-                if (requestMethod != null) {
-                    headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, requestMethod.name());
-                }
-                headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
-                headers.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "*");
-                headers.add(HttpHeaders.ACCESS_CONTROL_MAX_AGE, CORS_MAX_AGE);
-                if (request.getMethod() == HttpMethod.OPTIONS) {
-                    response.setStatusCode(HttpStatus.OK);
-                    return Mono.empty();
-                }
-            }
-            return chain.filter(ctx);
-        };
+    @Bean
+    CorsWebFilter corsWebFilter() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(true);
+        //corsConfiguration.addExposedHeader("*");
+        corsConfiguration.setMaxAge(18000L);
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.addAllowedOrigin("*");
+
+        UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        corsConfigurationSource
+                .registerCorsConfiguration("/**", corsConfiguration);
+        return new CorsWebFilter(corsConfigurationSource);
     }
 
     /**
@@ -116,6 +98,7 @@ public class ResourceServerConfiguration {
         });
 
         http
+                .headers().frameOptions().disable().and()// swagger 嵌入当前页面用到此配置（iframe）
                 .httpBasic().disable()
                 .csrf().disable()
                 .authorizeExchange()
@@ -129,7 +112,7 @@ public class ResourceServerConfiguration {
                 // 日志前置过滤器
                 .addFilterAt(new PreRequestFilter(), SecurityWebFiltersOrder.FIRST)
                 // 跨域过滤器
-                .addFilterAt(corsFilter(), SecurityWebFiltersOrder.CORS)
+                .addFilterAt(corsWebFilter(), SecurityWebFiltersOrder.CORS)
                 // 签名验证过滤器
                 .addFilterAt(new PreSignatureFilter(baseAppFeign, apiProperties, new JsonSignatureDeniedHandler(messageQueueAccessLogService)), SecurityWebFiltersOrder.CSRF)
                 // 访问验证前置过滤器

@@ -1,8 +1,8 @@
 package com.smart4y.cloud.gateway.infrastructure.exception;
 
 import com.alibaba.fastjson.JSONObject;
-import com.smart4y.cloud.core.domain.ResultEntity;
-import com.smart4y.cloud.core.infrastructure.exception.handler.OpenGlobalExceptionHandler;
+import com.smart4y.cloud.core.message.ResultMessage;
+import com.smart4y.cloud.core.exception.global.ExceptionHelper;
 import com.smart4y.cloud.gateway.application.AccessLogService;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
@@ -18,7 +18,7 @@ import java.nio.charset.Charset;
  * 异常处理（记录日志）
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 abstract class DeniedHandler {
 
@@ -29,12 +29,12 @@ abstract class DeniedHandler {
     }
 
     Mono<Void> handle(ServerWebExchange exchange, Exception e) {
-        ResultEntity resultEntity = OpenGlobalExceptionHandler.resolveException(e, exchange.getRequest().getURI().getPath());
+        ResultMessage<Void> resultEntity = ExceptionHelper.resolveException(e);
         return Mono
                 .defer(() -> Mono.just(exchange.getResponse()))
                 .flatMap((response) -> {
-                    response.setStatusCode(HttpStatus.valueOf(resultEntity.getHttpStatus()));
-                    response.getHeaders().setContentType(MediaType.APPLICATION_JSON_UTF8);
+                    response.setStatusCode(HttpStatus.OK);
+                    response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
                     DataBufferFactory dataBufferFactory = response.bufferFactory();
                     DataBuffer buffer = dataBufferFactory.wrap(JSONObject.toJSONString(resultEntity).getBytes(Charset.defaultCharset()));
                     // 保存日志

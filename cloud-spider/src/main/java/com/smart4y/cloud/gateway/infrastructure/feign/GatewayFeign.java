@@ -1,10 +1,10 @@
 package com.smart4y.cloud.gateway.infrastructure.feign;
 
-import com.smart4y.cloud.core.domain.ResultEntity;
-import com.smart4y.cloud.gateway.interfaces.GatewayRouteDTO;
-import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
-import com.smart4y.cloud.core.interfaces.RateLimitApiDTO;
-import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
+import com.smart4y.cloud.core.message.ResultMessage;
+import com.smart4y.cloud.gateway.interfaces.vo.GatewayRouteDTO;
+import com.smart4y.cloud.core.dto.IpLimitApiDTO;
+import com.smart4y.cloud.core.dto.RateLimitApiDTO;
+import com.smart4y.cloud.core.constant.BaseConstants;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,23 +25,23 @@ public interface GatewayFeign {
      * 获取接口黑名单列表
      */
     @GetMapping("/gateway/api/blackList")
-    ResultEntity<List<IpLimitApiDTO>> getApiBlackList();
+    ResultMessage<List<IpLimitApiDTO>> getApiBlackList();
 
     /**
      * 获取接口白名单列表
      */
     @GetMapping("/gateway/api/whiteList")
-    ResultEntity<List<IpLimitApiDTO>> getApiWhiteList();
+    ResultMessage<List<IpLimitApiDTO>> getApiWhiteList();
 
     /**
      * 获取限流列表
      */
     @GetMapping("/gateway/api/rateLimit")
-    ResultEntity<List<RateLimitApiDTO>> getApiRateLimitList();
+    ResultMessage<List<RateLimitApiDTO>> getApiRateLimitList();
 
     /**
      * 获取路由列表
      */
     @GetMapping("/gateway/api/route")
-    ResultEntity<List<GatewayRouteDTO>> getApiRouteList();
+    ResultMessage<List<GatewayRouteDTO>> getApiRouteList();
 }

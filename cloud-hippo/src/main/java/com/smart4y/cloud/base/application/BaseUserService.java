@@ -2,10 +2,10 @@ package com.smart4y.cloud.base.application;
 
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.domain.model.BaseUser;
-import com.smart4y.cloud.base.interfaces.valueobject.command.AddAdminUserCommand;
-import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterAdminThirdPartyCommand;
-import com.smart4y.cloud.base.interfaces.valueobject.query.BaseUserQuery;
-import com.smart4y.cloud.core.interfaces.UserAccountVO;
+import com.smart4y.cloud.base.interfaces.dtos.AddUserCommand;
+import com.smart4y.cloud.base.interfaces.dtos.AddUserThirdPartyCommand;
+import com.smart4y.cloud.base.interfaces.dtos.BaseUserQuery;
+import com.smart4y.cloud.core.dto.UserAccountVO;
 
 import java.util.List;
 
@@ -13,27 +13,24 @@ import java.util.List;
  * 系统用户资料管理
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 public interface BaseUserService {
 
     /**
      * 添加用户信息
      */
-    long addUser(AddAdminUserCommand command);
+    long addUser(AddUserCommand command);
 
     /**
      * 更新系统用户
-     *
-     * @param baseUser
-     * @return
      */
     void updateUser(BaseUser baseUser);
 
     /**
      * 添加第三方登录用户
      */
-    void addUserThirdParty(RegisterAdminThirdPartyCommand command, String accountType);
+    void addUserThirdParty(AddUserThirdPartyCommand command);
 
     /**
      * 更新密码
@@ -53,25 +50,16 @@ public interface BaseUserService {
 
     /**
      * 依据系统用户Id查询系统用户信息
-     *
-     * @param userId
-     * @return
      */
     BaseUser getUserById(long userId);
 
     /**
      * 获取用户权限
-     *
-     * @param userId
-     * @return
      */
     UserAccountVO getUserAccount(long userId);
 
     /**
      * 依据登录名查询系统用户信息
-     *
-     * @param username
-     * @return
      */
     BaseUser getUserByUsername(String username);
 
@@ -81,7 +69,6 @@ public interface BaseUserService {
      * 其他方式没有规则，无法自动识别。需要单独开发
      *
      * @param account 登陆账号
-     * @return
      */
     UserAccountVO login(String account);
 }

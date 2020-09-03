@@ -1,5 +1,6 @@
 package com.smart4y.cloud.gateway.infrastructure.filter;
 
+import com.smart4y.cloud.core.interceptor.FeignRequestInterceptor;
 import com.smart4y.cloud.gateway.application.AccessLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
@@ -14,16 +15,17 @@ import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 /**
  * 日志 过滤器
  *
- * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * @author Youtao on 2019-09-05.
  */
 @Slf4j
 public class AccessLogFilter implements WebFilter {
 
-    private AccessLogService accessLogService;
+    private final AccessLogService accessLogService;
 
     public AccessLogFilter(AccessLogService accessLogService) {
         this.accessLogService = accessLogService;
@@ -31,6 +33,12 @@ public class AccessLogFilter implements WebFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+
+        List<String> traceId = exchange.getRequest().getHeaders().get(FeignRequestInterceptor.X_REQUEST_ID);
+        String format = String.format(">>>>> >>>>> >>>>> %s, traceId=%s, path=%s",
+                this.getClass().getSimpleName(), traceId, (exchange.getRequest().getPath()  + exchange.getRequest().getMethodValue()));
+        log.info(format);
+
         ServerHttpResponse response = exchange.getResponse();
         DataBufferFactory bufferFactory = response.bufferFactory();
         ServerHttpResponseDecorator decoratedResponse = new ServerHttpResponseDecorator(response) {

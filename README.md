@@ -1,6 +1,6 @@
 #cloud
 
-从这个项目（https://gitee.com/liuyadu/open-cloud）改造。
+开源至 https://gitee.com/liuyadu/open-cloud 项目。
 
 ```
     "/oauth/authorize", // 授权端点

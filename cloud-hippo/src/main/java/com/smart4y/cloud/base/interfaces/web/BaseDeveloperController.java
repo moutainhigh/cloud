@@ -3,33 +3,32 @@ package com.smart4y.cloud.base.interfaces.web;
 import com.github.pagehelper.PageInfo;
 import com.smart4y.cloud.base.application.BaseDeveloperService;
 import com.smart4y.cloud.base.domain.model.BaseDeveloper;
-import com.smart4y.cloud.base.interfaces.converter.BaseDeveloperConverter;
-import com.smart4y.cloud.base.interfaces.valueobject.command.AddDeveloperUserCommand;
-import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterDeveloperThirdPartyCommand;
-import com.smart4y.cloud.base.interfaces.valueobject.query.BaseDeveloperQuery;
-import com.smart4y.cloud.base.interfaces.valueobject.vo.BaseDeveloperVO;
-import com.smart4y.cloud.core.domain.page.Page;
-import com.smart4y.cloud.core.domain.ResultEntity;
-import com.smart4y.cloud.core.interfaces.UserAccountVO;
+import com.smart4y.cloud.base.interfaces.dtos.AddDeveloperThirdPartyCommand;
+import com.smart4y.cloud.base.interfaces.dtos.AddDeveloperUserCommand;
+import com.smart4y.cloud.base.interfaces.dtos.UpdateDeveloperUserCommand;
+import com.smart4y.cloud.base.interfaces.dtos.UpdatePasswordCommand;
+import com.smart4y.cloud.base.interfaces.dtos.BaseDeveloperConverter;
+import com.smart4y.cloud.base.interfaces.dtos.BaseDeveloperQuery;
+import com.smart4y.cloud.base.interfaces.dtos.BaseDeveloperVO;
+import com.smart4y.cloud.core.message.ResultMessage;
+import com.smart4y.cloud.core.message.page.Page;
+import com.smart4y.cloud.core.dto.UserAccountVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 /**
- * 系统用户信息
+ * 开发者用户信息
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
-@Api(tags = "系统用户管理")
+@Api(tags = "开发者用户管理")
 @RestController
 public class BaseDeveloperController {
 
@@ -45,10 +44,10 @@ public class BaseDeveloperController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", required = true, value = "登录名", paramType = "path"),
     })
-    @PostMapping("/developer/login")
-    public ResultEntity<UserAccountVO> developerLogin(@RequestParam(value = "username") String username) {
+    @GetMapping("/developer/login")
+    public ResultMessage<UserAccountVO> developerLogin(@RequestParam(value = "username") String username) {
         UserAccountVO account = baseDeveloperService.login(username);
-        return ResultEntity.ok(account);
+        return ResultMessage.ok(account);
     }
 
     /**
@@ -56,10 +55,10 @@ public class BaseDeveloperController {
      */
     @ApiOperation(value = "系统分页用户列表", notes = "系统分页用户列表")
     @GetMapping("/developer")
-    public ResultEntity<Page<BaseDeveloperVO>> getUserList(BaseDeveloperQuery query) {
+    public ResultMessage<Page<BaseDeveloperVO>> getUserList(BaseDeveloperQuery query) {
         PageInfo<BaseDeveloper> pageInfo = baseDeveloperService.findListPage(query);
         Page<BaseDeveloperVO> result = baseDeveloperConverter.convertPage(pageInfo);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     /**
@@ -67,82 +66,49 @@ public class BaseDeveloperController {
      */
     @ApiOperation(value = "获取所有用户列表", notes = "获取所有用户列表")
     @GetMapping("/developer/all")
-    public ResultEntity<List<BaseDeveloperVO>> getUserAllList() {
+    public ResultMessage<List<BaseDeveloperVO>> getUserAllList() {
         List<BaseDeveloper> list = baseDeveloperService.findAllList();
         List<BaseDeveloperVO> result = baseDeveloperConverter.convertList(list);
-        return ResultEntity.ok(result);
+        return ResultMessage.ok(result);
     }
 
     /**
-     * 添加系统用户
+     * 添加开发者用户
      */
-    @ApiOperation(value = "添加系统用户", notes = "添加系统用户")
+    @ApiOperation(value = "添加开发者用户", notes = "添加开发者用户")
     @PostMapping("/developer/add")
-    public ResultEntity<Long> addUser(
-            @RequestParam(value = "userName") String userName,
-            @RequestParam(value = "password") String password,
-            @RequestParam(value = "nickName") String nickName,
-            @RequestParam(value = "status") Integer status,
-            @RequestParam(value = "userType") String userType,
-            @RequestParam(value = "email", required = false) String email,
-            @RequestParam(value = "mobile", required = false) String mobile,
-            @RequestParam(value = "userDesc", required = false) String userDesc,
-            @RequestParam(value = "avatar", required = false) String avatar
-    ) {
-        AddDeveloperUserCommand developer = new AddDeveloperUserCommand();
-        developer.setUserName(userName);
-        developer.setPassword(password);
-        developer.setNickName(nickName);
-        developer.setUserType(userType);
-        developer.setEmail(email);
-        developer.setMobile(mobile);
-        developer.setUserDesc(userDesc);
-        developer.setAvatar(avatar);
-        developer.setStatus(status);
-        long userId = baseDeveloperService.addUser(developer);
-        return ResultEntity.ok(userId);
+    public ResultMessage<Long> addUser(@RequestBody AddDeveloperUserCommand command) {
+        long userId = baseDeveloperService.addUser(command);
+        return ResultMessage.ok(userId);
     }
 
     /**
-     * 更新系统用户
+     * 更新开发者用户
      */
-    @ApiOperation(value = "更新系统用户", notes = "更新系统用户")
+    @ApiOperation(value = "更新开发者用户", notes = "更新开发者用户")
     @PostMapping("/developer/update")
-    public ResultEntity updateUser(
-            @RequestParam(value = "userId") Long userId,
-            @RequestParam(value = "nickName") String nickName,
-            @RequestParam(value = "status") Integer status,
-            @RequestParam(value = "userType") String userType,
-            @RequestParam(value = "email", required = false) String email,
-            @RequestParam(value = "mobile", required = false) String mobile,
-            @RequestParam(value = "userDesc", required = false) String userDesc,
-            @RequestParam(value = "avatar", required = false) String avatar
-    ) {
+    public ResultMessage<Void> updateUser(@RequestBody UpdateDeveloperUserCommand command) {
         BaseDeveloper developer = new BaseDeveloper();
-        developer.setUserId(userId);
-        developer.setNickName(nickName);
-        developer.setUserType(userType);
-        developer.setEmail(email);
-        developer.setMobile(mobile);
-        developer.setUserDesc(userDesc);
-        developer.setAvatar(avatar);
-        developer.setStatus(status);
+        developer.setUserId(command.getUserId());
+        developer.setNickName(command.getNickName());
+        developer.setUserType(command.getUserType());
+        developer.setEmail(command.getEmail());
+        developer.setMobile(command.getMobile());
+        developer.setUserDesc(command.getUserDesc());
+        developer.setAvatar(command.getAvatar());
+        developer.setStatus(command.getStatus());
         baseDeveloperService.updateUser(developer);
-        return ResultEntity.ok();
+        return ResultMessage.ok();
     }
-
 
     /**
      * 修改用户密码
      */
     @ApiOperation(value = "修改用户密码", notes = "修改用户密码")
     @PostMapping("/developer/update/password")
-    public ResultEntity updatePassword(
-            @RequestParam(value = "userId") Long userId,
-            @RequestParam(value = "password") String password
-    ) {
-        baseDeveloperService.updatePassword(userId, password);
-        return ResultEntity.ok();
+    public ResultMessage<Void> updatePassword(@RequestBody UpdatePasswordCommand command) {
+        baseDeveloperService.updatePassword(command.getUserId(), command.getPassword());
+        return ResultMessage.ok();
     }
 
     /**
@@ -150,18 +116,8 @@ public class BaseDeveloperController {
      */
     @ApiOperation(value = "注册第三方系统登录账号", notes = "仅限系统内部调用")
     @PostMapping("/developer/add/thirdParty")
-    public ResultEntity addDeveloperThirdParty(
-            @RequestParam(value = "account") String account,
-            @RequestParam(value = "password") String password,
-            @RequestParam(value = "accountType") String accountType,
-            @RequestParam(value = "nickName") String nickName,
-            @RequestParam(value = "avatar") String avatar) {
-        RegisterDeveloperThirdPartyCommand command = new RegisterDeveloperThirdPartyCommand();
-        command.setNickName(nickName);
-        command.setUserName(account);
-        command.setPassword(password);
-        command.setAvatar(avatar);
-        baseDeveloperService.addUserThirdParty(command, accountType);
-        return ResultEntity.ok();
+    public ResultMessage<Void> addDeveloperThirdParty(@RequestBody AddDeveloperThirdPartyCommand command) {
+        baseDeveloperService.addUserThirdParty(command);
+        return ResultMessage.ok();
     }
 }

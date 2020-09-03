@@ -1,6 +1,6 @@
 package com.smart4y.cloud.gateway;
 
-import com.smart4y.cloud.core.infrastructure.AbstractApplication;
+import com.smart4y.cloud.core.AbstractApplication;
 import com.smart4y.cloud.gateway.infrastructure.locator.JdbcRouteDefinitionLocator;
 import com.smart4y.cloud.gateway.infrastructure.locator.ResourceLocator;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import org.springframework.core.env.Environment;
  * 开发环境下提供在线调试文档.
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @EnableFeignClients

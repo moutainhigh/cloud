@@ -20,7 +20,9 @@
           </Button>
         </ButtonGroup>
       </div>
-      <Table :columns="columns" :data="data" :loading="loading" border>
+
+      <Alert show-icon type="info"><code>操作接口修改</code></Alert>
+      <Table size="small" :columns="columns" :data="data" :loading="loading" border>
         <template slot="policyType" slot-scope="{ row }">
           <Tag color="green" v-if="row.policyType===1">允许-白名单</Tag>
           <Tag color="red" v-else="">拒绝-黑名单</Tag>
@@ -33,7 +35,8 @@
           </a>
         </template>
       </Table>
-      <Page :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total" @on-change="handlePage" @on-page-size-change='handlePageSize'
+      <Page :current="pageInfo.page" :page-size="pageInfo.limit" :total="pageInfo.total" @on-change="handlePage"
+            @on-page-size-change='handlePageSize'
             show-elevator
             show-sizer show-total></Page>
     </Card>
@@ -73,13 +76,13 @@
             <Form :model="formItem" :rules="formItemRules" ref="form2" v-show="current=='form2'">
               <FormItem prop="authorities">
                 <Transfer
-                  :data="selectApis"
-                  :list-style="{width: '45%',height: '480px'}"
-                  :render-format="transferRender"
-                  :target-keys="formItem.apiIds"
-                  :titles="['选择接口', '已选择接口']"
-                  @on-change="handleTransferChange"
-                  filterable>
+                    :data="selectApis"
+                    :list-style="{width: '45%',height: '480px'}"
+                    :render-format="transferRender"
+                    :target-keys="formItem.apiIds"
+                    :titles="['选择接口', '已选择接口']"
+                    @on-change="handleTransferChange"
+                    filterable>
                 </Transfer>
               </FormItem>
             </Form>
@@ -95,234 +98,234 @@
 </template>
 
 <script>
-    import {
-        addRateLimit,
-        addRateLimitApis,
-        getRateLimitApis,
-        getRateLimits,
-        removeRateLimit,
-        updateRateLimit
-    } from '@/api/rateLimit'
-    import {getAuthorityApi} from '@/api/authority'
+import {
+  addRateLimit,
+  addRateLimitApis,
+  getRateLimitApis,
+  getRateLimits,
+  removeRateLimit,
+  updateRateLimit
+} from '@/api/rateLimit'
+import {getAuthorityApi} from '@/api/authority'
 
-    export default {
-        name: 'GatewayRateLimit',
-        data() {
-            return {
-                loading: false,
-                saving: false,
-                modalVisible: false,
-                modalTitle: '',
-                pageInfo: {
-                    total: 0,
-                    page: 1,
-                    limit: 10,
-                    policyName: ''
-                },
-                current: 'form1',
-                forms: [
-                    'form1',
-                    'form2'
-                ],
-                selectApis: [],
-                formItemRules: {
-                    policyName: [
-                        {required: true, message: '策略名称不能为空', trigger: 'blur'}
-                    ],
-                    policyType: [
-                        {required: true, message: '策略类型不能为空', trigger: 'blur'}
-                    ]
-                },
-                formItem: {
-                    policyId: '',
-                    policyName: '',
-                    policyType: 'url',
-                    intervalUnit: 'second',
-                    limitQuota: 10,
-                    apiIds: [],
-                },
-                columns: [
-                    {title: '策略名称', key: 'policyName', width: 350},
-                    {title: '策略类型', key: 'policyType', width: 300},
-                    {title: '单位时间', key: 'intervalUnit'},
-                    {title: '限流数', key: 'limitQuota'},
-                    {title: '操作', slot: 'action', fixed: 'right', width: 150}
-                ],
-                data: []
-            }
-        },
-        methods: {
-            handleModal(data) {
-                if (data) {
-                    this.formItem = Object.assign({}, this.formItem, data)
-                }
-                if (this.current === this.forms[0]) {
-                    this.modalTitle = data ? '编辑限流策略 - ' + this.formItem.policyName : '添加限流策略'
-                    this.modalVisible = true
-                }
-                if (this.current === this.forms[1]) {
-                    this.modalTitle = data ? '绑定接口 - ' + this.formItem.policyName : '绑定接口'
-                    this.handleRateLimitApi(this.formItem.policyId);
-                }
-                this.formItem.policyType = this.formItem.policyType + ''
-            },
-            handleResetForm(form) {
-                this.$refs[form].resetFields()
-            },
-            handleTabClick(name) {
-                this.current = name
-                this.handleModal();
-            },
-            handleReset() {
-                const newData = {
-                    policyId: '',
-                    policyName: '',
-                    policyType: 'url',
-                    intervalUnit: 'second',
-                    limitQuota: 10,
-                    apiIds: [],
-                };
-                this.formItem = newData;
-                //重置验证
-                this.forms.map(form => {
-                    this.$refs[form].resetFields()
-                })
-                this.current = this.forms[0]
-                this.modalVisible = false
-                this.saving = false
-            },
-            handleSubmit() {
-                if (this.current === this.forms[0]) {
-                    this.$refs[this.current].validate((valid) => {
-                        if (valid) {
-                            this.saving = true
-                            if (this.formItem.policyId) {
-                                updateRateLimit(this.formItem).then(res => {
-                                    this.handleReset()
-                                    this.handleSearch()
-                                    if (res.code === 0) {
-                                        this.$Message.success('保存成功')
-                                    }
-                                }).finally(() => {
-                                    this.saving = false
-                                })
-                            } else {
-                                addRateLimit(this.formItem).then(res => {
-                                    this.handleReset()
-                                    this.handleSearch()
-                                    if (res.code === 0) {
-                                        this.$Message.success('保存成功')
-                                    }
-                                }).finally(() => {
-                                    this.saving = false
-                                })
-                            }
-                        }
-                    })
-                }
-                if (this.current === this.forms[1]) {
-                    this.$refs[this.current].validate((valid) => {
-                        if (valid) {
-                            this.saving = true
-                            addRateLimitApis({
-                                policyId: this.formItem.policyId,
-                                apiIds: this.formItem.apiIds
-                            }).then(res => {
-                                this.handleReset()
-                                this.handleSearch()
-                                if (res.code === 0) {
-                                    this.$Message.success('绑定成功')
-                                }
-                            }).finally(() => {
-                                this.saving = false
-                            })
-                        }
-                    })
-                }
-            },
-            handleSearch(page) {
-                if (page) {
-                    this.pageInfo.page = page
-                }
-                this.loading = true;
-                getRateLimits(this.pageInfo).then(res => {
-                    this.data = res.data.records;
-                    this.pageInfo.total = parseInt(res.data.total)
-                }).finally(() => {
-                    this.loading = false
-                })
-            },
-            handlePage(current) {
-                this.pageInfo.page = current;
-                this.handleSearch()
-            },
-            handlePageSize(size) {
-                this.pageInfo.limit = size;
-                this.handleSearch()
-            },
-            handleRemove(data) {
-                this.$Modal.confirm({
-                    title: '确定删除吗？',
-                    onOk: () => {
-                        removeRateLimit(data.policyId).then(res => {
-                            if (res.code === 0) {
-                                this.pageInfo.page = 1
-                                this.$Message.success('删除成功')
-                            }
-                            this.handleSearch()
-                        })
-                    }
-                })
-            },
-            handleRateLimitApi(policyId) {
-                if (!policyId) {
-                    return
-                }
-                const that = this
-                const p1 = getAuthorityApi('')
-                const p2 = getRateLimitApis(policyId)
-                Promise.all([p1, p2]).then(function (values) {
-                    let res1 = values[0]
-                    let res2 = values[1]
-                    if (res1.code === 0) {
-                        res1.data.map(item => {
-                            item.key = item.apiId
-                            item.label = `${item.prefix.replace('/**', '')}${item.path} - ${item.apiName}`
-                        })
-                        that.selectApis = res1.data
-                    }
-                    if (res2.code === 0) {
-                        let apiIds = []
-                        res2.data.map(item => {
-                            if (!apiIds.includes(item.apiId)) {
-                                apiIds.push(item.apiId)
-                            }
-                        })
-                        that.formItem.apiIds = apiIds
-                    }
-                    that.modalVisible = true
-                })
-            },
-            transferRender(item) {
-                return `<span  title="${item.label}">${item.label}</span>`
-            },
-            handleTransferChange(newTargetKeys, direction, moveKeys) {
-                if (newTargetKeys.indexOf('1') != -1) {
-                    this.formItem.apiIds = ['1']
-                } else {
-                    this.formItem.apiIds = newTargetKeys
-                }
-            },
-            handleClick(name, row) {
-                switch (name) {
-                    case 'remove':
-                        this.handleRemove(row)
-                        break
-                }
-            }
-        },
-        mounted: function () {
-            this.handleSearch()
-        }
+export default {
+  name: 'GatewayRateLimit',
+  data() {
+    return {
+      loading: false,
+      saving: false,
+      modalVisible: false,
+      modalTitle: '',
+      pageInfo: {
+        total: 0,
+        page: 1,
+        limit: 10,
+        policyName: ''
+      },
+      current: 'form1',
+      forms: [
+        'form1',
+        'form2'
+      ],
+      selectApis: [],
+      formItemRules: {
+        policyName: [
+          {required: true, message: '策略名称不能为空', trigger: 'blur'}
+        ],
+        policyType: [
+          {required: true, message: '策略类型不能为空', trigger: 'blur'}
+        ]
+      },
+      formItem: {
+        policyId: '',
+        policyName: '',
+        policyType: 'url',
+        intervalUnit: 'second',
+        limitQuota: 10,
+        apiIds: [],
+      },
+      columns: [
+        {title: '策略名称', key: 'policyName', width: 350},
+        {title: '策略类型', key: 'policyType', width: 300},
+        {title: '单位时间', key: 'intervalUnit'},
+        {title: '限流数', key: 'limitQuota'},
+        {title: '操作', slot: 'action', fixed: 'right', width: 150}
+      ],
+      data: []
     }
+  },
+  methods: {
+    handleModal(data) {
+      if (data) {
+        this.formItem = Object.assign({}, this.formItem, data)
+      }
+      if (this.current === this.forms[0]) {
+        this.modalTitle = data ? '编辑限流策略 - ' + this.formItem.policyName : '添加限流策略'
+        this.modalVisible = true
+      }
+      if (this.current === this.forms[1]) {
+        this.modalTitle = data ? '绑定接口 - ' + this.formItem.policyName : '绑定接口'
+        this.handleRateLimitApi(this.formItem.policyId);
+      }
+      this.formItem.policyType = this.formItem.policyType + ''
+    },
+    handleResetForm(form) {
+      this.$refs[form].resetFields()
+    },
+    handleTabClick(name) {
+      this.current = name
+      this.handleModal();
+    },
+    handleReset() {
+      const newData = {
+        policyId: '',
+        policyName: '',
+        policyType: 'url',
+        intervalUnit: 'second',
+        limitQuota: 10,
+        apiIds: [],
+      };
+      this.formItem = newData;
+      //重置验证
+      this.forms.map(form => {
+        this.$refs[form].resetFields()
+      })
+      this.current = this.forms[0]
+      this.modalVisible = false
+      this.saving = false
+    },
+    handleSubmit() {
+      if (this.current === this.forms[0]) {
+        this.$refs[this.current].validate((valid) => {
+          if (valid) {
+            this.saving = true
+            if (this.formItem.policyId) {
+              updateRateLimit(this.formItem).then(res => {
+                this.handleReset()
+                this.handleSearch()
+                if (res.rtnCode === '200') {
+                  this.$Message.success('保存成功')
+                }
+              }).finally(() => {
+                this.saving = false
+              })
+            } else {
+              addRateLimit(this.formItem).then(res => {
+                this.handleReset()
+                this.handleSearch()
+                if (res.rtnCode === '200') {
+                  this.$Message.success('保存成功')
+                }
+              }).finally(() => {
+                this.saving = false
+              })
+            }
+          }
+        })
+      }
+      if (this.current === this.forms[1]) {
+        this.$refs[this.current].validate((valid) => {
+          if (valid) {
+            this.saving = true
+            addRateLimitApis({
+              policyId: this.formItem.policyId,
+              apiIds: this.formItem.apiIds
+            }).then(res => {
+              this.handleReset()
+              this.handleSearch()
+              if (res.rtnCode === '200') {
+                this.$Message.success('绑定成功')
+              }
+            }).finally(() => {
+              this.saving = false
+            })
+          }
+        })
+      }
+    },
+    handleSearch(page) {
+      if (page) {
+        this.pageInfo.page = page
+      }
+      this.loading = true;
+      getRateLimits(this.pageInfo).then(res => {
+        this.data = res.data.records;
+        this.pageInfo.total = parseInt(res.data.total)
+      }).finally(() => {
+        this.loading = false
+      })
+    },
+    handlePage(current) {
+      this.pageInfo.page = current;
+      this.handleSearch()
+    },
+    handlePageSize(size) {
+      this.pageInfo.limit = size;
+      this.handleSearch()
+    },
+    handleRemove(data) {
+      this.$Modal.confirm({
+        title: '确定删除吗？',
+        onOk: () => {
+          removeRateLimit(data.policyId).then(res => {
+            if (res.rtnCode === '200') {
+              this.pageInfo.page = 1
+              this.$Message.success('删除成功')
+            }
+            this.handleSearch()
+          })
+        }
+      })
+    },
+    handleRateLimitApi(policyId) {
+      if (!policyId) {
+        return
+      }
+      const that = this
+      const p1 = getAuthorityApi('')
+      const p2 = getRateLimitApis(policyId)
+      Promise.all([p1, p2]).then(function (values) {
+        let res1 = values[0]
+        let res2 = values[1]
+        if (res1.code === 0) {
+          res1.data.map(item => {
+            item.key = item.apiId
+            item.label = `${item.prefix.replace('/**', '')}${item.path} - ${item.apiName}`
+          })
+          that.selectApis = res1.data
+        }
+        if (res2.code === 0) {
+          let apiIds = []
+          res2.data.map(item => {
+            if (!apiIds.includes(item.apiId)) {
+              apiIds.push(item.apiId)
+            }
+          })
+          that.formItem.apiIds = apiIds
+        }
+        that.modalVisible = true
+      })
+    },
+    transferRender(item) {
+      return `<span  title="${item.label}">${item.label}</span>`
+    },
+    handleTransferChange(newTargetKeys, direction, moveKeys) {
+      if (newTargetKeys.indexOf('1') != -1) {
+        this.formItem.apiIds = ['1']
+      } else {
+        this.formItem.apiIds = newTargetKeys
+      }
+    },
+    handleClick(name, row) {
+      switch (name) {
+        case 'remove':
+          this.handleRemove(row)
+          break
+      }
+    }
+  },
+  mounted: function () {
+    this.handleSearch()
+  }
+}
 </script>

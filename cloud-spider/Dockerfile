@@ -9,7 +9,7 @@
 #EXPOSE     监听的端口号
 #ENTRYPOINT 让容器像一个可执行程序一样运行
 #------------------------------------------------
-FROM openjdk:8-jdk-alpine
+FROM openjdk:8-jre-alpine
 MAINTAINER yt cloud@smart4y.com
 VOLUME /tmp
 ARG JAR_FILE
@@ -20,4 +20,4 @@ RUN ln -snf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo 'Asia/Shang
 RUN echo "https://mirror.tuna.tsinghua.edu.cn/alpine/v3.4/main/" > /etc/apk/repositories
 RUN apk update && apk upgrade && apk add --no-cache bash bash-doc bash-completion && rm -rf /var/cache/apk/* && /bin/bash
 EXPOSE 8888
-ENTRYPOINT ["sh", "-c", "java -Djava.security.egd=file:/dev/./urandom -jar /app.jar"]
+ENTRYPOINT ["sh", "-c", "java", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app.jar"]

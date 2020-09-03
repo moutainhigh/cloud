@@ -1,8 +1,8 @@
 package com.smart4y.cloud.uaa.infrastructure.configuration;
 
-import com.smart4y.cloud.core.infrastructure.exception.handler.OpenOAuth2WebResponseExceptionTranslator;
-import com.smart4y.cloud.core.infrastructure.security.OpenHelper;
-import com.smart4y.cloud.core.infrastructure.security.OpenTokenEnhancer;
+import com.smart4y.cloud.core.exception.handler.OpenOAuth2WebResponseExceptionTranslator;
+import com.smart4y.cloud.core.security.OpenHelper;
+import com.smart4y.cloud.core.security.OpenTokenEnhancer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +32,7 @@ import javax.sql.DataSource;
  * 平台认证服务器配置
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Configuration
 @EnableAuthorizationServer
@@ -91,7 +91,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     }
 
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints
                 .allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
                 .authenticationManager(authenticationManager)

@@ -6,12 +6,12 @@ import request from '@/libs/request'
  * @param limit
  */
 export const getJobLogs = ({page, limit, jobName}) => {
-  const params = {page: page, limit: limit, jobName: jobName}
-  return request({
-    url: 'task/job/logs',
-    params,
-    method: 'get'
-  })
+    const params = {page: page, limit: limit, jobName: jobName}
+    return request({
+        url: 'task/job/logs',
+        params,
+        method: 'get'
+    })
 }
 
 /**
@@ -20,12 +20,12 @@ export const getJobLogs = ({page, limit, jobName}) => {
  * @param limit
  */
 export const getJobs = ({page, limit}) => {
-  const params = {page: page, limit: limit}
-  return request({
-    url: 'task/job',
-    params,
-    method: 'get'
-  })
+    const params = {page: page, limit: limit}
+    return request({
+        url: 'task/job',
+        params,
+        method: 'get'
+    })
 }
 
 /**
@@ -42,11 +42,11 @@ export const getJobs = ({page, limit}) => {
  * @param isAuth
  */
 export const addHttpJob = (data) => {
-  return request({
-    url: 'task/job/add/http',
-    data,
-    method: 'post'
-  })
+    return request({
+        url: 'task/job/add/http',
+        data,
+        method: 'post'
+    })
 }
 
 /**
@@ -64,11 +64,11 @@ export const addHttpJob = (data) => {
  * @param isAuth
  */
 export const updateHttpJob = (data) => {
-  return request({
-    url: 'task/job/update/http',
-    data,
-    method: 'post'
-  })
+    return request({
+        url: 'task/job/update/http',
+        data,
+        method: 'post'
+    })
 }
 
 /**
@@ -76,14 +76,14 @@ export const updateHttpJob = (data) => {
  * @param apiId
  */
 export const removeJob = (jobName) => {
-  const data = {
-    jobName: jobName
-  }
-  return request({
-    url: 'task/job/delete',
-    data,
-    method: 'post'
-  })
+    const data = {
+        jobName: jobName
+    }
+    return request({
+        url: 'task/job/delete',
+        data,
+        method: 'post'
+    })
 }
 
 /**
@@ -91,14 +91,14 @@ export const removeJob = (jobName) => {
  * @param apiId
  */
 export const pauseJob = (jobName) => {
-  const data = {
-    jobName: jobName
-  }
-  return request({
-    url: 'task/job/pause',
-    data,
-    method: 'post'
-  })
+    const data = {
+        jobName: jobName
+    }
+    return request({
+        url: 'task/job/pause',
+        data,
+        method: 'post'
+    })
 }
 
 /**
@@ -106,12 +106,12 @@ export const pauseJob = (jobName) => {
  * @param apiId
  */
 export const resumeJob = (jobName) => {
-  const data = {
-    jobName: jobName
-  }
-  return request({
-    url: 'task/job/resume',
-    data,
-    method: 'post'
-  })
+    const data = {
+        jobName: jobName
+    }
+    return request({
+        url: 'task/job/resume',
+        data,
+        method: 'post'
+    })
 }

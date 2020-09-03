@@ -4,27 +4,25 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.smart4y.cloud.base.access.application.UserApplicationService;
+import com.smart4y.cloud.base.access.domain.entity.RbacPrivilege;
+import com.smart4y.cloud.base.access.domain.entity.RbacRole;
 import com.smart4y.cloud.base.application.BaseAccountService;
-import com.smart4y.cloud.base.application.BaseAuthorityService;
-import com.smart4y.cloud.base.application.BaseRoleService;
 import com.smart4y.cloud.base.application.BaseUserService;
 import com.smart4y.cloud.base.domain.model.BaseAccount;
 import com.smart4y.cloud.base.domain.model.BaseAccountLogs;
-import com.smart4y.cloud.base.domain.model.BaseRole;
 import com.smart4y.cloud.base.domain.model.BaseUser;
-import com.smart4y.cloud.base.domain.repository.BaseUserMapper;
-import com.smart4y.cloud.base.interfaces.valueobject.command.AddAdminUserCommand;
-import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterAdminThirdPartyCommand;
-import com.smart4y.cloud.base.interfaces.valueobject.query.BaseUserQuery;
-import com.smart4y.cloud.core.application.ApplicationService;
-import com.smart4y.cloud.core.domain.OpenAuthority;
-import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
-import com.smart4y.cloud.core.infrastructure.constants.CommonConstants;
-import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
-import com.smart4y.cloud.core.infrastructure.security.OpenSecurityConstants;
-import com.smart4y.cloud.core.infrastructure.toolkit.web.WebUtils;
-import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
-import com.smart4y.cloud.core.interfaces.UserAccountVO;
+import com.smart4y.cloud.base.infrastructure.mapper.BaseUserMapper;
+import com.smart4y.cloud.base.interfaces.dtos.AddUserCommand;
+import com.smart4y.cloud.base.interfaces.dtos.AddUserThirdPartyCommand;
+import com.smart4y.cloud.base.interfaces.dtos.BaseUserQuery;
+import com.smart4y.cloud.core.annotation.ApplicationService;
+import com.smart4y.cloud.core.constant.BaseConstants;
+import com.smart4y.cloud.core.dto.OpenAuthority;
+import com.smart4y.cloud.core.dto.UserAccountVO;
+import com.smart4y.cloud.core.exception.OpenAlertException;
+import com.smart4y.cloud.core.toolkit.base.StringHelper;
+import com.smart4y.cloud.core.toolkit.web.WebUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +34,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @ApplicationService
@@ -50,14 +49,12 @@ public class BaseUserServiceImpl implements BaseUserService {
     @Autowired
     private BaseUserMapper baseUserMapper;
     @Autowired
-    private BaseRoleService roleService;
-    @Autowired
-    private BaseAuthorityService baseAuthorityService;
-    @Autowired
     private BaseAccountService baseAccountService;
+    @Autowired
+    private UserApplicationService userApplicationService;
 
     @Override
-    public long addUser(AddAdminUserCommand command) {
+    public long addUser(AddUserCommand command) {
         if (getUserByUsername(command.getUserName()) != null) {
             throw new OpenAlertException("用户名:" + command.getUserName() + "已存在!");
         }
@@ -101,7 +98,8 @@ public class BaseUserServiceImpl implements BaseUserService {
     }
 
     @Override
-    public void addUserThirdParty(RegisterAdminThirdPartyCommand command, String accountType) {
+    public void addUserThirdParty(AddUserThirdPartyCommand command) {
+        String accountType = command.getAccountType();
         if (!baseAccountService.isExist(command.getUserName(), accountType, ACCOUNT_DOMAIN)) {
             //保存系统用户信息
             BaseUser user = new BaseUser()
@@ -163,9 +161,9 @@ public class BaseUserServiceImpl implements BaseUserService {
         List<OpenAuthority> authorities = Lists.newArrayList();
         // 用户角色列表
         List<Map<String, Object>> roles = Lists.newArrayList();
-        List<BaseRole> rolesList = roleService.getUserRoles(userId);
-        if (rolesList != null) {
-            for (BaseRole role : rolesList) {
+        List<RbacRole> allRoles = userApplicationService.getRoles(userId);
+        if (allRoles != null) {
+            for (RbacRole role : allRoles) {
                 Map<String, Object> roleMap = Maps.newHashMap();
                 roleMap.put("roleId", role.getRoleId());
                 roleMap.put("roleCode", role.getRoleCode());
@@ -173,8 +171,7 @@ public class BaseUserServiceImpl implements BaseUserService {
                 // 用户角色详情
                 roles.add(roleMap);
                 // 加入角色标识
-                OpenAuthority authority = new OpenAuthority(role.getRoleId().toString(),
-                        OpenSecurityConstants.AUTHORITY_PREFIX_ROLE + role.getRoleCode(), null, "role");
+                OpenAuthority authority = new OpenAuthority(role.getRoleId().toString(), role.getRoleCode(), null, "role");
                 authorities.add(authority);
             }
         }
@@ -183,10 +180,14 @@ public class BaseUserServiceImpl implements BaseUserService {
         BaseUser baseUser = getUserById(userId);
 
         // 加入用户权限
-        List<OpenAuthority> userGrantedAuthority = baseAuthorityService.findAuthorityByUser(userId, CommonConstants.ROOT.equals(baseUser.getUserName()));
-        if (userGrantedAuthority != null && userGrantedAuthority.size() > 0) {
-            authorities.addAll(userGrantedAuthority);
+        List<RbacPrivilege> allPrivileges = userApplicationService.getPrivileges(userId);
+        if (allPrivileges != null && allPrivileges.size() > 0) {
+            List<OpenAuthority> openAuthorities = allPrivileges.stream()
+                    .map(x -> new OpenAuthority(x.getPrivilegeId().toString(), x.getPrivilege(), null, "role"))
+                    .collect(Collectors.toList());
+            authorities.addAll(openAuthorities);
         }
+
         UserAccountVO userAccount = new UserAccountVO();
         // 昵称
         userAccount.setNickName(baseUser.getNickName());

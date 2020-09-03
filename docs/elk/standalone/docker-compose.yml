@@ -1,0 +1,78 @@
+version: "3.2"
+
+services:
+  elasticsearch:
+    image: single-node-elk-es:latest
+    container_name: "elk-elasticsearch"
+    build:
+      context: elasticsearch
+      dockerfile: Dockerfile
+    networks:
+      - "cloud"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    restart: always
+    environment:
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+      - "TZ=Asia/Shanghai"
+      ##used with xpack.security.enabled
+      # - "ELASTIC_PASSWORD=my_own_password"
+    volumes:
+      - elk-es-data:/usr/share/elasticsearch/data
+  logstash:
+    image: single-node-elk-logstash:latest
+    container_name: "elk-logstash"
+    build:
+      context: logstash
+      dockerfile: Dockerfile
+    networks:
+      - "cloud"
+    ports:
+      - "12201:12201/udp"
+    depends_on:
+      - elasticsearch
+    restart: always
+    environment:
+      - "TZ=Asia/Shanghai"
+      - "LS_JAVA_OPTS=-Xms1024m -Xmx1024m"
+  kibana:
+    image: single-node-elk-kibana:latest
+    container_name: "elk-kibana"
+    build:
+      context: kibana
+      dockerfile: Dockerfile
+    networks:
+      - "cloud"
+    ports:
+      - "5601:5601"
+    restart: always
+    depends_on:
+      - elasticsearch
+    environment:
+      - "TZ=Asia/Shanghai"
+  redis:
+    image: single-node-elk-redis:latest
+    container_name: "elk-redis"
+    build:
+      context: redis
+      dockerfile: Dockerfile
+    networks:
+      - "cloud"
+    ports:
+      - "6379:6379"
+    restart: always
+    environment:
+      - "TZ=Asia/Shanghai"
+    volumes:
+      - elk-redis-data:/data
+
+networks:
+  cloud:
+    driver: bridge
+
+volumes:
+  elk-es-data:
+    driver: local
+  elk-redis-data:
+    driver: local

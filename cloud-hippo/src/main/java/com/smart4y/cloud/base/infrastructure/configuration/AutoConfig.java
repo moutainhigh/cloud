@@ -1,6 +1,6 @@
 package com.smart4y.cloud.base.infrastructure.configuration;
 
-import com.smart4y.cloud.core.infrastructure.autoconfigure.*;
+import com.smart4y.cloud.core.configuration.*;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.EnableTransactionManagement;

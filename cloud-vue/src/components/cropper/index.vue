@@ -50,6 +50,7 @@
 import Cropper from 'cropperjs'
 import './index.less'
 import 'cropperjs/dist/cropper.min.css'
+
 export default {
   name: 'Cropper',
   props: {
@@ -70,30 +71,30 @@ export default {
       default: '裁剪'
     }
   },
-  data () {
+  data() {
     return {
       cropper: null,
       insideSrc: ''
     }
   },
   computed: {
-    imgId () {
+    imgId() {
       return `cropper${this._uid}`
     },
-    previewId () {
+    previewId() {
       return `cropper_preview${this._uid}`
     }
   },
   watch: {
-    src (src) {
+    src(src) {
       this.replace(src)
     },
-    insideSrc (src) {
+    insideSrc(src) {
       this.replace(src)
     }
   },
   methods: {
-    beforeUpload (file) {
+    beforeUpload(file) {
       const reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = (event) => {
@@ -101,32 +102,32 @@ export default {
       }
       return false
     },
-    replace (src) {
+    replace(src) {
       this.cropper.replace(src)
       this.insideSrc = src
     },
-    rotate () {
+    rotate() {
       this.cropper.rotate(90)
     },
-    shrink () {
+    shrink() {
       this.cropper.zoom(-0.1)
     },
-    magnify () {
+    magnify() {
       this.cropper.zoom(0.1)
     },
-    scale (d) {
+    scale(d) {
       this.cropper[`scale${d}`](-this.cropper.getData()[`scale${d}`])
     },
-    move (...argu) {
+    move(...argu) {
       this.cropper.move(...argu)
     },
-    crop () {
+    crop() {
       this.cropper.getCroppedCanvas().toBlob(blob => {
         this.$emit('on-crop', blob)
       })
     }
   },
-  mounted () {
+  mounted() {
     this.$nextTick(() => {
       let dom = document.getElementById(this.imgId)
       this.cropper = new Cropper(dom, {

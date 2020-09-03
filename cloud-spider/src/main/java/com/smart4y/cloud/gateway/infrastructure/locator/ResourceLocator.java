@@ -1,23 +1,27 @@
 package com.smart4y.cloud.gateway.infrastructure.locator;
 
 import com.google.common.collect.Lists;
-import com.smart4y.cloud.core.interfaces.AuthorityResourceDTO;
-import com.smart4y.cloud.core.interfaces.IpLimitApiDTO;
-import com.smart4y.cloud.core.domain.ResultEntity;
-import com.smart4y.cloud.core.domain.event.RouteRemoteRefreshedEvent;
-import com.smart4y.cloud.gateway.infrastructure.feign.BaseAuthorityFeign;
+import com.smart4y.cloud.core.dto.IpLimitApiDTO;
+import com.smart4y.cloud.core.dto.RemotePrivilegeOperationDTO;
+import com.smart4y.cloud.core.event.RouteRemoteRefreshedEvent;
+import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.gateway.infrastructure.feign.GatewayFeign;
+import com.smart4y.cloud.gateway.infrastructure.feign.RemotePrivilegeFeign;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 import org.springframework.context.ApplicationListener;
+import org.springframework.lang.NonNull;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
-import reactor.cache.CacheFlux;
-import reactor.core.publisher.Flux;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,24 +29,21 @@ import java.util.concurrent.TimeUnit;
  * <p>
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshedEvent> {
 
-    /*
-     * 单位时间
-     */
     /**
-     * 1分钟
+     * 单位时间：1分钟
      */
     public static final long SECONDS_IN_MINUTE = 60;
     /**
-     * 一小时
+     * 单位时间：一小时
      */
     public static final long SECONDS_IN_HOUR = 3600;
     /**
-     * 一天
+     * 单位时间：一天
      */
     public static final long SECONDS_IN_DAY = 24 * 3600;
 
@@ -55,45 +56,56 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
     public static final int PERIOD_DAY_TTL = 2 * 3600 * 24 + 10;
 
     /**
-     * 权限资源
+     * 权限（操作）列表
      */
-    private Flux<AuthorityResourceDTO> authorityResources;
+    @Getter
+    @Setter
+    private List<RemotePrivilegeOperationDTO> privilegeOperations;
 
     /**
      * ip黑名单
      */
-    private Flux<IpLimitApiDTO> ipBlacks;
+    @Getter
+    @Setter
+    private List<IpLimitApiDTO> ipBlacks;
 
     /**
      * ip白名单
      */
-    private Flux<IpLimitApiDTO> ipWhites;
+    @Getter
+    @Setter
+    private List<IpLimitApiDTO> ipWhites;
 
     /**
-     * 权限列表
+     * （操作）权限列表
      */
+    @Getter
+    @Setter
     private Map<String, Collection<ConfigAttribute>> configAttributes = new ConcurrentHashMap<>();
+
     /**
      * 缓存
      */
+    @Getter
+    @Setter
     private Map<String, Object> cache = new ConcurrentHashMap<>();
 
 
     private RouteDefinitionLocator routeDefinitionLocator;
-    private BaseAuthorityFeign baseAuthorityFeign;
     private GatewayFeign gatewayFeign;
+    private RemotePrivilegeFeign remotePrivilegeFeign;
 
     public ResourceLocator() {
-        authorityResources = CacheFlux.lookup(cache, "authorityResources", AuthorityResourceDTO.class).onCacheMissResume(Flux.fromIterable(new ArrayList<>()));
-        ipBlacks = CacheFlux.lookup(cache, "ipBlacks", IpLimitApiDTO.class).onCacheMissResume(Flux.fromIterable(new ArrayList<>()));
-        ipWhites = CacheFlux.lookup(cache, "ipWhites", IpLimitApiDTO.class).onCacheMissResume(Flux.fromIterable(new ArrayList<>()));
+        privilegeOperations = new CopyOnWriteArrayList<>();
+        ipBlacks = new CopyOnWriteArrayList<>();
+        ipWhites = new CopyOnWriteArrayList<>();
     }
 
-    public ResourceLocator(RouteDefinitionLocator routeDefinitionLocator, BaseAuthorityFeign baseAuthorityFeign, GatewayFeign gatewayFeign) {
+    public ResourceLocator(RouteDefinitionLocator routeDefinitionLocator, GatewayFeign gatewayFeign, RemotePrivilegeFeign remotePrivilegeFeign) {
         this();
-        this.baseAuthorityFeign = baseAuthorityFeign;
         this.gatewayFeign = gatewayFeign;
         this.routeDefinitionLocator = routeDefinitionLocator;
+        this.remotePrivilegeFeign = remotePrivilegeFeign;
     }
 
     /**
@@ -113,20 +125,20 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
         }
     }
 
+    @Override
+    public void onApplicationEvent(@NonNull RouteRemoteRefreshedEvent event) {
+        refresh();
+    }
+
     /**
      * 清空缓存并刷新
      */
     public void refresh() {
         this.configAttributes.clear();
         this.cache.clear();
-        this.authorityResources = loadAuthorityResources();
+        this.privilegeOperations = loadPrivilegeOperations();
         this.ipBlacks = loadIpBlackList();
         this.ipWhites = loadIpWhiteList();
-    }
-
-    @Override
-    public void onApplicationEvent(RouteRemoteRefreshedEvent event) {
-        refresh();
     }
 
     /**
@@ -149,125 +161,83 @@ public class ResourceLocator implements ApplicationListener<RouteRemoteRefreshed
     }
 
     /**
-     * 加载授权列表
+     * 加载授权的操作权限列表
      */
-    public Flux<AuthorityResourceDTO> loadAuthorityResources() {
-        List<AuthorityResourceDTO> resources = null;
+    public List<RemotePrivilegeOperationDTO> loadPrivilegeOperations() {
+        List<RemotePrivilegeOperationDTO> operations = Lists.newArrayList();
         try {
-            // 查询所有接口
-            ResultEntity<List<AuthorityResourceDTO>> authorityResourceResponse = baseAuthorityFeign.findAuthorityResource();
-            resources = authorityResourceResponse.isOk() ? authorityResourceResponse.getData() : Collections.emptyList();
+            // 查询所有操作接口
+            ResultMessage<List<RemotePrivilegeOperationDTO>> listResultMessage = remotePrivilegeFeign.remoteAllOperations();
+            if (listResultMessage.isFail()) {
+                return operations;
+            }
+            operations = listResultMessage.getData();
 
             ConfigAttribute cfg;
             Collection<ConfigAttribute> array;
-            for (AuthorityResourceDTO item : resources) {
-                String path = item.getPath();
+            for (RemotePrivilegeOperationDTO operation : operations) {
+                String path = operation.getOperationPath();
                 if (path == null) {
                     continue;
                 }
-                String fullPath = getFullPath(item.getServiceId(), path);
-                item.setPath(fullPath);
+                String fullPath = getFullPath(operation.getOperationServiceId(), path);
+                operation.setOperationPath(fullPath);
                 array = configAttributes.get(fullPath);
                 if (array == null) {
                     array = new ArrayList<>();
                 }
-                cfg = new SecurityConfig(item.getAuthority());
+                cfg = new SecurityConfig("API_" + operation.getOperationCode());
                 if (!array.contains(cfg)) {
                     array.add(cfg);
                 }
                 configAttributes.put(fullPath, array);
             }
-            log.info("=============加载动态权限:{}==============", resources.size());
+            log.info("=============加载动态操作权限:{}==============", operations.size());
         } catch (Exception e) {
-            log.error("加载动态权限错误：{}", e.getLocalizedMessage(), e);
+            log.error("加载动态操作权限错误：{}", e.getLocalizedMessage(), e);
         }
-        if (CollectionUtils.isEmpty(resources)) {
-            return Flux.empty();
-        }
-        return Flux.fromIterable(resources);
+
+        return operations;
     }
 
     /**
      * 加载IP黑名单
      */
-    private Flux<IpLimitApiDTO> loadIpBlackList() {
+    private List<IpLimitApiDTO> loadIpBlackList() {
         List<IpLimitApiDTO> list = Lists.newArrayList();
-        try {
-            list = gatewayFeign.getApiBlackList().getData();
-            if (list != null) {
-                for (IpLimitApiDTO item : list) {
-                    item.setPath(getFullPath(item.getServiceId(), item.getPath()));
-                }
-                log.info("=============加载IP黑名单:{}==============", list.size());
-            }
-        } catch (Exception e) {
-            log.error("加载IP黑名单错误：{}", e.getLocalizedMessage(), e);
-        }
-        if (CollectionUtils.isEmpty(list)) {
-            return Flux.empty();
-        }
-        return Flux.fromIterable(list);
+        // TODO 加载IP黑名单
+//        try {
+//            list = gatewayFeign.getApiBlackList().getData();
+//            if (list != null) {
+//                for (IpLimitApiDTO item : list) {
+//                    item.setPath(getFullPath(item.getServiceId(), item.getPath()));
+//                }
+//                log.info("=============加载IP黑名单:{}==============", list.size());
+//            }
+//        } catch (Exception e) {
+//            log.error("加载IP黑名单错误：{}", e.getLocalizedMessage(), e);
+//        }
+        return list;
     }
 
     /**
      * 加载IP白名单
      */
-    private Flux<IpLimitApiDTO> loadIpWhiteList() {
+    private List<IpLimitApiDTO> loadIpWhiteList() {
         List<IpLimitApiDTO> list = Lists.newArrayList();
-        try {
-            list = gatewayFeign.getApiWhiteList().getData();
-            if (list != null) {
-                for (IpLimitApiDTO item : list) {
-                    item.setPath(getFullPath(item.getServiceId(), item.getPath()));
-                }
-                log.info("=============加载IP白名单:{}==============", list.size());
-            }
-        } catch (Exception e) {
-            log.error("加载IP白名单错误：{}", e.getLocalizedMessage(), e);
-        }
-        if (CollectionUtils.isEmpty(list)) {
-            return Flux.empty();
-        }
-        return Flux.fromIterable(list);
-    }
+        // TODO 加载IP白名单
+//        try {
+//            list = gatewayFeign.getApiWhiteList().getData();
+//            if (list != null) {
+//                for (IpLimitApiDTO item : list) {
+//                    item.setPath(getFullPath(item.getServiceId(), item.getPath()));
+//                }
+//                log.info("============= 加载IP白名单:{}==============", list.size());
+//            }
+//        } catch (Exception e) {
+//            log.error("加载IP白名单错误：{}", e.getLocalizedMessage(), e);
+//        }
 
-    public Flux<AuthorityResourceDTO> getAuthorityResources() {
-        return authorityResources;
-    }
-
-    public void setAuthorityResources(Flux<AuthorityResourceDTO> authorityResources) {
-        this.authorityResources = authorityResources;
-    }
-
-    public Flux<IpLimitApiDTO> getIpBlacks() {
-        return ipBlacks;
-    }
-
-    public void setIpBlacks(Flux<IpLimitApiDTO> ipBlacks) {
-        this.ipBlacks = ipBlacks;
-    }
-
-    public Flux<IpLimitApiDTO> getIpWhites() {
-        return ipWhites;
-    }
-
-    public void setIpWhites(Flux<IpLimitApiDTO> ipWhites) {
-        this.ipWhites = ipWhites;
-    }
-
-    public Map<String, Collection<ConfigAttribute>> getConfigAttributes() {
-        return configAttributes;
-    }
-
-    public void setConfigAttributes(Map<String, Collection<ConfigAttribute>> configAttributes) {
-        this.configAttributes = configAttributes;
-    }
-
-    public Map<String, Object> getCache() {
-        return cache;
-    }
-
-    public void setCache(Map<String, Object> cache) {
-        this.cache = cache;
+        return list;
     }
 }

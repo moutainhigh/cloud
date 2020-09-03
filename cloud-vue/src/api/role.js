@@ -6,22 +6,22 @@ import request from '@/libs/request'
  * @param limit
  */
 export const getRoles = ({page, limit, roleCode, roleName}) => {
-  const params = {page: page, limit: limit, roleCode: roleCode, roleName: roleName}
-  return request({
-    url: 'base/role',
-    params,
-    method: 'get'
-  })
+    const params = {page: page, limit: limit, roleCode: roleCode, roleName: roleName}
+    return request({
+        url: 'base/role',
+        params,
+        method: 'get'
+    })
 }
 
 /**
  * 获取所有角色
  */
 export const getAllRoles = () => {
-  return request({
-    url: 'base/role/all',
-    method: 'get'
-  })
+    return request({
+        url: 'base/role/all',
+        method: 'get'
+    })
 }
 
 /**
@@ -32,17 +32,17 @@ export const getAllRoles = () => {
  * @param status
  */
 export const addRole = ({roleCode, roleName, roleDesc, status}) => {
-  const data = {
-    roleCode: roleCode,
-    roleName: roleName,
-    roleDesc: roleDesc,
-    status: status
-  }
-  return request({
-    url: 'base/role/add',
-    data,
-    method: 'post'
-  })
+    const data = {
+        roleCode: roleCode,
+        roleName: roleName,
+        roleDesc: roleDesc,
+        status: status
+    }
+    return request({
+        url: 'base/role/add',
+        data,
+        method: 'post'
+    })
 }
 
 /**
@@ -54,18 +54,18 @@ export const addRole = ({roleCode, roleName, roleDesc, status}) => {
  * @param status
  */
 export const updateRole = ({roleId, roleCode, roleName, roleDesc, status}) => {
-  const data = {
-    roleId: roleId,
-    roleCode: roleCode,
-    roleName: roleName,
-    roleDesc: roleDesc,
-    status: status
-  }
-  return request({
-    url: 'base/role/update',
-    data,
-    method: 'post'
-  })
+    const data = {
+        roleId: roleId,
+        roleCode: roleCode,
+        roleName: roleName,
+        roleDesc: roleDesc,
+        status: status
+    }
+    return request({
+        url: 'base/role/update',
+        data,
+        method: 'post'
+    })
 }
 
 /**
@@ -73,14 +73,14 @@ export const updateRole = ({roleId, roleCode, roleName, roleDesc, status}) => {
  * @param roleId
  */
 export const removeRole = (roleId) => {
-  const data = {
-    roleId: roleId
-  }
-  return request({
-    url: 'base/role/remove',
-    data,
-    method: 'post'
-  })
+    const data = {
+        roleId: roleId
+    }
+    return request({
+        url: 'base/role/remove',
+        data,
+        method: 'post'
+    })
 }
 
 /**
@@ -89,14 +89,14 @@ export const removeRole = (roleId) => {
  * @param userIds
  */
 export const getRoleUsers = (roleId) => {
-  const params = {
-    roleId: roleId
-  }
-  return request({
-    url: 'base/role/users',
-    params,
-    method: 'get'
-  })
+    const params = {
+        roleId: roleId
+    }
+    return request({
+        url: 'base/role/users',
+        params,
+        method: 'get'
+    })
 }
 
 /**
@@ -105,13 +105,13 @@ export const getRoleUsers = (roleId) => {
  * @param userIds
  */
 export const addRoleUsers = ({roleId, userIds}) => {
-  const data = {
-    roleId: roleId,
-    userIds: userIds.join(',')
-  }
-  return request({
-    url: 'base/role/users/add',
-    data,
-    method: 'post'
-  })
+    const data = {
+        roleId: roleId,
+        userIds: userIds.join(',')
+    }
+    return request({
+        url: 'base/role/users/add',
+        data,
+        method: 'post'
+    })
 }

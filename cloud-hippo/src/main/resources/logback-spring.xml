@@ -1,61 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-    trace < debug < info < warn < error < fatal
-scan：当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true。
-scanPeriod：设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒当scan为true时，此属性生效。默认的时间间隔为1分钟。
-debug：当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。
--->
 <configuration scan="false" debug="false">
-    <springProperty scop="context" name="spring.application.name" source="spring.application.name" defaultValue="logs"/>
-    <property name="log.path" value="logs/${spring.application.name}"/>
-    <property name="APPENDER_ENCODER_PATTERN"
-              value="%yellow(%date{MM-dd HH:mm:ss.SSS}) |%highlight(%-5level) |%blue(%thread) |%blue(%logger{50}:%line) |%cyan(%msg%n)"/>
-    <!-- Console log output -->
-    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <contextName>${APP_NAME}</contextName>
+    <springProperty name="APP_NAME" scope="context" source="spring.application.name"/>
+    <springProperty name="APP_IP" scope="context" source="spring.cloud.client.ip-address" defaultValue="0.0.0.0"/>
+    <springProperty name="APP_PORT" scope="context" source="server.port" defaultValue="0000"/>
+    <springProperty name="REDIS_HOST" scope="context" source="spring.redis.host"/>
+    <springProperty name="REDIS_PORT" scope="context" source="spring.redis.port"/>
+    <springProperty name="REDIS_PASSWORD" scope="context" source="spring.redis.password"/>
+    <springProperty name="LOG_FILE" scope="context" source="logging.file" defaultValue="../logs/${APP_NAME}"/>
+    <springProperty name="LOG_MAX_FILE_SIZE" scope="context" source="logback.filesize" defaultValue="50MB"/>
+    <springProperty name="LOG_FILE_MAX_DAY" scope="context" source="logback.filemaxday" defaultValue="7"/>
+    <property name="REDIS_LOG_STASH_KEY" value="redis-log"/>
+
+    <property name="PATTERN_APP_NAME" value="%cyan(${APP_NAME})"/>
+    <property name="PATTERN_IP" value="%highlight(${APP_IP})"/>
+    <property name="PATTERN_PORT" value="%highlight(${APP_PORT})"/>
+    <property name="PATTERN_DATE" value="%yellow(%date{yyyy-MM-dd HH:mm:ss.SSS})"/>
+    <property name="PATTERN_LEVEL" value="%highlight(%level)"/>
+    <property name="PATTERN_PID" value="%magenta(${PID})"/>
+    <property name="PATTERN_TRACE" value="%cyan(%X{X-Request-Id:None})"/>
+    <property name="PATTERN_THREAD" value="%cyan(%thread)"/>
+    <property name="PATTERN_LOGGER" value="%blue(%logger{50}:%line)"/>
+    <property name="PATTERN_MSG" value="%cyan(%m%n)"/>
+    <property name="LOG_PATTERN"
+              value="${PATTERN_DATE} |${PATTERN_LEVEL} |${PATTERN_PID} |${PATTERN_TRACE} |${PATTERN_THREAD} |${PATTERN_LOGGER} : ${PATTERN_MSG}"/>
+
+    <!-- 控制台日志 -->
+    <appender name="STDOUT_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>true</withJansi>
         <encoder>
-            <pattern>${APPENDER_ENCODER_PATTERN}</pattern>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
         </encoder>
     </appender>
-    <!-- Log file debug output -->
-    <appender name="debug" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/debug.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/%d{yyyy-MM}/debug.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-            <maxFileSize>50MB</maxFileSize>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
+    <!-- 文件日志（按照每天生成常规日志文件） -->
+    <appender name="FILE_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}/${APP_NAME}.log</file>
         <encoder>
-            <pattern>${APPENDER_ENCODER_PATTERN}</pattern>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
         </encoder>
-    </appender>
-    <!-- Log file error output -->
-    <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/error.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/%d{yyyy-MM}/error.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
-            <maxFileSize>50MB</maxFileSize>
-            <maxHistory>30</maxHistory>
+        <!-- 基于时间的分包策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}/${APP_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--保留时间,单位:天-->
+            <maxHistory>${LOG_FILE_MAX_DAY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${LOG_MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
-        <encoder>
-            <pattern>${APPENDER_ENCODER_PATTERN}</pattern>
-        </encoder>
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>ERROR</level>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
         </filter>
+    </appender>
+    <appender name="FILE_LOG_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="FILE_LOG"/>
+    </appender>
+    <!-- LOGSTASH日志 -->
+    <appender name="LOG_STASH" class="com.cwbase.logback.RedisAppender">
+        <!--宿主机IP-->
+        <host>${REDIS_HOST}</host>
+        <port>${REDIS_PORT}</port>
+        <password>${REDIS_PASSWORD}</password>
+        <database>0</database>
+        <key>${REDIS_LOG_STASH_KEY}</key>
+
+        <additionalField>
+            <key>cAppName</key>
+            <value>${APP_NAME}</value>
+        </additionalField>
+        <additionalField>
+            <key>cIp</key>
+            <value>${APP_IP}</value>
+        </additionalField>
+        <additionalField>
+            <key>cPID</key>
+            <value>${PID}</value>
+        </additionalField>
+    </appender>
+    <appender name="LOG_STASH_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="LOG_STASH"/>
     </appender>
 
     <!-- 开发环境 -->
     <springProfile name="default,dev,test">
-        <logger name="com.smart4y.cloud" level="debug"/>
-        <logger name="org.springframework.amqp" level="info"/>
-        <logger name="com.alibaba.nacos.client.naming" level="warn"/>
-        <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="info"/>
-        <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="info"/>
+        <logger name="com.smart4y.cloud" level="info"/>
+        <logger name="org.springframework.amqp" level="error"/>
+        <logger name="com.alibaba.nacos.client.naming" level="error"/>
+        <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="error"/>
+        <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="error"/>
 
-        <root level="info">
-            <appender-ref ref="console"/>
-            <appender-ref ref="debug"/>
-            <appender-ref ref="error"/>
+        <root level="INFO">
+            <appender-ref ref="STDOUT_APPENDER"/>
+            <appender-ref ref="FILE_LOG_ASYNC"/>
+            <appender-ref ref="LOG_STASH_ASYNC"/>
         </root>
     </springProfile>
     <!-- 生产环境 -->
@@ -66,10 +107,9 @@ debug：当此属性设置为true时，将打印出logback内部日志信息，�
         <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="warn"/>
         <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="warn"/>
 
-        <root level="info">
-            <appender-ref ref="console"/>
-            <appender-ref ref="debug"/>
-            <appender-ref ref="error"/>
+        <root level="INFO">
+            <appender-ref ref="STDOUT_APPENDER"/>
+            <appender-ref ref="FILE_LOG_ASYNC"/>
         </root>
     </springProfile>
 </configuration>

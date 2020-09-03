@@ -7,16 +7,17 @@ import com.smart4y.cloud.base.application.BaseDeveloperService;
 import com.smart4y.cloud.base.domain.model.BaseAccount;
 import com.smart4y.cloud.base.domain.model.BaseAccountLogs;
 import com.smart4y.cloud.base.domain.model.BaseDeveloper;
-import com.smart4y.cloud.base.domain.repository.BaseDeveloperMapper;
-import com.smart4y.cloud.base.interfaces.valueobject.command.AddDeveloperUserCommand;
-import com.smart4y.cloud.base.interfaces.valueobject.command.RegisterDeveloperThirdPartyCommand;
-import com.smart4y.cloud.base.interfaces.valueobject.query.BaseDeveloperQuery;
-import com.smart4y.cloud.core.application.ApplicationService;
-import com.smart4y.cloud.core.infrastructure.constants.BaseConstants;
-import com.smart4y.cloud.core.infrastructure.exception.OpenAlertException;
-import com.smart4y.cloud.core.infrastructure.toolkit.web.WebUtils;
-import com.smart4y.cloud.core.infrastructure.toolkit.base.StringHelper;
-import com.smart4y.cloud.core.interfaces.UserAccountVO;
+import com.smart4y.cloud.base.infrastructure.mapper.BaseDeveloperMapper;
+import com.smart4y.cloud.base.interfaces.dtos.AddDeveloperThirdPartyCommand;
+import com.smart4y.cloud.base.interfaces.dtos.AddDeveloperUserCommand;
+import com.smart4y.cloud.base.interfaces.dtos.BaseDeveloperQuery;
+import com.smart4y.cloud.core.annotation.ApplicationService;
+import com.smart4y.cloud.core.constant.BaseConstants;
+import com.smart4y.cloud.core.exception.OpenAlertException;
+import com.smart4y.cloud.core.message.enums.MessageType;
+import com.smart4y.cloud.core.toolkit.base.StringHelper;
+import com.smart4y.cloud.core.toolkit.web.WebUtils;
+import com.smart4y.cloud.core.dto.UserAccountVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ import java.util.Map;
 
 /**
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @ApplicationService
@@ -70,7 +71,7 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
     @Override
     public long addUser(AddDeveloperUserCommand command) {
         if (getUserByUsername(command.getUserName()) != null) {
-            throw new OpenAlertException("用户名:" + command.getUserName() + "已存在!");
+            throw new OpenAlertException(MessageType.BAD_REQUEST, "用户名:" + command.getUserName() + "已存在!");
         }
         // 保存用户信息
         BaseDeveloper developer = new BaseDeveloper()
@@ -112,8 +113,8 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
     }
 
     @Override
-    public void addUserThirdParty(RegisterDeveloperThirdPartyCommand command, String accountType) {
-        if (!baseAccountService.isExist(command.getUserName(), accountType, ACCOUNT_DOMAIN)) {
+    public void addUserThirdParty(AddDeveloperThirdPartyCommand command) {
+        if (!baseAccountService.isExist(command.getUserName(), command.getAccountType(), ACCOUNT_DOMAIN)) {
             // 保存系统用户信息
             BaseDeveloper developer = new BaseDeveloper()
                     .setUserName(command.getUserName())
@@ -126,7 +127,7 @@ public class BaseDeveloperServiceImpl implements BaseDeveloperService {
             long userId = developer.getUserId();
 
             // 注册账号信息
-            baseAccountService.register(userId, command.getUserName(), command.getPassword(), accountType, BaseConstants.ACCOUNT_STATUS_NORMAL, ACCOUNT_DOMAIN, null);
+            baseAccountService.register(userId, command.getUserName(), command.getPassword(), command.getAccountType(), BaseConstants.ACCOUNT_STATUS_NORMAL, ACCOUNT_DOMAIN, null);
         }
     }
 

@@ -1,0 +1,64 @@
+version: '3.4'
+services:
+  elasticsearch1:
+    container_name: elasticsearch1
+    image: elasticsearch:6.8.6
+    environment:
+      LANG: "C.UTF-8"
+      TZ: "Asia/Shanghai"
+    volumes:
+      - ./elasticsearch1/config:/usr/share/elasticsearch/config
+      - elk-es1-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      cloud:
+        ipv4_address: 172.16.238.11
+  elasticsearch2:
+    container_name: elasticsearch2
+    image: elasticsearch:6.8.6
+    environment:
+      LANG: "C.UTF-8"
+      TZ: "Asia/Shanghai"
+    volumes:
+      - ./elasticsearch2/config:/usr/share/elasticsearch/config
+      - elk-es2-data:/usr/share/elasticsearch/data
+    ports:
+      - "9202:9200"
+      - "9302:9300"
+    networks:
+      cloud:
+        ipv4_address: 172.16.238.12
+  elasticsearch3:
+    container_name: elasticsearch3
+    image: elasticsearch:6.8.6
+    environment:
+      LANG: "C.UTF-8"
+      TZ: "Asia/Shanghai"
+    volumes:
+      - ./elasticsearch3/config:/usr/share/elasticsearch/config
+      - elk-es3-data:/usr/share/elasticsearch/data
+    ports:
+      - "9203:9200"
+      - "9303:9300"
+    networks:
+      cloud:
+        ipv4_address: 172.16.238.13
+
+networks:
+  cloud:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.16.238.0/24"
+
+volumes:
+  elk-es1-data:
+    driver: local
+  elk-es2-data:
+    driver: local
+  elk-es3-data:
+    driver: local
+  elk-redis-data:
+    driver: local

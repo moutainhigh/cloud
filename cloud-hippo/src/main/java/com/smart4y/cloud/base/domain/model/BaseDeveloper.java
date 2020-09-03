@@ -1,7 +1,7 @@
 package com.smart4y.cloud.base.domain.model;
 
-import com.smart4y.cloud.core.infrastructure.mapper.BaseEntity;
-import com.smart4y.cloud.core.infrastructure.toolkit.gen.SnowflakeId;
+import com.smart4y.cloud.mapper.BaseEntity;
+import com.smart4y.cloud.core.toolkit.gen.SnowflakeId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Table(name = "base_developer")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class BaseDeveloper extends BaseEntity {
+public class BaseDeveloper extends BaseEntity<BaseDeveloper> {
 
     /**
      * 用户ID

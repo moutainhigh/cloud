@@ -22,7 +22,7 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/cloud?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
     username: root
-    password: 123456
+    password: 12345678
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
@@ -58,7 +58,7 @@ management:
 mapper:
   mappers:
     - tk.mybatis.mapper.common.Mapper
-    - com.smart4y.cloud.core.infrastructure.mapper.CloudMapper
+    - com.smart4y.cloud.mapper.CloudMapper
   not-empty: true
   identity: MYSQL
 ##分页配置
@@ -99,8 +99,11 @@ mybatis:
     local-cache-scope: session
     #设置当JDBC类型为空时，插入空值时的处理方式
     jdbc-type-for-null: null
-    default-enum-type-handler: com.smart4y.cloud.core.infrastructure.mapper.enumhandler.EnumHandler
+    default-enum-type-handler: com.smart4y.cloud.mapper.enumhandler.EnumHandler
 cloud:
+  ##开启资源扫描
+  scan:
+    register-request-mapping: true
   ##资源服务器公共配置
   common:
     #API网关访问地址

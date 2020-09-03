@@ -5,7 +5,8 @@
 <script>
 import echarts from 'echarts'
 import tdTheme from './theme.json'
-import { on, off } from '@/libs/tools'
+import {off, on} from '@/libs/tools'
+
 echarts.registerTheme('tdTheme', tdTheme)
 export default {
   name: 'ChartPie',
@@ -14,17 +15,17 @@ export default {
     text: String,
     subtext: String
   },
-  data () {
+  data() {
     return {
       dom: null
     }
   },
   methods: {
-    resize () {
+    resize() {
       this.dom.resize()
     }
   },
-  mounted () {
+  mounted() {
     this.$nextTick(() => {
       let legend = this.value.map(_ => _.name)
       let option = {
@@ -63,7 +64,7 @@ export default {
       on(window, 'resize', this.resize)
     })
   },
-  beforeDestroy () {
+  beforeDestroy() {
     off(window, 'resize', this.resize)
   }
 }

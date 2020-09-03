@@ -1,6 +1,7 @@
 package com.smart4y.cloud.gateway.infrastructure.filter;
 
 import com.alibaba.fastjson.JSONObject;
+import com.smart4y.cloud.core.interceptor.FeignRequestInterceptor;
 import com.smart4y.cloud.gateway.domain.CachedBodyOutputMessage;
 import com.smart4y.cloud.gateway.domain.GatewayContext;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.http.ReactiveHttpOutputMessage;
 import org.springframework.http.codec.HttpMessageReader;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
+import org.springframework.lang.NonNull;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -32,6 +34,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * SpringCloud Gateway 记录缓存请求 Body 和 Form 表单
@@ -39,7 +42,7 @@ import java.util.Map;
  * https://github.com/chenggangpro/spring-cloud-gateway-plugin
  *
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @AllArgsConstructor
@@ -50,9 +53,16 @@ public class GatewayContextFilter implements WebFilter, Ordered {
      */
     private static final List<HttpMessageReader<?>> MESSAGE_READERS = HandlerStrategies.withDefaults().messageReaders();
 
+    @NonNull
     @Override
-    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+    public Mono<Void> filter(ServerWebExchange exchange, @NonNull WebFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+
+        List<String> traceId = exchange.getRequest().getHeaders().get(FeignRequestInterceptor.X_REQUEST_ID);
+        String format = String.format(">>>>> >>>>> >>>>> %s, traceId=%s, path=%s",
+                this.getClass().getSimpleName(), traceId, (exchange.getRequest().getPath()  + exchange.getRequest().getMethodValue()));
+        log.info(format);
+
         GatewayContext gatewayContext = new GatewayContext();
         HttpHeaders headers = request.getHeaders();
         gatewayContext.setRequestHeaders(headers);
@@ -90,7 +100,7 @@ public class GatewayContextFilter implements WebFilter, Ordered {
                     gatewayContext.getAllRequestData().addAll(multiValueMap);
                 })
                 .then(Mono.defer(() -> {
-                    Charset charset = headers.getContentType().getCharset();
+                    Charset charset = Objects.requireNonNull(headers.getContentType()).getCharset();
                     charset = charset == null ? StandardCharsets.UTF_8 : charset;
                     String charsetName = charset.name();
                     MultiValueMap<String, String> formData = gatewayContext.getFormData();

@@ -1,0 +1,26 @@
+version: '3.2'
+services:
+  nacos:
+    image: nacos/nacos-server:latest
+    container_name: "nacos"
+    labels:
+      NAME: "nacos"
+    hostname: "nacos"
+    networks:
+      - cloud
+    ports:
+      - "8848:8848"
+    environment:
+      - TZ=Asia/Shanghai
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+    healthcheck:
+      test: "curl localhost:8848/nacos/actuator/health && exit 0 || exit 1"
+      interval: 15s
+      timeout: 5s
+      retries: 128
+    restart: on-failure
+
+networks:
+  cloud:
+    driver: bridge

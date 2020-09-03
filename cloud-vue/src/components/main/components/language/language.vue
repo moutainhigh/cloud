@@ -3,7 +3,7 @@
     <Dropdown trigger="click" @on-click="selectLang">
       <a href="javascript:void(0)">
         {{ title }}
-        <Icon :size="18" type="md-arrow-dropdown" />
+        <Icon :size="18" type="md-arrow-dropdown"/>
       </a>
       <DropdownMenu slot="list">
         <DropdownItem v-for="(value, key) in localList" :name="key" :key="`lang-${key}`">{{ value }}</DropdownItem>
@@ -18,7 +18,7 @@ export default {
   props: {
     lang: String
   },
-  data () {
+  data() {
     return {
       langList: {
         'zh-CN': '语言',
@@ -33,17 +33,17 @@ export default {
     }
   },
   watch: {
-    lang (lang) {
+    lang(lang) {
       this.$i18n.locale = lang
     }
   },
   computed: {
-    title () {
+    title() {
       return this.langList[this.lang]
     }
   },
   methods: {
-    selectLang (name) {
+    selectLang(name) {
       this.$emit('on-lang-change', name)
     }
   }
