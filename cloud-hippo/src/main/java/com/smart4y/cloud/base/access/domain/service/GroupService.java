@@ -3,6 +3,7 @@ package com.smart4y.cloud.base.access.domain.service;
 import com.smart4y.cloud.base.access.domain.entity.RbacGroup;
 import com.smart4y.cloud.base.access.domain.entity.RbacGroupRole;
 import com.smart4y.cloud.base.access.domain.entity.RbacGroupUser;
+import com.smart4y.cloud.base.access.infrastructure.persistence.mybatis.RbacGroupMapper;
 import com.smart4y.cloud.base.access.infrastructure.persistence.mybatis.RbacGroupRoleMapper;
 import com.smart4y.cloud.base.access.infrastructure.persistence.mybatis.RbacGroupUserMapper;
 import com.smart4y.cloud.core.annotation.DomainService;
@@ -24,13 +25,15 @@ import java.util.stream.Collectors;
 @DomainService
 public class GroupService extends BaseDomainService<RbacGroup> {
 
+    private final RbacGroupMapper rbacGroupMapper;
     private final RbacGroupUserMapper rbacGroupUserMapper;
     private final RbacGroupRoleMapper rbacGroupRoleMapper;
 
     @Autowired
-    public GroupService(RbacGroupUserMapper rbacGroupUserMapper, RbacGroupRoleMapper rbacGroupRoleMapper) {
+    public GroupService(RbacGroupUserMapper rbacGroupUserMapper, RbacGroupRoleMapper rbacGroupRoleMapper, RbacGroupMapper rbacGroupMapper) {
         this.rbacGroupUserMapper = rbacGroupUserMapper;
         this.rbacGroupRoleMapper = rbacGroupRoleMapper;
+        this.rbacGroupMapper = rbacGroupMapper;
     }
 
     /**
@@ -191,6 +194,44 @@ public class GroupService extends BaseDomainService<RbacGroup> {
         this.updateSelectiveById(record);
     }
 
+    /**
+     * 是否为非空
+     * <p>
+     * 即当前组织下是否存在子公司/部门/小组/岗位/人员等
+     * </p>
+     *
+     * @param groupId 组织ID
+     * @return true非空，false空
+     */
+    public boolean isNotEmpty(long groupId) {
+        Weekend<RbacGroup> weekend = Weekend.of(RbacGroup.class);
+        weekend
+                .weekendCriteria()
+                .andNotEqualTo(RbacGroup::getGroupId, groupId)
+                .andLike(RbacGroup::getGroupHierarchyId, "%<" + groupId + "<%");
+        weekend
+                .setOrderByClause("group_id DESC LIMIT 1");
+        return this.exist(weekend);
+    }
+
+    /**
+     * 转移父组织关系
+     *
+     * @param groupId       当前组织
+     * @param parentGroupId 待转移到的组织下
+     */
+    public void transferParent(long groupId, long parentGroupId) {
+        RbacGroup record = new RbacGroup()
+                .setGroupParentId(parentGroupId)
+                .setLastModifiedDate(LocalDateTime.now());
+        Weekend<RbacGroup> weekend = Weekend.of(RbacGroup.class);
+        weekend
+                .weekendCriteria()
+                .andEqualTo(RbacGroup::getGroupParentId, groupId);
+        rbacGroupMapper.updateByExampleSelective(record, weekend);
+
+        // TODO 层级ID也要更新
+    }
 
     /**
      * 添加组织用户关联信息

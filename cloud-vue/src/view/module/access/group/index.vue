@@ -31,6 +31,7 @@
                   <Option value="d">部门</Option>
                   <Option value="t">小组</Option>
                   <Option value="p">岗位</Option>
+                  <Option value="r">角色线</Option>
                 </Select>
               </label>
             </FormItem>
@@ -63,7 +64,9 @@
 
             <Button @click="handleModal('add')" class="search-btn" type="dashed">添加</Button>&nbsp;
             <Button class="search-btn" type="dashed" v-show="group.viewShow">编辑</Button>&nbsp;
-            <Button class="search-btn" type="dashed" v-show="group.viewShow">移除</Button>
+            <Button @click="handleRemove(group.viewData.groupId)" class="search-btn" type="dashed"
+                    v-show="group.viewShow">移除
+            </Button>
           </Form>
         </Card>
         <br/>
@@ -120,6 +123,7 @@
               <Option value="t">小组</Option>
               <Option value="p">岗位</Option>
               <Option value="u">人员</Option>
+              <Option value="r">角色线</Option>
             </Select>
           </label>
         </FormItem>
@@ -156,7 +160,7 @@ import {
   getGroupChildren,
   getGroupRoles,
   getGroups,
-  getGroupUsers,
+  getGroupUsers, removeGroup,
   updateGroup,
   viewGroup
 } from '@/api/access/group';
@@ -368,6 +372,18 @@ export default {
         }
       });
     },
+    handleRemove(groupId) {
+      this.$Modal.confirm({
+        title: '确定删除吗？',
+        onOk: () => {
+          removeGroup(groupId)
+            .then(() => {
+              this.$Message.success('删除成功')
+              this.handleSearch()
+            })
+        }
+      });
+    },
     /**
      * 加载子节点
      * @param item
@@ -399,6 +415,9 @@ export default {
           iconType = 'md-people';
           break;
         case 'p':
+          iconType = 'md-person';
+          break;
+        case 'r':
           iconType = 'md-person';
           break;
       }

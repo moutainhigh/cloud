@@ -8,6 +8,8 @@ import com.smart4y.cloud.base.access.domain.service.GroupService;
 import com.smart4y.cloud.base.access.domain.service.UserService;
 import com.smart4y.cloud.base.access.interfaces.dtos.group.CreateGroupCommand;
 import com.smart4y.cloud.core.annotation.ApplicationService;
+import com.smart4y.cloud.core.exception.OpenAlertException;
+import com.smart4y.cloud.core.message.enums.MessageType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -53,6 +55,21 @@ public class GroupApplicationServiceImpl implements GroupApplicationService {
                 newUser(command);
                 break;
         }
+    }
+
+    @Override
+    public void removeGroup(long groupId) {
+        RbacGroup current = groupService.getById(groupId);
+        long parentId = current.getGroupParentId();
+        if (0 == parentId) {
+            throw new OpenAlertException(MessageType.BAD_REQUEST, "最上层机构禁止删除，请使用禁用功能");
+        }
+
+        boolean notEmpty = groupService.isNotEmpty(groupId);
+        if (notEmpty) {
+            groupService.transferParent(groupId, current.getGroupParentId());
+        }
+        groupService.removeById(groupId);
     }
 
     private void newUser(CreateGroupCommand command) {

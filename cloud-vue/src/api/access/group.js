@@ -6,14 +6,14 @@ import request from '@/libs/request'
  * @returns {*}
  */
 export const getGroups = ({groupTypes}) => {
-  const params = {
-    groupTypes: groupTypes
-  };
-  return request({
-    url: 'base/access/groups',
-    params,
-    method: 'get'
-  })
+    const params = {
+        groupTypes: groupTypes
+    };
+    return request({
+        url: 'base/access/groups',
+        params,
+        method: 'get'
+    })
 };
 
 /**
@@ -23,12 +23,12 @@ export const getGroups = ({groupTypes}) => {
  * @returns {*}
  */
 export const getGroupChildren = ({groupId}) => {
-  const params = {groupId: groupId}
-  return request({
-    url: 'base/access/groups/children',
-    params,
-    method: 'get'
-  })
+    const params = {groupId: groupId}
+    return request({
+        url: 'base/access/groups/children',
+        params,
+        method: 'get'
+    })
 };
 /**
  * 查询组织详情
@@ -37,10 +37,10 @@ export const getGroupChildren = ({groupId}) => {
  * @returns {*}
  */
 export const viewGroup = ({groupId}) => {
-  return request({
-    url: 'base/access/groups/' + groupId,
-    method: 'get'
-  })
+    return request({
+        url: 'base/access/groups/' + groupId,
+        method: 'get'
+    })
 };
 
 /**
@@ -48,34 +48,45 @@ export const viewGroup = ({groupId}) => {
  * @returns {*}
  */
 export const addGroup = ({groupParentId, groupName, groupState, groupType}) => {
-  const data = {
-    groupParentId: groupParentId,
-    groupName: groupName,
-    groupState: groupState,
-    groupType: groupType
-  };
-  return request({
-    url: 'base/access/groups',
-    data,
-    method: 'post'
-  })
+    const data = {
+        groupParentId: groupParentId,
+        groupName: groupName,
+        groupState: groupState,
+        groupType: groupType
+    };
+    return request({
+        url: 'base/access/groups',
+        data,
+        method: 'post'
+    })
 };
 /**
  * 编辑组织
  * @returns {*}
  */
 export const updateGroup = ({groupId, groupParentId, groupName, groupState, groupType}) => {
-  const data = {
-    groupParentId: groupParentId,
-    groupName: groupName,
-    groupState: groupState,
-    groupType: groupType
-  };
-  return request({
-    url: 'base/access/groups/' + groupId,
-    data,
-    method: 'put'
-  })
+    const data = {
+        groupParentId: groupParentId,
+        groupName: groupName,
+        groupState: groupState,
+        groupType: groupType
+    };
+    return request({
+        url: 'base/access/groups/' + groupId,
+        data,
+        method: 'put'
+    })
+};
+/**
+ * 移除组织
+ * @param groupId
+ * @returns {*}
+ */
+export const removeGroup = (groupId) => {
+    return request({
+        url: 'base/access/groups/' + groupId,
+        method: 'delete'
+    })
 };
 /**
  * 查询组织{groupId}下的直接用户（不查询下下级数据）
@@ -84,10 +95,10 @@ export const updateGroup = ({groupId, groupParentId, groupName, groupState, grou
  * @returns {*}
  */
 export const getGroupUsers = ({groupId}) => {
-  return request({
-    url: 'base/access/groups/' + groupId + "/users",
-    method: 'get'
-  })
+    return request({
+        url: 'base/access/groups/' + groupId + "/users",
+        method: 'get'
+    })
 };
 
 /**
@@ -97,8 +108,8 @@ export const getGroupUsers = ({groupId}) => {
  * @returns {*}
  */
 export const getGroupRoles = ({groupId}) => {
-  return request({
-    url: 'base/access/groups/' + groupId + "/roles",
-    method: 'get'
-  })
+    return request({
+        url: 'base/access/groups/' + groupId + "/roles",
+        method: 'get'
+    })
 };

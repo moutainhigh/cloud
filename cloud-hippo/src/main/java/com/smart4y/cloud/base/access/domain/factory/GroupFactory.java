@@ -43,7 +43,7 @@ public final class GroupFactory {
                 parent.getGroupId() : parent.getGroupOrgId();
         return new RbacGroup()
                 .setGroupId(groupId)
-                .setGroupParentId(parent.getGroupParentId())
+                .setGroupParentId(parent.getGroupId())
                 .setGroupHierarchyId(parent.getGroupHierarchyId() + groupId + "<")
                 .setGroupName(command.getGroupName())
                 .setGroupState(command.getGroupState())
@@ -68,7 +68,7 @@ public final class GroupFactory {
                 parent.getGroupId() : parent.getGroupOrgId();
         return new RbacGroup()
                 .setGroupId(groupId)
-                .setGroupParentId(parent.getGroupParentId())
+                .setGroupParentId(parent.getGroupId())
                 .setGroupHierarchyId(parent.getGroupHierarchyId() + groupId + "<")
                 .setGroupName(command.getGroupName())
                 .setGroupState(command.getGroupState())
@@ -93,7 +93,7 @@ public final class GroupFactory {
                 parent.getGroupId() : parent.getGroupOrgId();
         return new RbacGroup()
                 .setGroupId(groupId)
-                .setGroupParentId(parent.getGroupParentId())
+                .setGroupParentId(parent.getGroupId())
                 .setGroupHierarchyId(parent.getGroupHierarchyId() + groupId + "<")
                 .setGroupName(command.getGroupName())
                 .setGroupState(command.getGroupState())
@@ -118,7 +118,7 @@ public final class GroupFactory {
                 parent.getGroupId() : parent.getGroupOrgId();
         return new RbacGroup()
                 .setGroupId(groupId)
-                .setGroupParentId(parent.getGroupParentId())
+                .setGroupParentId(parent.getGroupId())
                 .setGroupHierarchyId(parent.getGroupHierarchyId() + groupId + "<")
                 .setGroupName(command.getGroupName())
                 .setGroupState(command.getGroupState())
@@ -139,7 +139,7 @@ public final class GroupFactory {
     public static RbacGroup newCompany(@Nullable RbacGroup parent, @NonNull CreateGroupCommand command) {
         long groupId = snowflake().nextId();
         // 所属机构ID
-        long groupParentId = null == parent ? 0 : parent.getGroupParentId();
+        long groupParentId = null == parent ? 0 : parent.getGroupId();
         long groupOrgId = null == parent ? 0 : parent.getGroupOrgId();
         String groupHierarchyId = null == parent ? "" : parent.getGroupHierarchyId();
         return new RbacGroup()

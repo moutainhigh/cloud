@@ -13,4 +13,11 @@ public interface GroupApplicationService {
      * @param command 组织结构信息
      */
     void createGroup(CreateGroupCommand command);
+
+    /**
+     * 删除组织结构
+     *
+     * @param groupId 组织ID
+     */
+    void removeGroup(long groupId);
 }

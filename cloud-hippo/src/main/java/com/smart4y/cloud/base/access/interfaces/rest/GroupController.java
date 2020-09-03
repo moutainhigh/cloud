@@ -79,7 +79,7 @@ public class GroupController extends BaseAccessController {
             @ApiImplicitParam(name = "groupId", value = "组织ID", required = true, paramType = "path", dataType = "long", example = "122367153805459456")
     })
     public ResultMessage<Void> removeGroup(@PathVariable("groupId") Long groupId) {
-        // TODO 组织:删除
+        groupApplicationService.removeGroup(groupId);
         return ok();
     }
 
