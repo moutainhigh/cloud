@@ -59,7 +59,7 @@
 
         <!-- 指定数据库表 -->
         <!--<table tableName="hello" domainObjectName="Hello">
-            <columnOverride column="user_name" javaType="com.smart4y.cloud.base.gateway.domain.entity.GatewayRoute"/>
+            <columnOverride column="user_name" javaType="GatewayRoute"/>
         </table>-->
 
         <table tableName="rbac_%"/>
