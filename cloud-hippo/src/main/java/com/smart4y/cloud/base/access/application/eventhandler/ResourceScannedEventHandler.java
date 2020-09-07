@@ -2,7 +2,7 @@ package com.smart4y.cloud.base.access.application.eventhandler;
 
 import com.smart4y.cloud.base.access.application.PrivilegeApplicationService;
 import com.smart4y.cloud.base.access.domain.entity.RbacOperation;
-import com.smart4y.cloud.base.infrastructure.constants.RedisConstants;
+import com.smart4y.cloud.base.system.infrastructure.constant.RedisConstants;
 import com.smart4y.cloud.core.constant.QueueConstants;
 import com.smart4y.cloud.core.event.ResourceScannedEvent;
 import lombok.extern.slf4j.Slf4j;

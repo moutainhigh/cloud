@@ -63,7 +63,7 @@
             </FormItem>
 
             <Button @click="handleModal('add')" class="search-btn" type="dashed">添加</Button>&nbsp;
-            <Button class="search-btn" type="dashed" v-show="group.viewShow">编辑</Button>&nbsp;
+            <!--<Button class="search-btn" type="dashed" v-show="group.viewShow">编辑</Button>&nbsp;-->
             <Button @click="handleRemove(group.viewData.groupId)" class="search-btn" type="dashed"
                     v-show="group.viewShow">移除
             </Button>

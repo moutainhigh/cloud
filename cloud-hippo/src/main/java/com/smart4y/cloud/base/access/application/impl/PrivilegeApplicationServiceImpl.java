@@ -10,7 +10,7 @@ import com.smart4y.cloud.base.access.interfaces.dtos.menu.ModifyMenuCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.operation.ModifyOperationAuthCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.operation.ModifyOperationOpenCommand;
 import com.smart4y.cloud.base.access.interfaces.dtos.operation.ModifyOperationStateCommand;
-import com.smart4y.cloud.base.infrastructure.constants.RedisConstants;
+import com.smart4y.cloud.base.system.infrastructure.constant.RedisConstants;
 import com.smart4y.cloud.core.annotation.ApplicationService;
 import com.smart4y.cloud.core.exception.OpenAlertException;
 import com.smart4y.cloud.core.message.enums.MessageType;

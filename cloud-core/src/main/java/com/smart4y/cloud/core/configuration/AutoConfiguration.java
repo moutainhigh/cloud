@@ -4,7 +4,6 @@ import com.smart4y.cloud.core.AbstractApplication;
 import com.smart4y.cloud.core.event.scanner.RequestMappingScanner;
 import com.smart4y.cloud.core.exception.global.OpenGlobalExceptionHandler;
 import com.smart4y.cloud.core.exception.handler.OpenRestResponseErrorHandler;
-import com.smart4y.cloud.core.filter.XFilter;
 import com.smart4y.cloud.core.properties.OpenCommonProperties;
 import com.smart4y.cloud.core.properties.OpenIdGenProperties;
 import com.smart4y.cloud.core.properties.OpenScanProperties;
@@ -20,7 +19,6 @@ import org.springframework.boot.actuate.jdbc.DataSourceHealthIndicator;
 import org.springframework.boot.actuate.redis.RedisHealthIndicator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.bus.BusProperties;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
@@ -41,17 +39,6 @@ import javax.sql.DataSource;
 @ComponentScan(basePackageClasses = AbstractApplication.class)
 @EnableConfigurationProperties({OpenCommonProperties.class, OpenIdGenProperties.class, OpenOAuth2ClientProperties.class, OpenScanProperties.class})
 public class AutoConfiguration {
-
-    /**
-     * 参数去除空格过滤
-     * body缓存
-     */
-    @Bean
-    public FilterRegistrationBean<XFilter> xFilter() {
-        FilterRegistrationBean<XFilter> filterRegistrationBean = new FilterRegistrationBean<>(new XFilter());
-        log.info("XFilter [{}]", filterRegistrationBean);
-        return filterRegistrationBean;
-    }
 
     /**
      * 默认加密 配置

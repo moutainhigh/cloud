@@ -38,7 +38,7 @@ public class UserController extends BaseAccessController {
     @ApiOperation(value = "用户:分页")
     public ResultMessage<Page<RbacUser>> getUsersPage(RbacUserPageQuery query) {
         Page<RbacUser> result = userService.getPageLike(
-                query.getPage(), query.getPage(), query.getUserId(), query.getUserName()
+                query.getPage(), query.getLimit(), query.getUserId(), query.getUserName()
         );
         return ok(result);
     }

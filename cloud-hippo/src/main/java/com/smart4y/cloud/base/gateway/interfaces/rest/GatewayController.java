@@ -6,7 +6,7 @@ import com.smart4y.cloud.base.gateway.application.GatewayRouteService;
 import com.smart4y.cloud.base.gateway.domain.entity.GatewayRoute;
 import com.smart4y.cloud.base.gateway.interfaces.dtos.GatewayRouteConverter;
 import com.smart4y.cloud.base.gateway.interfaces.dtos.GatewayRouteVO;
-import com.smart4y.cloud.base.interfaces.dtos.ServiceVO;
+import com.smart4y.cloud.base.system.interfaces.dtos.ServiceVO;
 import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.core.dto.IpLimitApiDTO;
 import com.smart4y.cloud.core.dto.RateLimitApiDTO;
