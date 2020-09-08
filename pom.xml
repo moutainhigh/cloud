@@ -51,17 +51,27 @@
 
             <dependency>
                 <groupId>com.smart4y</groupId>
-                <artifactId>cloud-common-neo4j</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.smart4y</groupId>
                 <artifactId>cloud-common-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.smart4y</groupId>
                 <artifactId>cloud-common-generator</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.smart4y</groupId>
+                <artifactId>cloud-common-loadbalancer</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.smart4y</groupId>
+                <artifactId>cloud-common-sms</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.smart4y</groupId>
+                <artifactId>cloud-common-neo4j</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
@@ -236,7 +246,7 @@
         </repository>
     </repositories>
 
-    <distributionManagement>
+    <!--<distributionManagement>
         <snapshotRepository>
             <id>sonatype-nexus-snapshots</id>
             <name>sonatype Nexus Snapshots</name>
@@ -247,5 +257,5 @@
             <name>Nexus Release Repository</name>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
-    </distributionManagement>
+    </distributionManagement>-->
 </project>
