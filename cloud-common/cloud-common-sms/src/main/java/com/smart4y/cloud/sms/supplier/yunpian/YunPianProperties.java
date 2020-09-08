@@ -31,5 +31,4 @@ public class YunPianProperties {
     public String getTemplates(String type) {
         return templates == null ? null : templates.get(type);
     }
-
 }

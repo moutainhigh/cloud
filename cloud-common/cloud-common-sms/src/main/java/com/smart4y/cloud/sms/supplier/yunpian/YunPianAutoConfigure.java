@@ -38,5 +38,4 @@ public class YunPianAutoConfigure {
             return enable == null || enable;
         }
     }
-
 }

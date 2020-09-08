@@ -42,5 +42,4 @@ public class SmsWebProperties {
      * 是否启用通知发送web端点
      */
     private boolean enableNotice = true;
-
 }

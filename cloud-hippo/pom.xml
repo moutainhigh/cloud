@@ -58,6 +58,11 @@
             <groupId>com.smart4y</groupId>
             <artifactId>cloud-common-mapper</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.smart4y</groupId>
+            <artifactId>cloud-common-sms</artifactId>
+        </dependency>
+
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>

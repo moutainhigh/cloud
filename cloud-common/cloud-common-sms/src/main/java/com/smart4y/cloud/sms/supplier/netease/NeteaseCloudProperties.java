@@ -52,5 +52,4 @@ public class NeteaseCloudProperties {
     public List<String> getParamsOrder(String type) {
         return paramsOrders.get(type);
     }
-
 }
