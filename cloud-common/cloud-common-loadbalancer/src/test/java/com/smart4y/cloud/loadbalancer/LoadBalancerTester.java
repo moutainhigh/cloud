@@ -3,7 +3,10 @@ package com.smart4y.cloud.loadbalancer;
 import com.smart4y.cloud.loadbalancer.factory.LoadBalancerFactory;
 import com.smart4y.cloud.loadbalancer.wrapper.TargetWrapper;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -31,11 +34,8 @@ public class LoadBalancerTester {
         int threadSize = 10;
         int threadJobSize = 10;
 
-        List<String> rules = Arrays
-                .asList("Hash", "Random", "RoundRobin", "WeightRandom", "WeightRoundRobin", "SmoothWeightRoundRobin");
-
-        for (String rule : rules) {
-            new LoadBalancerTester(LoadBalancerFactory.build(rule), wrappers, threadSize, threadJobSize).start();
+        for (LBType lbType : LBType.values()) {
+            new LoadBalancerTester(LoadBalancerFactory.build(lbType), wrappers, threadSize, threadJobSize).start();
         }
     }
 

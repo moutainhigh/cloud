@@ -1,7 +1,10 @@
 package com.smart4y.cloud.loadbalancer.factory;
 
 import com.smart4y.cloud.loadbalancer.ILoadBalancer;
+import com.smart4y.cloud.loadbalancer.LBType;
+import com.smart4y.cloud.loadbalancer.impl.AbstractLoadBalancer;
 import com.smart4y.cloud.loadbalancer.wrapper.TargetWrapper;
+import org.springframework.lang.NonNull;
 
 import java.util.List;
 
@@ -13,27 +16,27 @@ public class LoadBalancerFactory {
     /**
      * build load balancer instance by appoint rule
      *
-     * @param rule load balance rule
-     * @param <T>  target object class
-     * @param <C>  choose reference object
+     * @param lbType load balance rule
+     * @param <T>    target object class
+     * @param <C>    choose reference object
      * @return load balancer instance
      */
-    public static <T, C> ILoadBalancer<T, C> build(String rule) {
-        return build(rule, null);
+    public static <T, C> ILoadBalancer<T, C> build(@NonNull LBType lbType) {
+        return build(lbType, null);
     }
 
     /**
      * build load balancer instance by appoint rule
      *
-     * @param rule       load balance rule
+     * @param lbType     load balance rule
      * @param targetList target object list
      * @param <T>        target object class
      * @param <C>        choose reference object
      * @return load balancer instance
      */
     @SuppressWarnings("unchecked")
-    public static <T, C> ILoadBalancer<T, C> build(String rule, List<TargetWrapper<T>> targetList) {
-        String instanceClassName = "com.smart4y.cloud.loadbalancer.impl." + rule + "LoadBalancer";
+    public static <T, C> ILoadBalancer<T, C> build(@NonNull LBType lbType, List<TargetWrapper<T>> targetList) {
+        String instanceClassName = AbstractLoadBalancer.class.getPackage().getName() + "." + lbType.name() + "LoadBalancer";
 
         try {
             Class<?> clazz = LoadBalancerFactory.class.getClassLoader().loadClass(instanceClassName);

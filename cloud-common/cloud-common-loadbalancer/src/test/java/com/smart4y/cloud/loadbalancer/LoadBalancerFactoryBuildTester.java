@@ -11,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class LoadBalancerFactoryBuildTester {
 
-    private static final String rule = "Random";
+    private static final LBType rule = LBType.Random;
 
     @Test
     public void notWithParamsStructure() {
