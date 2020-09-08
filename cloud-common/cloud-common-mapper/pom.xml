@@ -10,17 +10,18 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cloud-common-generator</artifactId>
+    <artifactId>cloud-common-mapper</artifactId>
     <version>1.1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.boot.version>2.2.8.RELEASE</spring.boot.version>
-        <spring.cloud.version>Hoxton.SR6</spring.cloud.version>
-        <spring.cloud.alibaba.version>2.2.1.RELEASE</spring.cloud.alibaba.version>
 
-        <mybatis-generator-core.version>1.4.0</mybatis-generator-core.version>
+        <mybatis.version>3.5.5</mybatis.version>
+        <mapper.version>4.1.5</mapper.version>
+        <mapper-spring-boot-starter.version>2.1.5</mapper-spring-boot-starter.version>
+        <pagehelper-spring-boot-starter.version>1.2.13</pagehelper-spring-boot-starter.version>
     </properties>
 
     <dependencyManagement>
@@ -29,20 +30,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring.boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring.cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${spring.cloud.alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -55,21 +42,62 @@
             <artifactId>cloud-common-core</artifactId>
             <scope>provided</scope>
         </dependency>
+        <!-- Lombok -->
         <dependency>
-            <groupId>com.smart4y</groupId>
-            <artifactId>cloud-common-mapper</artifactId>
-            <scope>provided</scope>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <!-- 属性配置 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mybatis.generator</groupId>
-            <artifactId>mybatis-generator-core</artifactId>
-            <version>${mybatis-generator-core.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
         </dependency>
-        <!-- 模板依赖 -->
+
+        <!-- ((((((((((((((((((((((((( 持久层依赖（以下） ))))))))))))))))))))))))) -->
         <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <scope>compile</scope>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper</artifactId>
+            <version>${mapper.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>tk.mybatis</groupId>
+            <artifactId>mapper-spring-boot-starter</artifactId>
+            <version>${mapper-spring-boot-starter.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.mybatis</groupId>
+                    <artifactId>mybatis</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>mybatis-spring</artifactId>
+                    <groupId>org.mybatis</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>${pagehelper-spring-boot-starter.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>mybatis</artifactId>
+                    <groupId>org.mybatis</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

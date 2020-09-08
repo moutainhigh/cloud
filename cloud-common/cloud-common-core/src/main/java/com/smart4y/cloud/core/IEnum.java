@@ -1,4 +1,4 @@
-package com.smart4y.cloud.mapper.enumhandler;
+package com.smart4y.cloud.core;
 
 import java.io.Serializable;
 

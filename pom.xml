@@ -56,6 +56,11 @@
             </dependency>
             <dependency>
                 <groupId>com.smart4y</groupId>
+                <artifactId>cloud-common-mapper</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.smart4y</groupId>
                 <artifactId>cloud-common-generator</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -162,6 +167,12 @@
                         <verbose>true</verbose>
                     </configuration>
                     <dependencies>
+                        <dependency>
+                            <groupId>com.smart4y</groupId>
+                            <artifactId>cloud-common-mapper</artifactId>
+                            <version>${project.version}</version>
+                            <type>jar</type>
+                        </dependency>
                         <dependency>
                             <groupId>com.smart4y</groupId>
                             <artifactId>cloud-common-generator</artifactId>

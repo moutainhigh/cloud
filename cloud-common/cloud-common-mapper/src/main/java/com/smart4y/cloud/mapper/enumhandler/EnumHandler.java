@@ -1,5 +1,6 @@
 package com.smart4y.cloud.mapper.enumhandler;
 
+import com.smart4y.cloud.core.IEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;

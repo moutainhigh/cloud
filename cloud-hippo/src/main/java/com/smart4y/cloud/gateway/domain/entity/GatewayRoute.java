@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import lombok.Data;
 import com.smart4y.cloud.core.toolkit.gen.SnowflakeId;
 import lombok.EqualsAndHashCode;
-import com.smart4y.cloud.mapper.BaseEntity;
+import com.smart4y.cloud.core.BaseEntity;
 import javax.persistence.Id;
 
 /**

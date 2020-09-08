@@ -2,6 +2,7 @@ package com.smart4y.cloud.mapper;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.smart4y.cloud.core.BaseEntity;
 import com.smart4y.cloud.core.message.page.Page;
 import com.smart4y.cloud.core.spring.SpringContextHolder;
 import lombok.extern.slf4j.Slf4j;

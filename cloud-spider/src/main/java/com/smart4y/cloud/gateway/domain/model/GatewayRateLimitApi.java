@@ -1,6 +1,6 @@
 package com.smart4y.cloud.gateway.domain.model;
 
-import com.smart4y.cloud.mapper.BaseEntity;
+import com.smart4y.cloud.core.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
