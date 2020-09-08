@@ -5,7 +5,7 @@ import com.smart4y.cloud.sms.entity.VerificationCode;
 /**
  * 验证码储存接口
  */
-public interface IVerificationCodeRepository {
+public interface VerificationCodeRepository {
 
     /**
      * 根据手机号码查询验证码

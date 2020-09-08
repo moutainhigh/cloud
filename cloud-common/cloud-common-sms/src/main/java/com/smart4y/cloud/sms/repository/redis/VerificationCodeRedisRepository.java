@@ -2,14 +2,12 @@ package com.smart4y.cloud.sms.repository.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smart4y.cloud.sms.entity.VerificationCode;
-import com.smart4y.cloud.sms.repository.IVerificationCodeRepository;
+import com.smart4y.cloud.sms.repository.VerificationCodeRepository;
 import com.smart4y.cloud.sms.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -19,20 +17,14 @@ import java.util.concurrent.TimeUnit;
  * 验证码redis储存实现
  */
 @Slf4j
-@Repository
-@EnableConfigurationProperties(RedisProperties.class)
-public class VerificationCodeRedisRepository implements IVerificationCodeRepository {
-
-    private final RedisProperties properties;
-    private final RedisTemplate<String, String> redisTemplate;
-    private final ObjectMapper objectMapper;
+public class VerificationCodeRedisRepository implements VerificationCodeRepository {
 
     @Autowired
-    public VerificationCodeRedisRepository(RedisProperties properties, RedisTemplate<String, String> redisTemplate, ObjectMapper objectMapper) {
-        this.properties = properties;
-        this.redisTemplate = redisTemplate;
-        this.objectMapper = objectMapper;
-    }
+    private RedisProperties properties;
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public VerificationCode findOne(String phone, String identificationCode) {

@@ -67,7 +67,7 @@ sms:
     ##AccessKeyId
     access-key-id: 7gBZcbsC7kLIWCdELIl8nxcs
     ##AccessKeySecret
-    access-key-secret: 0osTIhce7uPvDKHz6aa67bhCukaKoYl4
+    secret-access-key: 0osTIhce7uPvDKHz6aa67bhCukaKoYl4
     endpoint: ##endpoint
     ##短信模板配置
     templates:

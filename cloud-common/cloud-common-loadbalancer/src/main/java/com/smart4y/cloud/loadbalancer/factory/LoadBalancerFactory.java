@@ -1,6 +1,6 @@
 package com.smart4y.cloud.loadbalancer.factory;
 
-import com.smart4y.cloud.loadbalancer.ILoadBalancer;
+import com.smart4y.cloud.loadbalancer.LoadBalancer;
 import com.smart4y.cloud.loadbalancer.LBType;
 import com.smart4y.cloud.loadbalancer.impl.AbstractLoadBalancer;
 import com.smart4y.cloud.loadbalancer.wrapper.TargetWrapper;
@@ -21,7 +21,7 @@ public class LoadBalancerFactory {
      * @param <C>    choose reference object
      * @return load balancer instance
      */
-    public static <T, C> ILoadBalancer<T, C> build(@NonNull LBType lbType) {
+    public static <T, C> LoadBalancer<T, C> build(@NonNull LBType lbType) {
         return build(lbType, null);
     }
 
@@ -35,16 +35,16 @@ public class LoadBalancerFactory {
      * @return load balancer instance
      */
     @SuppressWarnings("unchecked")
-    public static <T, C> ILoadBalancer<T, C> build(@NonNull LBType lbType, List<TargetWrapper<T>> targetList) {
+    public static <T, C> LoadBalancer<T, C> build(@NonNull LBType lbType, List<TargetWrapper<T>> targetList) {
         String instanceClassName = AbstractLoadBalancer.class.getPackage().getName() + "." + lbType.name() + "LoadBalancer";
 
         try {
             Class<?> clazz = LoadBalancerFactory.class.getClassLoader().loadClass(instanceClassName);
 
             if (targetList == null) {
-                return (ILoadBalancer<T, C>) clazz.getConstructor().newInstance();
+                return (LoadBalancer<T, C>) clazz.getConstructor().newInstance();
             } else {
-                return (ILoadBalancer<T, C>) clazz.getConstructor(List.class).newInstance(targetList);
+                return (LoadBalancer<T, C>) clazz.getConstructor(List.class).newInstance(targetList);
             }
         } catch (Exception e) {
             throw new RuntimeException(e.getLocalizedMessage(), e);

@@ -1,6 +1,6 @@
 package com.smart4y.cloud.loadbalancer.impl;
 
-import com.smart4y.cloud.loadbalancer.ILoadBalancer;
+import com.smart4y.cloud.loadbalancer.LoadBalancer;
 import com.smart4y.cloud.loadbalancer.wrapper.TargetWrapper;
 
 import java.util.Collections;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * @param <T> target class
  * @param <C> choose reference object
  */
-public abstract class AbstractLoadBalancer<T, C> implements ILoadBalancer<T, C> {
+public abstract class AbstractLoadBalancer<T, C> implements LoadBalancer<T, C> {
 
     protected final List<TargetWrapper<T>> targetList;
 

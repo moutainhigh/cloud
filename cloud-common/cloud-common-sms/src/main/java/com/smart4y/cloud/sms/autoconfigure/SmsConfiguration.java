@@ -7,8 +7,9 @@ import com.smart4y.cloud.sms.loadbalancer.RandomSmsLoadBalancer;
 import com.smart4y.cloud.sms.loadbalancer.SmsSenderLoadBalancer;
 import com.smart4y.cloud.sms.properties.SmsProperties;
 import com.smart4y.cloud.sms.properties.SmsWebProperties;
-import com.smart4y.cloud.sms.repository.IVerificationCodeRepository;
-import com.smart4y.cloud.sms.repository.VerificationCodeMemoryRepository;
+import com.smart4y.cloud.sms.repository.VerificationCodeRepository;
+import com.smart4y.cloud.sms.repository.memory.VerificationCodeMemoryRepository;
+import com.smart4y.cloud.sms.repository.redis.VerificationCodeRedisRepository;
 import com.smart4y.cloud.sms.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -41,9 +42,20 @@ public class SmsConfiguration {
      * @return 默认验证码储存接口实现
      */
     @Bean
-    @ConditionalOnMissingBean(IVerificationCodeRepository.class)
-    public IVerificationCodeRepository verificationCodeMemoryRepository() {
+    @ConditionalOnMissingBean(VerificationCodeRepository.class)
+    public VerificationCodeRepository verificationCodeMemoryRepository() {
         return new VerificationCodeMemoryRepository();
+    }
+
+    /**
+     * 构造默认验证码储存接口实现
+     *
+     * @return 默认验证码储存接口实现
+     */
+    @Bean
+    @ConditionalOnMissingBean(VerificationCodeRepository.class)
+    public VerificationCodeRepository verificationCodeRedisRepository() {
+        return new VerificationCodeRedisRepository();
     }
 
     /**
@@ -74,8 +86,7 @@ public class SmsConfiguration {
      */
     @Autowired(required = false)
     @ConditionalOnBean({RequestMappingHandlerMapping.class, SmsProperties.class})
-    public void setWebMapping(RequestMappingHandlerMapping mapping, SmsProperties smsProperties,
-                              SmsController controller) throws NoSuchMethodException, SecurityException {
+    public void setWebMapping(RequestMappingHandlerMapping mapping, SmsProperties smsProperties, SmsController controller) throws NoSuchMethodException, SecurityException {
         if (smsProperties == null) {
             return;
         }
@@ -116,9 +127,7 @@ public class SmsConfiguration {
         if (properties == null) {
             return SmsWebProperties.DEFAULT_BASE_PATH;
         }
-
         String bathPath = StringUtils.trimToNull(properties.getBasePath());
-
         return bathPath == null ? SmsWebProperties.DEFAULT_BASE_PATH : bathPath;
     }
 }

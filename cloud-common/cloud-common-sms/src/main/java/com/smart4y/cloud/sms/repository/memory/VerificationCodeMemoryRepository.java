@@ -1,6 +1,7 @@
-package com.smart4y.cloud.sms.repository;
+package com.smart4y.cloud.sms.repository.memory;
 
 import com.smart4y.cloud.sms.entity.VerificationCode;
+import com.smart4y.cloud.sms.repository.VerificationCodeRepository;
 import com.smart4y.cloud.sms.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 验证码内存储存实现
  */
 @Slf4j
-public class VerificationCodeMemoryRepository implements IVerificationCodeRepository {
+public class VerificationCodeMemoryRepository implements VerificationCodeRepository {
 
     private final Map<String, VerificationCode> cache = new ConcurrentHashMap<>();
 

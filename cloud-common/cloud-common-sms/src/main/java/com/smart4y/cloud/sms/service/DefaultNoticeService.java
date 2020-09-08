@@ -1,6 +1,6 @@
 package com.smart4y.cloud.sms.service;
 
-import com.smart4y.cloud.loadbalancer.ILoadBalancer;
+import com.smart4y.cloud.loadbalancer.LoadBalancer;
 import com.smart4y.cloud.sms.domain.NoticeData;
 import com.smart4y.cloud.sms.exception.NotFindSendHandlerException;
 import com.smart4y.cloud.sms.handler.SendHandler;
@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
 public class DefaultNoticeService implements NoticeService {
 
     private final SmsProperties properties;
-    private final ILoadBalancer<SendHandler, NoticeData> smsSenderLoadbalancer;
+    private final LoadBalancer<SendHandler, NoticeData> smsSenderLoadbalancer;
 
     @Autowired
-    public DefaultNoticeService(SmsProperties properties, ILoadBalancer<SendHandler, NoticeData> smsSenderLoadbalancer) {
+    public DefaultNoticeService(SmsProperties properties, LoadBalancer<SendHandler, NoticeData> smsSenderLoadbalancer) {
         this.properties = properties;
         this.smsSenderLoadbalancer = smsSenderLoadbalancer;
     }

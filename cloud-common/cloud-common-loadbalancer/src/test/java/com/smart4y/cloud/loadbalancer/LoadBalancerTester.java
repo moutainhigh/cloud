@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class LoadBalancerTester {
 
-    private final ILoadBalancer<String, Object> lb;
+    private final LoadBalancer<String, Object> lb;
 
     private final List<TargetWrapper<String>> wrappers;
 
@@ -39,7 +39,7 @@ public class LoadBalancerTester {
         }
     }
 
-    public LoadBalancerTester(ILoadBalancer<String, Object> lb, List<TargetWrapper<String>> wrappers, int threadSize, int threadJobSize) {
+    public LoadBalancerTester(LoadBalancer<String, Object> lb, List<TargetWrapper<String>> wrappers, int threadSize, int threadJobSize) {
         this.lb = lb;
         this.wrappers = wrappers;
         this.threadSize = threadSize;

@@ -22,18 +22,14 @@ public class SmsController {
     /**
      * 手机验证码服务
      */
-    private final VerificationCodeService verificationCodeService;
+    @Autowired
+    private VerificationCodeService verificationCodeService;
     /**
      * 短信通知服务
      */
-    private final NoticeService noticeService;
-
     @Autowired
-    public SmsController(VerificationCodeService verificationCodeService, NoticeService noticeService) {
-        this.verificationCodeService = verificationCodeService;
-        this.noticeService = noticeService;
-    }
-
+    private NoticeService noticeService;
+    
     /**
      * 获取验证码
      *

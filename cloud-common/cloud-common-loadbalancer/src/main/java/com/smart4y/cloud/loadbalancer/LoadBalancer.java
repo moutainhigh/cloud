@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * @param <T> target class
  * @param <C> choose reference object
  */
-public interface ILoadBalancer<T, C> {
+public interface LoadBalancer<T, C> {
 
     int MIN_WEIGHT = 1;
 

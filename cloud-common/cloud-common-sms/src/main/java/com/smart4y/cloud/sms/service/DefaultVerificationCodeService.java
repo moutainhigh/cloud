@@ -5,7 +5,7 @@ import com.smart4y.cloud.sms.entity.VerificationCode;
 import com.smart4y.cloud.sms.exception.PhoneIsNullException;
 import com.smart4y.cloud.sms.exception.RetryTimeShortException;
 import com.smart4y.cloud.sms.properties.SmsProperties;
-import com.smart4y.cloud.sms.repository.IVerificationCodeRepository;
+import com.smart4y.cloud.sms.repository.VerificationCodeRepository;
 import com.smart4y.cloud.sms.utils.RandomUtil;
 import com.smart4y.cloud.sms.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +23,13 @@ import java.util.Objects;
 @Service
 public class DefaultVerificationCodeService implements VerificationCodeService {
 
-    private final IVerificationCodeRepository repository;
+    private final VerificationCodeRepository repository;
     private final SmsProperties properties;
     private final NoticeService noticeService;
     private final ICodeGenerate codeGenerate;
 
     @Autowired
-    public DefaultVerificationCodeService(IVerificationCodeRepository repository, SmsProperties properties, NoticeService noticeService, ICodeGenerate codeGenerate) {
+    public DefaultVerificationCodeService(VerificationCodeRepository repository, SmsProperties properties, NoticeService noticeService, ICodeGenerate codeGenerate) {
         this.repository = repository;
         this.properties = properties;
         this.noticeService = noticeService;

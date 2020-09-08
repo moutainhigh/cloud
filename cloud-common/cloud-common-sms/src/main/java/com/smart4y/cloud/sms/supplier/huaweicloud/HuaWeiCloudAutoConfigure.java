@@ -4,9 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smart4y.cloud.sms.autoconfigure.SmsConfiguration;
 import com.smart4y.cloud.sms.loadbalancer.SmsSenderLoadBalancer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.*;
-import org.springframework.core.type.AnnotatedTypeMetadata;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * 华为云发送端点自动配置
@@ -25,21 +26,10 @@ public class HuaWeiCloudAutoConfigure {
      * @return 华为云发送处理
      */
     @Bean
-    @Conditional(HuaWeiCloudSendHandlerCondition.class)
-    public HuaWeiCloudSendHandler huaWeiCloudSendHandler(HuaWeiCloudProperties properties, ObjectMapper objectMapper,
-                                                         SmsSenderLoadBalancer loadbalancer) {
+    @ConditionalOnProperty(value = "sms.huawei.enable", havingValue = "true")
+    public HuaWeiCloudSendHandler huaWeiCloudSendHandler(HuaWeiCloudProperties properties, ObjectMapper objectMapper, SmsSenderLoadBalancer loadbalancer) {
         HuaWeiCloudSendHandler handler = new HuaWeiCloudSendHandler(properties, objectMapper);
         loadbalancer.addTarget(handler, true);
         return handler;
     }
-
-    public static class HuaWeiCloudSendHandlerCondition implements Condition {
-
-        @Override
-        public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-            Boolean enable = context.getEnvironment().getProperty("sms.huawei.enable", Boolean.class);
-            return enable == null || enable;
-        }
-    }
-
 }
