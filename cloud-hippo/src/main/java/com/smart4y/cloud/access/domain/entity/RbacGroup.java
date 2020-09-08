@@ -1,6 +1,6 @@
 package com.smart4y.cloud.access.domain.entity;
 
-import com.smart4y.cloud.core.toolkit.gen.SnowflakeId;
+import com.smart4y.cloud.mapper.SnowflakeId;
 import com.smart4y.cloud.core.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

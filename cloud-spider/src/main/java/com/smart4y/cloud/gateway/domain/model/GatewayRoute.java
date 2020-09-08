@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 import tk.mybatis.mapper.annotation.KeySql;
 import java.time.LocalDateTime;
 import lombok.Data;
-import com.smart4y.cloud.core.toolkit.gen.SnowflakeId;
+import com.smart4y.cloud.mapper.SnowflakeId;
 import lombok.EqualsAndHashCode;
 import com.smart4y.cloud.core.BaseEntity;
 import javax.persistence.Id;

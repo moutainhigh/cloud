@@ -1,6 +1,7 @@
-package com.smart4y.cloud.core.toolkit.gen;
+package com.smart4y.cloud.mapper;
 
 import com.smart4y.cloud.core.spring.SpringContextHolder;
+import com.smart4y.cloud.core.toolkit.gen.SnowflakeIdWorker;
 import tk.mybatis.mapper.genid.GenId;
 
 /**
