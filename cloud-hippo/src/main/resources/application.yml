@@ -144,6 +144,8 @@ sms:
     ##访问路径前缀
     base-path: /commons/sms
   verification-code:
+    ##存储方式
+    repository: redis
     ##验证码长度
     code-length: 6
     ##为true则验证失败后删除验证码

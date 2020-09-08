@@ -67,5 +67,4 @@ public class HuaWeiCloudProperties {
     public List<String> getParamsOrder(String type) {
         return paramsOrders.get(type);
     }
-
 }

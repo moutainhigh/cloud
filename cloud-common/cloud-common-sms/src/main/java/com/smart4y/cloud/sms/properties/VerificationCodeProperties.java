@@ -9,6 +9,11 @@ import lombok.Data;
 public class VerificationCodeProperties {
 
     /**
+     * 验证码存储方式（memory，redis）
+     */
+    private String repository = "memory";
+
+    /**
      * 验证码过期时间,小于等于0表示不过期,单位秒
      */
     private Long expirationTime;

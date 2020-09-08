@@ -28,12 +28,12 @@ import java.lang.reflect.Method;
  * 短信服务配置
  */
 @Configuration
-@EnableConfigurationProperties(SmsProperties.class)
 @ComponentScan({
         "com.smart4y.cloud.sms.controller",
         "com.smart4y.cloud.sms.repository",
         "com.smart4y.cloud.sms.service"
 })
+@EnableConfigurationProperties({SmsProperties.class})
 public class SmsConfiguration {
 
     /**
@@ -43,19 +43,13 @@ public class SmsConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(VerificationCodeRepository.class)
-    public VerificationCodeRepository verificationCodeMemoryRepository() {
-        return new VerificationCodeMemoryRepository();
-    }
-
-    /**
-     * 构造默认验证码储存接口实现
-     *
-     * @return 默认验证码储存接口实现
-     */
-    @Bean
-    @ConditionalOnMissingBean(VerificationCodeRepository.class)
-    public VerificationCodeRepository verificationCodeRedisRepository() {
-        return new VerificationCodeRedisRepository();
+    public VerificationCodeRepository verificationCodeRepository(SmsProperties properties) {
+        String repository = properties.getVerificationCode().getRepository();
+        if ("redis".equals(repository)) {
+            return new VerificationCodeRedisRepository();
+        } else {
+            return new VerificationCodeMemoryRepository();
+        }
     }
 
     /**

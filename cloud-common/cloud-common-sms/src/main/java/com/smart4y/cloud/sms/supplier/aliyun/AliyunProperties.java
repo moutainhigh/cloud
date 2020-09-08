@@ -46,5 +46,4 @@ public class AliyunProperties {
     public String getTemplates(String type) {
         return templates == null ? null : templates.get(type);
     }
-
 }
