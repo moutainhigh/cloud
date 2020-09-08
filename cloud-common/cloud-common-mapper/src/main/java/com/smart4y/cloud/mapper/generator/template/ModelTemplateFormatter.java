@@ -1,6 +1,6 @@
-package com.smart4y.cloud.core.mapper.generator.template;
+package com.smart4y.cloud.mapper.generator.template;
 
-import com.smart4y.cloud.core.mapper.generator.TableClass;
+import com.smart4y.cloud.mapper.generator.TableClass;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;

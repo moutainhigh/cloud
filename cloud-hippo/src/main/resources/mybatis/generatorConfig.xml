@@ -7,12 +7,12 @@
              defaultModelType="flat">
 
         <!-- Mapper.java Mapper.xml 生成插件 -->
-        <plugin type="com.smart4y.cloud.core.mapper.generator.plugins.MapperClassAndXmlPlugin">
+        <plugin type="com.smart4y.cloud.mapper.generator.plugins.MapperClassAndXmlPlugin">
             <property name="mappers" value="com.smart4y.cloud.mapper.CloudMapper"/>
             <property name="author" value="Youtao"/>
         </plugin>
         <!-- Entity 生成插件 使用`javaModelGenerator`的`targetPackage`参数 -->
-        <plugin type="com.smart4y.cloud.core.mapper.generator.plugins.EntityPlugin">
+        <plugin type="com.smart4y.cloud.mapper.generator.plugins.EntityPlugin">
             <property name="author" value="Youtao"/>
         </plugin>
 

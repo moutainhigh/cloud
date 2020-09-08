@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.mapper.generator.enums;
+package com.smart4y.cloud.mapper.generator.enums;
 
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 

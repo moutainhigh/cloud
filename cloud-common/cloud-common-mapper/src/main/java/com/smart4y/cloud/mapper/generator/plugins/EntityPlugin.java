@@ -1,9 +1,9 @@
-package com.smart4y.cloud.core.mapper.generator.plugins;
+package com.smart4y.cloud.mapper.generator.plugins;
 
-import com.smart4y.cloud.core.mapper.generator.TableClass;
-import com.smart4y.cloud.core.mapper.generator.TableColumnBuilder;
-import com.smart4y.cloud.core.mapper.generator.template.GenerateByTemplateFile;
-import com.smart4y.cloud.core.mapper.generator.template.ModelTemplateFormatter;
+import com.smart4y.cloud.mapper.generator.TableClass;
+import com.smart4y.cloud.mapper.generator.TableColumnBuilder;
+import com.smart4y.cloud.mapper.generator.template.GenerateByTemplateFile;
+import com.smart4y.cloud.mapper.generator.template.ModelTemplateFormatter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.api.GeneratedJavaFile;

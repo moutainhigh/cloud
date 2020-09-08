@@ -1,6 +1,6 @@
-package com.smart4y.cloud.core.mapper.generator.plugins;
+package com.smart4y.cloud.mapper.generator.plugins;
 
-import com.smart4y.cloud.core.mapper.generator.enums.LombokAnnotations;
+import com.smart4y.cloud.mapper.generator.enums.LombokAnnotations;
 import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;

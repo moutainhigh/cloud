@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.mapper.generator;
+package com.smart4y.cloud.mapper.generator;
 
 import com.smart4y.cloud.core.toolkit.gen.SnowflakeId;
 import com.smart4y.cloud.core.BaseEntity;

@@ -1,6 +1,6 @@
-package com.smart4y.cloud.core.mapper.generator.template;
+package com.smart4y.cloud.mapper.generator.template;
 
-import com.smart4y.cloud.core.mapper.generator.TableClass;
+import com.smart4y.cloud.mapper.generator.TableClass;
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.dom.java.CompilationUnit;
 

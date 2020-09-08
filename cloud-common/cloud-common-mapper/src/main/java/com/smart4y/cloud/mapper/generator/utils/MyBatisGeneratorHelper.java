@@ -1,4 +1,4 @@
-package com.smart4y.cloud.core.mapper.generator.utils;
+package com.smart4y.cloud.mapper.generator.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.generator.api.MyBatisGenerator;
