@@ -53,7 +53,7 @@ public abstract class AbstractApplication implements ApplicationListener<Applica
                             "Local: \t\thttp://127.0.0.1:{}\n\t" +
                             "External: \thttp://{}:{}\n\t" +
                             "Profile(s): {}\n\t" +
-                            "Java Opt: \t{}\n\t" +
+//                            "Java Opt: \t{}\n\t" +
                             "Memory: \tmax: {}M, total: {}M, free: {}M" +
                             "\n----------------------------------------------------------",
                     env.getProperty("spring.application.name"),
@@ -61,7 +61,7 @@ public abstract class AbstractApplication implements ApplicationListener<Applica
                     InetAddress.getLocalHost().getHostAddress(),
                     env.getProperty("server.port"),
                     Arrays.toString(env.getActiveProfiles()),
-                    inputArguments,
+//                    inputArguments,
                     runtime.maxMemory() / 1048576, runtime.totalMemory() / 1048576, runtime.freeMemory() / 1048576
             );
         } catch (UnknownHostException e) {
