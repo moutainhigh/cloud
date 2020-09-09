@@ -1,7 +1,6 @@
 package com.smart4y.cloud.hippo;
 
 import com.smart4y.cloud.core.AbstractApplication;
-import com.smart4y.cloud.sms.annotation.EnableSmsServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
