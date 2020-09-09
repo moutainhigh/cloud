@@ -16,6 +16,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.boot.version>2.2.8.RELEASE</spring.boot.version>
+        <knife4j.version>2.0.4</knife4j.version>
     </properties>
 
     <dependencyManagement>
@@ -59,6 +60,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-micro-spring-boot-starter</artifactId>
+            <version>${knife4j.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- 阿里云 -->

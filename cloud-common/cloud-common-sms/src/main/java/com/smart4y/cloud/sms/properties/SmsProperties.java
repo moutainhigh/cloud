@@ -19,9 +19,4 @@ public class SmsProperties {
      * 验证码配置
      */
     private VerificationCodeProperties verificationCode = new VerificationCodeProperties();
-
-    /**
-     * 短信Web配置
-     */
-    private SmsWebProperties web = new SmsWebProperties();
 }

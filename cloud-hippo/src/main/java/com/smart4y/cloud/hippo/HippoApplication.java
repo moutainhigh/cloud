@@ -19,7 +19,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @Slf4j
 @EnableCaching
 @EnableFeignClients
-@EnableSmsServer
 @SpringBootApplication
 @EnableDiscoveryClient
 public class HippoApplication extends AbstractApplication {

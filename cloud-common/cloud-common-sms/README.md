@@ -19,11 +19,6 @@ sms:
   #通用配置
   ##手机号码正则表达式，为空则不做验证
   reg: 
-  web:
-    ##启用web端点
-    enable: true 
-    ##访问路径前缀
-    base-path: /commons/sms 
   verification-code:
     ##存储方式
     repository: redis
@@ -202,7 +197,7 @@ public class Starter {
 ```
 
 ### 4.定制验证码的储存位置（可选）
-* 实现`IVerificationCodeRepository`接口即可
+* 实现`VerificationCodeRepository`接口即可
 
 ### 5.发送验证码
 * 5.1 注入`VerificationCodeService` (com.smart4y.cloud.sms.service.VerificationCodeService)
@@ -214,7 +209,7 @@ public class Starter {
 * 6.2 调用noticeService.send(noticeData, phones)进行通知发送，noticeData为`NoticeData`实例，phones为手机号码列表
 
 ### 7.请求地址
-* /commons/sms/verifyCode/{phone}	POST 给指定号码发送验证码
-* /commons/sms/verifyCode/{phone}	GET	 获取指定号码的验证码信息
-* /commons/sms/verifyCode	        POST 验证验证码是否有效
-* /commons/sms/notice	            POST 发送短信通知
+* /sms/verifies/{phone}	POST 给指定号码发送验证码
+* /sms/verifies/{phone}	GET	 获取指定号码的验证码信息
+* /sms/verifies	        POST 验证验证码是否有效
+* /sms/notices	        POST 发送短信通知
