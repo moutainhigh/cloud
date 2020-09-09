@@ -33,13 +33,13 @@
             <property name="forceBigDecimals" value="true"/>
         </javaTypeResolver>
         <!-- Entity 路径 -->
-        <javaModelGenerator targetPackage="com.smart4y.cloud.hippo.gateway.domain.model"
+        <javaModelGenerator targetPackage="com.smart4y.cloud.spider.domain.model"
                             targetProject="src/main/java"/>
         <!-- Mapper.xml 路径 -->
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
         <!-- Mapper.java 路径 -->
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="com.smart4y.cloud.hippo.gateway.infrastructure.mapper"
+                             targetPackage="com.smart4y.cloud.spider.infrastructure.mapper"
                              targetProject="src/main/java"/>
 
         <!-- 使用"%"匹配所有表或者单独定义表 -->
