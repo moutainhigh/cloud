@@ -28,6 +28,11 @@ public class QCloudSendHandler implements SendHandler {
 
     @Override
     public boolean send(NoticeData noticeData, Collection<String> phones) {
+        if (!isEnable()) {
+            log.warn("未启用");
+            return false;
+        }
+
         String type = noticeData.getType();
 
         Integer templateId = properties.getTemplates(type);
@@ -75,6 +80,11 @@ public class QCloudSendHandler implements SendHandler {
 
         return phoneMap.entrySet().parallelStream()
                 .allMatch(entry -> send0(templateId, params, entry.getKey(), entry.getValue()));
+    }
+
+    @Override
+    public boolean isEnable() {
+        return properties.isEnable();
     }
 
     private Collection<String> getList(Map<String, ArrayList<String>> phoneMap, String nationCode) {

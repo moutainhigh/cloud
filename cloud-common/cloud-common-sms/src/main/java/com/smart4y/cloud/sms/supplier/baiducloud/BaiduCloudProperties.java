@@ -13,14 +13,19 @@ import java.util.Map;
 public class BaiduCloudProperties {
 
     /**
+     * 是否启用配置
+     */
+    private boolean enable = true;
+
+    /**
      * ACCESS_KEY_ID
      */
     private String accessKeyId;
 
     /**
-     * SECRET_ACCESS_KEY
+     * ACCESS_KEY_SECRET
      */
-    private String secretAccessKey;
+    private String accessKeySecret;
 
     /**
      * endpoint

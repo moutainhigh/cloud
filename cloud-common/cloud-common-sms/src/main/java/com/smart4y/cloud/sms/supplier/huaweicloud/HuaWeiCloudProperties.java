@@ -14,6 +14,11 @@ import java.util.Map;
 public class HuaWeiCloudProperties {
 
     /**
+     * 是否启用配置
+     */
+    private boolean enable = true;
+
+    /**
      * 短信模板
      */
     protected Map<String, String> templates;

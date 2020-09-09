@@ -37,7 +37,7 @@ spring:
     username: guest
     password: guest
     virtual-host: /
-    publisher-confirms: true
+    publisher-confirm-type: correlated
   redis:
     host: 127.0.0.1
     port: 6379
@@ -188,7 +188,7 @@ sms:
     ##AccessKeyId
     access-key-id: 7gBZcbsC7kLIWCdELIl8nxcs
     ##AccessKeySecret
-    secret-access-key: 0osTIhce7uPvDKHz6aa67bhCukaKoYl4
+    access-key-secret: 0osTIhce7uPvDKHz6aa67bhCukaKoYl4
     endpoint: endpoint
     ##短信模板配置
     templates:
@@ -205,7 +205,6 @@ sms:
     app-secret: APP_Secret
     sender: 国内短信签名通道号或国际/港澳台短信通道号
     signature: 签名名称
-    endpoint: endpoint
     ##短信模板配置
     templates:
       ##验证码业务所使用的短信模板ID

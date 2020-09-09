@@ -13,6 +13,11 @@ import java.util.Map;
 public class QiNiuProperties {
 
     /**
+     * 是否启用配置
+     */
+    private boolean enable = true;
+
+    /**
      * accessKey
      */
     private String accessKey;

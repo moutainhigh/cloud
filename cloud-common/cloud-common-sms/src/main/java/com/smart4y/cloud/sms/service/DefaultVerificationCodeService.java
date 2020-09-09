@@ -154,5 +154,4 @@ public class DefaultVerificationCodeService implements VerificationCodeService {
             throw new PhoneIsNullException();
         }
     }
-
 }

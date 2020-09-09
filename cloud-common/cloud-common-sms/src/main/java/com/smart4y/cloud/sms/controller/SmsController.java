@@ -24,18 +24,19 @@ public class SmsController {
      */
     @Autowired
     private VerificationCodeService verificationCodeService;
+
     /**
      * 短信通知服务
      */
     @Autowired
     private NoticeService noticeService;
-    
+
     /**
      * 获取验证码
      *
      * @param phone 手机号码
      */
-    public void sendVerificationCode(@PathVariable("phone") String phone) {
+    public void sendVerifyCode(@PathVariable("phone") String phone) {
         verificationCodeService.send(phone);
     }
 
@@ -46,8 +47,7 @@ public class SmsController {
      * @param identificationCode 识别码
      * @return 验证码信息
      */
-    public VerifyInfo getVerificationCode(@PathVariable("phone") String phone,
-                                          @RequestParam(value = "identificationCode", required = false, defaultValue = "") String identificationCode) {
+    public VerifyInfo getVerifyCode(@PathVariable("phone") String phone, @RequestParam(value = "identificationCode", required = false, defaultValue = "") String identificationCode) {
         String code = verificationCodeService.find(phone, identificationCode);
 
         if (StringUtils.isBlank(code)) {
@@ -67,9 +67,8 @@ public class SmsController {
      *
      * @param verifyInfo 验证信息
      */
-    public void verifyVerificationCode(@RequestBody VerifyInfo verifyInfo) {
-        if (!verificationCodeService.verify(verifyInfo.getPhone(), verifyInfo.getCode(),
-                verifyInfo.getIdentificationCode())) {
+    public void verifyCode(@RequestBody VerifyInfo verifyInfo) {
+        if (!verificationCodeService.verify(verifyInfo.getPhone(), verifyInfo.getCode(), verifyInfo.getIdentificationCode())) {
             throw new VerifyFailException();
         }
     }

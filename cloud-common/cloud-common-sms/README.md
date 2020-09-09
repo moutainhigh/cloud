@@ -25,6 +25,8 @@ sms:
     ##访问路径前缀
     base-path: /commons/sms 
   verification-code:
+    ##存储方式
+    repository: redis
     ##验证码长度
     code-length: 6 
     ##为true则验证失败后删除验证码
@@ -67,7 +69,7 @@ sms:
     ##AccessKeyId
     access-key-id: 7gBZcbsC7kLIWCdELIl8nxcs
     ##AccessKeySecret
-    secret-access-key: 0osTIhce7uPvDKHz6aa67bhCukaKoYl4
+    access-key-secret: 0osTIhce7uPvDKHz6aa67bhCukaKoYl4
     endpoint: ##endpoint
     ##短信模板配置
     templates:
@@ -84,7 +86,6 @@ sms:
     app-secret: ##APP_Secret
     sender: ##国内短信签名通道号或国际/港澳台短信通道号
     signature: ##签名名称
-    endpoint: ##endpoint
     ##短信模板配置
     templates:
       ##验证码业务所使用的短信模板ID
@@ -210,10 +211,10 @@ public class Starter {
 
 ### 6.发送通知
 * 6.1 注入`NoticeService` (com.smart4y.cloud.sms.service.NoticeService)
-* 7.2 发送通知，调用noticeService.send(noticeData, phones)进行通知发送，noticeData为net.guerlab.sms.core.domain.NoticeData实例，phones为手机号码列表
+* 6.2 调用noticeService.send(noticeData, phones)进行通知发送，noticeData为`NoticeData`实例，phones为手机号码列表
 
 ### 7.请求地址
-* /commons/sms/verificationCode/{phone}	POST	给指定号码发送验证码
-* /commons/sms/verificationCode/{phone}	GET	获取指定号码的验证码信息
-* /commons/sms/verificationCode	POST	验证验证码是否有效
-* /commons/sms/notice	POST	发送短信通知
+* /commons/sms/verifyCode/{phone}	POST 给指定号码发送验证码
+* /commons/sms/verifyCode/{phone}	GET	 获取指定号码的验证码信息
+* /commons/sms/verifyCode	        POST 验证验证码是否有效
+* /commons/sms/notice	            POST 发送短信通知

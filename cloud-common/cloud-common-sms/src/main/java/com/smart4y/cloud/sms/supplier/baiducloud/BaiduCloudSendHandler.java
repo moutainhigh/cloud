@@ -26,17 +26,20 @@ public class BaiduCloudSendHandler implements SendHandler {
         this.properties = properties;
 
         SmsClientConfiguration config = new SmsClientConfiguration();
-        config.setCredentials(new DefaultBceCredentials(properties.getAccessKeyId(), properties.getSecretAccessKey()));
+        config.setCredentials(new DefaultBceCredentials(properties.getAccessKeyId(), properties.getAccessKeySecret()));
         config.setEndpoint(properties.getEndpoint());
         client = new SmsClient(config);
     }
 
     @Override
     public boolean send(NoticeData noticeData, Collection<String> phones) {
+        if (!isEnable()) {
+            log.warn("未启用");
+            return false;
+        }
+
         String type = noticeData.getType();
-
         String templateId = properties.getTemplates(type);
-
         if (templateId == null) {
             log.debug("templateId invalid");
             return false;
@@ -58,5 +61,10 @@ public class BaiduCloudSendHandler implements SendHandler {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean isEnable() {
+        return properties.isEnable();
     }
 }

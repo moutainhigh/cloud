@@ -14,6 +14,11 @@ import java.util.Map;
 public class NeteaseCloudProperties {
 
     /**
+     * 是否启用配置
+     */
+    private boolean enable = true;
+
+    /**
      * appkey
      */
     private String appKey;

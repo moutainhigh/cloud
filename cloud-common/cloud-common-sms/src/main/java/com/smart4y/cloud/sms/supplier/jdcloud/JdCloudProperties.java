@@ -14,6 +14,11 @@ import java.util.Map;
 public class JdCloudProperties {
 
     /**
+     * 是否启用配置
+     */
+    private boolean enable = true;
+
+    /**
      * 短信模板
      */
     protected Map<String, String> templates;
@@ -31,7 +36,7 @@ public class JdCloudProperties {
     /**
      * AccessKey Secret
      */
-    private String secretAccessKey;
+    private String accessKeySecret;
 
     /**
      * 地域

@@ -14,6 +14,11 @@ import java.util.Map;
 public class QCloudProperties {
 
     /**
+     * 是否启用配置
+     */
+    private boolean enable = true;
+
+    /**
      * 短信应用SDK AppID
      */
     private int appId;

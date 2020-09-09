@@ -1,11 +1,15 @@
 package com.smart4y.cloud.sms.properties;
 
 import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
- * 验证码配置
+ * 短信验证码配置
  */
 @Data
+@Component
+@ConfigurationProperties(prefix = "sms.verification-code")
 public class VerificationCodeProperties {
 
     /**
@@ -14,12 +18,12 @@ public class VerificationCodeProperties {
     private String repository = "memory";
 
     /**
-     * 验证码过期时间,小于等于0表示不过期,单位秒
+     * 验证码过期时间,小于等于0表示不过期，单位秒
      */
     private Long expirationTime;
 
     /**
-     * 重新发送验证码间隔时间,小于等于0表示不启用,单位秒
+     * 重新发送验证码间隔时间,小于等于0表示不启用，单位秒
      */
     private Long retryIntervalTime;
 

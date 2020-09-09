@@ -29,13 +29,18 @@ public class JdCloudSendHandler implements SendHandler {
     public JdCloudSendHandler(JdCloudProperties properties) {
         this.properties = properties;
         CredentialsProvider credentialsProvider = new StaticCredentialsProvider(properties.getAccessKeyId(),
-                properties.getSecretAccessKey());
+                properties.getAccessKeySecret());
         smsClient = SmsClient.builder().credentialsProvider(credentialsProvider)
                 .httpRequestConfig(new HttpRequestConfig.Builder().protocol(Protocol.HTTP).build()).build();
     }
 
     @Override
     public boolean send(NoticeData noticeData, Collection<String> phones) {
+        if (!isEnable()) {
+            log.warn("未启用");
+            return false;
+        }
+
         String type = noticeData.getType();
 
         String templateId = properties.getTemplates(type);
@@ -73,5 +78,10 @@ public class JdCloudSendHandler implements SendHandler {
         }
 
         return flag;
+    }
+
+    @Override
+    public boolean isEnable() {
+        return properties.isEnable();
     }
 }

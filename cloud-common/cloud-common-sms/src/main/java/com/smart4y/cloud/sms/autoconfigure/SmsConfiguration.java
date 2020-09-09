@@ -92,26 +92,39 @@ public class SmsConfiguration {
         String bathPath = getBasePath(webProperties);
 
         if (webProperties.isEnableSend()) {
-            Method sendMethod = SmsController.class.getMethod("sendVerificationCode", String.class);
-            RequestMappingInfo sendInfo = RequestMappingInfo.paths(bathPath + "/verificationCode/{phone}")
-                    .methods(RequestMethod.POST).build();
+            Method sendMethod = SmsController.class
+                    .getMethod("sendVerifyCode", String.class);
+            RequestMappingInfo sendInfo = RequestMappingInfo
+                    .paths(bathPath + "/verifyCode/{phone}")
+                    .methods(RequestMethod.POST)
+                    .build();
             mapping.registerMapping(sendInfo, controller, sendMethod);
         }
         if (webProperties.isEnableGet()) {
-            Method getMethod = SmsController.class.getMethod("getVerificationCode", String.class, String.class);
-            RequestMappingInfo getInfo = RequestMappingInfo.paths(bathPath + "/verificationCode/{phone}")
-                    .methods(RequestMethod.GET).produces("application/json").build();
+            Method getMethod = SmsController.class
+                    .getMethod("getVerifyCode", String.class, String.class);
+            RequestMappingInfo getInfo = RequestMappingInfo
+                    .paths(bathPath + "/verifyCode/{phone}")
+                    .methods(RequestMethod.GET)
+                    .produces("application/json")
+                    .build();
             mapping.registerMapping(getInfo, controller, getMethod);
         }
         if (webProperties.isEnableVerify()) {
-            Method verifyMethod = SmsController.class.getMethod("verifyVerificationCode", VerifyInfo.class);
-            RequestMappingInfo verifyInfo = RequestMappingInfo.paths(bathPath + "/verificationCode")
-                    .methods(RequestMethod.POST).build();
+            Method verifyMethod = SmsController.class
+                    .getMethod("verifyCode", VerifyInfo.class);
+            RequestMappingInfo verifyInfo = RequestMappingInfo
+                    .paths(bathPath + "/verifyCode")
+                    .methods(RequestMethod.POST)
+                    .build();
             mapping.registerMapping(verifyInfo, controller, verifyMethod);
         }
         if (webProperties.isEnableNotice()) {
-            Method noticeMethod = SmsController.class.getMethod("sendNotice", NoticeInfo.class);
-            RequestMappingInfo noticeInfo = RequestMappingInfo.paths(bathPath + "/notice").methods(RequestMethod.PUT)
+            Method noticeMethod = SmsController.class
+                    .getMethod("sendNotice", NoticeInfo.class);
+            RequestMappingInfo noticeInfo = RequestMappingInfo
+                    .paths(bathPath + "/notice")
+                    .methods(RequestMethod.PUT)
                     .build();
             mapping.registerMapping(noticeInfo, controller, noticeMethod);
         }

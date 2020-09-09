@@ -13,6 +13,11 @@ import java.util.Map;
 public class YunPianProperties {
 
     /**
+     * 是否启用配置
+     */
+    private boolean enable = true;
+
+    /**
      * apikey
      */
     private String apikey;

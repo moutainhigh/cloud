@@ -14,6 +14,11 @@ import java.util.Map;
 public class UpyunProperties {
 
     /**
+     * 是否启用配置
+     */
+    private boolean enable = true;
+
+    /**
      * 参数顺序
      */
     protected Map<String, List<String>> paramsOrders;

@@ -22,15 +22,11 @@ import java.util.Collection;
 public class AliyunSendHandler implements SendHandler {
 
     private static final String OK = "OK";
-
     private static final String PRODUCT = "Dysmsapi";
-
     private static final String DOMAIN = "dysmsapi.aliyuncs.com";
 
     private final AliyunProperties properties;
-
     private final ObjectMapper objectMapper;
-
     private final IAcsClient acsClient;
 
     /**
@@ -55,6 +51,11 @@ public class AliyunSendHandler implements SendHandler {
 
     @Override
     public boolean send(NoticeData noticeData, Collection<String> phones) {
+        if (!isEnable()) {
+            log.warn("未启用");
+            return false;
+        }
+
         String paramString;
         try {
             paramString = objectMapper.writeValueAsString(noticeData.getParams());
@@ -83,5 +84,10 @@ public class AliyunSendHandler implements SendHandler {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean isEnable() {
+        return properties.isEnable();
     }
 }

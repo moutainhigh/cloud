@@ -50,4 +50,11 @@ public interface SendHandler {
 
         return send(noticeData, Arrays.asList(phones));
     }
+
+    /**
+     * 是否启用配置
+     *
+     * @return true启用
+     */
+    boolean isEnable();
 }

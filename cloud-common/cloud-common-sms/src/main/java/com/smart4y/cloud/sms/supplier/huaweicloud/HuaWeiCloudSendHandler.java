@@ -87,19 +87,20 @@ public class HuaWeiCloudSendHandler implements SendHandler {
 
     @Override
     public boolean send(NoticeData noticeData, Collection<String> phones) {
+        if (!isEnable()) {
+            log.warn("未启用");
+            return false;
+        }
+
         String type = noticeData.getType();
-
         String templateId = properties.getTemplates(type);
-
         if (templateId == null) {
             log.debug("templateId invalid");
             return false;
         }
 
         List<String> paramsOrder = properties.getParamsOrder(type);
-
         ArrayList<String> params = new ArrayList<>();
-
         if (!paramsOrder.isEmpty()) {
             Map<String, String> paramMap = noticeData.getParams();
             for (String paramName : paramsOrder) {
@@ -143,6 +144,11 @@ public class HuaWeiCloudSendHandler implements SendHandler {
             log.debug(e.getLocalizedMessage(), e);
             return false;
         }
+    }
+
+    @Override
+    public boolean isEnable() {
+        return properties.isEnable();
     }
 
     private CloseableHttpClient buildHttpclient() {

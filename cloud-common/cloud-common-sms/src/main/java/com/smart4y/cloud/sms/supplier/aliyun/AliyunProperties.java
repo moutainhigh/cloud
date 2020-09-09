@@ -13,6 +13,11 @@ import java.util.Map;
 public class AliyunProperties {
 
     /**
+     * 是否启用配置
+     */
+    private boolean enable = true;
+
+    /**
      * Endpoint
      */
     private String endpoint = "cn-hangzhou";
