@@ -22,25 +22,13 @@ spring:
     suffix: .html
   main:
     allow-bean-definition-overriding: true
-  datasource:
-    url: jdbc:mysql://${DB_HOST}:3306/${DB_SCHEMA}?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    type: com.zaxxer.hikari.HikariDataSource
-    hikari:
-      pool-name: dbg
-      max-lifetime: 1765000
-      minimum-idle: 1
-      maximum-pool-size: 15
-      connection-test-query: SELECT 1
   rabbitmq:
     host: ${RABBITMQ_HOST}
     port: 5672
     username: guest
     password: guest
     virtual-host: /
-    publisher-confirms: true
+    publisher-confirm-type: correlated
   redis:
     host: ${REDIS_HOST}
     database: ${REDIS_DB}

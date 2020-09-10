@@ -121,14 +121,6 @@ public class AutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(DataSourceHealthIndicator.class)
-    public DataSourceHealthIndicator dataSourceHealthIndicator(DataSource dataSource) {
-        DataSourceHealthIndicator indicator = new DataSourceHealthIndicator(dataSource);
-        log.info("DataSourceHealthIndicator [{}]", indicator);
-        return indicator;
-    }
-
-    @Bean
     @ConditionalOnMissingBean(RabbitHealthIndicator.class)
     public RabbitHealthIndicator rabbitHealthIndicator(RabbitTemplate rabbitTemplate) {
         RabbitHealthIndicator indicator = new RabbitHealthIndicator(rabbitTemplate);

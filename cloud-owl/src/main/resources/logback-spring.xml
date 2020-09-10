@@ -77,7 +77,6 @@
         <logger name="com.smart4y.cloud" level="debug"/>
         <logger name="org.springframework.amqp" level="info"/>
         <logger name="com.alibaba.nacos.client.naming" level="warn"/>
-        <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="info"/>
         <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="info"/>
 
         <root level="INFO">
@@ -91,7 +90,6 @@
         <logger name="com.smart4y.cloud" level="info"/>
         <logger name="org.springframework.amqp" level="warn"/>
         <logger name="com.alibaba.nacos.client.naming" level="warn"/>
-        <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="warn"/>
         <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="warn"/>
 
         <root level="INFO">
