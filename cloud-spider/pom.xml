@@ -57,10 +57,6 @@
             <groupId>com.smart4y</groupId>
             <artifactId>cloud-common-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.smart4y</groupId>
-            <artifactId>cloud-common-mapper</artifactId>
-        </dependency>
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -95,11 +91,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-resource-server</artifactId>
-        </dependency>
-        <!-- MySQL -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
         <!-- Swagger -->
@@ -155,18 +146,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.mybatis.generator</groupId>
-                <artifactId>mybatis-generator-maven-plugin</artifactId>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.smart4y</groupId>
-                        <artifactId>cloud-spider</artifactId>
-                        <version>${project.version}</version>
-                        <type>jar</type>
-                    </dependency>
-                </dependencies>
             </plugin>
             <!-- 若要发布新镜像则打开此插件 -->
             <!--<plugin>

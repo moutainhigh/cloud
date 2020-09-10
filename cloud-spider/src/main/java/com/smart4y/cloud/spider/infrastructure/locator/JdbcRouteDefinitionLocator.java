@@ -1,11 +1,11 @@
 package com.smart4y.cloud.spider.infrastructure.locator;
 
 import com.google.common.collect.Lists;
+import com.smart4y.cloud.core.dto.RateLimitApiDTO;
 import com.smart4y.cloud.core.event.RouteRemoteRefreshedEvent;
-import com.smart4y.cloud.spider.domain.RateLimitApiObj;
-import com.smart4y.cloud.spider.domain.model.GatewayRoute;
-import com.smart4y.cloud.spider.domain.service.GatewayRateLimitApiDomainService;
-import com.smart4y.cloud.spider.domain.service.GatewayRouteDomainService;
+import com.smart4y.cloud.core.message.ResultMessage;
+import com.smart4y.cloud.spider.infrastructure.feign.GatewayFeign;
+import com.smart4y.cloud.spider.domain.GatewayRouteDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +24,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,9 +40,8 @@ import java.util.Map;
 public class JdbcRouteDefinitionLocator implements ApplicationListener<RouteRemoteRefreshedEvent>, ApplicationEventPublisherAware {
 
     @Autowired
-    private GatewayRouteDomainService gatewayRouteDomainService;
-    @Autowired
-    private GatewayRateLimitApiDomainService gatewayRateLimitApiDomainService;
+    private GatewayFeign gatewayFeign;
+
     private ApplicationEventPublisher publisher;
     private final InMemoryRouteDefinitionRepository repository;
 
@@ -71,12 +71,12 @@ public class JdbcRouteDefinitionLocator implements ApplicationListener<RouteRemo
         this.publisher.publishEvent(new RefreshRoutesEvent(this));
     }
 
-    private String getFullPath(List<GatewayRoute> routeList, String serviceId, String path) {
+    private String getFullPath(List<GatewayRouteDTO> routeList, String serviceId, String path) {
         final String[] fullPath = {path.startsWith("/") ? path : "/" + path};
         if (routeList != null) {
             routeList.forEach(route -> {
-                if (route.getRouteServiceId() != null && route.getRouteServiceId().equals(serviceId)) {
-                    fullPath[0] = route.getRoutePath().replace("/**", path.startsWith("/") ? path : "/" + path);
+                if (route.getServiceId() != null && route.getServiceId().equals(serviceId)) {
+                    fullPath[0] = route.getPath().replace("/**", path.startsWith("/") ? path : "/" + path);
                 }
             });
         }
@@ -98,14 +98,22 @@ public class JdbcRouteDefinitionLocator implements ApplicationListener<RouteRemo
     private void loadRoutes() {
         //从数据库拿到路由配置
         try {
-            List<GatewayRoute> routeList = gatewayRouteDomainService.findAllByStatusEnable();
-            List<RateLimitApiObj> limitApiList = gatewayRateLimitApiDomainService.findRateLimitApis();
+            // 查询 所有有效的路由列表
+            ResultMessage<List<GatewayRouteDTO>> routeListResponse = gatewayFeign.getApiRouteList();
+            if (routeListResponse.isFail()) {
+                return;
+            }
+            List<GatewayRouteDTO> routeList = routeListResponse.getData();
+            // 查询 路由限流数据
+            ResultMessage<List<RateLimitApiDTO>> limitApiListResponse = gatewayFeign.getApiRateLimitList();
+            List<RateLimitApiDTO> limitApiList = limitApiListResponse.isOk() ? limitApiListResponse.getData() : Collections.emptyList();
+
             if (CollectionUtils.isNotEmpty(limitApiList)) {
                 // 加载限流
                 limitApiList.forEach(item -> {
-                    long[] arry = ResourceLocator.getIntervalAndQuota(item.getIntervalUnit());
-                    Long refreshInterval = arry[0];
-                    Long quota = arry[1];
+                    long[] array = ResourceLocator.getIntervalAndQuota(item.getIntervalUnit());
+                    Long refreshInterval = array[0];
+                    //Long quota = array[1];
                     // 允许用户每秒处理多少个请求
                     long replenishRate = item.getLimitQuota() / refreshInterval;
                     replenishRate = replenishRate < 1 ? 1 : refreshInterval;
@@ -166,12 +174,12 @@ public class JdbcRouteDefinitionLocator implements ApplicationListener<RouteRemo
                     Map<String, String> predicatePathParams = new HashMap<>(8);
                     predicatePath.setName("Path");
                     predicatePathParams.put("name", StringUtils.isBlank(gatewayRoute.getRouteName()) ? gatewayRoute.getRouteId().toString() : gatewayRoute.getRouteName());
-                    predicatePathParams.put("pattern", gatewayRoute.getRoutePath());
-                    predicatePathParams.put("pathPattern", gatewayRoute.getRoutePath());
+                    predicatePathParams.put("pattern", gatewayRoute.getPath());
+                    predicatePathParams.put("pathPattern", gatewayRoute.getPath());
                     predicatePath.setArgs(predicatePathParams);
                     predicates.add(predicatePath);
                     // 服务地址
-                    URI uri = UriComponentsBuilder.fromUriString(StringUtils.isNotBlank(gatewayRoute.getRouteUrl()) ? gatewayRoute.getRouteUrl() : "lb://" + gatewayRoute.getRouteServiceId()).build().toUri();
+                    URI uri = UriComponentsBuilder.fromUriString(StringUtils.isNotBlank(gatewayRoute.getUrl()) ? gatewayRoute.getUrl() : "lb://" + gatewayRoute.getServiceId()).build().toUri();
 
                     FilterDefinition stripPrefixDefinition = new FilterDefinition();
                     Map<String, String> stripPrefixParams = new HashMap<>(8);

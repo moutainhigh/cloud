@@ -9,7 +9,7 @@ import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.core.toolkit.secret.SignatureUtils;
 import com.smart4y.cloud.spider.domain.GatewayContext;
 import com.smart4y.cloud.spider.infrastructure.exception.JsonSignatureDeniedHandler;
-import com.smart4y.cloud.spider.infrastructure.feign.AppDTO;
+import com.smart4y.cloud.spider.domain.AppDTO;
 import com.smart4y.cloud.spider.infrastructure.feign.BaseAppFeign;
 import com.smart4y.cloud.spider.infrastructure.properties.ApiProperties;
 import lombok.extern.slf4j.Slf4j;

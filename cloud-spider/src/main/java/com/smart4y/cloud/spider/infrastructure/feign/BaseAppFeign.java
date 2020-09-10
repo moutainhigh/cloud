@@ -3,6 +3,7 @@ package com.smart4y.cloud.spider.infrastructure.feign;
 import com.smart4y.cloud.core.message.ResultMessage;
 import com.smart4y.cloud.core.constant.BaseConstants;
 import com.smart4y.cloud.core.dto.OpenClientDetailsDTO;
+import com.smart4y.cloud.spider.domain.AppDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;

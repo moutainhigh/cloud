@@ -1,4 +1,4 @@
-package com.smart4y.cloud.spider.infrastructure.feign;
+package com.smart4y.cloud.spider.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

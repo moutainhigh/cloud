@@ -2,27 +2,27 @@ package com.smart4y.cloud.hippo.application.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.smart4y.cloud.core.annotation.ApplicationService;
+import com.smart4y.cloud.core.dto.RateLimitApiDTO;
+import com.smart4y.cloud.core.toolkit.base.StringHelper;
 import com.smart4y.cloud.hippo.application.GatewayRateLimitService;
 import com.smart4y.cloud.hippo.domain.entity.GatewayRateLimit;
 import com.smart4y.cloud.hippo.domain.entity.GatewayRateLimitApi;
-import com.smart4y.cloud.hippo.infrastructure.persistence.mybatis.GatewayRateLimitApiCustomMapper;
 import com.smart4y.cloud.hippo.infrastructure.persistence.mybatis.GatewayRateLimitApiMapper;
 import com.smart4y.cloud.hippo.infrastructure.persistence.mybatis.GatewayRateLimitMapper;
 import com.smart4y.cloud.hippo.interfaces.dtos.RateLimitQuery;
-import com.smart4y.cloud.core.annotation.ApplicationService;
-import com.smart4y.cloud.core.toolkit.base.StringHelper;
-import com.smart4y.cloud.core.dto.RateLimitApiDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.weekend.Weekend;
 import tk.mybatis.mapper.weekend.WeekendCriteria;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Youtao
- *         Created by youtao on 2019-09-05.
+ * Created by youtao on 2019-09-05.
  */
 @Slf4j
 @ApplicationService
@@ -32,8 +32,6 @@ public class GatewayRateLimitServiceImpl implements GatewayRateLimitService {
     private GatewayRateLimitMapper gatewayRateLimitMapper;
     @Autowired
     private GatewayRateLimitApiMapper gatewayRateLimitApiMapper;
-    @Autowired
-    private GatewayRateLimitApiCustomMapper gatewayRateLimitApiCustomMapper;
 
     @Override
     public PageInfo<GatewayRateLimit> findListPage(RateLimitQuery query) {
@@ -54,7 +52,7 @@ public class GatewayRateLimitServiceImpl implements GatewayRateLimitService {
 
     @Override
     public List<RateLimitApiDTO> findRateLimitApiList() {
-        return gatewayRateLimitApiCustomMapper.selectRateLimitApi();
+        return new ArrayList<>();
     }
 
     @Override
