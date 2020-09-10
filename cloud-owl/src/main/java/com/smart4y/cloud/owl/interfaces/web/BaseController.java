@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 /**
  * @author Youtao
- *         Created by youtao on 2019/9/27.
+ * Created by youtao on 2019/9/27.
  */
 @Component
 public abstract class BaseController {
@@ -24,25 +24,6 @@ public abstract class BaseController {
     private RestTemplate restTemplate;
     @Autowired
     private OpenOAuth2ClientProperties clientProperties;
-
-    //@Autowired
-    //private AuthorizationServerEndpointsConfiguration endpoints;
-    ///**
-    // * 生成 oauth2 token
-    // */
-    //OAuth2AccessToken getToken(String userName, String password, String type) throws Exception {
-    //    OpenOAuth2ClientDetails clientDetails = clientProperties.getOauth2().get("admin");
-    //    // 使用oauth2密码模式登录.
-    //    Map<String, String> postParameters = new HashMap<>();
-    //    postParameters.put("username", userName);
-    //    postParameters.put("password", password);
-    //    postParameters.put("client_id", clientDetails.getClientId());
-    //    postParameters.put("client_secret", clientDetails.getClientSecret());
-    //    postParameters.put("grant_type", "password");
-    //    // 添加参数区分,第三方登录
-    //    postParameters.put("login_type", type);
-    //    return OpenHelper.createAccessToken(endpoints, postParameters);
-    //}
 
     JSONObject getToken(String userName, String password, String type, HttpHeaders headers) {
         OpenOAuth2ClientDetails clientDetails = clientProperties.getOauth2().get("portal");

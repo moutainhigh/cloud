@@ -1,21 +1,20 @@
 package com.smart4y.cloud.hippo.domain.entity;
 
-import com.smart4y.cloud.mapper.SnowflakeId;
+import javax.persistence.Column;
 import com.smart4y.cloud.core.BaseEntity;
+import javax.persistence.Table;
+import lombok.experimental.Accessors;
+import com.smart4y.cloud.mapper.SnowflakeId;
+import tk.mybatis.mapper.annotation.KeySql;
+import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
-import tk.mybatis.mapper.annotation.KeySql;
-
-import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.persistence.Table;
-import java.time.LocalDateTime;
 
 /**
  * 组织结构表
  *
- * @author Youtao on 2020/08/26 16:31
+ * @author Youtao on 2020/09/10 17:53
  */
 @Data
 @Accessors(chain = true)
@@ -38,7 +37,7 @@ public class RbacGroup extends BaseEntity<RbacGroup> {
     private String groupName;
 
     /**
-     * 组织类型（g-集团，c-公司，d-部门，t-小组，p-岗位，u-人员）
+     * 组织类型（g-集团，c-公司，d-部门，t-小组，p-岗位，u-人员，r-角色线）
      */
     @Column(name = "group_type")
     private String groupType;

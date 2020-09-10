@@ -1,21 +1,20 @@
 package com.smart4y.cloud.hippo.domain.entity;
 
-import com.smart4y.cloud.mapper.SnowflakeId;
+import javax.persistence.Column;
 import com.smart4y.cloud.core.BaseEntity;
+import javax.persistence.Table;
+import lombok.experimental.Accessors;
+import com.smart4y.cloud.mapper.SnowflakeId;
+import tk.mybatis.mapper.annotation.KeySql;
+import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
-import tk.mybatis.mapper.annotation.KeySql;
-
-import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.persistence.Table;
-import java.time.LocalDateTime;
 
 /**
  * 权限表
  *
- * @author Youtao on 2020/08/26 16:31
+ * @author Youtao on 2020/09/10 17:53
  */
 @Data
 @Accessors(chain = true)
@@ -48,12 +47,6 @@ public class RbacPrivilege extends BaseEntity<RbacPrivilege> {
      */
     @Column(name = "created_date")
     private LocalDateTime createdDate;
-
-    /**
-     * 更新时间
-     */
-    @Column(name = "last_modified_date")
-    private LocalDateTime lastModifiedDate;
 
 
     /**
