@@ -52,7 +52,7 @@
         <!-- 公共模块 -->
         <dependency>
             <groupId>com.smart4y</groupId>
-            <artifactId>cloud-core</artifactId>
+            <artifactId>cloud-common-core</artifactId>
         </dependency>
         <!-- Lombok -->
         <dependency>

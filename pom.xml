@@ -8,10 +8,12 @@
     <version>1.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <name>${project.artifactId}</name>
+    <description>cloud</description>
+    <url>https://smart4y.com/admin</url>
+
     <modules>
         <module>cloud-common</module>
-        <module>cloud-core</module>
-        <module>cloud-generator</module>
         <module>cloud-hippo</module>
         <module>cloud-owl</module>
         <module>cloud-spider</module>
@@ -49,17 +51,32 @@
 
             <dependency>
                 <groupId>com.smart4y</groupId>
+                <artifactId>cloud-common-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.smart4y</groupId>
+                <artifactId>cloud-common-mapper</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.smart4y</groupId>
+                <artifactId>cloud-common-generator</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.smart4y</groupId>
+                <artifactId>cloud-common-loadbalancer</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.smart4y</groupId>
+                <artifactId>cloud-common-sms</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.smart4y</groupId>
                 <artifactId>cloud-common-neo4j</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.smart4y</groupId>
-                <artifactId>cloud-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.smart4y</groupId>
-                <artifactId>cloud-generator</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
@@ -152,7 +169,13 @@
                     <dependencies>
                         <dependency>
                             <groupId>com.smart4y</groupId>
-                            <artifactId>cloud-generator</artifactId>
+                            <artifactId>cloud-common-mapper</artifactId>
+                            <version>${project.version}</version>
+                            <type>jar</type>
+                        </dependency>
+                        <dependency>
+                            <groupId>com.smart4y</groupId>
+                            <artifactId>cloud-common-generator</artifactId>
                             <version>${project.version}</version>
                             <type>jar</type>
                         </dependency>
@@ -188,6 +211,40 @@
         </plugins>
     </build>
 
+    <licenses>
+        <license>
+            <name>GNU LESSER GENERAL PUBLIC LICENSE Version 3</name>
+            <url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>Youtao</id>
+            <name>Youtao</name>
+            <email>youtao531@163.com</email>
+            <organization>SMART4Y</organization>
+            <organizationUrl>https://smart4y.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <organization>
+        <name>SMART4Y</name>
+        <url>https://smart4y.com</url>
+    </organization>
+
+    <scm>
+        <connection>scm:git:https://gitee.com/utao/cloud.git</connection>
+        <developerConnection>scm:git:https://gitee.com/utao/cloud.git</developerConnection>
+        <url>https://gitee.com/cloud/cloud</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+        <system>Gitee</system>
+        <url>https://gitee.com/utao/cloud/issues</url>
+    </issueManagement>
+
     <repositories>
         <repository>
             <id>aliYun</id>
@@ -199,4 +256,17 @@
             <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
         </repository>
     </repositories>
+
+    <!--<distributionManagement>
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <name>sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <name>Nexus Release Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>-->
 </project>

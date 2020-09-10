@@ -37,7 +37,7 @@ spring:
     username: guest
     password: guest
     virtual-host: /
-    publisher-confirms: true
+    publisher-confirm-type: correlated
   redis:
     host: 127.0.0.1
     port: 6379
@@ -133,3 +133,85 @@ cloud:
     scope: ${cloud.common.scope}
     access-token-uri: ${cloud.common.access-token-uri}
     user-authorization-uri: ${cloud.common.user-authorization-uri}
+
+sms:
+  #通用配置
+  ##手机号码正则表达式，为空则不做验证
+  reg:
+  web:
+    ##启用web端点
+    enable: true
+    ##访问路径前缀
+    base-path: /commons/sms
+  verification-code:
+    ##存储方式
+    repository: redis
+    ##验证码长度
+    code-length: 6
+    ##为true则验证失败后删除验证码
+    delete-by-verify-fail: false
+    ##为true则验证成功后删除验证码
+    delete-by-verify-succeed: true
+    ##重试间隔时间，单位秒
+    retry-interval-time: 60
+    ##验证码有效期，单位秒
+    expiration-time: 180
+    ##识别码长度
+    identification-code-length: 3
+    ##是否启用识别码
+    use-identification-code: false
+  redis:
+    ##验证码业务在保存到redis时的key的前缀
+    key-prefix: VerificationCode
+  ##阿里云
+  aliyun:
+    ##启用客户端
+    enable: true
+    ##AccessKeyId
+    access-key-id: 7gBZcbsC7kLIWCdELIl8nxcs
+    ##AccessKeySecret
+    access-key-secret: 0osTIhce7uPvDKHz6aa67bhCukaKoYl4
+    ##endpoint，默认为cn-hangzhou
+    endpoint: cn-hangzhou
+    ##短信签名
+    sign-name:
+    ##短信模板配置（key为业务层的NoticeData中type的值，value为阿里云中生成的短信模板ID）
+    templates:
+      ##验证码业务所使用的短信模板ID
+      VerificationCode: SMS_00000000
+      ##自定义业务所使用的短信模板ID
+      test: SMS_00000001
+  ##百度云
+  baiducloud:
+    ##启用客户端
+    enable: true
+    ##AccessKeyId
+    access-key-id: 7gBZcbsC7kLIWCdELIl8nxcs
+    ##AccessKeySecret
+    access-key-secret: 0osTIhce7uPvDKHz6aa67bhCukaKoYl4
+    endpoint: endpoint
+    ##短信模板配置
+    templates:
+      ##验证码业务所使用的短信模板ID
+      VerificationCode: SMS_00000000
+      ##自定义业务所使用的短信模板ID
+      test: SMS_00000001
+  ##华为云
+  huawei:
+    ##启用客户端
+    enable: true
+    uri: 请求地址
+    app-key: APP_Key
+    app-secret: APP_Secret
+    sender: 国内短信签名通道号或国际/港澳台短信通道号
+    signature: 签名名称
+    ##短信模板配置
+    templates:
+      ##验证码业务所使用的短信模板ID
+      VerificationCode: SMS_00000000
+      ##自定义业务所使用的短信模板ID
+      test: SMS_00000001
+    params-orders:
+      VerificationCode: ##规定验证码业务的参数顺序
+        - code
+        - identificationCode

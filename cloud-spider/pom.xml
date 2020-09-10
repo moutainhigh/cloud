@@ -55,7 +55,7 @@
         <!-- 公共模块 -->
         <dependency>
             <groupId>com.smart4y</groupId>
-            <artifactId>cloud-core</artifactId>
+            <artifactId>cloud-common-core</artifactId>
         </dependency>
         <!-- Lombok -->
         <dependency>
@@ -92,18 +92,8 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-resource-server</artifactId>
         </dependency>
-        <!-- MySQL -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
 
         <!-- Swagger -->
-        <!--<dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>swagger-bootstrap-ui</artifactId>
-            <version>${swagger-bootstrap-ui.version}</version>
-        </dependency>-->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-spring-boot-starter</artifactId>
@@ -156,18 +146,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.mybatis.generator</groupId>
-                <artifactId>mybatis-generator-maven-plugin</artifactId>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.smart4y</groupId>
-                        <artifactId>cloud-spider</artifactId>
-                        <version>${project.version}</version>
-                        <type>jar</type>
-                    </dependency>
-                </dependencies>
             </plugin>
             <!-- 若要发布新镜像则打开此插件 -->
             <!--<plugin>

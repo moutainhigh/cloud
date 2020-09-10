@@ -36,25 +36,13 @@ spring:
   mvc:
     favicon:
       enabled: false
-  datasource:
-    url: jdbc:mysql://127.0.0.1:3306/cloud?useSSL=false&useUnicode=true&autoReconnect=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
-    username: root
-    password: 12345678
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    type: com.zaxxer.hikari.HikariDataSource
-    hikari:
-      pool-name: dbg
-      max-lifetime: 1765000
-      minimum-idle: 1
-      maximum-pool-size: 15
-      connection-test-query: SELECT 1
   rabbitmq:
     host: 127.0.0.1
     port: 5672
     username: guest
     password: guest
     virtual-host: /
-    publisher-confirms: true
+    publisher-confirm-type: correlated
   redis:
     host: 127.0.0.1
     port: 6379
