@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.core.Authentication;
@@ -42,10 +41,10 @@ import java.util.concurrent.atomic.AtomicReference;
 public class AccessManager implements ReactiveAuthorizationManager<AuthorizationContext> {
 
     private static final AntPathMatcher pathMatch = new AntPathMatcher();
-    private ResourceLocator resourceLocator;
-    private ApiProperties apiProperties;
-    private Set<String> permitAll = new ConcurrentHashSet<>();
-    private Set<String> authorityIgnores = new ConcurrentHashSet<>();
+    private final ResourceLocator resourceLocator;
+    private final ApiProperties apiProperties;
+    private final Set<String> permitAll = new ConcurrentHashSet<>();
+    private final Set<String> authorityIgnores = new ConcurrentHashSet<>();
 
     public AccessManager(ResourceLocator resourceLocator, ApiProperties apiProperties) {
         this.resourceLocator = resourceLocator;
@@ -141,10 +140,8 @@ public class AccessManager implements ReactiveAuthorizationManager<Authorization
         Object principal = authentication.getPrincipal();
         // 已认证身份
         if (principal != null) {
-            if (authentication instanceof AnonymousAuthenticationToken) {
-                //check if this uri can be access by anonymous
-                //return
-            }
+//            if (authentication instanceof AnonymousAuthenticationToken) {
+//            }
             if (authorityIgnores(requestPath)) {
                 // 认证通过,并且无需权限
                 return true;
