@@ -1,7 +1,5 @@
 #cloud
 
-开源至 https://gitee.com/liuyadu/open-cloud 项目。
-
 ```
     "/oauth/authorize", // 授权端点
     "/oauth/token", // 令牌端点
