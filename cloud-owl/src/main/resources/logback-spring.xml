@@ -74,10 +74,10 @@
 
     <!-- 开发环境 -->
     <springProfile name="default,dev,test">
-        <logger name="com.smart4y.cloud" level="debug"/>
-        <logger name="org.springframework.amqp" level="info"/>
-        <logger name="com.alibaba.nacos.client.naming" level="warn"/>
-        <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="info"/>
+        <logger name="com.smart4y.cloud" level="INFO"/>
+        <logger name="org.springframework.amqp" level="INFO"/>
+        <logger name="com.alibaba.nacos.client.naming" level="WARN"/>
+        <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="INFO"/>
 
         <root level="INFO">
             <appender-ref ref="STDOUT_APPENDER"/>
@@ -87,10 +87,10 @@
     </springProfile>
     <!-- 生产环境 -->
     <springProfile name="online,docker">
-        <logger name="com.smart4y.cloud" level="info"/>
-        <logger name="org.springframework.amqp" level="warn"/>
-        <logger name="com.alibaba.nacos.client.naming" level="warn"/>
-        <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="warn"/>
+        <logger name="com.smart4y.cloud" level="INFO"/>
+        <logger name="org.springframework.amqp" level="WARN"/>
+        <logger name="com.alibaba.nacos.client.naming" level="WARN"/>
+        <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="WARN"/>
 
         <root level="INFO">
             <appender-ref ref="STDOUT_APPENDER"/>

@@ -87,11 +87,11 @@
 
     <!-- 开发环境 -->
     <springProfile name="default,dev,test">
-        <logger name="com.smart4y.cloud" level="info"/>
-        <logger name="org.springframework.amqp" level="error"/>
-        <logger name="com.alibaba.nacos.client.naming" level="error"/>
-        <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="error"/>
-        <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="error"/>
+        <logger name="com.smart4y.cloud" level="INFO"/>
+        <logger name="org.springframework.amqp" level="ERROR"/>
+        <logger name="com.alibaba.nacos.client.naming" level="ERROR"/>
+        <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="ERROR"/>
+        <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="ERROR"/>
 
         <root level="INFO">
             <appender-ref ref="STDOUT_APPENDER"/>
@@ -101,11 +101,11 @@
     </springProfile>
     <!-- 生产环境 -->
     <springProfile name="online,docker">
-        <logger name="com.smart4y.cloud" level="info"/>
-        <logger name="org.springframework.amqp" level="warn"/>
-        <logger name="com.alibaba.nacos.client.naming" level="warn"/>
-        <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="warn"/>
-        <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="warn"/>
+        <logger name="com.smart4y.cloud" level="INFO"/>
+        <logger name="org.springframework.amqp" level="WARN"/>
+        <logger name="com.alibaba.nacos.client.naming" level="WARN"/>
+        <logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="WARN"/>
+        <logger name="org.springframework.boot.actuate.endpoint.EndpointId" level="WARN"/>
 
         <root level="INFO">
             <appender-ref ref="STDOUT_APPENDER"/>

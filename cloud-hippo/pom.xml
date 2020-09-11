@@ -58,7 +58,6 @@
             <groupId>com.smart4y</groupId>
             <artifactId>cloud-common-mapper</artifactId>
         </dependency>
-
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
