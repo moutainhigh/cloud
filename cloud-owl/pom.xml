@@ -54,10 +54,6 @@
             <groupId>com.smart4y</groupId>
             <artifactId>cloud-common-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.smart4y</groupId>
-            <artifactId>cloud-common-swagger</artifactId>
-        </dependency>
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>

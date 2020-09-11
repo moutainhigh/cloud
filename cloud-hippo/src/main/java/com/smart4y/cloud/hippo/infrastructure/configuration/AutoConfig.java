@@ -1,7 +1,7 @@
 package com.smart4y.cloud.hippo.infrastructure.configuration;
 
 import com.smart4y.cloud.core.configuration.*;
-import com.smart4y.cloud.swagger.SwaggerAutoConfiguration;
+import com.smart4y.cloud.core.configuration.SwaggerAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.EnableTransactionManagement;

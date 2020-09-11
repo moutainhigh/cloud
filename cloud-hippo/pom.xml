@@ -58,10 +58,6 @@
             <groupId>com.smart4y</groupId>
             <artifactId>cloud-common-mapper</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.smart4y</groupId>
-            <artifactId>cloud-common-swagger</artifactId>
-        </dependency>
 
         <!-- Lombok -->
         <dependency>

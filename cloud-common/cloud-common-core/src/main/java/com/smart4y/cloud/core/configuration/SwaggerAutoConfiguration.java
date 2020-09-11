@@ -1,4 +1,4 @@
-package com.smart4y.cloud.swagger;
+package com.smart4y.cloud.core.configuration;
 
 import com.smart4y.cloud.core.exception.OpenException;
 import com.smart4y.cloud.core.message.enums.MessageType;

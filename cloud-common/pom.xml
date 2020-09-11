@@ -18,7 +18,6 @@
         <module>cloud-common-core</module>
         <module>cloud-common-mapper</module>
         <module>cloud-common-generator</module>
-        <module>cloud-common-swagger</module>
         <module>cloud-common-loadbalancer</module>
         <module>cloud-common-sms</module>
         <module>cloud-common-neo4j</module>
