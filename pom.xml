@@ -27,6 +27,7 @@
         <!-- Spring Boot/Cloud -->
         <spring.boot.version>2.2.8.RELEASE</spring.boot.version>
         <spring.cloud.version>Hoxton.SR6</spring.cloud.version>
+        <spring.cloud.alibaba.version>2.2.1.RELEASE</spring.cloud.alibaba.version>
         <!-- 镜像前缀 -->
         <docker.image.prefix>cloud</docker.image.prefix>
         <maven-dockerfile-plugin.version>1.4.10</maven-dockerfile-plugin.version>
@@ -45,6 +46,13 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring.cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring.cloud.alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -266,17 +274,4 @@
             <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
         </repository>
     </repositories>
-
-    <!--<distributionManagement>
-        <snapshotRepository>
-            <id>sonatype-nexus-snapshots</id>
-            <name>sonatype Nexus Snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-        </snapshotRepository>
-        <repository>
-            <id>sonatype-nexus-staging</id>
-            <name>Nexus Release Repository</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>-->
 </project>
