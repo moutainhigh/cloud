@@ -1,5 +1,7 @@
 #cloud
 
+改造至 https://gitee.com/liuyadu/open-cloud 
+
 ```
     "/oauth/authorize", // 授权端点
     "/oauth/token", // 令牌端点
