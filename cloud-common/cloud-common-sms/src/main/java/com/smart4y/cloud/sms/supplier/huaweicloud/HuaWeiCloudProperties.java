@@ -1,32 +1,22 @@
 package com.smart4y.cloud.sms.supplier.huaweicloud;
 
+import com.smart4y.cloud.sms.properties.AbstractHandlerProperties;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * 华为云短信配置
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @ConfigurationProperties(prefix = "sms.huawei")
-public class HuaWeiCloudProperties {
+public class HuaWeiCloudProperties extends AbstractHandlerProperties<String> {
 
     /**
      * 是否启用配置
      */
-    private boolean enable = true;
-
-    /**
-     * 短信模板
-     */
-    protected Map<String, String> templates;
-
-    /**
-     * 参数顺序
-     */
-    protected Map<String, List<String>> paramsOrders;
+    private boolean enable = false;
 
     /**
      * 请求地址
@@ -52,24 +42,4 @@ public class HuaWeiCloudProperties {
      * 签名名称
      */
     private String signature;
-
-    /**
-     * 获取短信模板
-     *
-     * @param type 类型
-     * @return 短信模板
-     */
-    public String getTemplates(String type) {
-        return templates == null ? null : templates.get(type);
-    }
-
-    /**
-     * 返回参数顺序
-     *
-     * @param type 类型
-     * @return 参数顺序
-     */
-    public List<String> getParamsOrder(String type) {
-        return paramsOrders.get(type);
-    }
 }

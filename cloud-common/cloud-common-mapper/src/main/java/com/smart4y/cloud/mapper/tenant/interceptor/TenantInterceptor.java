@@ -27,7 +27,7 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 /**
- * 添加租户ID拦截器
+ * TODO 添加租户ID拦截器（未完待续）
  *
  * @author Youtao on 2020/9/14 15:41
  */

@@ -1,7 +1,6 @@
 package com.smart4y.cloud.sms.autoconfigure;
 
-import com.smart4y.cloud.sms.loadbalancer.RandomSmsLoadBalancer;
-import com.smart4y.cloud.sms.loadbalancer.SmsSenderLoadBalancer;
+import com.smart4y.cloud.sms.loadbalancer.*;
 import com.smart4y.cloud.sms.properties.SmsProperties;
 import com.smart4y.cloud.sms.repository.VerificationCodeRepository;
 import com.smart4y.cloud.sms.repository.memory.VerificationCodeMemoryRepository;
@@ -47,7 +46,19 @@ public class SmsConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(SmsSenderLoadBalancer.class)
-    public SmsSenderLoadBalancer smsSenderLoadbalancer() {
-        return new RandomSmsLoadBalancer();
+    public SmsSenderLoadBalancer smsSenderLoadBalancer(SmsProperties properties) {
+        switch (properties.getLoadBalancerType()) {
+            case RoundRobin:
+                return new RoundRobinSmsLoadBalancer();
+            case WeightRandom:
+                return new WeightRandomSmsLoadBalancer();
+            case WeightRoundRobin:
+                return new WeightRoundRobinSmsLoadBalancer();
+            case Hash:
+            case Random:
+            case SmoothWeightRoundRobin:
+            default:
+                return new RandomSmsLoadBalancer();
+        }
     }
 }

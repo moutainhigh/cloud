@@ -2,6 +2,7 @@ package com.smart4y.cloud.sms.supplier.huaweicloud;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smart4y.cloud.sms.domain.NoticeData;
+import com.smart4y.cloud.sms.exception.SendClientException;
 import com.smart4y.cloud.sms.exception.SendFailedException;
 import com.smart4y.cloud.sms.handler.SendHandler;
 import com.smart4y.cloud.sms.utils.StringUtils;
@@ -194,7 +195,7 @@ public class HuaWeiCloudSendHandler implements SendHandler {
         String appKey = properties.getAppKey();
         String appSecret = properties.getAppSecret();
         if (StringUtils.isAnyBlank(appKey, appSecret)) {
-            throw new SendFailedException("buildWsseHeader(): appKey or appSecret is null.");
+            throw new SendClientException("buildWsseHeader(): appKey or appSecret is null.");
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");

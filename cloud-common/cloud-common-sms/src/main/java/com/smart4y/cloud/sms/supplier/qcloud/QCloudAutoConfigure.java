@@ -3,10 +3,10 @@ package com.smart4y.cloud.sms.supplier.qcloud;
 import com.smart4y.cloud.sms.autoconfigure.SmsConfiguration;
 import com.smart4y.cloud.sms.loadbalancer.SmsSenderLoadBalancer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
+import org.springframework.core.type.AnnotatedTypeMetadata;
 
 /**
  * 腾讯云发送端点自动配置
@@ -24,10 +24,24 @@ public class QCloudAutoConfigure {
      * @return 腾讯云发送处理
      */
     @Bean
-    @ConditionalOnProperty(value = "sms.qcloud.enable", havingValue = "true")
+    @Conditional(QCloudSendHandlerCondition.class)
+    @ConditionalOnBean(SmsSenderLoadBalancer.class)
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public QCloudSendHandler qcloudSendHandler(QCloudProperties properties, SmsSenderLoadBalancer loadbalancer) {
         QCloudSendHandler handler = new QCloudSendHandler(properties);
         loadbalancer.addTarget(handler, true);
+        loadbalancer.setWeight(handler, properties.getWeight());
         return handler;
+    }
+
+    @SuppressWarnings("AlibabaClassNamingShouldBeCamel")
+    public static class QCloudSendHandlerCondition implements Condition {
+
+        @SuppressWarnings("NullableProblems")
+        @Override
+        public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+            Boolean enable = context.getEnvironment().getProperty("sms.qcloud.enable", Boolean.class);
+            return enable == null || enable;
+        }
     }
 }
