@@ -147,9 +147,16 @@ public final class TableColumnBuilder {
         List<ColumnField> pkFields = tableClass.getPkFields();
         if (CollectionUtils.isNotEmpty(pkFields)) {
             qualifiedJavaTypeSet.add(new FullyQualifiedJavaType(Id.class.getName()));
+            
             // 若表中有主键，则设置主键生成策略
-            qualifiedJavaTypeSet.add(new FullyQualifiedJavaType(KeySql.class.getName()));
-            qualifiedJavaTypeSet.add(new FullyQualifiedJavaType(SnowflakeId.class.getName()));
+            boolean isLong = pkFields.stream()
+                    .map(ColumnField::getType)
+                    .map(FullyQualifiedJavaType::getShortName)
+                    .anyMatch("Long"::equals);
+            if (isLong) {
+                qualifiedJavaTypeSet.add(new FullyQualifiedJavaType(KeySql.class.getName()));
+                qualifiedJavaTypeSet.add(new FullyQualifiedJavaType(SnowflakeId.class.getName()));
+            }
         }
         qualifiedJavaTypeSet.add(new FullyQualifiedJavaType(Table.class.getName()));
         qualifiedJavaTypeSet.add(new FullyQualifiedJavaType(Column.class.getName()));

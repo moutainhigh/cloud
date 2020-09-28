@@ -133,6 +133,9 @@ cloud:
     scope: ${cloud.common.scope}
     access-token-uri: ${cloud.common.access-token-uri}
     user-authorization-uri: ${cloud.common.user-authorization-uri}
+  tenant:
+    enable: true
+    type: column
 
 sms:
   #通用配置

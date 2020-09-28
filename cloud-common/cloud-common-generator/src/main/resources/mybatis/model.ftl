@@ -21,7 +21,9 @@ public class ${tableClass.shortClassName} extends BaseEntity<${tableClass.shortC
      */
     <#if field.identity==true??>
     @Id
+        <#if field.shortTypeName=="Long">
     @KeySql(genId = SnowflakeId.class)
+        </#if>
     </#if>
     @Column(name = "${field.columnName}")
     private ${field.shortTypeName} ${field.fieldName};
